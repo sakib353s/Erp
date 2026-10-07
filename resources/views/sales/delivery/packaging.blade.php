@@ -10,9 +10,6 @@
         </div>
     </div>
 
-    @if (session('status'))
-        <div class="alert alert-success">{{ session('status') }}</div>
-    @endif
     @if ($errors->has('packaging'))
         <div class="alert alert-warning">{{ $errors->first('packaging') }}</div>
     @endif
@@ -194,4 +191,9 @@
             </div>
         @endif
     </div>
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

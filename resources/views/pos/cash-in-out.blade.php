@@ -19,10 +19,6 @@
     @if ($errors->any())
         <div class="alert alert-danger">{{ $errors->first() }}</div>
     @endif
-    @if (session('status'))
-        <div class="alert alert-success">{{ session('status') }}</div>
-    @endif
-
     @if ($session === null)
         <div class="erp-card">
             <p class="mb-0">No open cash drawer for this branch. Open a POS session before moving cash.</p>
@@ -112,4 +108,9 @@
             @endif
         </div>
     @endif
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

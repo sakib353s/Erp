@@ -134,4 +134,9 @@
         <code>bi_metrics_daily</code> on load, so the series always equals its source. Days without invoices are
         real zeros, not synthetic rows.
     </p>
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

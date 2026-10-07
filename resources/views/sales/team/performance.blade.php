@@ -133,4 +133,9 @@
             · Rows: {{ $report['sample_size'] }}
         </p>
     </div>
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

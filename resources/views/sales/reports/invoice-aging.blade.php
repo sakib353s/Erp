@@ -96,4 +96,9 @@
     <p class="text-muted small mt-2">
         Buckets are a partition of every open invoice balance as of {{ $report['as_of'] }} — no modelled rows.
     </p>
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

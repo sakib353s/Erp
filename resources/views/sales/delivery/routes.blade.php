@@ -79,4 +79,9 @@
             <p class="text-muted mb-0">No assigned stops to route yet — assign riders from the Rider Assignment screen first.</p>
         </div>
     @endforelse
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

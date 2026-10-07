@@ -94,4 +94,9 @@
     </div>
 
     <div class="mt-3">{{ $events->links() }}</div>
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

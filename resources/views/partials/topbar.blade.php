@@ -1,3 +1,10 @@
+{{--
+    TopBar + BranchSwitcher + Breadcrumbs (§18.2).
+
+    Order of intent, left → right: where am I (trail), what can I do here
+    (context actions), where else can I go (⌘K), what changed (notifications),
+    who am I (account). Nothing here duplicates the sidebar.
+--}}
 @php
     $context = app(\App\Domain\Foundation\Services\TenantContext::class);
     $currentBranch = $context->branch();
@@ -26,33 +33,51 @@
         <i class="bi bi-list" aria-hidden="true"></i>
     </button>
 
-    <div class="erp-topbar-title d-none d-md-block">
-        <span class="erp-topbar-crumb">@yield('page_title', 'Dashboard')</span>
-        @if($currentBranch)
-            <span class="erp-chip erp-chip-soft" title="Current branch context">
-                <i class="bi bi-geo-alt" aria-hidden="true"></i>{{ $currentBranch->name }}
-            </span>
+    <div class="erp-topbar-crumbs">
+        @if(! empty($trail))
+            <nav aria-label="Breadcrumb">
+                <ol class="erp-breadcrumb">
+                    @foreach($trail as $crumb)
+                        <li>
+                            @if(! empty($crumb['url']))
+                                <a href="{{ $crumb['url'] }}">{{ $crumb['label'] }}</a>
+                                <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                            @else
+                                <span class="is-current" aria-current="page">{{ $crumb['label'] }}</span>
+                            @endif
+                        </li>
+                    @endforeach
+                </ol>
+            </nav>
         @endif
-        @if($currentWarehouse)
-            <span class="erp-chip erp-chip-soft" title="Current warehouse context">
-                <i class="bi bi-house" aria-hidden="true"></i>{{ $currentWarehouse->name }}
-            </span>
-        @endif
+
+        <div class="erp-topbar-title">
+            <strong class="d-none d-md-inline">@yield('page_title', 'Dashboard')</strong>
+
+            @if($currentBranch)
+                <span class="erp-chip erp-chip-outline d-none d-xl-inline-flex" title="Current branch context">
+                    <i class="bi bi-geo-alt" aria-hidden="true"></i>{{ $currentBranch->name }}
+                </span>
+            @endif
+            @if($currentWarehouse)
+                <span class="erp-chip erp-chip-outline d-none d-xxl-inline-flex" title="Current warehouse context">
+                    <i class="bi bi-box-seam" aria-hidden="true"></i>{{ $currentWarehouse->name }}
+                </span>
+            @endif
+        </div>
     </div>
 
-    <form class="erp-topbar-search d-none d-md-flex" method="GET" action="{{ route('search.index') }}" role="search">
-        <label class="visually-hidden" for="topbarSearch">Search</label>
+    <button class="erp-global-search d-none d-md-flex" type="button" data-palette-open aria-label="Search the workspace">
         <i class="bi bi-search" aria-hidden="true"></i>
-        <input class="erp-topbar-search-input" type="search" id="topbarSearch" name="q"
-               value="{{ request()->routeIs('search.index') ? request('q') : '' }}"
-               placeholder="Search…" autocomplete="off">
-    </form>
+        <span>Search pages, orders, invoices…</span>
+        <kbd>⌘K</kbd>
+    </button>
 
     <div class="erp-topbar-actions">
         @if($switchableBranches->count() > 1)
-            <form class="erp-switcher" method="POST" action="{{ route('context.branch') }}">
+            <form class="erp-switcher d-none d-lg-flex" method="POST" action="{{ route('context.branch') }}">
                 @csrf
-                <label class="visually-hidden" for="branchSwitch">Branch</label>
+                <label class="erp-visually-hidden" for="branchSwitch">Branch</label>
                 <i class="bi bi-geo-alt" aria-hidden="true"></i>
                 <select class="erp-switcher-select" id="branchSwitch" name="branch_id" data-erp-autosubmit>
                     @foreach($switchableBranches as $b)
@@ -63,10 +88,10 @@
         @endif
 
         @if($switchableWarehouses->count() > 1)
-            <form class="erp-switcher d-none d-md-flex" method="POST" action="{{ route('context.warehouse') }}">
+            <form class="erp-switcher d-none d-xl-flex" method="POST" action="{{ route('context.warehouse') }}">
                 @csrf
-                <label class="visually-hidden" for="warehouseSwitch">Warehouse</label>
-                <i class="bi bi-house" aria-hidden="true"></i>
+                <label class="erp-visually-hidden" for="warehouseSwitch">Warehouse</label>
+                <i class="bi bi-box-seam" aria-hidden="true"></i>
                 <select class="erp-switcher-select" id="warehouseSwitch" name="warehouse_id" data-erp-autosubmit>
                     @foreach($switchableWarehouses as $w)
                         <option value="{{ $w->id }}" @selected($currentWarehouse && $w->id === $currentWarehouse->id)>{{ $w->name }}</option>
@@ -74,6 +99,16 @@
                 </select>
             </form>
         @endif
+
+        <button class="erp-icon-btn d-none d-md-inline-flex" type="button" data-erp-theme-toggle
+                aria-pressed="false" title="Switch appearance">
+            <i class="bi bi-moon-stars" aria-hidden="true"></i>
+        </button>
+
+        <button class="erp-icon-btn d-none d-xl-inline-flex" type="button" data-erp-density-toggle
+                aria-pressed="false" title="Compact rows">
+            <i class="bi bi-list-ul" aria-hidden="true"></i>
+        </button>
 
         <form method="POST" action="{{ route('context.locale') }}" class="d-inline">
             @csrf
@@ -91,7 +126,7 @@
             <div class="dropdown-menu dropdown-menu-end erp-notif-menu" data-erp-notif-menu>
                 <div class="dropdown-header d-flex justify-content-between align-items-center">
                     <span>Notifications</span>
-                    <span class="erp-chip erp-chip-soft" data-notif-unread>{{ $unread }} unread</span>
+                    <span class="erp-chip erp-chip-outline" data-notif-unread>{{ $unread }} unread</span>
                 </div>
                 <div data-erp-notif-list>
                     <p class="dropdown-item-text erp-notif-loading">Loading latest…</p>
@@ -101,7 +136,8 @@
         </div>
 
         <div class="dropdown">
-            <button class="erp-avatar-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="erp-avatar-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                    aria-label="Account menu">
                 {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
             </button>
             <div class="dropdown-menu dropdown-menu-end">
@@ -111,7 +147,7 @@
                 </div>
                 @foreach($headerEntries as $entry)
                     @continue(str_contains($entry['route'], '/notifications'))
-                    <a class="dropdown-item" href="{{ strtok($entry['route'], '#') }}">
+                    <a class="dropdown-item" href="{{ explode('#', $entry['route'])[0] }}">
                         @if($entry['icon'] ?? null)<i class="bi {{ $entry['icon'] }} me-2" aria-hidden="true"></i>@endif
                         {{ $tr($entry['label_key'], $entry['label']) }}
                     </a>

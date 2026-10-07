@@ -81,4 +81,9 @@
             </div>
         </div>
     </form>
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

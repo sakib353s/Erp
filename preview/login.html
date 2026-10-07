@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" data-accent="teal" data-density="comfortable">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#ffffff">
+    <title>Sign in · BD ERP — UI redesign preview</title>
+    <link rel="stylesheet" href="./assets/preview.css">
+</head>
+<body class="erp-body">
+<a class="erp-skip-link" href="#erpContent">Skip to main content</a>
+
+<div class="erp-preview-bar">
+    <i class="bi bi-easel2" aria-hidden="true"></i>
+    <strong>UI redesign preview</strong>
+    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./login.html" style="color:#fff;text-decoration:underline">Sign in</a>
+    <span class="erp-preview-note">Static render of the new shell — same CSS + JS the Laravel app ships. Press ⌘K / Ctrl+K.</span>
+</div>
+<div class="erp-guest-wrap">
+    <aside class="erp-guest-aside">
+        <div class="erp-guest-brand" style="color:#fff">
+            <span class="erp-brand-mark erp-brand-mark-inverse" aria-hidden="true">BE</span>
+            <strong>BD ERP</strong>
+        </div>
+        <div>
+            <h2>Run sales, stock and accounts from one ledger.</h2>
+            <p>Bangladesh-first ERP: branch scope, Mushak documents, POS, courier settlement and a double-entry core that ties every number back to a source document.</p>
+            <ul class="erp-guest-points">
+                <li><i class="bi bi-shield-check" aria-hidden="true"></i> Permission-filtered navigation — you only see what you may open</li>
+                <li><i class="bi bi-journal-check" aria-hidden="true"></i> Append-only audit trail on every posting</li>
+                <li><i class="bi bi-box-seam" aria-hidden="true"></i> Stock truth from immutable movements, never edited balances</li>
+            </ul>
+        </div>
+        <p class="erp-guest-foot" style="color:#8296a8;text-align:left">Rafshan Trading Ltd. · Asia/Dhaka</p>
+    </aside>
+
+    <main class="erp-guest-main">
+        <div class="erp-guest-card">
+            <h1 class="erp-auth-title">Sign in</h1>
+            <p class="erp-auth-sub">Use your work account to continue to BD ERP.</p>
+
+            <form onsubmit="return false">
+                <div class="mb-3">
+                    <label class="form-label" for="email">E-mail address</label>
+                    <input class="form-control" type="email" id="email" placeholder="you@company.com" autocomplete="username">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="password">Password</label>
+                    <input class="form-control" type="password" id="password" autocomplete="current-password">
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="remember">
+                        <label class="form-check-label" for="remember">Remember this device</label>
+                    </div>
+                    <a href="#" style="font-size:12.5px;font-weight:620">Forgot password?</a>
+                </div>
+                <button class="btn btn-primary w-100 btn-lg" type="submit">
+                    <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i> Sign in
+                </button>
+            </form>
+            <p class="form-text text-center mt-3 mb-0">Accounts lock after five failed attempts; sign-in events are audited.</p>
+        </div>
+
+        <p class="erp-guest-foot">BD ERP · 2026<span class="d-block">Need help? Contact your workspace administrator.</span></p>
+    </main>
+</div>

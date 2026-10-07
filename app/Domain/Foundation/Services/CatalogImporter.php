@@ -396,6 +396,18 @@ class CatalogImporter
                 );
             }
 
+            /*
+             * LOCATION classifies the entry, and the sidebar is curated from
+             * it. Verb-first leaves ("Bulk Print Invoice", "Add Product",
+             * "Session Opening") are ACTIONS that share their parent page's
+             * route — rendering them as nav links is exactly how the sidebar
+             * turned into a wall of near-identical links (§18.3). They keep
+             * their permission row and route (so nothing becomes unreachable)
+             * but they are no longer destinations: they surface through page
+             * toolbars and the ⌘K palette.
+             */
+            $location = $isAction ? 'action' : 'sidebar';
+
             $row = $this->syncItem($code, [
                 'module_id' => $moduleModel?->id,
                 'parent_id' => $parent['id'] ?? null,
@@ -404,7 +416,7 @@ class CatalogImporter
                 'route' => $route,
                 'icon' => $parent === null ? (self::MODULE_ICONS[$moduleCode] ?? null) : null,
                 'permission_id' => $permissionId,
-                'location' => 'sidebar',
+                'location' => $location,
                 'status' => $active ? 'active' : 'planned',
                 'action' => $isAction ? $actionName : null,
                 'feature_key' => $moduleCode,
@@ -441,7 +453,7 @@ class CatalogImporter
     protected function pruneStaleItems(array $touchedCodes): int
     {
         return MenuItem::query()
-            ->where('location', 'sidebar')
+            ->whereIn('location', ['sidebar', 'action'])
             ->whereNotIn('code', $touchedCodes)
             ->delete();
     }

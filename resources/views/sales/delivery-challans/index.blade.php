@@ -63,4 +63,9 @@
         </div>
         <div class="mt-3">{{ $challans->links() }}</div>
     </div>
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

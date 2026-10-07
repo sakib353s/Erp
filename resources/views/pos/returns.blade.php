@@ -14,10 +14,6 @@
     @if ($errors->any())
         <div class="alert alert-danger">{{ $errors->first() }}</div>
     @endif
-    @if (session('status'))
-        <div class="alert alert-success">{{ session('status') }}</div>
-    @endif
-
     <div class="erp-card mb-3">
         <form method="GET" action="{{ route('pos.returns.index') }}" class="row g-2 align-items-end">
             <div class="col-md-4">
@@ -105,4 +101,9 @@
             </form>
         </div>
     @endif
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

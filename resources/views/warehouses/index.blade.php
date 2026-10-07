@@ -88,4 +88,9 @@
     </div>
 
     <div class="mt-3">{{ $warehouses->links() }}</div>
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

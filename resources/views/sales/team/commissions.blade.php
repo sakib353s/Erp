@@ -128,4 +128,9 @@
         </div>
         <div class="mt-3">{{ $calculations->links() }}</div>
     </div>
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

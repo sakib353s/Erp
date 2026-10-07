@@ -241,12 +241,89 @@ return [
     /*
     |--------------------------------------------------------------------------
     | Navigation registry (spec section F + §47 catalog)
+    |--------------------------------------------------------------------------
+    | The §47 catalog is the AUTHORITY for coverage (what pages exist and who
+    | may open them). It is deliberately NOT a sidebar layout: the supplied
+    | tree is 1,022 lines of spec prose whose verb-first leaves ("Bulk Print
+    | Invoice", "Session Opening") are ACTIONS on a page, not destinations.
+    | Rendering it verbatim produced §18.3's forbidden "wall-of-text sidebar"
+    | in which dozens of links opened the same screen.
+    |
+    | Curation policy (all data-driven, nothing hard-coded in Blade):
+    |   · location=sidebar  → a DESTINATION (renders in the nav)
+    |   · location=action   → an ACTION on its parent page (never a nav link;
+    |                          it keeps its permission row and reaches the user
+    |                          through the page toolbar and the ⌘K palette)
+    |   · sections          → job-to-be-done grouping shown in the sidebar
+    |   · max_depth         → hard cap on nav nesting (deeper pages are served
+    |                          by the palette, the page tabs and the module rail)
+    |   · dedupe_by_path    → one canonical link per screen; query variants
+    |                          (`?status=pending`) become saved views/tabs
     */
     'navigation' => [
         'catalog_file' => database_path('catalog/menu_tree.txt'),
         'widgets_file' => database_path('catalog/widgets.txt'),
-        'locations' => ['sidebar', 'header', 'utility'],
+        'locations' => ['sidebar', 'header', 'utility', 'action'],
         'statuses' => ['active', 'planned'], // planned entries never render
+
+        /* Sidebar curation (v2) */
+        'max_depth' => 2,               // section → module → page (never deeper)
+        'max_children' => 8,            // per module group; the rest live in ⌘K
+        'dedupe_by_path' => true,       // one canonical link per screen
+        'collapse_query_variants' => true,
+        'show_favorites' => true,
+        'show_recents' => true,
+
+        /* Job-to-be-done sections, in display order. */
+        'sections' => [
+            'work' => ['label' => 'My work', 'icon' => 'bi-lightning-charge'],
+            'sell' => ['label' => 'Sell', 'icon' => 'bi-cart3'],
+            'operate' => ['label' => 'Buy & stock', 'icon' => 'bi-box-seam'],
+            'money' => ['label' => 'Money', 'icon' => 'bi-cash-stack'],
+            'people' => ['label' => 'People', 'icon' => 'bi-people'],
+            'insight' => ['label' => 'Insight', 'icon' => 'bi-graph-up-arrow'],
+            'govern' => ['label' => 'Governance', 'icon' => 'bi-shield-check'],
+            'configure' => ['label' => 'Configuration', 'icon' => 'bi-sliders'],
+        ],
+
+        /* module code → section code (unknown modules fall back to 'govern'). */
+        'module_sections' => [
+            'dashboard' => 'work',
+            'sales' => 'sell',
+            'pos' => 'sell',
+            'customers' => 'sell',
+            'returns' => 'sell',
+            'purchase' => 'operate',
+            'inventory' => 'operate',
+            'suppliers' => 'operate',
+            'cash_bank' => 'money',
+            'accounting' => 'money',
+            'employee' => 'people',
+            'reports' => 'insight',
+            'marketing' => 'govern',
+            'business_management' => 'govern',
+            'masters' => 'configure',
+            'settings' => 'configure',
+        ],
+
+        /* Display order of modules inside a section. */
+        'module_order' => [
+            'dashboard', 'sales', 'pos', 'customers', 'returns',
+            'purchase', 'inventory', 'suppliers',
+            'cash_bank', 'accounting',
+            'employee',
+            'reports',
+            'marketing', 'business_management',
+            'masters', 'settings',
+        ],
+
+        /* Entries promoted into the "My work" section regardless of module. */
+        'work_routes' => [
+            '/app/dashboard',
+            '/app/approvals',
+            '/app/notifications',
+            '/app/tasks',
+        ],
     ],
 
     /*
@@ -452,6 +529,49 @@ return [
                         'type' => 'boolean',
                         'default' => true,
                         'help' => 'When off, POST /pos/sync refuses every batch with an honest reason instead of committing offline sales.',
+                    ],
+                ],
+            ],
+
+            /*
+             * Appearance — the §18.1 "one configurable accent" contract.
+             * Every preset in resources/css/app.css is a non-purple,
+             * WCAG-AA enterprise accent; the operator picks one company-wide
+             * and each user may still switch light/dark + row density locally.
+             */
+            'appearance' => [
+                'label' => 'Appearance',
+                'description' => 'Workspace identity and default reading density.',
+                'fields' => [
+                    'accent' => [
+                        'label' => 'Accent colour',
+                        'type' => 'select',
+                        'options' => [
+                            'teal' => 'Deep teal (default)',
+                            'azure' => 'Azure',
+                            'forest' => 'Forest',
+                            'graphite' => 'Graphite (neutral)',
+                        ],
+                        'default' => 'teal',
+                        'help' => 'Used for primary actions and active states. Purple is not offered — §18.1 forbids a purple identity.',
+                    ],
+                    'density' => [
+                        'label' => 'Default row density',
+                        'type' => 'select',
+                        'options' => ['comfortable' => 'Comfortable', 'compact' => 'Compact (data entry)'],
+                        'default' => 'comfortable',
+                    ],
+                    'theme' => [
+                        'label' => 'Default theme',
+                        'type' => 'select',
+                        'options' => ['light' => 'Light (white-first)', 'dark' => 'Dark'],
+                        'default' => 'light',
+                    ],
+                    'sidebar_rail' => [
+                        'label' => 'Sidebar starts collapsed',
+                        'type' => 'boolean',
+                        'default' => false,
+                        'help' => 'Users can still pin their own choice; this only sets the first-run state.',
                     ],
                 ],
             ],

@@ -83,4 +83,9 @@
             <code>sales_person_id</code> matches, filtered to the period window. Inputs and sample size shown above.
         </p>
     </div>
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

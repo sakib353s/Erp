@@ -1,0 +1,20 @@
+/* Preview build: the shipped design system, verbatim. */
+@import "../../resources/css/app.css";
+
+/* Preview-only chrome (never shipped to the app) */
+.erp-preview-bar {
+    position: sticky;
+    top: 0;
+    z-index: 1500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 9px 16px;
+    background: var(--ink);
+    color: #e8edf3;
+    font-size: 12.5px;
+}
+.erp-preview-bar a { color: #4fd1c5; text-decoration: none; font-weight: 620; }
+.erp-preview-bar a:hover { text-decoration: underline; }
+.erp-preview-bar .erp-preview-note { margin-left: auto; color: #9fb0c0; }

@@ -81,4 +81,9 @@
             {{ $movements->links() }}
         </div>
     </div>
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

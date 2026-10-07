@@ -124,4 +124,9 @@
             that sample, not synthetic data. Ties resolve to the earliest hour.
         @endif
     </p>
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

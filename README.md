@@ -1,58 +1,90 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# BD ERP
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A single-company, multi-branch ERP for Bangladesh: sales & POS, purchase and
+stock, double-entry accounting, employees, courier/delivery settlement and the
+statutory document set (invoice / Mushak 9.1 / challan) — built on Laravel 13,
+Bootstrap 5.3 as a utility base, and an original design system.
 
-## About Laravel
+* Architecture decisions, data model and module contracts: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+* Module-by-module traceability to the specification: [`docs/TRACEABILITY/`](docs/TRACEABILITY)
+* Implementation status (machine-readable): [`docs/IMPLEMENTATION_STATUS.json`](docs/IMPLEMENTATION_STATUS.json)
+* UI audit + redesign record: [`docs/UI_AUDIT_AND_REDESIGN.md`](docs/UI_AUDIT_AND_REDESIGN.md)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Non-negotiables baked into the code
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+| Invariant | Where it is enforced |
+|---|---|
+| Exactly one company per instance | `Company` + DB constraint (`config('erp.company.singleton')`) |
+| Double entry: Σ debits = Σ credits on every posted journal | accounting domain actions + tests |
+| Stock truth = immutable movements; balances derived | inventory domain |
+| Permission-filtered navigation — unauthorized items are **absent**, never disabled | `NavigationBuilder` + `NavigationMenuTest` |
+| No fake business data anywhere | widgets and reports render real queries or explicit empty states |
+| Append-only audit with actor/action detail | `AuditRecorder`, chain verification command |
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Getting started
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer setup        # install, .env, key, migrate, npm install, build
+php artisan serve
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+First boot is explicit — no default account exists:
 
-## Contributing
+```bash
+php artisan erp:setup-token      # print the one-time setup token
+# then open /setup and create the first Super Admin
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Useful commands:
 
-## Code of Conduct
+```bash
+php artisan menu:sync            # re-import the §47 catalog and re-classify entries
+php artisan search:rebuild       # rebuild the search index
+php artisan erp:chain-verify     # verify the audit hash chain
+php artisan test                 # full suite
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## The UI: "Aperture" design system
 
-## Security Vulnerabilities
+White-first, ink-on-paper enterprise UI as specified in
+[`docs/ARCHITECTURE.md` §18](docs/ARCHITECTURE.md): one configurable accent
+(deep teal by default — **no purple identity**), layered near-white surfaces,
+hairline borders, restrained elevation, tabular numerals for money, and one
+overlay system for modal / drawer / toast / confirm.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+* **App shell** — `resources/views/layouts/app.blade.php` + `partials/`:
+  sectioned navigation rail (collapsible, remembered), breadcrumbs, command
+  palette, toasts, skip link.
+* **Navigation** — the §47 catalog defines *coverage*; a curation layer
+  (`NavigationBuilder` + `config/erp.php → navigation`) decides what the rail
+  shows: job-to-be-done sections, promoted groups, one link per screen, a hard
+  depth cap. Every permitted page — including deep ones — stays reachable
+  through **⌘K / Ctrl+K**.
+* **Primitives** — `resources/views/components/ui/`: `page-header`, `kpi`,
+  `table-shell`, `empty`, `status`, `related-pages`.
+* **Behaviour** — `resources/js/app.js`: shell, palette, toasts, tables/bulk
+  selection, forms, permission matrix, repeaters, notification poller, scanner.
+  No anonymous inline scripts in Blade.
+* **Appearance** — Settings › Appearance chooses the company accent (teal /
+  azure / forest / graphite), default theme and row density. Each user can
+  still switch light/dark and comfortable/compact rows; both are remembered
+  locally, the accent is token-driven.
+
+### Design preview (no PHP required)
+
+`preview/` renders the new shell, dashboard, order list, order workspace, POS
+terminal and sign-in screen with the **same stylesheet and behaviour layer the
+app ships**. It is a review aid, not part of the application build.
+
+```bash
+node preview/serve.mjs 4173          # → http://localhost:4173
+# after changing resources/css/app.css or resources/js/app.js:
+npx vite build --config vite.preview.config.js && node preview/src/build.mjs
+```
+
+Figures in the preview are labelled sample data used to show density and state
+handling; they are never seeded into an instance.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Proprietary — © the ERP owner. Laravel itself is MIT licensed.

@@ -117,4 +117,9 @@
         </div>
         <div class="mt-3">{{ $quotations->links() }}</div>
     </div>
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

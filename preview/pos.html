@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en" data-accent="teal" data-density="comfortable">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#ffffff">
+    <title>POS terminal · BD ERP — UI redesign preview</title>
+    <link rel="stylesheet" href="./assets/preview.css">
+</head>
+<body class="erp-body">
+<a class="erp-skip-link" href="#erpContent">Skip to main content</a>
+
+
+<div class="erp-preview-bar">
+    <i class="bi bi-easel2" aria-hidden="true"></i>
+    <strong>UI redesign preview</strong>
+    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./pos.html" style="color:#fff;text-decoration:underline">POS terminal</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
+    <span class="erp-preview-note">Static render of the new shell — same CSS + JS the Laravel app ships. Press ⌘K / Ctrl+K.</span>
+</div>
+<div class="erp-shell" data-rail="expanded">
+
+<aside class="erp-sidebar" id="erpSidebar" aria-label="Primary navigation">
+    <div class="erp-sidebar-head">
+        <a class="erp-brand" href="./dashboard.html">
+            <span class="erp-brand-mark" aria-hidden="true">BE</span>
+            <span class="erp-brand-text">
+                <strong>BD ERP</strong>
+                <small>Rafshan Trading Ltd.</small>
+            </span>
+        </a>
+        <button class="erp-icon-btn d-lg-none" type="button" data-erp-sidebar-close aria-label="Close navigation">
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <div class="erp-sidebar-context">
+        <button class="erp-nav-search" type="button" data-palette-open>
+            <i class="bi bi-search" aria-hidden="true"></i>
+            <span>Search or jump to…</span>
+            <kbd>⌘K</kbd>
+        </button>
+    </div>
+
+    <nav class="erp-sidebar-nav" aria-label="Sections">
+        <div class="erp-nav-section">
+            <p class="erp-nav-section-label">
+                <i class="bi bi-star" aria-hidden="true"></i>
+                <span>Pinned</span>
+            </p>
+            
+    <div class="erp-nav-group">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-pinned-0" aria-expanded="false">
+            <i class="bi bi-star erp-nav-icon" aria-hidden="true"></i>
+            <span>Pinned pages</span>
+            <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
+        </button>
+        <div class="collapse" id="nav-pinned-0">
+            <div class="erp-nav-sub">
+        <a class="erp-nav-link" href="./orders.html">
+            <span>Sales orders</span>
+        </a>
+        <a class="erp-nav-link" href="./pos.html">
+            <span>POS terminal</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Trial balance</span>
+        </a></div>
+        </div>
+    </div>
+        </div>
+        <div class="erp-nav-section">
+            <p class="erp-nav-section-label">
+                <i class="bi bi-lightning-charge" aria-hidden="true"></i>
+                <span>My work</span>
+            </p>
+            
+    <div class="erp-nav-group">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-work-0" aria-expanded="false">
+            <i class="bi bi-inbox erp-nav-icon" aria-hidden="true"></i>
+            <span>Work queue</span>
+            <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
+        </button>
+        <div class="collapse" id="nav-work-0">
+            <div class="erp-nav-sub">
+        <a class="erp-nav-link" href="./dashboard.html">
+            <span>Dashboard</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Approval inbox</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Notifications</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Audit log</span>
+        </a></div>
+        </div>
+    </div>
+        </div>
+        <div class="erp-nav-section">
+            <p class="erp-nav-section-label">
+                <i class="bi bi-cart3" aria-hidden="true"></i>
+                <span>Sell</span>
+            </p>
+            
+    <div class="erp-nav-group">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-sell-0" aria-expanded="false">
+            <i class="bi bi-cart3 erp-nav-icon" aria-hidden="true"></i>
+            <span>Sales</span>
+            <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
+        </button>
+        <div class="collapse" id="nav-sell-0">
+            <div class="erp-nav-sub">
+        <a class="erp-nav-link" href="./orders.html">
+            <span>Orders</span>
+        </a>
+        <a class="erp-nav-link" href="./order-detail.html">
+            <span>Invoices</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Quotations</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Delivery challans</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Shipments</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Delivery riders</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Coupons &amp; promotions</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Sales team</span>
+        </a><button class="erp-nav-link" type="button" data-palette-open title="Search every page in this module">
+                <i class="bi bi-plus-circle erp-nav-icon" aria-hidden="true"></i>
+                <span>34 more — search</span>
+           </button></div>
+        </div>
+    </div>
+    <div class="erp-nav-group">
+        <button class="erp-nav-group-btn is-active has-active-trail" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-sell-1" aria-expanded="true">
+            <i class="bi bi-upc-scan erp-nav-icon" aria-hidden="true"></i>
+            <span>Counter (POS)</span>
+            <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
+        </button>
+        <div class="collapse show" id="nav-sell-1">
+            <div class="erp-nav-sub">
+        <a class="erp-nav-link active" href="./pos.html" aria-current="page">
+            <span>Terminal</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Sessions</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Returns</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Exchange</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Cash drawer</span>
+        </a></div>
+        </div>
+    </div>
+        <a class="erp-nav-link" href="#">
+            <i class="bi bi-people erp-nav-icon" aria-hidden="true"></i>
+            <span>Customers</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <i class="bi bi-arrow-counterclockwise erp-nav-icon" aria-hidden="true"></i>
+            <span>Returns</span>
+        </a>
+        </div>
+        <div class="erp-nav-section">
+            <p class="erp-nav-section-label">
+                <i class="bi bi-box-seam" aria-hidden="true"></i>
+                <span>Buy &amp; stock</span>
+            </p>
+            
+    <div class="erp-nav-group">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-operate-0" aria-expanded="false">
+            <i class="bi bi-box-seam erp-nav-icon" aria-hidden="true"></i>
+            <span>Inventory</span>
+            <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
+        </button>
+        <div class="collapse" id="nav-operate-0">
+            <div class="erp-nav-sub">
+        <a class="erp-nav-link" href="#">
+            <span>Products</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Stock overview</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Adjustments</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Transfers</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Stock movements</span>
+        </a><button class="erp-nav-link" type="button" data-palette-open title="Search every page in this module">
+                <i class="bi bi-plus-circle erp-nav-icon" aria-hidden="true"></i>
+                <span>21 more — search</span>
+           </button></div>
+        </div>
+    </div>
+        <a class="erp-nav-link" href="#">
+            <i class="bi bi-bag-check erp-nav-icon" aria-hidden="true"></i>
+            <span>Purchase</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <i class="bi bi-truck erp-nav-icon" aria-hidden="true"></i>
+            <span>Suppliers</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <i class="bi bi-building erp-nav-icon" aria-hidden="true"></i>
+            <span>Warehouses</span>
+        </a>
+        </div>
+        <div class="erp-nav-section">
+            <p class="erp-nav-section-label">
+                <i class="bi bi-cash-stack" aria-hidden="true"></i>
+                <span>Money</span>
+            </p>
+            
+    <div class="erp-nav-group">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-money-0" aria-expanded="false">
+            <i class="bi bi-journal-text erp-nav-icon" aria-hidden="true"></i>
+            <span>Accounting</span>
+            <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
+        </button>
+        <div class="collapse" id="nav-money-0">
+            <div class="erp-nav-sub">
+        <a class="erp-nav-link" href="#">
+            <span>Chart of accounts</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Journals</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>General ledger</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Trial balance</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Opening balances</span>
+        </a></div>
+        </div>
+    </div>
+        <a class="erp-nav-link" href="#">
+            <i class="bi bi-bank erp-nav-icon" aria-hidden="true"></i>
+            <span>Cash &amp; bank</span>
+        </a>
+        </div>
+        <div class="erp-nav-section">
+            <p class="erp-nav-section-label">
+                <i class="bi bi-people" aria-hidden="true"></i>
+                <span>People</span>
+            </p>
+            
+        <a class="erp-nav-link" href="#">
+            <i class="bi bi-person-badge erp-nav-icon" aria-hidden="true"></i>
+            <span>Employee</span>
+        </a>
+        </div>
+        <div class="erp-nav-section">
+            <p class="erp-nav-section-label">
+                <i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
+                <span>Insight</span>
+            </p>
+            
+    <div class="erp-nav-group">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-insight-0" aria-expanded="false">
+            <i class="bi bi-graph-up-arrow erp-nav-icon" aria-hidden="true"></i>
+            <span>Reports</span>
+            <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
+        </button>
+        <div class="collapse" id="nav-insight-0">
+            <div class="erp-nav-sub">
+        <a class="erp-nav-link" href="#">
+            <span>Sales summary</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Sales trend</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Invoice aging</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Peak hours</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Custom report</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Documents</span>
+        </a><button class="erp-nav-link" type="button" data-palette-open title="Search every page in this module">
+                <i class="bi bi-plus-circle erp-nav-icon" aria-hidden="true"></i>
+                <span>26 more — search</span>
+           </button></div>
+        </div>
+    </div>
+        </div>
+        <div class="erp-nav-section">
+            <p class="erp-nav-section-label">
+                <i class="bi bi-shield-check" aria-hidden="true"></i>
+                <span>Governance</span>
+            </p>
+            
+    <div class="erp-nav-group">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-govern-0" aria-expanded="false">
+            <i class="bi bi-building erp-nav-icon" aria-hidden="true"></i>
+            <span>Business management</span>
+            <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
+        </button>
+        <div class="collapse" id="nav-govern-0">
+            <div class="erp-nav-sub">
+        <a class="erp-nav-link" href="#">
+            <span>Workflows</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Documents</span>
+        </a></div>
+        </div>
+    </div>
+        </div>
+        <div class="erp-nav-section">
+            <p class="erp-nav-section-label">
+                <i class="bi bi-sliders" aria-hidden="true"></i>
+                <span>Configuration</span>
+            </p>
+            
+    <div class="erp-nav-group">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-configure-0" aria-expanded="false">
+            <i class="bi bi-sliders erp-nav-icon" aria-hidden="true"></i>
+            <span>Settings</span>
+            <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
+        </button>
+        <div class="collapse" id="nav-configure-0">
+            <div class="erp-nav-sub">
+        <a class="erp-nav-link" href="#">
+            <span>Company profile</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Users</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Roles &amp; permissions</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Branches</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Appearance</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Courier partners</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>POS settings</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>System maintenance</span>
+        </a><button class="erp-nav-link" type="button" data-palette-open title="Search every page in this module">
+                <i class="bi bi-plus-circle erp-nav-icon" aria-hidden="true"></i>
+                <span>38 more — search</span>
+           </button></div>
+        </div>
+    </div>
+        <a class="erp-nav-link" href="#">
+            <i class="bi bi-list-check erp-nav-icon" aria-hidden="true"></i>
+            <span>Master data</span>
+        </a>
+        </div></nav>
+
+    <div class="erp-sidebar-foot">
+        
+        <a class="erp-util-link" href="#">
+            <i class="bi bi-building" aria-hidden="true"></i>
+            <span>Company profile</span>
+        </a>
+        <a class="erp-util-link" href="#">
+            <i class="bi bi-list-check" aria-hidden="true"></i>
+            <span>Master data</span>
+        </a>
+        <a class="erp-util-link" href="#">
+            <i class="bi bi-person-badge" aria-hidden="true"></i>
+            <span>Employees</span>
+        </a>
+        <a class="erp-util-link active" href="#">
+            <i class="bi bi-inbox" aria-hidden="true"></i>
+            <span>Approval inbox</span>
+        </a>
+        <a class="erp-util-link" href="#">
+            <i class="bi bi-shield-lock" aria-hidden="true"></i>
+            <span>Audit log</span>
+        </a>
+        <div class="erp-sidebar-foot-row">
+            <button class="erp-rail-toggle d-none d-lg-flex" type="button" data-erp-rail-toggle aria-expanded="true"
+                    title="Collapse navigation">
+                <i class="bi bi-chevron-double-left" aria-hidden="true"></i>
+                <span>Collapse</span>
+            </button>
+        </div>
+        <span class="erp-version">Build 2026.10 · v2</span>
+    </div>
+</aside>
+    <div class="erp-main">
+
+<header class="erp-topbar">
+    <button class="erp-icon-btn d-lg-none" type="button" data-erp-sidebar-open aria-label="Open navigation">
+        <i class="bi bi-list" aria-hidden="true"></i>
+    </button>
+
+    <div class="erp-topbar-crumbs">
+        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb">
+        <li>
+            <span class="is-current" aria-current="page">Sell</span>
+        </li>
+        <li>
+            <span class="is-current" aria-current="page">Counter (POS)</span>
+        </li>
+        <li>
+            <span class="is-current" aria-current="page">Terminal</span>
+        </li></ol></nav>
+        <div class="erp-topbar-title">
+            <strong class="d-none d-md-inline">POS terminal</strong>
+            <span class="erp-chip erp-chip-outline d-none d-xl-inline-flex" title="Current branch context">
+                <i class="bi bi-geo-alt" aria-hidden="true"></i>Dhaka HQ
+            </span>
+            <span class="erp-chip erp-chip-outline d-none d-xxl-inline-flex" title="Current warehouse context">
+                <i class="bi bi-box-seam" aria-hidden="true"></i>Main warehouse
+            </span>
+        </div>
+    </div>
+
+    <button class="erp-global-search d-none d-md-flex" type="button" data-palette-open aria-label="Search the workspace">
+        <i class="bi bi-search" aria-hidden="true"></i>
+        <span>Search pages, orders, invoices…</span>
+        <kbd>⌘K</kbd>
+    </button>
+
+    <div class="erp-topbar-actions">
+        <form class="erp-switcher d-none d-lg-flex" onsubmit="return false">
+            <label class="erp-visually-hidden" for="branchSwitch">Branch</label>
+            <i class="bi bi-geo-alt" aria-hidden="true"></i>
+            <select class="erp-switcher-select" id="branchSwitch">
+                <option>Dhaka HQ</option>
+                <option>Chattogram branch</option>
+                <option>Sylhet outlet</option>
+            </select>
+        </form>
+
+        <button class="erp-icon-btn d-none d-md-inline-flex" type="button" data-erp-theme-toggle
+                aria-pressed="false" title="Switch appearance">
+            <i class="bi bi-moon-stars" aria-hidden="true"></i>
+        </button>
+
+        <button class="erp-icon-btn d-none d-xl-inline-flex" type="button" data-erp-density-toggle
+                aria-pressed="false" title="Compact rows">
+            <i class="bi bi-list-ul" aria-hidden="true"></i>
+        </button>
+
+        <button class="erp-lang-btn" type="button" title="Switch language">বাংলা</button>
+
+        <div class="dropdown">
+            <button class="erp-icon-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications">
+                <i class="bi bi-bell" aria-hidden="true"></i>
+                <span class="erp-badge-count">4</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end erp-notif-menu">
+                <div class="dropdown-header d-flex justify-content-between align-items-center">
+                    <span>Notifications</span>
+                    <span class="erp-chip erp-chip-outline">4 unread</span>
+                </div>
+                <a class="dropdown-item fw-semibold" href="#">Order SO-2026-01845 needs confirmation
+                    <small class="d-block fw-normal text-body-secondary">unread · high</small></a>
+                <a class="dropdown-item fw-semibold" href="#">Courier settlement ready to reconcile
+                    <small class="d-block fw-normal text-body-secondary">unread · normal</small></a>
+                <a class="dropdown-item" href="#">Stock adjustment ADJ-00031 approved
+                    <small class="d-block fw-normal text-body-secondary">read · normal</small></a>
+                <a class="dropdown-item text-center fw-semibold" href="#">View all notifications</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="erp-avatar-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Account menu">S</button>
+            <div class="dropdown-menu dropdown-menu-end">
+                <div class="dropdown-header">
+                    <strong>Sakib Rahman</strong>
+                    <small class="d-block text-body-secondary">sakib@rafshtrading.bd</small>
+                </div>
+                <a class="dropdown-item" href="#"><i class="bi bi-person me-2" aria-hidden="true"></i>My profile</a>
+                <a class="dropdown-item" href="#"><i class="bi bi-bell me-2" aria-hidden="true"></i>Notifications</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2" aria-hidden="true"></i>Sign out</a>
+            </div>
+        </div>
+    </div>
+</header>
+        <main class="erp-content erp-content-fluid" id="erpContent">
+            <header class="erp-page-head">
+                <div class="erp-page-head-main">
+                    <p class="erp-eyebrow">Counter · Session CS-00091</p>
+                    <h1 class="erp-h1">POS terminal <span class="erp-status erp-status-open">open</span></h1>
+                    <p class="erp-page-sub">Cashier: Rakib · Dhaka HQ counter 2 · opened 09:58 AM with ৳ 5,000 float. Keyboard-first: F2 product, F4 payment, F8 hold, F9 complete.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <span class="erp-chip erp-chip-outline"><i class="bi bi-clock" aria-hidden="true"></i>Shift 4h 12m</span>
+                    <button class="btn btn-outline-secondary" type="button">X-report</button>
+                    <button class="btn btn-outline-secondary" type="button">Hold order</button>
+                    <button class="btn btn-primary" type="button">Close session</button>
+                </div>
+            </header>
+
+            <div class="row g-3">
+                <div class="col-lg-7">
+                    <div class="erp-toolbar">
+                        <div class="erp-toolbar-start">
+                            <div class="erp-input-group" style="flex:1">
+                                <i class="bi bi-upc-scan" aria-hidden="true"></i>
+                                <input class="form-control" placeholder="Scan barcode or type SKU / name…" autofocus>
+                            </div>
+                            <span class="erp-chip erp-chip-soft"><i class="bi bi-wifi" aria-hidden="true"></i>Online · offline queue empty</span>
+                        </div>
+                        <div class="erp-toolbar-end">
+                            <button class="btn btn-outline-secondary btn-sm" type="button">Price check</button>
+                            <button class="btn btn-outline-secondary btn-sm" type="button">Customers</button>
+                        </div>
+                    </div>
+
+                    <div class="row g-2">
+                        
+                        <div class="col-sm-6 col-xl-4">
+                            <button class="erp-card erp-card-tight w-100 text-start h-100" type="button">
+                                <span class="erp-chip erp-chip-outline mb-2">RM-5KG · rack A3</span>
+                                <strong class="d-block mb-1">Rice — Miniket 5kg</strong>
+                                <span class="erp-amount">৳ 1,180</span>
+                                <span class="erp-chip erp-chip-ok ms-2">in stock</span>
+                            </button>
+                        </div>
+                        <div class="col-sm-6 col-xl-4">
+                            <button class="erp-card erp-card-tight w-100 text-start h-100" type="button">
+                                <span class="erp-chip erp-chip-outline mb-2">SO-2L · rack B1</span>
+                                <strong class="d-block mb-1">Soybean oil 2L</strong>
+                                <span class="erp-amount">৳ 335</span>
+                                <span class="erp-chip erp-chip-ok ms-2">in stock</span>
+                            </button>
+                        </div>
+                        <div class="col-sm-6 col-xl-4">
+                            <button class="erp-card erp-card-tight w-100 text-start h-100" type="button">
+                                <span class="erp-chip erp-chip-outline mb-2">SG-1KG · rack B2</span>
+                                <strong class="d-block mb-1">Sugar — fresh 1kg</strong>
+                                <span class="erp-amount">৳ 128</span>
+                                <span class="erp-chip erp-chip-ok ms-2">in stock</span>
+                            </button>
+                        </div>
+                        <div class="col-sm-6 col-xl-4">
+                            <button class="erp-card erp-card-tight w-100 text-start h-100" type="button">
+                                <span class="erp-chip erp-chip-outline mb-2">ML-1L · rack C4</span>
+                                <strong class="d-block mb-1">Milk powder 1kg</strong>
+                                <span class="erp-amount">৳ 880</span>
+                                <span class="erp-chip erp-chip-ok ms-2">in stock</span>
+                            </button>
+                        </div>
+                        <div class="col-sm-6 col-xl-4">
+                            <button class="erp-card erp-card-tight w-100 text-start h-100" type="button">
+                                <span class="erp-chip erp-chip-outline mb-2">TZ-500 · rack A1</span>
+                                <strong class="d-block mb-1">Tea — premium 500g</strong>
+                                <span class="erp-amount">৳ 410</span>
+                                <span class="erp-chip erp-chip-ok ms-2">in stock</span>
+                            </button>
+                        </div>
+                        <div class="col-sm-6 col-xl-4">
+                            <button class="erp-card erp-card-tight w-100 text-start h-100" type="button">
+                                <span class="erp-chip erp-chip-outline mb-2">LT-200 · rack C2</span>
+                                <strong class="d-block mb-1">Lentil — masoor 1kg</strong>
+                                <span class="erp-amount">৳ 145</span>
+                                <span class="erp-chip erp-chip-ok ms-2">in stock</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5">
+                    <section class="erp-table-shell h-100">
+                        <div class="erp-card-head px-3 pt-3">
+                            <h2 class="erp-card-title"><i class="bi bi-basket" aria-hidden="true"></i> Current sale</h2>
+                            <button class="btn btn-sm btn-outline-danger" type="button">Void</button>
+                        </div>
+                        <div class="erp-table-scroll">
+                            <table class="table erp-table">
+                                <thead>
+                                    <tr><th>Item</th><th class="erp-th-num">Qty</th><th class="erp-th-num">Total</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Rice — Miniket 5kg<div class="erp-td-muted small">৳1,180 × 12</div></td>
+                                        <td class="erp-td-num">12</td>
+                                        <td class="erp-td-num">৳14,160</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Soybean oil 2L<div class="erp-td-muted small">৳335 × 24</div></td>
+                                        <td class="erp-td-num">24</td>
+                                        <td class="erp-td-num">৳8,040</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr><td colspan="2" class="text-end">Subtotal</td><td class="erp-td-num">৳22,200</td></tr>
+                                    <tr><td colspan="2" class="text-end">Discount (retailer)</td><td class="erp-td-num erp-amount-neg">− ৳1,460</td></tr>
+                                    <tr><td colspan="2" class="text-end">VAT 5%</td><td class="erp-td-num">৳1,137</td></tr>
+                                    <tr><td colspan="2" class="text-end">Grand total</td><td class="erp-td-num erp-amount-lg">৳21,877</td></tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <div class="p-3 border-top" style="border-color:var(--line-soft) !important">
+                            <div class="erp-segmented w-100 mb-2">
+                                <button class="active flex-fill" type="button">Cash</button>
+                                <button class="flex-fill" type="button">bKash</button>
+                                <button class="flex-fill" type="button">Card</button>
+                                <button class="flex-fill" type="button">Split</button>
+                            </div>
+                            <button class="btn btn-primary w-100 btn-lg" type="button">
+                                <i class="bi bi-check2-circle" aria-hidden="true"></i> Complete sale · ৳ 21,877
+                            </button>
+                            <p class="erp-widget-note mt-2 mb-0">Offline sales are queued with an idempotency key and reconciled on reconnect; the server stays authoritative.</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+
+<footer class="erp-footer">
+    <span>BD ERP · Rafshan Trading Ltd.</span>
+    <span class="erp-footer-meta">
+        <span>07 Oct 2026, 06:20 PM · Asia/Dhaka</span>
+        <span class="d-none d-md-inline">Press <kbd>⌘</kbd><kbd>K</kbd> to jump anywhere</span>
+    </span>
+</footer>
+    </div>
+</div>
+
+<div class="erp-backdrop" data-erp-backdrop hidden></div>
+</div>
+
+
+<div class="erp-palette" id="erpPalette" hidden role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="erp-palette-panel">
+        <div class="erp-palette-search">
+            <i class="bi bi-search" aria-hidden="true"></i>
+            <label class="erp-visually-hidden" for="erpPaletteInput">Search the workspace</label>
+            <input class="erp-palette-input" id="erpPaletteInput" type="text" autocomplete="off" spellcheck="false"
+                   placeholder="Search pages, reports, and actions…" data-palette-input>
+            <kbd>esc</kbd>
+        </div>
+        <div class="erp-palette-list" data-palette-list role="listbox" aria-label="Results"></div>
+        <div class="erp-palette-foot">
+            <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+            <span><kbd>↵</kbd> open</span>
+            <span class="ms-auto">28 destinations available to you</span>
+        </div>
+    </div>
+</div>
+
+<div class="erp-toast-stack" data-erp-toasts role="status" aria-live="polite"></div>
+
+<script>window.erpNavIndex = [{"label":"Dashboard","url":"./dashboard.html","icon":"bi-grid-1x2","section":"My work","group":"Dashboard"},{"label":"Approval inbox","url":"#","icon":"bi-inbox","section":"My work","group":"Workflow"},{"label":"Sales orders","url":"./orders.html","icon":"bi-receipt","section":"Sell","group":"Sales"},{"label":"Create order","url":"./orders.html","icon":"bi-plus-circle","section":"Sell","group":"Sales","hint":"action"},{"label":"Bulk confirm orders","url":"./orders.html","icon":"bi-check2-square","section":"Sell","group":"Sales","hint":"action"},{"label":"Bulk print invoice","url":"./orders.html","icon":"bi-printer","section":"Sell","group":"Sales","hint":"action"},{"label":"Invoices","url":"./order-detail.html","icon":"bi-file-earmark-text","section":"Sell","group":"Sales"},{"label":"Mushak 9.1 tax invoice","url":"#","icon":"bi-file-earmark-ruled","section":"Sell","group":"Sales"},{"label":"POS terminal","url":"./pos.html","icon":"bi-upc-scan","section":"Sell","group":"Counter (POS)"},{"label":"Cash in / cash out","url":"#","icon":"bi-cash-stack","section":"Sell","group":"Counter (POS)"},{"label":"Coupon analytics","url":"#","icon":"bi-ticket-perforated","section":"Sell","group":"Sales"},{"label":"Products","url":"#","icon":"bi-boxes","section":"Buy & stock","group":"Inventory"},{"label":"Stock overview","url":"#","icon":"bi-clipboard-check","section":"Buy & stock","group":"Inventory"},{"label":"Stock movement ledger","url":"#","icon":"bi-list-columns","section":"Buy & stock","group":"Inventory"},{"label":"Purchase orders","url":"#","icon":"bi-bag-check","section":"Buy & stock","group":"Purchase"},{"label":"Chart of accounts","url":"#","icon":"bi-diagram-3","section":"Money","group":"Accounting"},{"label":"Journal entries","url":"#","icon":"bi-journal-text","section":"Money","group":"Accounting"},{"label":"Trial balance","url":"#","icon":"bi-clipboard-data","section":"Money","group":"Accounting"},{"label":"General ledger","url":"#","icon":"bi-list-columns","section":"Money","group":"Accounting"},{"label":"Employees","url":"#","icon":"bi-person-badge","section":"People","group":"Employee"},{"label":"Sales summary report","url":"#","icon":"bi-bar-chart","section":"Insight","group":"Reports"},{"label":"Invoice aging report","url":"#","icon":"bi-calendar-check","section":"Insight","group":"Reports"},{"label":"Custom report builder","url":"#","icon":"bi-sliders2","section":"Insight","group":"Reports"},{"label":"Workflows","url":"#","icon":"bi-diagram-3","section":"Governance","group":"Business management"},{"label":"Users","url":"#","icon":"bi-person-badge","section":"Configuration","group":"Settings"},{"label":"Roles & permissions","url":"#","icon":"bi-shield-lock","section":"Configuration","group":"Settings"},{"label":"Appearance","url":"#","icon":"bi-palette","section":"Configuration","group":"Settings"},{"label":"System maintenance","url":"#","icon":"bi-tools","section":"Configuration","group":"Settings"}];</script>
+<script type="module" src="./assets/preview.js"></script>
+</body>
+</html>

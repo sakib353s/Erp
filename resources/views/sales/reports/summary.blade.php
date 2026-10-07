@@ -176,4 +176,9 @@
     <p class="text-muted small mt-2">
         Every figure aggregates invoices and posted receipts directly — no synthetic rows.
     </p>
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

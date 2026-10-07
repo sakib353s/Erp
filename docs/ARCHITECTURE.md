@@ -531,6 +531,30 @@ Additional: password policy + history, optional email verification, recovery flo
 
 DB-driven tree (module → submenu → sub-submenu), collapsible groups, search/filter, favorites + recent, permission-filtered (unauthorized items absent), active trail, breadcrumbs, page title, contextual action bar. No wall-of-text sidebar; no disabled/locked unauthorized items.
 
+### 18.3.1 Navigation curation (implemented 2026-10-07)
+
+The §47 catalog is the **coverage authority**; it is not a sidebar layout. Curation
+happens in `NavigationBuilder` from `config('erp.navigation')`, never in Blade:
+
+| Concern | Mechanism |
+|---|---|
+| Destination vs action | `CatalogImporter` seeds verb-first leaves with `location = 'action'`; only `sidebar` rows may render |
+| Grouping | job-to-be-done `sections`; second-level groups are *promoted* to siblings (`max_depth`) |
+| One screen, one link | `dedupe_by_path` + `collapse_query_variants` |
+| Rail length | `max_children` quota; the remainder is announced as “n more — search” |
+| Deep pages | ⌘K palette indexes every permitted, routable entry (`palette()`) |
+| Query variants | page-level saved views (`viewsForPath()`), e.g. the order status ladder |
+| Sibling screens | “More in this module” rail (`related()`) |
+| Personal | server-side pins (`menu_item_favorites`, `navigation.pin`) |
+| Orientation | breadcrumb trail (`trail()`) rendered by the TopBar |
+
+Invariants preserved: only `status = active` rows render; unauthorized items are
+absent (never disabled); portal and entitlement filters still apply; the whole
+tree remains database-driven (`php artisan menu:sync` after each phase).
+
+`php artisan menu:sync` must be run once after this change so existing rows pick
+up the new `location` classification.
+
 ### 18.4 Responsive modes (behavioral adaptation, not scaling)
 
 | Mode | Width | Behavior |

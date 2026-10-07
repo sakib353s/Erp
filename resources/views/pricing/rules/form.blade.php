@@ -178,4 +178,9 @@
             <a class="btn btn-outline-secondary" href="{{ route('pricing.rules.index') }}">Cancel</a>
         </div>
     </form>
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

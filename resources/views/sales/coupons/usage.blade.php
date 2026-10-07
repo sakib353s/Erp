@@ -101,4 +101,9 @@
     </div>
 
     <p class="text-muted small mt-2">method: {{ $report['method'] }}</p>
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

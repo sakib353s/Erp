@@ -10,10 +10,6 @@
         </div>
     </div>
 
-    @if (session('status'))
-        <div class="alert alert-success">{{ session('status') }}</div>
-    @endif
-
     <div class="erp-card mb-3">
         <h2 class="erp-h3">Add rider</h2>
         @if ($employees->isEmpty())
@@ -140,4 +136,9 @@
             </table>
         </div>
     </div>
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

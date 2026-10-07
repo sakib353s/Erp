@@ -18,10 +18,6 @@
         <a class="btn btn-outline-secondary" href="{{ route('pricing.price-lists.index') }}">Price lists</a>
     </div>
 
-    @if (session('status'))
-        <div class="alert alert-success" role="alert">{{ session('status') }}</div>
-    @endif
-
     @if ($errors->any())
         <div class="alert alert-danger" role="alert">
             <ul class="mb-0">
@@ -214,4 +210,9 @@
             </table>
         </div>
     </div>
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection

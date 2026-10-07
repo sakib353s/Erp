@@ -13,6 +13,7 @@ use App\Http\Controllers\ContextController;
 use App\Http\Controllers\CourierPartnerController;
 use App\Http\Controllers\CourierProviderController;
 use App\Http\Controllers\CustomReportController;
+use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeliveryZoneController;
 use App\Http\Controllers\DocumentController;
@@ -113,6 +114,10 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::get('/app/dashboard', [DashboardController::class, 'index'])
         ->middleware(['permission:dashboard.view', 'feature:dashboard'])
         ->name('dashboard');
+
+    /* ---- Personal navigation: pin/unpin a destination (§18.3) ---- */
+    Route::post('/app/navigation/pin', [NavigationController::class, 'pin'])
+        ->name('navigation.pin');
 
     /* ---- Global search (D17 / row 16-49): auth only, per-entity
            permissions enforced inside SearchService ---- */

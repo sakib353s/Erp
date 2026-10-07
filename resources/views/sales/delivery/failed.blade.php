@@ -10,9 +10,6 @@
         </div>
     </div>
 
-    @if (session('status'))
-        <div class="alert alert-success">{{ session('status') }}</div>
-    @endif
     @if ($errors->has('failed_delivery'))
         <div class="alert alert-warning">{{ $errors->first('failed_delivery') }}</div>
     @endif
@@ -74,4 +71,9 @@
             <p class="small text-muted mb-0 mt-2">Retry puts the same shipment back out with the courier (no stock movement). Return brings the goods back into stock (reverses this shipment's dispatch). Reship returns the goods, closes the failed shipment, and creates its replacement. An issued invoice means the return belongs to the sales return flow — this screen says so instead of forcing a reversal.</p>
         @endif
     </div>
+
+    <div class="mt-3">
+        <x-ui.related-pages />
+    </div>
+
 @endsection
