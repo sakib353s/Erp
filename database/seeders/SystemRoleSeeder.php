@@ -64,6 +64,7 @@ class SystemRoleSeeder extends Seeder
                 'purchase.orders.view', 'purchase.orders.approve', 'purchase.orders.cancel',
                 'purchase.receipts.view', 'purchase.bills.view', 'purchase.bills.approve',
                 'purchase.payments.view', 'purchase.payments.create',
+                'purchase.returns.view', 'purchase.returns.approve', 'purchase.returns.cancel',
                 'suppliers.view', 'inventory.stock.view',
             ]],
             ['slug' => 'employee', 'name' => 'Employee', 'description' => 'Staff account: own portal access only — own leave, own payslips.', 'keys' => [
@@ -82,6 +83,7 @@ class SystemRoleSeeder extends Seeder
                 'purchase.orders.view', 'purchase.orders.create',
                 'purchase.receipts.view', 'purchase.receipts.create',
                 'purchase.bills.view', 'purchase.bills.create',
+                'purchase.returns.view', 'purchase.returns.create',
                 'inventory.products.view', 'inventory.stock.view',
             ]],
             ['slug' => 'storekeeper', 'name' => 'Store keeper', 'description' => 'Receiving desk: books goods in against approved orders and posts them to stock.', 'keys' => [
@@ -89,6 +91,7 @@ class SystemRoleSeeder extends Seeder
                 'suppliers.view',
                 'purchase.orders.view', 'purchase.receipts.view',
                 'purchase.receipts.create', 'purchase.receipts.post', 'purchase.bills.view',
+                'purchase.returns.view', 'purchase.returns.create',
                 'inventory.stock.view', 'inventory.ledger.view', 'inventory.transfers.receive',
             ]],
         ];

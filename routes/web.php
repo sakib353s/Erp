@@ -23,6 +23,7 @@ use App\Http\Controllers\GoodsReceiptController;
 use App\Http\Controllers\HrController;
 use App\Http\Controllers\PurchaseBillController;
 use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\PurchaseReturnController;
 use App\Http\Controllers\SupplierPaymentController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\FailedDeliveryController;
@@ -524,6 +525,29 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::post('/app/purchase/payments', [SupplierPaymentController::class, 'store'])
         ->middleware('permission:purchase.payments.create')
         ->name('purchase.payments.store');
+
+    /* ---- Purchase returns (§03.9) — the correction path for a posted
+       receipt or bill. `create` is registered before the {return} binding so
+       the literal path is never mistaken for a document id. ---- */
+    Route::get('/app/purchase/returns/create', [PurchaseReturnController::class, 'create'])
+        ->middleware('permission:purchase.returns.create')
+        ->name('purchase.returns.create');
+    Route::post('/app/purchase/returns', [PurchaseReturnController::class, 'store'])
+        ->middleware('permission:purchase.returns.create')
+        ->name('purchase.returns.store');
+    Route::middleware('permission:purchase.returns.view')->group(function () {
+        Route::get('/app/purchase/returns', [PurchaseReturnController::class, 'index'])->name('purchase.returns.index');
+        Route::get('/app/purchase/returns/{return}', [PurchaseReturnController::class, 'show'])->name('purchase.returns.show');
+    });
+    Route::post('/app/purchase/returns/{return}/submit', [PurchaseReturnController::class, 'submit'])
+        ->middleware('permission:purchase.returns.create')
+        ->name('purchase.returns.submit');
+    Route::post('/app/purchase/returns/{return}/approve', [PurchaseReturnController::class, 'approve'])
+        ->middleware('permission:purchase.returns.approve')
+        ->name('purchase.returns.approve');
+    Route::post('/app/purchase/returns/{return}/cancel', [PurchaseReturnController::class, 'cancel'])
+        ->middleware('permission:purchase.returns.cancel')
+        ->name('purchase.returns.cancel');
 
     /* ---- Masters (§14) — permission keys come from MasterCatalog ---- */
     foreach (MasterCatalog::all() as $slug => $entry) {

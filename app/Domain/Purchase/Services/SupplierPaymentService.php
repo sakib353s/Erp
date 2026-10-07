@@ -172,10 +172,16 @@ class SupplierPaymentService
             ]);
 
             $newPaid = round((float) $bill->paid_amount + $amount, 4);
-            $newDue = round(max(0, (float) $bill->total - $newPaid), 4);
 
             $bill->forceFill([
                 'paid_amount' => $newPaid,
+            ]);
+
+            // One definition of the balance for cash and credit alike:
+            // due = total − paid − credited (see PurchaseBill::balanceAgainst).
+            $newDue = $bill->balanceAgainst();
+
+            $bill->forceFill([
                 'due_amount' => $newDue,
                 'status' => $newDue <= 0.0001 ? 'paid' : 'partially_paid',
             ])->save();

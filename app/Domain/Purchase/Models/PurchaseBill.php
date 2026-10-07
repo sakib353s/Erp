@@ -9,6 +9,7 @@ use App\Domain\Masters\Supplier;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -36,7 +37,7 @@ class PurchaseBill extends Model
         'company_id', 'branch_id', 'supplier_id', 'purchase_order_id', 'goods_receipt_id',
         'code', 'supplier_bill_no', 'bill_date', 'due_date', 'status', 'posting_state',
         'match_state', 'match_summary', 'subtotal', 'discount_total', 'tax_total', 'total',
-        'paid_amount', 'due_amount', 'notes', 'journal_entry_id', 'created_by',
+        'paid_amount', 'credited_amount', 'due_amount', 'notes', 'journal_entry_id', 'created_by',
         'approved_by', 'approved_at', 'posted_at', 'cancel_reason',
     ];
 
@@ -50,6 +51,7 @@ class PurchaseBill extends Model
         'tax_total' => 'decimal:4',
         'total' => 'decimal:4',
         'paid_amount' => 'decimal:4',
+        'credited_amount' => 'decimal:4',
         'due_amount' => 'decimal:4',
     ];
 
@@ -104,6 +106,31 @@ class PurchaseBill extends Model
     }
 
     /** Is this bill part of what the company currently owes? */
+    /**
+     * The single definition of what is still owed on this bill:
+     * total − money paid − credit taken back through purchase returns.
+     * Cash and credit both reduce it, and neither rewrites the other.
+     */
+    public function balanceAgainst(?float $total = null, ?float $paid = null, ?float $credited = null): float
+    {
+        $total ??= (float) $this->total;
+        $paid ??= (float) $this->paid_amount;
+        $credited ??= (float) $this->credited_amount;
+
+        return round(max(0, $total - $paid - $credited), 4);
+    }
+
+    /** How much of the bill has been closed, cash or credit. */
+    public function settledAmount(): float
+    {
+        return round((float) $this->paid_amount + (float) $this->credited_amount, 4);
+    }
+
+    public function returns(): HasMany
+    {
+        return $this->hasMany(PurchaseReturn::class);
+    }
+
     public function isPayable(): bool
     {
         return in_array($this->status, self::PAYABLE, true) && (float) $this->due_amount > 0;

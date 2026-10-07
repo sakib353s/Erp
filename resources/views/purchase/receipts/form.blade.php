@@ -131,7 +131,7 @@
                             @foreach ($order->lines as $index => $line)
                                 <tr>
                                     <td data-label="Item">
-                                        <span class="erp-cell-strong">{{ $line->product?->name ?? $line->description }}</span>
+                                        <span class="erp-cell-strong">{{ $line->label() }}</span>
                                         <span class="erp-td-muted d-block small">{{ $line->product?->sku }}</span>
                                         <input type="hidden" name="lines[{{ $index }}][purchase_order_line_id]" value="{{ $line->id }}">
                                         <input type="hidden" name="lines[{{ $index }}][product_id]" value="{{ $line->product_id }}">
@@ -146,13 +146,13 @@
                                                max="{{ $line->outstandingQty() }}"
                                                name="lines[{{ $index }}][qty_received]"
                                                value="{{ old('lines.'.$index.'.qty_received', $line->outstandingQty()) }}"
-                                               aria-label="Quantity receiving for {{ $line->description }}">
+                                               aria-label="Quantity receiving for {{ $line->label() }}">
                                     </td>
                                     <td data-label="Unit cost">
                                         <input class="form-control form-control-sm erp-num" type="number" step="0.0001" min="0"
                                                name="lines[{{ $index }}][unit_cost]"
                                                value="{{ old('lines.'.$index.'.unit_cost', $line->unit_price) }}"
-                                               aria-label="Unit cost for {{ $line->description }}">
+                                               aria-label="Unit cost for {{ $line->label() }}">
                                     </td>
                                     <td data-label="Batch">
                                         <input class="form-control form-control-sm" name="lines[{{ $index }}][batch_no]" maxlength="64"

@@ -14,7 +14,7 @@ _Last updated: 2026-10-08, after the HRM (§10) and Purchase/Suppliers (§03/§0
 |---|---|---|
 | 01 Dashboard | 0 / 27 | widget frames + real-data contract in place; 25 widget queries pending |
 | 02 Sales | 104 / 120 | essentially complete: orders, bulk actions, invoices, delivery, team, POS, reports |
-| 03 Purchase | 15 / 73 | **purchasing core + purchase bills built** — POs with approval, receipts posting real stock, bills posting the payable with a three-way match, payments settling it; returns, RFQ, LC and reports pending |
+| 03 Purchase | 18 / 73 | **the purchase cycle is closed both ways** — POs with approval, receipts posting real stock, bills posting the payable with a three-way match, payments settling it, returns taking goods back with their debit note; RFQ, LC and reports pending |
 | 04 Inventory | 11 / 63 | products, adjustments, transfers, stock movements; purchase receipts now feed stock; opening stock/valuation reports pending |
 | 05 Customers (CRM) | 14 / 23 | profile, ledger, ageing, credit control, feedback, referrals, blacklist; collections workflow + import pending |
 | 06 Suppliers | 3 / 15 | **master + transactional controls built** — duplicate refusal, blacklist with reason, profile from real documents incl. payables ageing; GL ledger, statements and payments pending |
@@ -29,18 +29,18 @@ _Last updated: 2026-10-08, after the HRM (§10) and Purchase/Suppliers (§03/§0
 | 15 Settings | 0 / 35 | **not started** — company/branch/invoice/Bengali/payment-gateway settings screens |
 | 16 Cross-cutting | 0 / 64 | search, notifications, backups, BI, i18n, API mgmt, public links |
 
-**Totals: 191 of 619 catalogued rows implemented.** (Sales 104, HRM 17, Masters 15, CRM 14, Purchase 15,
+**Totals: 194 of 619 catalogued rows implemented.** (Sales 104, HRM 17, Masters 15, CRM 14, Purchase 18,
 Inventory 11, Accounting 8, Returns 4, Suppliers 3.)
 
 ## The next three builds, in the order they unlock the most
 
-1. **Purchase returns and debit notes (03-59…03-64)** — the money half of purchasing is
-   now closed in one direction: a delivery posts stock (GRN), becomes a liability (bill)
-   and can be settled (payment), all through `posting_rules`. What has no path yet is the
-   way back: a posted receipt and a posted bill are immutable, so a return with its debit
-   note — stock out, supplier credit, AP reduced — is the only honest correction. Then
-   supplier advances / BEFTN / schedule (03-53…03-55) and the GL-side supplier ledger and
-   statement (06-08, 06-14), which can finally read real AP journal lines.
+1. **Supplier ledger and statement (06-08, 06-14, 03-63)** — the purchase cycle is now
+   complete in both directions: order → receipt → bill → payment, and returns with their
+   debit notes. Everything needed to answer "what does this supplier's account look like"
+   exists as real documents and journal lines; what is missing is reading them back as one
+   running account with a printable statement, plus the ageing screen company-wide
+   (06-09) and report exports (03-51, 03-64). After that, supplier advances / BEFTN /
+   payment schedule (03-53…03-55) are the remaining gaps in the money-out half.
 2. **Accounts close-out (08 + 09 remainder)** — cash book and bank reconciliation
    first (they feed every collection screen), then customer/supplier ledgers, day book,
    and the VAT/Mushak report family.
@@ -57,6 +57,12 @@ Inventory 11, Accounting 8, Returns 4, Suppliers 3.)
 * **Three-way match** is computed on bill approval and stored with a human summary, but
   with no configurable tolerance it *records* a mismatch instead of blocking it — a real
   liability is never hidden, and the mismatch is shown in full on the bill.
+* **Purchase returns** post through `posting_rules` (`purchase_return_posted` → Cr inventory
+  1140, `purchase_return_expense_posted` → Cr purchases & services 5225, both Dr accounts
+  payable 2110 with Cr tax payable 2120 for the input tax reversed). A return tied to a bill
+  credits that bill in the same transaction (`credited_amount`), so `due_amount =
+  total − paid − credited` is the single definition of what a bill still owes and the AP
+  control account never disagrees with the sum of the bills.
 * **Supplier payments** post through `posting_rules` (`supplier_payment` → cash 1110,
   `supplier_payment_bank` → bank 1120) into the shared `payments` table with direction
   `out`; a payment is always allocated to one posted bill, never left floating, and the

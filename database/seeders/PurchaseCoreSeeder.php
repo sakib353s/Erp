@@ -49,6 +49,20 @@ class PurchaseCoreSeeder extends Seeder
             ['ap', 'debit', '2110', 10],
             ['counter', 'credit', '1120', 20],
         ],
+        // Purchase returns (§03.9) invert the bill: Dr Accounts Payable (the
+        // liability goes down), Cr Inventory for goods-backed returns or Cr
+        // Purchases & Services for a service/direct one, and Cr Tax Payable for
+        // the input tax we claimed back on the bill.
+        'purchase_return_posted' => [
+            ['ap', 'debit', '2110', 10],
+            ['inventory', 'credit', '1140', 20],
+            ['tax_payable', 'credit', '2120', 30],
+        ],
+        'purchase_return_expense_posted' => [
+            ['ap', 'debit', '2110', 10],
+            ['expense', 'credit', '5225', 20],
+            ['tax_payable', 'credit', '2120', 30],
+        ],
     ];
 
     public function run(): void

@@ -124,6 +124,12 @@ class CatalogImporter
         'purchase > supplier payments > record payment' => ['/app/purchase/payments/create', 'purchase.payments.create'],
         'purchase > supplier payments > payment history' => ['/app/purchase/payments', 'purchase.payments.view'],
         'purchase > purchase bills > bill payment recording' => ['/app/purchase/payments/create', 'purchase.payments.create'],
+        'purchase > supplier returns > all returns' => ['/app/purchase/returns', 'purchase.returns.view'],
+        'purchase > supplier returns > create return' => ['/app/purchase/returns/create', 'purchase.returns.create'],
+        'purchase > supplier returns > return authorization' => ['/app/purchase/returns?status=pending_approval', 'purchase.returns.approve'],
+        'purchase > supplier returns > auto debit note' => ['/app/purchase/returns?status=approved', 'purchase.returns.view'],
+        'purchase > supplier returns > return history' => ['/app/purchase/returns?status=approved', 'purchase.returns.view'],
+        'purchase > supplier returns > supplier ledger credit' => ['/app/purchase/returns', 'purchase.returns.view'],
 
         // §10 HRM — attendance, leave, structure (pages that really exist)
         'employee > attendance > attendance list' => ['/app/hr/attendance', 'attendance.view'],

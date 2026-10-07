@@ -25,6 +25,11 @@
                     </button>
                 </form>
             @endif
+            @if ($perm('purchase.returns.create') && $bill->isPosted() && (float) $bill->due_amount > 0)
+                <a class="btn btn-outline-secondary" href="{{ route('purchase.returns.create', ['bill' => $bill->id]) }}">
+                    <i class="bi bi-arrow-return-left" aria-hidden="true"></i> Return goods
+                </a>
+            @endif
             @if ($perm('purchase.payments.create') && $bill->isPosted() && (float) $bill->due_amount > 0)
                 <a class="btn btn-primary" href="{{ route('purchase.payments.create', ['bill' => $bill->id]) }}">
                     <i class="bi bi-cash-coin" aria-hidden="true"></i> Record payment
@@ -202,6 +207,15 @@
                         <a class="erp-td-muted d-block small" href="{{ route('purchase.payments.index', ['bill' => $bill->id]) }}">see the payments</a>
                     @endif
                 </dd>
+                @if ((float) $bill->credited_amount > 0)
+                    <dt>Credited by returns</dt>
+                    <dd>
+                        ৳ {{ number_format((float) $bill->credited_amount, 2) }}
+                        @if ($perm('purchase.returns.view'))
+                            <a class="erp-td-muted d-block small" href="{{ route('purchase.returns.index', ['q' => $bill->code]) }}">see the returns</a>
+                        @endif
+                    </dd>
+                @endif
                 <dt>Subtotal · discount · tax</dt>
                 <dd>
                     ৳ {{ number_format((float) $bill->subtotal, 2) }} − {{ number_format((float) $bill->discount_total, 2) }}

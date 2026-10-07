@@ -10,12 +10,20 @@ supplier payables with ageing (03-48 partial) and then by **supplier payments (0
 against a specific bill — Dr Accounts Payable / Cr Cash or Bank through `posting_rules` — so the balance a bill
 carries can actually be settled rather than only reported.
 
+Finally, **purchase returns (03-59, 03-60, 03-61)**: goods can go back with the debit note that belongs to them — the
+only correction path for a posted receipt or a posted bill, capped at what actually arrived and posted to the ledger
+as Dr accounts payable / Cr inventory (or purchases) with the input tax reversed.
+
 **Deliberately out of these slices** (planned, not stubbed — no screen claims a capability it does not have):
 purchase requests (03-16…03-21), PO amendment / duplication / print / outbox (03-26…03-28), GRN amendment / print
 (03-35, 03-38), RFQ & comparison (03-39…03-43), bill print (03-49) and the report family (03-51, 03-68…03-73),
-advances / BEFTN / schedules / reminders (03-53…03-57), **purchase returns and debit notes (03-59…03-64)** and
-import purchase / LC / landing cost (03-65…03-67). Purchase returns are the immediate next change: a posted receipt
-and a posted bill are both immutable, and a return with its debit note is the only honest way to correct them.
+advances / BEFTN / schedules / reminders (03-53…03-57), return shipment tracking (03-62), the GL-derived supplier
+ledger and statement (03-63, 06-08, 06-14) and the return/exports report family (03-64). Each is named where it is
+missing; none is faked.
+
+**The immediate next change is the supplier ledger and statement (06-08, 06-14, 03-63)**: receipts, bills, payments
+and returns all exist now, so the one thing missing is reading them back as a supplier account — what was ordered,
+received, billed, paid and credited, with the running balance in one place.
 
 **Known deviations in the implemented slice (honest, not silent):**
 - Approval runs on the direct permission `purchase.orders.approve` (creator ≠ approver enforced in the service),
@@ -41,6 +49,11 @@ and a posted bill are both immutable, and a return with its debit note is the on
 - Goods-backed bills capitalise **Inventory (1140)**; direct/service bills land on **Purchases & Services (5225)**.
   Both routes are `posting_rules` rows (`purchase_bill_posted` / `purchase_bill_expense_posted`) seeded by
   `PurchaseCoreSeeder` — no account id appears in the service.
+- **A purchase return is capped by the bill it corrects.** The credit applied to a bill may not exceed what the bill
+  still owes; the excess is refused with the numbers in the message rather than silently becoming an unapplied debit
+  note, which this slice does not track yet (03-63). Returning *stock* is still capped only by what actually arrived.
+- **`restock` marks goods kept in stock versus held out of sellable stock**; either way approval posts the same
+  ledger entry, because the choice is a warehouse fact, not an accounting one.
 - Bill numbering is `BILL-00001` per company from the service (like `PO-` and `GRN-`), not NumberingService:
   purchase documents have no `document_types` row yet, so nothing claims a Mushak-style document type.
 
@@ -147,12 +160,12 @@ Shared services: this slice is `Purchase\Services\{PurchaseOrderService, GoodsRe
 
 | Ref | Menu path | Route | Permission | Status |
 |---|---|---|---|---|
-| 03-59 | Purchase › Supplier Returns › All / Create Return | — | — | NOT STARTED |
-| 03-60 | Purchase › Supplier Returns › Return Authorization | — | — | NOT STARTED |
-| 03-61 | Purchase › Supplier Returns › Auto Debit Note | — | — | NOT STARTED |
-| 03-62 | Purchase › Supplier Returns › Shipment Tracking | — | — | NOT STARTED |
-| 03-63 | Purchase › Supplier Returns › Supplier Ledger Credit | — | — | NOT STARTED |
-| 03-64 | Purchase › Supplier Returns › History / Reports | — | — | NOT STARTED |
+| 03-59 | Purchase › Supplier Returns › All / Create Return | `GET /app/purchase/returns`, `GET|POST /app/purchase/returns/create` | `purchase.returns.view` / `purchase.returns.create` | `PurchaseReturnService::create` — a return can be raised from a posted receipt (lines prefilled with received / already-returned / returnable), from an open bill (service or goods without a receipt on file) or standalone; quantities are capped at received − already returned, the reason is mandatory, and every figure is recomputed server-side | `purchase_returns`, `_lines`, `goods_receipt_lines`, `purchase_bills` | AUD; stock only on approval | `PurchaseReturnTest::test_you_cannot_return_more_than_arrived_minus_what_already_went_back`, `::test_a_return_needs_a_real_reason_and_at_least_one_line` | DONE |
+| 03-60 | Purchase › Supplier Returns › Return Authorization | `POST /app/purchase/returns/{return}/submit|approve` | `purchase.returns.create` / `purchase.returns.approve` | submit → approve (maker never approves their own return), approval posts stock out (`PURCHASE_RETURN_OUT`, idempotent per line) and the debit note; cancel is possible only while nothing is posted | `purchase_returns`, `stock_movements`, `journal_entries` | ACCT + stock; AUD | `PurchaseReturnTest::test_the_maker_cannot_approve_their_own_return`, `::test_cancelling_is_only_for_unposted_returns_and_needs_a_reason` | DONE |
+| 03-61 | Purchase › Supplier Returns › Auto Debit Note | (the debit note posts on approval) | `purchase.returns.approve` | `PurchaseReturnService::postToLedger` — event `purchase_return_posted` (goods) or `purchase_return_expense_posted` (service): Dr Accounts Payable, Cr Inventory 1140 or Purchases & Services 5225, Cr Tax Payable 2120 for the input tax claimed. When tied to a bill the same transaction credits the bill (`credited_amount`), so due = total − paid − credited and AP keeps agreeing | `journal_entries`, `purchase_bills` | ACCT; AUD | `PurchaseReturnTest::test_a_return_posts_stock_out_and_the_debit_note`, `::test_a_return_against_a_bill_credits_that_bill_and_keeps_the_ledger_agreeing`, `::test_a_service_bill_return_credits_purchases_not_inventory` | DONE — the note is the ledger entry, not a separately numbered document |
+| 03-62 | Purchase › Supplier Returns › Shipment Tracking | — | — | — | — | — | — | NOT STARTED |
+| 03-63 | Purchase › Supplier Returns › Supplier Ledger Credit | — | — | the return reduces AP and credits the bill it names; an *unapplied* debit note (a credit with us when the bill is already settled) is refused rather than half-tracked, and the supplier-side ledger view is the next change (06-08) | — | — | — | NOT STARTED |
+| 03-64 | Purchase › Supplier Returns › History / Reports | (the returns list with status/supplier/date filters + summary) | `purchase.returns.view` | `PurchaseQuery::returns` / `returnSummary` — returned this month, waiting approval, draft value; search covers the return, its reason, the supplier and the receipt/bill it corrects | `purchase_returns` | — | — | PARTIAL — history is real; no report routes or exports |
 
 ## 3.9 Import Purchase & Reports
 
@@ -172,9 +185,9 @@ Shared services: this slice is `Purchase\Services\{PurchaseOrderService, GoodsRe
 
 | | Count |
 |---|---|
-| DONE | 15 (03-01, 03-02, 03-04, 03-22, 03-23, 03-29, 03-32, 03-33, 03-36, 03-44, 03-45, 03-46, 03-47, 03-50, 03-52) |
-| PARTIAL | 10 (03-05, 03-06, 03-11, 03-12, 03-24, 03-25, 03-31, 03-34, 03-48, 03-58) |
-| NOT STARTED | 48 |
+| DONE | 18 (03-01, 03-02, 03-04, 03-22, 03-23, 03-29, 03-32, 03-33, 03-36, 03-44, 03-45, 03-46, 03-47, 03-50, 03-52, 03-59, 03-60, 03-61) |
+| PARTIAL | 11 (03-05, 03-06, 03-11, 03-12, 03-24, 03-25, 03-31, 03-34, 03-48, 03-58, 03-64) |
+| NOT STARTED | 44 |
 
 Stock consequence of the slice: **purchase is now the only inbound stock path with documents behind it** — a receipt
 posts an immutable `purchase_receipt` movement and a valuation layer at the cost actually paid, and the cached
@@ -188,3 +201,9 @@ match result stored beside it.
 Money consequence of the payment slice: **the liability can now be discharged** — a payment posts Dr accounts
 payable / Cr cash or bank in the same transaction that moves the bill's balance and status, allocations keep the
 link between money and document, and the same idempotency key can never pay a supplier twice.
+
+Correction consequence of the return slice: **a posted document can now be put right** — goods leave through the
+stock ledger, the debit note posts Dr accounts payable / Cr inventory (or purchases) with the input tax reversed, and
+when the return names a bill the bill is credited in the same transaction. What has been paid in cash and what has
+been taken back in credit are kept apart (`paid_amount` vs `credited_amount`), and both reduce one balance:
+`due_amount`.

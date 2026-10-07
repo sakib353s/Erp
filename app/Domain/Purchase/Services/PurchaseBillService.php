@@ -172,14 +172,13 @@ class PurchaseBillService
         }
 
         $total = round($subtotal - $discountTotal + $taxTotal, 4);
-        $paid = round((float) $bill->paid_amount, 4);
 
         $bill->forceFill([
             'subtotal' => $subtotal,
             'discount_total' => $discountTotal,
             'tax_total' => $taxTotal,
             'total' => $total,
-            'due_amount' => round($total - $paid, 4),
+            'due_amount' => $bill->balanceAgainst($total),
         ])->save();
 
         return $bill->refresh();

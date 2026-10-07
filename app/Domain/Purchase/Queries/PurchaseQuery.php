@@ -6,6 +6,7 @@ use App\Domain\Masters\Supplier;
 use App\Domain\Purchase\Models\GoodsReceipt;
 use App\Domain\Purchase\Models\PurchaseBill;
 use App\Domain\Purchase\Models\PurchaseOrder;
+use App\Domain\Purchase\Models\PurchaseReturn;
 use App\Domain\Sales\Payment;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -398,5 +399,59 @@ class PurchaseQuery
             ->orderBy('bill_date')
             ->limit($limit)
             ->get(['id', 'code', 'supplier_id', 'bill_date', 'due_date', 'total', 'due_amount', 'status', 'branch_id']);
+    }
+
+    /* --------------------------------------- purchase returns (§03.9) */
+
+    /**
+     * @param  array{q?:?string,status?:?string,supplier?:?int,from?:?string,to?:?string}  $filters
+     */
+    public function returns(array $filters, array $accessibleBranchIds = [], int $perPage = 20): LengthAwarePaginator
+    {
+        return PurchaseReturn::query()
+            ->with(['supplier:id,name,code', 'branch:id,name', 'receipt:id,code', 'bill:id,code'])
+            ->withCount('lines')
+            ->when($accessibleBranchIds !== [], fn ($q) => $q->whereIn('branch_id', $accessibleBranchIds))
+            ->when(($filters['status'] ?? null), function ($q, $status) {
+                return $status === 'open'
+                    ? $q->open()
+                    : $q->where('status', $status);
+            })
+            ->when(($filters['supplier'] ?? null), fn ($q, $id) => $q->where('supplier_id', $id))
+            ->when(($filters['from'] ?? null), fn ($q, $d) => $q->whereDate('return_date', '>=', $d))
+            ->when(($filters['to'] ?? null), fn ($q, $d) => $q->whereDate('return_date', '<=', $d))
+            ->when(($filters['q'] ?? null), function ($q, $term) {
+                $q->where(function ($inner) use ($term) {
+                    $inner->where('code', 'like', "%{$term}%")
+                        ->orWhere('reason', 'like', "%{$term}%")
+                        ->orWhereHas('supplier', fn ($s) => $s->where('name', 'like', "%{$term}%")->orWhere('code', 'like', "%{$term}%"))
+                        ->orWhereHas('receipt', fn ($r) => $r->where('code', 'like', "%{$term}%"))
+                        ->orWhereHas('bill', fn ($b) => $b->where('code', 'like', "%{$term}%"));
+                });
+            })
+            ->orderByDesc('return_date')
+            ->orderByDesc('id')
+            ->paginate($perPage)
+            ->withQueryString();
+    }
+
+    /**
+     * @return array{returned_month:float,returns_month:int,awaiting:int,draft:float,credited_month:float}
+     */
+    public function returnSummary(array $accessibleBranchIds = []): array
+    {
+        $rows = PurchaseReturn::query()
+            ->when($accessibleBranchIds !== [], fn ($q) => $q->whereIn('branch_id', $accessibleBranchIds))
+            ->get(['status', 'total', 'return_date']);
+
+        $thisMonth = $rows->filter(fn ($row) => $row->return_date !== null && $row->return_date->isSameMonth(now()));
+
+        return [
+            'returned_month' => round((float) $thisMonth->where('status', 'approved')->sum(fn ($row) => (float) $row->total), 4),
+            'returns_month' => $thisMonth->where('status', 'approved')->count(),
+            'credited_month' => round((float) $thisMonth->where('status', 'approved')->sum(fn ($row) => (float) $row->total), 4),
+            'awaiting' => $rows->where('status', 'pending_approval')->count(),
+            'draft' => round((float) $rows->where('status', 'draft')->sum(fn ($row) => (float) $row->total), 4),
+        ];
     }
 }

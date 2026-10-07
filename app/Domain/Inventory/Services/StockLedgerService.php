@@ -349,12 +349,10 @@ class StockLedgerService
 
     protected function isInbound(string $type): bool
     {
-        return in_array($type, [
-            StockMovement::TYPE_OPENING,
-            StockMovement::TYPE_ADJUST_IN,
-            StockMovement::TYPE_TRANSIT_IN,
-            StockMovement::TYPE_SALES_RETURN,
-        ], true);
+        // The direction vocabulary lives on the model (StockMovement::INBOUND_TYPES)
+        // so a new movement type cannot be added inbound in one place and read as
+        // outbound here — which is exactly what happened to PURCHASE_RECEIPT.
+        return in_array($type, StockMovement::INBOUND_TYPES, true);
     }
 
     protected function defaultState(string $type): string
