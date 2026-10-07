@@ -56,8 +56,9 @@ HRM 17, Masters 15, CRM 14, Accounting 8, Suppliers 6, Returns 4.)
 * **Dashboard containers** are answered by one read service (`App\Domain\Dashboard\Services\DashboardMetrics`)
   rather than the planned per-widget classes and per-widget `dashboard.widget.*` keys: a container is visible
   exactly when the caller holds the view permission of the module whose documents it reads, and each container
-  reports `ok`, `empty` or `unavailable` — the last one naming the module that will fill it (01-21 expiry has no
-  source yet, so it says so instead of inventing dates). The plan, the shipped shape and the reasons are side by
+  reports `ok`, `empty` or `unavailable` — the last one naming what is missing. No panel is left naming an unbuilt
+  module: the expiry panel (01-21) reads the batch register as of the §04-39 slice, and cash position's
+  `unavailable` is a real statement about this company's chart of accounts, not about missing code. The plan, the shipped shape and the reasons are side by
   side in `docs/TRACEABILITY/01-dashboard.md`. While wiring it, a real defect was fixed: `WidgetSeeder` produced
   mixed-case container codes (`Todays_Sales`) while the translations table, the label keys and the dashboard all
   key off lowercase slugs — codes are lowercase now and the seeder prunes containers outside the catalogue.

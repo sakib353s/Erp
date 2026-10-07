@@ -9,6 +9,8 @@ use App\Domain\Inventory\Actions\CreateOpeningStock;
 use App\Domain\Inventory\Actions\CreateProduct;
 use App\Domain\Inventory\Product;
 use App\Domain\Inventory\Services\ReorderService;
+use App\Domain\Inventory\Services\StockLedgerService;
+use App\Domain\Inventory\StockMovement;
 use App\Domain\Purchase\Services\GoodsReceiptService;
 use App\Domain\Purchase\Services\PurchaseBillService;
 use App\Domain\Purchase\Services\PurchaseOrderService;
@@ -118,9 +120,35 @@ class DashboardWidgetTest extends TestCase
         $this->assertSame('empty', $metrics['top_10_products']['state']);
         $this->assertSame('empty', $metrics['payable_aging']['state']);
 
-        // Expiry has no source at all yet, and the panel says why.
-        $this->assertSame('unavailable', $metrics['expiring_products_alert']['state']);
-        $this->assertStringContainsString('expiry', (string) $metrics['expiring_products_alert']['note']);
+        // Expiry now has a source (§04-39): with no dated batch holding stock the
+        // panel is empty and points at the desk, and it never guesses a shelf life.
+        $this->assertSame('empty', $metrics['expiring_products_alert']['state']);
+        $this->assertStringContainsString('expired', (string) $metrics['expiring_products_alert']['caption']);
+    }
+
+    public function test_a_batch_past_its_date_turns_the_expiry_panel_into_a_figure(): void
+    {
+        $product = $this->makeProduct('DASH-EXP', 0);
+
+        // A batch that arrived two days past its date, received through the one
+        // inbound path (§04-37) — the panel reads the register, not a guess.
+        app(StockLedgerService::class)->post([
+            'product_id' => $product->id,
+            'warehouse_id' => $this->warehouse->id,
+            'movement_type' => StockMovement::TYPE_PURCHASE_RECEIPT,
+            'qty' => 4,
+            'unit_cost' => 25,
+            'batch_no' => 'DASH-LOT-1',
+            'expires_on' => now()->subDays(2)->toDateString(),
+            'idempotency_key' => uniqid('dash-batch-', true),
+        ], $this->admin);
+
+        $panel = $this->metrics()['expiring_products_alert'];
+
+        $this->assertSame('ok', $panel['state']);
+        $this->assertSame('100.00', (string) $panel['primary'], '4 × 25 read from the layer');
+        $this->assertStringContainsString('already expired', (string) $panel['note']);
+        $this->assertStringContainsString('/app/inventory/expiry', (string) $panel['href']);
     }
 
     public function test_a_document_becomes_a_figure_only_after_it_is_posted(): void

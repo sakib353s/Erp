@@ -8,7 +8,9 @@ use App\Domain\Accounting\JournalLine;
 use App\Domain\Customers\Queries\CustomerQuery;
 use App\Domain\Foundation\Services\TenantContext;
 use App\Domain\Inventory\Product;
+use App\Domain\Inventory\Services\BatchService;
 use App\Domain\Inventory\Services\ReorderService;
+use App\Domain\Inventory\StockBatch;
 use App\Domain\Purchase\Models\PurchaseBill;
 use App\Domain\Purchase\Models\PurchaseOrder;
 use App\Domain\Purchase\Models\PurchaseReturn;
@@ -16,6 +18,7 @@ use App\Domain\Purchase\Queries\PurchaseQuery;
 use App\Domain\Sales\Payment;
 use App\Domain\Sales\Queries\LeaderboardQuery;
 use App\Domain\Sales\SalesOrder;
+use App\Domain\Settings\Services\SettingService;
 use App\Domain\Workflow\ApprovalRequest;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -93,6 +96,8 @@ class DashboardMetrics
         protected PurchaseQuery $purchases,
         protected ReorderService $reorder,
         protected LeaderboardQuery $leaderboard,
+        protected BatchService $batches,
+        protected SettingService $settings,
     ) {}
 
     /**
@@ -550,12 +555,37 @@ class DashboardMetrics
             : $this->figure((string) $counts['out'], 'product(s) with nothing on hand', 'Every sale of these is a lost sale until stock arrives.', 'Out of stock', route('inventory.stock.alerts', ['type' => 'out']));
     }
 
+    /**
+     * §04-39 as a panel: the batches that are past their date or inside the clock,
+     * valued at what the layers say they cost. Expired stock is not sellable, but
+     * it is still on the books — which is exactly why the money figure matters
+     * more here than the count.
+     */
     protected function expiringProducts(): array
     {
-        return $this->unavailable(
-            'Goods receipts capture a batch number but no expiry date yet, so this panel cannot report expiring stock without inventing dates.',
-            'Goods receipts',
-            route('purchase.receipts.index'),
+        $days = max(1, $this->settings->getInt('inventory', 'expiry_alert_days', 30));
+        $buckets = $this->batches->buckets($days);
+
+        $expired = $buckets[StockBatch::STATE_EXPIRED];
+        $expiring = $buckets[StockBatch::STATE_EXPIRING];
+        $together = $expired['batches'] + $expiring['batches'];
+
+        if ($together === 0) {
+            return $this->empty(
+                'No batch with stock on hand has expired or is inside the expiry window.',
+                'Expiry desk',
+                route('inventory.batches.expiry'),
+            );
+        }
+
+        return $this->figure(
+            $this->money($expired['value'] + $expiring['value']),
+            number_format($together).' batch(es) past their date or expiring soon',
+            $expired['batches'] > 0
+                ? number_format($expired['batches']).' already expired — not sellable, still on the books'
+                : number_format($expiring['batches']).' expiring within '.$days.' days',
+            'Expiry desk',
+            route('inventory.batches.expiry', ['days' => $days]),
         );
     }
 
