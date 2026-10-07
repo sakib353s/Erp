@@ -11,6 +11,17 @@
         <a class="btn btn-outline-secondary" href="{{ route('inventory.adjustments.index') }}">Back</a>
     </div>
 
+    @if (($threshold ?? 0) > 0)
+        <div class="erp-note erp-note-info mb-3">
+            <i class="bi bi-info-circle" aria-hidden="true"></i>
+            <div>
+                <strong>Adjustments worth {{ number_format($threshold, 2) }} or more wait for approval.</strong>
+                Saving one of those stores the document and changes nothing — stock moves only when a second person
+                approves it. Somebody else has to decide it; you cannot approve your own.
+            </div>
+        </div>
+    @endif
+
     <div class="erp-card" style="max-width: 960px">
         <form method="POST" action="{{ route('inventory.adjustments.store') }}">
             @csrf

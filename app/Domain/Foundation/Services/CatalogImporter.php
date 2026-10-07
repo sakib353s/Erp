@@ -260,7 +260,11 @@ class CatalogImporter
         'inventory > stock > stock list' => ['/app/inventory/stock', 'inventory.stock.view'],
         'inventory > stock > stock per branch' => ['/app/inventory/stock', 'inventory.stock.view'],
         'inventory > stock > opening stock entry' => ['/app/inventory/stock/opening', 'inventory.adjustments.create'],
+        // §04-26: one adjustment register, and its own history. Approval is not a
+        // separate page — it is the same list filtered to what is waiting.
         'inventory > stock > stock adjustment' => ['/app/inventory/adjustments', 'inventory.adjustments.view'],
+        'inventory > stock > adjustment approval' => ['/app/inventory/adjustments?status=pending_approval', 'inventory.adjustments.approve'],
+        'inventory > stock > adjustment history' => ['/app/inventory/adjustments/history', 'inventory.adjustments.view'],
         'inventory > stock > create adjustment' => ['/app/inventory/adjustments/create', 'inventory.adjustments.create'],
         'inventory > stock > stock transfer' => ['/app/inventory/transfers', 'inventory.transfers.create'],
         'inventory > stock > create transfer' => ['/app/inventory/transfers/create', 'inventory.transfers.create'],

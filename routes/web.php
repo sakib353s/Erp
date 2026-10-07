@@ -941,6 +941,17 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::post('/app/inventory/adjustments', [InventoryController::class, 'storeAdjustment'])
         ->middleware('permission:inventory.adjustments.create')
         ->name('inventory.adjustments.store');
+    /* §04-26: a holding pen for adjustments above the threshold, and the
+       document's own history. Deciding one is its own permission. */
+    Route::get('/app/inventory/adjustments/history', [InventoryController::class, 'adjustmentHistory'])
+        ->middleware('permission:inventory.adjustments.view')
+        ->name('inventory.adjustments.history');
+    Route::post('/app/inventory/adjustments/{adjustment}/approve', [InventoryController::class, 'approveAdjustment'])
+        ->middleware('permission:inventory.adjustments.approve')
+        ->name('inventory.adjustments.approve');
+    Route::post('/app/inventory/adjustments/{adjustment}/reject', [InventoryController::class, 'rejectAdjustment'])
+        ->middleware('permission:inventory.adjustments.approve')
+        ->name('inventory.adjustments.reject');
 
     Route::get('/app/inventory/transfers', [InventoryController::class, 'transfers'])
         ->middleware('permission:inventory.transfers.create')

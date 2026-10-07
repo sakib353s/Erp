@@ -133,13 +133,64 @@ class InventoryController extends Controller
 
     public function adjustments(Request $request): View
     {
+        $status = (string) $request->query('status');
+
         $query = StockAdjustment::query()
-            ->with(['warehouse', 'lines.product'])
+            ->with(['warehouse', 'creator', 'approver', 'lines.product'])
             ->orderByDesc('adjustment_date')
             ->orderByDesc('id');
 
+        if ($status !== '') {
+            $query->where('status', $status);
+        }
+
+        if ($search = trim((string) $request->query('q'))) {
+            $query->where(fn ($q) => $q->where('adjustment_no', 'like', "%{$search}%")
+                ->orWhere('reason', 'like', "%{$search}%"));
+        }
+
+        $counts = [
+            'all' => StockAdjustment::query()->count(),
+            'pending' => StockAdjustment::query()->where('status', StockAdjustment::STATUS_PENDING)->count(),
+            'posted' => StockAdjustment::query()->where('status', StockAdjustment::STATUS_POSTED)->count(),
+            'rejected' => StockAdjustment::query()->where('status', StockAdjustment::STATUS_REJECTED)->count(),
+        ];
+
+        $pendingValue = (float) StockAdjustment::query()
+            ->where('status', StockAdjustment::STATUS_PENDING)
+            ->sum('total_value');
+
         return view('inventory.adjustments.index', [
             'adjustments' => $query->paginate(15)->withQueryString(),
+            'counts' => $counts,
+            'status' => $status,
+            'q' => $search,
+            'pendingValue' => $pendingValue,
+            'threshold' => $this->postAdjustment->approvalThreshold(),
+        ]);
+    }
+
+    /**
+     * §04-26 — the history of the document, not just its current state: who
+     * raised it, who decided it and what the ledger was actually asked to do.
+     */
+    public function adjustmentHistory(Request $request): View
+    {
+        $status = (string) $request->query('status');
+
+        $query = StockAdjustment::query()
+            ->with(['warehouse', 'creator', 'approver'])
+            ->orderByDesc('created_at')
+            ->orderByDesc('id');
+
+        if ($status !== '') {
+            $query->where('status', $status);
+        }
+
+        return view('inventory.adjustments.history', [
+            'adjustments' => $query->paginate(25)->withQueryString(),
+            'status' => $status,
+            'threshold' => $this->postAdjustment->approvalThreshold(),
         ]);
     }
 
@@ -148,20 +199,57 @@ class InventoryController extends Controller
         return view('inventory.adjustments.form', [
             'products' => Product::query()->active()->stocked()->orderBy('sku')->get(),
             'warehouses' => Warehouse::query()->where('is_active', true)->orderBy('name')->get(),
+            'threshold' => $this->postAdjustment->approvalThreshold(),
         ]);
     }
 
     public function storeAdjustment(StoreStockAdjustmentRequest $request): RedirectResponse
     {
         try {
-            $adjustment = $this->postAdjustment->handle($request->validated(), $request);
+            $adjustment = $this->postAdjustment->submit($request->validated(), $request->user());
         } catch (\RuntimeException $e) {
             return back()->withInput()->withErrors(['lines' => $e->getMessage()]);
+        }
+
+        if ($adjustment->isPending()) {
+            return redirect()
+                ->route('inventory.adjustments.index', ['status' => StockAdjustment::STATUS_PENDING])
+                ->with('status', sprintf(
+                    'Adjustment %s is worth %s and is waiting for a second pair of eyes — no stock has moved yet.',
+                    $adjustment->adjustment_no,
+                    number_format((float) $adjustment->total_value, 2),
+                ));
         }
 
         return redirect()
             ->route('inventory.adjustments.index')
             ->with('status', "Adjustment {$adjustment->adjustment_no} posted.");
+    }
+
+    /** Approve a held adjustment: the stock moves now, once. */
+    public function approveAdjustment(Request $request, StockAdjustment $adjustment): RedirectResponse
+    {
+        $note = trim((string) $request->input('note'));
+
+        try {
+            $this->postAdjustment->approve($adjustment, $request->user(), $note !== '' ? $note : null);
+        } catch (\RuntimeException $e) {
+            return back()->withErrors(['adjustment' => $e->getMessage()]);
+        }
+
+        return back()->with('status', "Adjustment {$adjustment->adjustment_no} approved and posted.");
+    }
+
+    /** Refuse a held adjustment — which moves nothing, by definition. */
+    public function rejectAdjustment(Request $request, StockAdjustment $adjustment): RedirectResponse
+    {
+        try {
+            $this->postAdjustment->reject($adjustment, $request->user(), (string) $request->input('note'));
+        } catch (\RuntimeException $e) {
+            return back()->withErrors(['adjustment' => $e->getMessage()]);
+        }
+
+        return back()->with('status', "Adjustment {$adjustment->adjustment_no} rejected — the stock was left alone.");
     }
 
     public function transfers(Request $request): View
