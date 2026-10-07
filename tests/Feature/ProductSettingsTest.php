@@ -183,4 +183,59 @@ class ProductSettingsTest extends TestCase
         $this->assertDoesNotMatchRegularExpression('/id="sku"[^>]*required/', $optional);
         $this->assertStringContainsString('Left blank, the SKU becomes the product code.', $optional);
     }
+
+    /**
+     * The screen is the write path for these defaults, so the select has to offer
+     * the method names the product form can actually show — the engine validates a
+     * select with Rule::in(array_keys(options)), so a list of bare values would
+     * render 0..3 and refuse every real method name on save.
+     */
+    public function test_the_settings_screen_saves_a_cost_method_the_product_form_can_show(): void
+    {
+        $this->actingAs($this->admin)
+            ->get(route('settings.show', ['group' => 'inventory']))
+            ->assertOk()
+            ->assertSee('value="fifo"', false)
+            ->assertSee('>Weighted average</option>', false);
+
+        $this->actingAs($this->admin)
+            ->post(route('settings.update', ['group' => 'inventory']), [
+                'settings' => ['default_cost_method' => 'lifo'],
+            ])
+            ->assertSessionHasNoErrors();
+
+        $this->assertSame('lifo', app(SettingService::class)->get('inventory', 'default_cost_method'));
+
+        $this->assertMatchesRegularExpression(
+            '/value="lifo"\s+selected/',
+            $this->actingAs($this->admin)->get(route('inventory.products.create'))->getContent(),
+            'What the settings screen saved is what the add-product form preselects.',
+        );
+    }
+
+    /**
+     * A switch that cannot be turned back off is not a switch. An unchecked box
+     * sends nothing, and the engine only writes the keys it is handed, so the
+     * screen carries the "off" in a hidden twin that the checkbox overrides.
+     */
+    public function test_a_switch_can_be_turned_back_off(): void
+    {
+        $this->setting('default_track_batch', true);
+
+        $this->actingAs($this->admin)
+            ->get(route('settings.show', ['group' => 'inventory']))
+            ->assertOk()
+            ->assertSee('<input type="hidden" name="settings[default_track_batch]" value="0">', false);
+
+        $this->actingAs($this->admin)
+            ->post(route('settings.update', ['group' => 'inventory']), [
+                'settings' => ['default_track_batch' => '0'],
+            ])
+            ->assertSessionHasNoErrors();
+
+        $this->assertFalse(
+            app(SettingService::class)->getBool('inventory', 'default_track_batch', true),
+            'Turning the batch switch off has to store the off.',
+        );
+    }
 }

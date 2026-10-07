@@ -583,7 +583,12 @@ return [
                     'default_cost_method' => [
                         'label' => 'Default cost method for a new product',
                         'type' => 'select',
-                        'options' => ['fifo', 'lifo', 'wac', 'standard'],
+                        'options' => [
+                            'fifo' => 'FIFO — first in, first out',
+                            'lifo' => 'LIFO — last in, first out',
+                            'wac' => 'Weighted average',
+                            'standard' => 'Standard cost',
+                        ],
                         'default' => 'wac',
                         'help' => 'Preselects the valuation method on the add-product form. It is only a default: the form still decides per product, and changing a method never rewrites a layer that was already posted.',
                     ],

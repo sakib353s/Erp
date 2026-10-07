@@ -39,6 +39,11 @@
                     @php($label = ($meta['label'] ?? ucfirst(str_replace('_', ' ', $key))))
                     <div class="{{ $type === 'boolean' ? 'col-12' : 'col-md-6' }}">
                         @if ($type === 'boolean')
+                            {{-- An unchecked box sends nothing, and a setting that is
+                                 never sent is never written: the hidden twin carries the
+                                 "off" so a switch can be turned back off. It sits first,
+                                 so the checkbox wins when it is on. --}}
+                            <input type="hidden" name="settings[{{ $key }}]" value="0">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
                                        id="setting_{{ $key }}" name="settings[{{ $key }}]" value="1"
