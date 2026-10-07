@@ -26,3 +26,8 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Agent scratch: transient auditors and patch scripts. They belong to a working
+# session, never to the repository.
+/.audit*.py
+/.patch_*.py

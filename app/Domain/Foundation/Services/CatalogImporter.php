@@ -267,6 +267,10 @@ class CatalogImporter
         'inventory > products > add brand' => ['/app/masters/brands/create', 'masters.manage'],
         'inventory > products > product units of measure' => ['/app/masters/units', 'masters.manage'],
         'inventory > products > product conversion unit' => ['/app/masters/units', 'masters.manage'],
+        // §04-20: the product defaults are the settings engine's inventory group —
+        // the same page the FEFO switch lives on, reached from the products it
+        // governs rather than only from the settings menu.
+        'inventory > products > product settings' => ['/app/settings/inventory', 'settings.view'],
         'inventory > products > product import' => ['/app/inventory/products/import', 'inventory.products.import'],
         'inventory > products > product export' => ['/app/inventory/products/export', 'inventory.products.export'],
         'inventory > products > import history' => ['/app/inventory/products/import/history', 'inventory.products.import'],
