@@ -560,6 +560,21 @@ return [
              * WCAG-AA enterprise accent; the operator picks one company-wide
              * and each user may still switch light/dark + row density locally.
              */
+            'inventory' => [
+                'label' => 'Inventory Settings',
+                'description' => 'Thresholds the stock reports and alerts judge against.',
+                'fields' => [
+                    'dead_stock_days' => [
+                        'label' => 'Dead stock after (days without movement)',
+                        'type' => 'number',
+                        'default' => 90,
+                        'min' => 1,
+                        'max' => 3650,
+                        'help' => 'Days since the last movement before a product with stock on hand is reported as dead stock.',
+                    ],
+                ],
+            ],
+
             'appearance' => [
                 'label' => 'Appearance',
                 'description' => 'Workspace identity and default reading density.',

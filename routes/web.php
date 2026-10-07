@@ -29,6 +29,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\FailedDeliveryController;
 use App\Http\Controllers\FinancialReportController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\InventoryReportController;
 use App\Http\Controllers\InventoryReservationController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\MaintenanceController;
@@ -809,6 +810,17 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::post('/app/inventory/reservations/{reservation}/release', [InventoryReservationController::class, 'release'])
         ->middleware('permission:inventory.reservations.manage')
         ->name('inventory.reservations.release');
+
+    // Stock report family (§04-35/04-36) — derived from the ledger, never cached.
+    Route::get('/app/reports/inventory/aging', [InventoryReportController::class, 'aging'])
+        ->middleware('permission:inventory.reports.view')
+        ->name('inventory.reports.aging');
+    Route::get('/app/reports/inventory/dead-stock', [InventoryReportController::class, 'deadStock'])
+        ->middleware('permission:inventory.reports.view')
+        ->name('inventory.reports.dead-stock');
+    Route::get('/app/reports/inventory/stock', [InventoryReportController::class, 'stock'])
+        ->middleware('permission:inventory.reports.view')
+        ->name('inventory.reports.stock');
 
     Route::get('/app/inventory/stock/opening', [InventoryController::class, 'createOpening'])
         ->middleware('permission:inventory.adjustments.create')

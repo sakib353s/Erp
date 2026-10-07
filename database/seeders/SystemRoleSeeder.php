@@ -68,6 +68,7 @@ class SystemRoleSeeder extends Seeder
                 'suppliers.view', 'inventory.stock.view',
                 // Stock the desk promised away is a manager's business too.
                 'inventory.reservations.view', 'inventory.reservations.manage',
+                'inventory.reports.view',
             ]],
             ['slug' => 'employee', 'name' => 'Employee', 'description' => 'Staff account: own portal access only — own leave, own payslips.', 'keys' => [
                 'dashboard.view', 'employees.view', 'documents.view', 'search.view',
@@ -96,6 +97,7 @@ class SystemRoleSeeder extends Seeder
                 'purchase.returns.view', 'purchase.returns.create',
                 'inventory.stock.view', 'inventory.ledger.view', 'inventory.transfers.receive',
                 'inventory.reservations.view', 'inventory.reservations.manage',
+                'inventory.reports.view', 'inventory.valuation.view',
             ]],
         ];
 

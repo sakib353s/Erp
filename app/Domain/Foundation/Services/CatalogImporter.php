@@ -267,6 +267,9 @@ class CatalogImporter
         'inventory > stock > create transfer' => ['/app/inventory/transfers/create', 'inventory.transfers.create'],
         'inventory > stock > stock movement ledger' => ['/app/inventory/movements', 'inventory.ledger.view'],
         'inventory > stock > stock reservation' => ['/app/inventory/reservations', 'inventory.reservations.view'],
+        'inventory > stock > stock aging' => ['/app/reports/inventory/aging', 'inventory.reports.view'],
+        'inventory > stock > dead stock report' => ['/app/reports/inventory/dead-stock', 'inventory.reports.view'],
+        'inventory > stock > stock reports' => ['/app/reports/inventory/stock', 'inventory.reports.view'],
         'inventory > stock > stock ledger' => ['/app/inventory/movements', 'inventory.ledger.view'],
         // §04-23/04-24: alerts judged by a real policy, and the policies themselves
         'inventory > stock > low stock alert' => ['/app/inventory/stock/alerts?type=low', 'inventory.reorder.view'],
