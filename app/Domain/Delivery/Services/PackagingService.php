@@ -68,7 +68,10 @@ class PackagingService
             ->get();
 
         if ($types->isEmpty()) {
-            return ['rows' => collect(), 'totals' => $this->emptyTotals()];
+            // An empty register still answers every figure the screen asks for.
+            return ['rows' => collect(), 'totals' => [
+                'types' => 0, 'active' => 0, 'on_hand' => 0.0, 'value' => 0.0, 'consumed_cost' => 0.0,
+            ]];
         }
 
         $productIds = $types->pluck('product_id')->unique()->values()->all();
@@ -138,7 +141,10 @@ class PackagingService
             ->get();
 
         if ($types->isEmpty()) {
-            return ['rows' => collect(), 'totals' => $this->emptyTotals()];
+            // An empty desk still answers every figure the screen asks for.
+            return ['rows' => collect(), 'totals' => [
+                'shelves' => 0, 'on_hand' => 0.0, 'value' => 0.0, 'warehouses' => 0,
+            ]];
         }
 
         $productIds = $types->pluck('product_id')->unique()->values()->all();
@@ -226,7 +232,10 @@ class PackagingService
             ->get();
 
         if ($types->isEmpty()) {
-            return ['rows' => collect(), 'totals' => $this->emptyTotals()];
+            // An empty desk still answers every figure the screen asks for.
+            return ['rows' => collect(), 'totals' => [
+                'types' => 0, 'consumed_qty' => 0.0, 'consumed_cost' => 0.0, 'stock_value' => 0.0, 'days' => $days,
+            ]];
         }
 
         $productIds = $types->pluck('product_id')->unique()->values()->all();
@@ -645,11 +654,5 @@ class PackagingService
                 ];
             })
             ->all();
-    }
-
-    /** @return array<string, float|int> */
-    protected function emptyTotals(): array
-    {
-        return ['types' => 0, 'active' => 0, 'on_hand' => 0.0, 'value' => 0.0, 'consumed_cost' => 0.0];
     }
 }
