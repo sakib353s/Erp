@@ -88,6 +88,10 @@ class SystemRoleSeeder extends Seeder
                 // the maker-checker rule lives in the service, not in a hidden
                 // button, so a manager holding both still cannot clear their own.
                 'inventory.transfers.create',
+                // §04-44: picking and putaway are warehouse work, and the module's
+                // own keys cover it — a bin is a place, so the layout and the
+                // instructions that use it share one pair of keys.
+                'warehouses.view', 'warehouses.update',
             ]],
             ['slug' => 'employee', 'name' => 'Employee', 'description' => 'Staff account: own portal access only — own leave, own payslips.', 'keys' => [
                 'dashboard.view', 'employees.view', 'documents.view', 'search.view',
@@ -130,6 +134,11 @@ class SystemRoleSeeder extends Seeder
                 // §04-38: the label on the shelf is read at this desk, so the
                 // register and its date corrections belong here first.
                 'inventory.batch.view', 'inventory.batch.manage',
+                // §04-44: goods arrive at this desk and have to be put away, and
+                // the same person walks the pick for an order. Bins and the map
+                // belong to the warehouse module, so the keys are the warehouse's
+                // own — the physical layout *is* the warehouse.
+                'warehouses.view', 'warehouses.update',
             ]],
         ];
 

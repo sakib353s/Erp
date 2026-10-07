@@ -332,6 +332,10 @@ class CatalogImporter
         'inventory > warehouse > bin locations' => ['/app/warehouses', 'warehouses.view'],
         'inventory > warehouse > product bin assignment' => ['/app/warehouses', 'warehouses.view'],
         'inventory > warehouse > warehouse map' => ['/app/warehouses', 'warehouses.view'],
+        // §04-44: the two directions goods move inside a warehouse. Both are the
+        // warehouse module's work, so both read with its key.
+        'inventory > warehouse > pick lists' => ['/app/inventory/pick-lists', 'warehouses.view'],
+        'inventory > warehouse > putaway lists' => ['/app/inventory/putaway-lists', 'warehouses.view'],
         'inventory > stock > maximum stock level' => ['/app/inventory/reorder-levels', 'inventory.reorder.view'],
         // §04-46…04-51: damage and loss are their own register, and the write-off
         // is the document that needs a second person — so it gets its own queue.

@@ -45,8 +45,10 @@ use App\Http\Controllers\PosCustomerDisplayController;
 use App\Http\Controllers\PosSettingsController;
 use App\Http\Controllers\PriceCompareController;
 use App\Http\Controllers\PriceHistoryController;
+use App\Http\Controllers\PickListController;
 use App\Http\Controllers\PriceListController;
 use App\Http\Controllers\PricingRuleController;
+use App\Http\Controllers\PutawayListController;
 use App\Http\Controllers\ProductCostHistoryController;
 use App\Http\Controllers\ProductImportController;
 use App\Http\Controllers\ProductController;
@@ -381,6 +383,62 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::delete('/app/bin-assignments/{assignment}', [WarehouseController::class, 'unassignBin'])
         ->middleware('permission:warehouses.update')
         ->name('warehouses.bins.unassign');
+
+    /* ---- §04-44 Pick lists and putaway lists ----
+       The two instructions goods follow inside a warehouse. Reading a walk is
+       `warehouses.view`; writing one down, handing it out and finishing it is
+       `warehouses.update` — the same key the layout uses, because a bin is a
+       place and this is the work that happens in it. Literal '/create' is
+       registered before the {pickList} wildcard. */
+    Route::get('/app/inventory/pick-lists', [PickListController::class, 'index'])
+        ->middleware('permission:warehouses.view')
+        ->name('inventory.pick-lists.index');
+    Route::get('/app/inventory/pick-lists/create', [PickListController::class, 'create'])
+        ->middleware('permission:warehouses.update')
+        ->name('inventory.pick-lists.create');
+    Route::post('/app/inventory/pick-lists', [PickListController::class, 'store'])
+        ->middleware('permission:warehouses.update')
+        ->name('inventory.pick-lists.store');
+    Route::get('/app/inventory/pick-lists/{pickList}', [PickListController::class, 'show'])
+        ->middleware('permission:warehouses.view')
+        ->name('inventory.pick-lists.show');
+    Route::post('/app/inventory/pick-lists/{pickList}/assign', [PickListController::class, 'assign'])
+        ->middleware('permission:warehouses.update')
+        ->name('inventory.pick-lists.assign');
+    Route::post('/app/inventory/pick-lists/{pickList}/pick', [PickListController::class, 'recordPick'])
+        ->middleware('permission:warehouses.update')
+        ->name('inventory.pick-lists.pick');
+    Route::post('/app/inventory/pick-lists/{pickList}/complete', [PickListController::class, 'complete'])
+        ->middleware('permission:warehouses.update')
+        ->name('inventory.pick-lists.complete');
+    Route::post('/app/inventory/pick-lists/{pickList}/cancel', [PickListController::class, 'cancel'])
+        ->middleware('permission:warehouses.update')
+        ->name('inventory.pick-lists.cancel');
+
+    Route::get('/app/inventory/putaway-lists', [PutawayListController::class, 'index'])
+        ->middleware('permission:warehouses.view')
+        ->name('inventory.putaway-lists.index');
+    Route::get('/app/inventory/putaway-lists/create', [PutawayListController::class, 'create'])
+        ->middleware('permission:warehouses.update')
+        ->name('inventory.putaway-lists.create');
+    Route::post('/app/inventory/putaway-lists', [PutawayListController::class, 'store'])
+        ->middleware('permission:warehouses.update')
+        ->name('inventory.putaway-lists.store');
+    Route::get('/app/inventory/putaway-lists/{putawayList}', [PutawayListController::class, 'show'])
+        ->middleware('permission:warehouses.view')
+        ->name('inventory.putaway-lists.show');
+    Route::post('/app/inventory/putaway-lists/{putawayList}/assign', [PutawayListController::class, 'assign'])
+        ->middleware('permission:warehouses.update')
+        ->name('inventory.putaway-lists.assign');
+    Route::post('/app/inventory/putaway-lists/{putawayList}/place', [PutawayListController::class, 'recordPlacement'])
+        ->middleware('permission:warehouses.update')
+        ->name('inventory.putaway-lists.place');
+    Route::post('/app/inventory/putaway-lists/{putawayList}/complete', [PutawayListController::class, 'complete'])
+        ->middleware('permission:warehouses.update')
+        ->name('inventory.putaway-lists.complete');
+    Route::post('/app/inventory/putaway-lists/{putawayList}/cancel', [PutawayListController::class, 'cancel'])
+        ->middleware('permission:warehouses.update')
+        ->name('inventory.putaway-lists.cancel');
 
     /* ---- Customers / CRM (§05) ----
        The customer master existed so sales documents could reference a party;

@@ -41,6 +41,10 @@ final class DocumentTypeRegistry
         ['code' => 'stock_damage_entry', 'type_group' => 'inventory', 'name' => 'Damage / Loss Entry', 'printed_title' => 'DAMAGE / LOSS REPORT'],
         ['code' => 'stock_write_off', 'type_group' => 'inventory', 'name' => 'Stock Write-Off', 'printed_title' => 'WRITE-OFF'],
         ['code' => 'stock_count', 'type_group' => 'inventory', 'name' => 'Stock Count Sheet', 'printed_title' => 'STOCK COUNT'],
+        // §04-44: a pick list and a putaway list are numbered documents like any
+        // other — the number is how the floor refers to the walk.
+        ['code' => 'pick_list', 'type_group' => 'inventory', 'name' => 'Pick List', 'printed_title' => 'PICK LIST'],
+        ['code' => 'putaway_list', 'type_group' => 'inventory', 'name' => 'Putaway List', 'printed_title' => 'PUTAWAY LIST'],
 
         // ---- Accounting
         ['code' => 'journal_voucher', 'type_group' => 'accounting', 'name' => 'Journal Voucher', 'printed_title' => 'JOURNAL VOUCHER'],
@@ -76,6 +80,8 @@ final class DocumentTypeRegistry
         'stock_damage_entry' => 'DL',
         'stock_write_off' => 'WO',
         'stock_count' => 'SC',
+        'pick_list' => 'PL',
+        'putaway_list' => 'PA',
         'payroll' => 'PAY',
     ];
 
