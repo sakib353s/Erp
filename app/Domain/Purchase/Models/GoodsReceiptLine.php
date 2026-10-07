@@ -10,13 +10,15 @@ class GoodsReceiptLine extends Model
 {
     protected $fillable = [
         'goods_receipt_id', 'purchase_order_line_id', 'product_id', 'qty_received',
-        'unit_cost', 'line_total', 'batch_no', 'remarks', 'sort_order',
+        'unit_cost', 'line_total', 'batch_no', 'manufactured_on', 'expires_on', 'remarks', 'sort_order',
     ];
 
     protected $casts = [
         'qty_received' => 'decimal:4',
         'unit_cost' => 'decimal:4',
         'line_total' => 'decimal:4',
+        'manufactured_on' => 'date',
+        'expires_on' => 'date',
     ];
 
     public function receipt(): BelongsTo

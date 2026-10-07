@@ -51,7 +51,7 @@ class GoodsReceiptController extends Controller
 
         if ($request->filled('order')) {
             $order = PurchaseOrder::query()
-                ->with(['lines.product:id,sku,name', 'lines' => fn ($q) => $q->orderBy('sort_order')])
+                ->with(['lines.product:id,sku,name,track_batch', 'lines' => fn ($q) => $q->orderBy('sort_order')])
                 ->open()
                 ->findOrFail((int) $request->query('order'));
         }
@@ -61,7 +61,9 @@ class GoodsReceiptController extends Controller
             'openOrders' => PurchaseOrder::query()->open()->with('supplier:id,name')->orderByDesc('order_date')->limit(100)->get(['id', 'code', 'supplier_id', 'warehouse_id', 'order_date']),
             'suppliers' => Supplier::query()->orderable()->orderBy('name')->get(['id', 'name', 'code']),
             'warehouses' => Warehouse::query()->orderBy('name')->get(['id', 'name', 'branch_id']),
-            'products' => Product::query()->active()->orderBy('name')->limit(500)->get(['id', 'sku', 'name', 'standard_cost']),
+            // track_batch travels with the dropdown so the form can say which
+            // products must name a batch on the way in (§04-37).
+            'products' => Product::query()->active()->orderBy('name')->limit(500)->get(['id', 'sku', 'name', 'standard_cost', 'track_batch']),
         ]);
     }
 

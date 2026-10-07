@@ -580,6 +580,20 @@ return [
                         'max' => 100000000,
                         'help' => 'A stock transfer worth at least this much waits for approval and cannot be dispatched until a second person clears it. 0 dispatches every transfer as it always did.',
                     ],
+                    'fefo_picking' => [
+                        'label' => 'Issue batch-tracked stock expiry-first (FEFO)',
+                        'type' => 'boolean',
+                        'default' => true,
+                        'help' => 'A batch-tracked product is consumed from the batch with the earliest expiry date, not simply the oldest receipt. Turning this off falls back to the valuation method (FIFO/LIFO) for those products too.',
+                    ],
+                    'expiry_alert_days' => [
+                        'label' => 'Warn about a batch this many days before it expires',
+                        'type' => 'number',
+                        'default' => 30,
+                        'min' => 1,
+                        'max' => 3650,
+                        'help' => 'A batch inside this window is listed on the expiry desk and raises an expiry alert; one already past its date is listed as expired whatever this says.',
+                    ],
                     'dead_stock_days' => [
                         'label' => 'Dead stock after (days without movement)',
                         'type' => 'number',

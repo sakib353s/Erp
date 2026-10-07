@@ -209,6 +209,7 @@ class FoundationPermissionSeeder extends Seeder
             ['inventory', 'reorder', 'view', 'inventory.reorder.view', 'View reorder alerts'],
             ['inventory', 'reorder', 'configure', 'inventory.reorder.configure', 'Configure reorder policies'],
             ['inventory', 'batch', 'view', 'inventory.batch.view', 'View batches'],
+            ['inventory', 'batch', 'manage', 'inventory.batch.manage', 'Record and correct batch dates and references'],
             ['inventory', 'serial', 'view', 'inventory.serial.view', 'View serials'],
             ['inventory', 'reservations', 'view', 'inventory.reservations.view', 'View stock reservations'],
             ['inventory', 'reservations', 'manage', 'inventory.reservations.manage', 'Release or expire stock holds'],

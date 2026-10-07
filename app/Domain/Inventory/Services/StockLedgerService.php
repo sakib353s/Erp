@@ -29,6 +29,7 @@ class StockLedgerService
     public function __construct(
         protected TenantContext $context,
         protected ValuationService $valuation,
+        protected BatchService $batches,
     ) {}
 
     /**
@@ -48,6 +49,9 @@ class StockLedgerService
      *   idempotency_key?: string|null,
      *   narration?: string|null,
      *   occurred_at?: string|null,
+     *   batch_no?: string|null,
+     *   manufactured_on?: string|null,
+     *   expires_on?: string|null,
      * } $command
      */
     public function post(array $command, ?User $actor = null): StockMovement
@@ -115,6 +119,12 @@ class StockLedgerService
                 ?? $warehouse->branch_id
                 ?? $this->context->branchId();
 
+            // §04-38: an inbound movement that names a batch registers it, once,
+            // and the layer it creates belongs to that batch from here on. A
+            // batch-tracked product must name one — receiving it anonymously
+            // would leave an expiry nobody can ever ask about.
+            $batch = $this->resolveBatch($command, $product, $warehouse, $isInbound, $actor);
+
             $balance = StockBalance::query()
                 ->where('warehouse_id', $warehouse->id)
                 ->where('product_id', $product->id)
@@ -157,6 +167,7 @@ class StockLedgerService
                     $command['unit_cost'] ?? null,
                     $command['source_type'] ?? null,
                     $command['source_id'] ?? null,
+                    $batch?->id,
                 );
                 $layerId = $layer?->id;
             } else {
@@ -232,6 +243,7 @@ class StockLedgerService
                 'unit_cost' => $unitCost,
                 'valuation_method' => $valuationMethod,
                 'layer_id' => $layerId,
+                'stock_batch_id' => $batch?->id,
                 'source_type' => $command['source_type'] ?? null,
                 'source_id' => $command['source_id'] ?? null,
                 'source_event' => $command['source_event'] ?? null,
@@ -241,6 +253,51 @@ class StockLedgerService
                 'narration' => $command['narration'] ?? null,
             ]);
         });
+    }
+
+    /**
+     * The batch an inbound movement belongs to: the one it named, or nothing.
+     * A batch-tracked product has to name one — the alternative is stock whose
+     * expiry can never be asked about, which is the whole point of the register.
+     *
+     * @param  array<string, mixed>  $command
+     */
+    protected function resolveBatch(
+        array $command,
+        Product $product,
+        Warehouse $warehouse,
+        bool $isInbound,
+        ?User $actor,
+    ): ?\App\Domain\Inventory\StockBatch {
+        $batchNo = trim((string) ($command['batch_no'] ?? ''));
+
+        if (! $isInbound) {
+            // Outbound movements do not invent batches: the layers they consume
+            // already know which batch they came from.
+            return null;
+        }
+
+        if ($batchNo === '') {
+            if ($product->track_batch) {
+                throw new RuntimeException(sprintf(
+                    '%s is batch-tracked, so the movement has to name the batch it brings in.',
+                    $product->sku,
+                ));
+            }
+
+            return null;
+        }
+
+        return $this->batches->register(
+            $product,
+            $warehouse,
+            $batchNo,
+            $command['manufactured_on'] ?? null,
+            $command['expires_on'] ?? null,
+            $command['source_type'] ?? null,
+            isset($command['source_id']) ? (int) $command['source_id'] : null,
+            $actor,
+        );
     }
 
     /**

@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class StockLayer extends Model
 {
     protected $fillable = [
-        'company_id', 'warehouse_id', 'product_id',
+        'company_id', 'warehouse_id', 'product_id', 'stock_batch_id',
         'qty_initial', 'qty_remaining', 'unit_cost',
         'received_at', 'source_type', 'source_id',
     ];
@@ -39,6 +39,12 @@ class StockLayer extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    /** The batch this layer came in on (§04-37) — null for untracked stock. */
+    public function batch(): BelongsTo
+    {
+        return $this->belongsTo(StockBatch::class, 'stock_batch_id');
     }
 
     public function isExhausted(): bool

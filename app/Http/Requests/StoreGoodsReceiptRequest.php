@@ -32,6 +32,21 @@ class StoreGoodsReceiptRequest extends FormRequest
             'lines.*.qty_received' => ['required', 'numeric', 'gt:0'],
             'lines.*.unit_cost' => ['nullable', 'numeric', 'min:0'],
             'lines.*.batch_no' => ['nullable', 'string', 'max:64'],
+            'lines.*.manufactured_on' => ['nullable', 'date', 'before_or_equal:today'],
+            'lines.*.expires_on' => [
+                'nullable', 'date',
+                function (string $attribute, mixed $value, \Closure $fail): void {
+                    // Only compared when both were given: a label that prints
+                    // only the expiry date is normal, and refusing it would be
+                    // refusing the commonest way a batch arrives.
+                    $index = explode('.', $attribute)[1] ?? null;
+                    $made = $index === null ? null : $this->input("lines.{$index}.manufactured_on");
+
+                    if ($value && $made && strtotime((string) $value) < strtotime((string) $made)) {
+                        $fail('The expiry date cannot come before the manufactured date.');
+                    }
+                },
+            ],
             'lines.*.remarks' => ['nullable', 'string', 'max:500'],
         ];
     }

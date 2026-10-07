@@ -93,7 +93,16 @@
                                 <td data-label="Quantity" class="erp-td-num">{{ number_format((float) $line->qty_received, 4) }}</td>
                                 <td data-label="Unit cost" class="erp-td-num">৳ {{ number_format((float) $line->unit_cost, 4) }}</td>
                                 <td data-label="Line value" class="erp-td-num erp-cell-strong">৳ {{ number_format((float) $line->line_total, 2) }}</td>
-                                <td data-label="Batch" class="erp-td-muted">{{ $line->batch_no ?: '—' }}</td>
+                                <td data-label="Batch" class="erp-td-muted">
+                                    {{ $line->batch_no ?: '—' }}
+                                    @if ($line->manufactured_on || $line->expires_on)
+                                        <span class="d-block small">
+                                            @if ($line->manufactured_on) made {{ $line->manufactured_on->format('d M Y') }}@endif
+                                            @if ($line->manufactured_on && $line->expires_on) · @endif
+                                            @if ($line->expires_on) expires {{ $line->expires_on->format('d M Y') }}@endif
+                                        </span>
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

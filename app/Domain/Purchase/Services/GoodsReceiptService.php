@@ -167,6 +167,12 @@ class GoodsReceiptService
                     'qty' => (float) $line->qty_received,
                     'unit_cost' => (float) $line->unit_cost,
                     'branch_id' => $receipt->branch_id,
+                    // §04-38: whatever the receiving desk wrote on the line about
+                    // the batch and its dates travels with the movement, so the
+                    // register is filled by the receipt itself.
+                    'batch_no' => $line->batch_no,
+                    'manufactured_on' => $line->manufactured_on?->toDateString(),
+                    'expires_on' => $line->expires_on?->toDateString(),
                     'source_type' => 'goods_receipt',
                     'source_id' => $receipt->id,
                     'source_event' => 'posted',
@@ -330,6 +336,8 @@ class GoodsReceiptService
             'unit_cost' => (float) ($unitCost ?? 0),
             'line_total' => 0,
             'batch_no' => $line['batch_no'] ?? null,
+            'manufactured_on' => $line['manufactured_on'] ?? null,
+            'expires_on' => $line['expires_on'] ?? null,
             'remarks' => $line['remarks'] ?? null,
             'sort_order' => $line['sort_order'] ?? $sortOrder,
         ];

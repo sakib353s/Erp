@@ -28,6 +28,7 @@ use App\Http\Controllers\SupplierPaymentController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\FailedDeliveryController;
 use App\Http\Controllers\FinancialReportController;
+use App\Http\Controllers\InventoryBatchController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\InventoryReportController;
 use App\Http\Controllers\InventoryCountController;
@@ -900,6 +901,19 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::post('/app/inventory/writeoffs/{writeoff}/reject', [InventoryDamageController::class, 'rejectWriteoff'])
         ->middleware('permission:inventory.writeoffs.approve')
         ->name('inventory.writeoffs.reject');
+
+    // Batches and expiry (§04-38/04-39) — the label on the goods, and the clock
+    // that runs on it. Read-only apart from the one write that matters: a date
+    // correction, which keeps its reason.
+    Route::get('/app/inventory/batches', [InventoryBatchController::class, 'index'])
+        ->middleware('permission:inventory.batch.view')
+        ->name('inventory.batches.index');
+    Route::get('/app/inventory/expiry', [InventoryBatchController::class, 'expiry'])
+        ->middleware('permission:inventory.batch.view')
+        ->name('inventory.batches.expiry');
+    Route::post('/app/inventory/batches/{batch}/expiry', [InventoryBatchController::class, 'updateExpiry'])
+        ->middleware('permission:inventory.batch.manage')
+        ->name('inventory.batches.expiry.update');
 
     Route::get('/app/inventory/reservations', [InventoryReservationController::class, 'index'])
         ->middleware('permission:inventory.reservations.view')

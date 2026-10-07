@@ -1308,7 +1308,9 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-status-present,
 .erp-status-received,
 .erp-status-fully-received,
-.erp-status-matched {
+.erp-status-matched,
+/* §04-39: an expiry date that is still ahead — in date, but dated */
+.erp-status-ok {
     background: var(--ok-soft);
     color: var(--ok);
 }
@@ -1370,7 +1372,9 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 /* §04-31: a count sheet is open — the warehouse is mid-answer */
 .erp-status-counting,
 /* §04-46: stock is held damaged — not gone, but not sellable either */
-.erp-status-damage {
+.erp-status-damage,
+/* §04-39: still sellable, but the date is close enough to act on */
+.erp-status-expiring {
     background: var(--warn-soft);
     color: var(--warn);
 }
@@ -1414,7 +1418,9 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-status-weekend,
 .erp-status-inactive,
 .erp-status-not_applicable,
-.erp-status-not-applicable {
+.erp-status-not-applicable,
+/* §04-39: nobody wrote a date on it, so nothing can warn about it */
+.erp-status-undated {
     background: var(--neutral-soft);
     color: var(--neutral-ink);
 }

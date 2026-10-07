@@ -289,6 +289,17 @@ class CatalogImporter
         // §04-31: a count sheet is opened here; "Cycle Count" starts a subset sheet.
         'inventory > stock > stock count' => ['/app/inventory/counts', 'inventory.counts.view'],
         'inventory > stock > cycle count' => ['/app/inventory/counts/create?scope=cycle', 'inventory.counts.create'],
+        // §04-38/04-39: the batch register and the expiry desk. "Serial tracking"
+        // is deliberately NOT mapped — the serial write path does not exist yet,
+        // so the leaf stays planned rather than pointing at a page that would
+        // show nothing (a dead link by another name).
+        'inventory > batch & serial > batch tracking' => ['/app/inventory/batches', 'inventory.batch.view'],
+        'inventory > batch & serial > expiry date entry' => ['/app/inventory/expiry?type=undated', 'inventory.batch.manage'],
+        'inventory > batch & serial > expiring products' => ['/app/inventory/expiry?type=expiring', 'inventory.batch.view'],
+        'inventory > batch & serial > expired stock' => ['/app/inventory/expiry?type=expired', 'inventory.batch.view'],
+        'inventory > batch & serial > expiry alerts' => ['/app/inventory/expiry?type=expiring', 'inventory.batch.view'],
+        'inventory > batch & serial > fefo settings' => ['/app/settings/inventory', 'inventory.batch.view'],
+        'inventory > batch & serial > expiry write-off' => ['/app/inventory/writeoffs', 'inventory.writeoffs.create'],
         // §04-42/04-43/04-45: a warehouse is opened to see its layout. Zones, bins
         // and assignments live on that screen, so their leaves land on the list
         // rather than pretending to be separate pages. Warehousing lives at

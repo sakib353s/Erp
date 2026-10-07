@@ -34,7 +34,7 @@
                     <select class="form-select" id="warehouse_id" name="warehouse_id" required>
                         <option value="">— select —</option>
                         @foreach ($warehouses as $warehouse)
-                            <option value="{{ $warehouse->id }}" @selected((int) old('warehouse_id') === $warehouse->id)>
+                            <option value="{{ $warehouse->id }}" @selected((int) old('warehouse_id', $warehouseId) === $warehouse->id)>
                                 {{ $warehouse->name }}
                             </option>
                         @endforeach
@@ -51,7 +51,7 @@
                     <label class="form-label" for="source_state">Take the goods from</label>
                     <select class="form-select" id="source_state" name="source_state" required>
                         @foreach ($sources as $key => $label)
-                            <option value="{{ $key }}" @selected(old('source_state', 'damaged') === $key)>{{ $label }}</option>
+                            <option value="{{ $key }}" @selected(old('source_state', $prefill['source_state'] ?? 'damaged') === $key)>{{ $label }}</option>
                         @endforeach
                     </select>
                     <div class="form-text">Damaged and quarantined goods are held outside sellable stock.</div>
@@ -59,7 +59,7 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label" for="reason">Reason</label>
-                    <input class="form-control" id="reason" name="reason" value="{{ old('reason') }}"
+                    <input class="form-control" id="reason" name="reason" value="{{ old('reason', $prefill['reason']) }}"
                            required maxlength="500" placeholder="Disposed of after inspection">
                     @error('reason') <div class="text-danger small">{{ $message }}</div> @enderror
                 </div>
@@ -92,12 +92,13 @@
             </thead>
             <tbody id="lines-body">
                 @for ($i = 0; $i < 2; $i++)
+                    @php($handed = $i === 0 ? $prefill : [])
                     <tr class="line-row">
                         <td>
                             <select class="form-select" name="lines[{{ $i }}][product_id]" required>
                                 <option value="">— select —</option>
                                 @foreach ($products as $product)
-                                    <option value="{{ $product->id }}" @selected((int) old("lines.$i.product_id") === $product->id)>
+                                    <option value="{{ $product->id }}" @selected((int) old("lines.$i.product_id", $handed['product_id'] ?? null) === $product->id)>
                                         {{ $product->sku }} · {{ $product->name }}
                                     </option>
                                 @endforeach
@@ -105,7 +106,7 @@
                         </td>
                         <td>
                             <input type="number" step="0.0001" min="0.0001" class="form-control"
-                                   name="lines[{{ $i }}][qty]" required value="{{ old("lines.$i.qty") }}" placeholder="1">
+                                   name="lines[{{ $i }}][qty]" required value="{{ old("lines.$i.qty", $handed['qty'] ?? null) }}" placeholder="1">
                         </td>
                         <td>
                             <input class="form-control" name="lines[{{ $i }}][narration]" maxlength="500"

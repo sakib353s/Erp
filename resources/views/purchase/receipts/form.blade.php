@@ -123,7 +123,7 @@
                             <th class="erp-th-num">Outstanding</th>
                             <th class="erp-th-num">Receiving now</th>
                             <th class="erp-th-num">Unit cost</th>
-                            <th>Batch</th>
+                            <th>Batch &amp; dates</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -154,9 +154,21 @@
                                                value="{{ old('lines.'.$index.'.unit_cost', $line->unit_price) }}"
                                                aria-label="Unit cost for {{ $line->label() }}">
                                     </td>
-                                    <td data-label="Batch">
+                                    <td data-label="Batch &amp; dates">
                                         <input class="form-control form-control-sm" name="lines[{{ $index }}][batch_no]" maxlength="64"
-                                               value="{{ old('lines.'.$index.'.batch_no') }}" aria-label="Batch number">
+                                               value="{{ old('lines.'.$index.'.batch_no') }}" aria-label="Batch number"
+                                               @if ($line->product?->track_batch) required @endif
+                                               placeholder="{{ $line->product?->track_batch ? 'Required — batch-tracked' : 'Optional' }}">
+                                        <div class="d-flex gap-1 mt-1">
+                                            <input class="form-control form-control-sm" type="date"
+                                                   name="lines[{{ $index }}][manufactured_on]"
+                                                   value="{{ old('lines.'.$index.'.manufactured_on') }}"
+                                                   aria-label="Manufactured on" title="Manufactured on (optional)">
+                                            <input class="form-control form-control-sm" type="date"
+                                                   name="lines[{{ $index }}][expires_on]"
+                                                   value="{{ old('lines.'.$index.'.expires_on') }}"
+                                                   aria-label="Expires on" title="Expires on (optional)">
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -169,7 +181,7 @@
                                             <option value="">Choose the product that arrived…</option>
                                             @foreach ($products as $product)
                                                 <option value="{{ $product->id }}" @selected((int) ($line['product_id'] ?? 0) === $product->id)>
-                                                    {{ $product->sku }} · {{ \Illuminate\Support\Str::limit($product->name, 42) }}
+                                                    {{ $product->sku }} · {{ \Illuminate\Support\Str::limit($product->name, 42) }}@if ($product->track_batch) · batch-tracked@endif
                                                 </option>
                                             @endforeach
                                         </select>
@@ -185,8 +197,19 @@
                                         <input class="form-control form-control-sm erp-num" type="number" step="0.0001" min="0"
                                                name="lines[{{ $index }}][unit_cost]" value="{{ $line['unit_cost'] ?? 0 }}" required>
                                     </td>
-                                    <td data-label="Batch">
-                                        <input class="form-control form-control-sm" name="lines[{{ $index }}][batch_no]" maxlength="64" value="{{ $line['batch_no'] ?? '' }}">
+                                    <td data-label="Batch &amp; dates">
+                                        <input class="form-control form-control-sm" name="lines[{{ $index }}][batch_no]" maxlength="64"
+                                               value="{{ $line['batch_no'] ?? '' }}" aria-label="Batch number">
+                                        <div class="d-flex gap-1 mt-1">
+                                            <input class="form-control form-control-sm" type="date"
+                                                   name="lines[{{ $index }}][manufactured_on]"
+                                                   value="{{ $line['manufactured_on'] ?? '' }}"
+                                                   aria-label="Manufactured on" title="Manufactured on (optional)">
+                                            <input class="form-control form-control-sm" type="date"
+                                                   name="lines[{{ $index }}][expires_on]"
+                                                   value="{{ $line['expires_on'] ?? '' }}"
+                                                   aria-label="Expires on" title="Expires on (optional)">
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -196,7 +219,10 @@
             </div>
             <div class="erp-help px-3 pb-3">
                 Unit cost defaults to the ordered price. Setting the real invoice cost here is what makes weighted-average
-                and FIFO valuation stay true — the layer is written with this figure when the receipt is posted.
+                and FIFO valuation stay true — the layer is written with this figure when the receipt is posted.<br>
+                <strong>Batch and dates.</strong> A batch-tracked product must name its batch; the expiry date on the
+                box is what the expiry desk watches, and a later receipt only fills a blank in — it never overwrites a
+                date somebody already recorded. Correcting a date is done on the expiry desk, with a reason.
             </div>
         </div>
 

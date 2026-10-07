@@ -158,11 +158,22 @@ class InventoryDamageController extends Controller
     {
         $warehouseId = $request->filled('warehouse') ? (int) $request->query('warehouse') : null;
 
+        // §04-41: the expiry desk hands over what it is looking at — the product,
+        // how much of it is left and why — so raising the write-off starts filled
+        // in instead of making somebody retype what the screen already knew.
+        $prefill = [
+            'product_id' => $request->filled('product') ? (int) $request->query('product') : null,
+            'qty' => $request->filled('qty') ? (float) $request->query('qty') : null,
+            'source_state' => $request->filled('source') ? (string) $request->query('source') : null,
+            'reason' => $request->filled('reason') ? (string) $request->query('reason') : null,
+        ];
+
         return view('inventory.writeoffs.form', [
             'warehouses' => Warehouse::query()->where('is_active', true)->orderBy('name')->get(['id', 'name', 'code']),
             'products' => Product::query()->active()->stocked()->orderBy('sku')->get(['id', 'sku', 'name']),
             'sources' => StockWriteoff::SOURCE_STATES,
             'holdings' => $this->damage->compartmentHoldings(StockMovement::STATE_DAMAGED, $warehouseId),
+            'prefill' => $prefill,
         ]);
     }
 

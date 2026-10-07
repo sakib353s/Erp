@@ -82,7 +82,7 @@ class StockMovement extends Model
     protected $fillable = [
         'company_id', 'branch_id', 'warehouse_id', 'product_id',
         'movement_type', 'state', 'qty_signed', 'unit_cost',
-        'valuation_method', 'layer_id', 'source_type', 'source_id',
+        'valuation_method', 'layer_id', 'stock_batch_id', 'source_type', 'source_id',
         'source_event', 'idempotency_key', 'occurred_at', 'actor_id',
         'narration',
     ];
@@ -111,6 +111,12 @@ class StockMovement extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    /** The batch a movement carried in, when it named one (§04-37). */
+    public function batch(): BelongsTo
+    {
+        return $this->belongsTo(StockBatch::class, 'stock_batch_id');
     }
 
     public function actor(): BelongsTo

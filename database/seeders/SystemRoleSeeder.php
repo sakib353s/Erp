@@ -74,6 +74,9 @@ class SystemRoleSeeder extends Seeder
                 'inventory.damage.create', 'inventory.loss.create',
                 'inventory.writeoffs.create', 'inventory.writeoffs.approve',
                 'inventory.counts.view', 'inventory.counts.create', 'inventory.counts.post',
+                // §04-38: an expired shelf is a value decision, so the desk that
+                // judges writes and loss also reads the dates — and corrects one.
+                'inventory.batch.view', 'inventory.batch.manage',
                 // §04-28: stock leaving the building on a transfer is the same
                 // kind of decision as stock being written off, so it is the same
                 // desk that signs it off — and never the person who raised it.
@@ -101,6 +104,8 @@ class SystemRoleSeeder extends Seeder
                 'purchase.bills.view', 'purchase.bills.create',
                 'purchase.returns.view', 'purchase.returns.create',
                 'inventory.products.view', 'inventory.stock.view',
+                // §04-38: a buyer has to see what is about to expire to buy it again.
+                'inventory.batch.view',
             ]],
             ['slug' => 'storekeeper', 'name' => 'Store keeper', 'description' => 'Receiving desk: books goods in against approved orders, posts them to stock and records what breaks.', 'keys' => [
                 'dashboard.view', 'search.view',
@@ -119,6 +124,9 @@ class SystemRoleSeeder extends Seeder
                 // §04-31: the storekeeper counts the shelves; posting the
                 // difference into stock is the manager's signature.
                 'inventory.counts.view', 'inventory.counts.create',
+                // §04-38: the label on the shelf is read at this desk, so the
+                // register and its date corrections belong here first.
+                'inventory.batch.view', 'inventory.batch.manage',
             ]],
         ];
 

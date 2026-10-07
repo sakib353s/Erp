@@ -5,6 +5,7 @@ namespace App\Domain\Inventory\Services;
 use App\Domain\Foundation\Warehouse;
 use App\Domain\Inventory\Product;
 use App\Domain\Inventory\StockLayer;
+use App\Domain\Settings\Services\SettingService;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 
@@ -14,6 +15,8 @@ use RuntimeException;
  */
 class ValuationService
 {
+    public function __construct(protected SettingService $settings) {}
+
     /**
      * Unit cost for an inbound quantity (receipt / opening / adjust-in).
      * Returns [unit_cost, layer|null].
@@ -27,6 +30,7 @@ class ValuationService
         ?float $explicitUnitCost = null,
         ?string $sourceType = null,
         ?int $sourceId = null,
+        ?int $batchId = null,
     ): array {
         if ($qty <= 0) {
             throw new RuntimeException('Receipt quantity must be greater than zero.');
@@ -38,6 +42,7 @@ class ValuationService
             'company_id' => $product->company_id,
             'warehouse_id' => $warehouse->id,
             'product_id' => $product->id,
+            'stock_batch_id' => $batchId,
             'qty_initial' => number_format($qty, 4, '.', ''),
             'qty_remaining' => number_format($qty, 4, '.', ''),
             'unit_cost' => number_format($unitCost, 4, '.', ''),
@@ -76,11 +81,25 @@ class ValuationService
             ];
         }
 
+        // §04-40/04-41: a batch-tracked product is issued earliest-expiry-first.
+        // A date written on a box only means something if the box leaves before
+        // it passes, so FEFO overrides the valuation order for those products.
+        // Undated layers go last: nothing is known to be urgent about them.
+        $fefo = (bool) $product->track_batch
+            && $this->settings->getBool('inventory', 'fefo_picking', true);
+
         $open = StockLayer::query()
-            ->where('warehouse_id', $warehouse->id)
-            ->where('product_id', $product->id)
-            ->where('qty_remaining', '>', 0)
-            ->orderBy($method === 'lifo' ? 'received_at' : 'received_at', $method === 'lifo' ? 'desc' : 'asc')
+            ->when($fefo, fn ($q) => $q
+                ->leftJoin('stock_batches as b', 'b.id', '=', 'stock_layers.stock_batch_id')
+                ->select('stock_layers.*')
+                ->orderByRaw('case when b.expires_on is null then 1 else 0 end')
+                ->orderByRaw('b.expires_on asc'))
+            ->where('stock_layers.warehouse_id', $warehouse->id)
+            ->where('stock_layers.product_id', $product->id)
+            ->where('stock_layers.qty_remaining', '>', 0)
+            ->when(! $fefo, fn ($q) => $q
+                ->orderBy('stock_layers.received_at', $method === 'lifo' ? 'desc' : 'asc'))
+            ->orderBy('stock_layers.id')
             ->lockForUpdate()
             ->get();
 
