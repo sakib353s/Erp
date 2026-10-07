@@ -59,6 +59,10 @@ class SystemRoleSeeder extends Seeder
                 // HRM (§10): a manager runs their team's attendance and approves leave
                 'attendance.view', 'attendance.manage', 'attendance.report',
                 'leave.view', 'leave.approve', 'leave.balance',
+                // Purchase (§03): a manager signs orders off but does not raise
+                // the ones they will approve — self-approval is refused in code.
+                'purchase.orders.view', 'purchase.orders.approve', 'purchase.orders.cancel',
+                'purchase.receipts.view', 'suppliers.view', 'inventory.stock.view',
             ]],
             ['slug' => 'employee', 'name' => 'Employee', 'description' => 'Staff account: own portal access only — own leave, own payslips.', 'keys' => [
                 'dashboard.view', 'employees.view', 'documents.view', 'search.view',
@@ -69,6 +73,20 @@ class SystemRoleSeeder extends Seeder
             ['slug' => 'technician', 'name' => 'Technician', 'description' => 'Service technician (portal-capable).', 'keys' => [
                 'dashboard.view', 'documents.view', 'documents.upload', 'search.view',
                 'portal.technician.access',
+            ]],
+            ['slug' => 'buyer', 'name' => 'Buyer (procurement)', 'description' => 'Procurement officer: keeps suppliers and raises purchase orders. Cannot approve them.', 'keys' => [
+                'dashboard.view', 'search.view', 'documents.view',
+                'suppliers.view', 'suppliers.create', 'suppliers.edit',
+                'purchase.orders.view', 'purchase.orders.create',
+                'purchase.receipts.view', 'purchase.receipts.create',
+                'inventory.products.view', 'inventory.stock.view',
+            ]],
+            ['slug' => 'storekeeper', 'name' => 'Store keeper', 'description' => 'Receiving desk: books goods in against approved orders and posts them to stock.', 'keys' => [
+                'dashboard.view', 'search.view',
+                'suppliers.view',
+                'purchase.orders.view', 'purchase.receipts.view',
+                'purchase.receipts.create', 'purchase.receipts.post',
+                'inventory.stock.view', 'inventory.ledger.view', 'inventory.transfers.receive',
             ]],
         ];
 

@@ -98,6 +98,22 @@ class CatalogImporter
         'inventory > warehouse > warehouses' => ['/app/warehouses', 'warehouses.view'],
         'employee > employees > all employees' => ['/app/employees', 'employees.view'],
 
+        // §03 purchase + §06 suppliers — the pages that now exist
+        'purchase > suppliers > all suppliers' => ['/app/suppliers', 'suppliers.view'],
+        'purchase > suppliers > add supplier' => ['/app/suppliers/create', 'suppliers.create'],
+        'purchase > suppliers > supplier profile' => ['/app/suppliers', 'suppliers.view'],
+        'purchase > purchase orders > all purchase orders' => ['/app/purchase/orders', 'purchase.orders.view'],
+        'purchase > purchase orders > create po' => ['/app/purchase/orders/create', 'purchase.orders.create'],
+        'purchase > purchase orders > pending approval' => ['/app/purchase/orders?status=pending_approval', 'purchase.orders.view'],
+        'purchase > purchase orders > approved pos' => ['/app/purchase/orders?status=approved', 'purchase.orders.view'],
+        'purchase > purchase orders > partially received' => ['/app/purchase/orders?status=partially_received', 'purchase.orders.view'],
+        'purchase > purchase orders > fully received' => ['/app/purchase/orders?status=received', 'purchase.orders.view'],
+        'purchase > purchase orders > cancelled pos' => ['/app/purchase/orders?status=cancelled', 'purchase.orders.view'],
+        'purchase > goods receipt (grn) > all grns' => ['/app/purchase/receipts', 'purchase.receipts.view'],
+        'purchase > goods receipt (grn) > create grn' => ['/app/purchase/receipts/create', 'purchase.receipts.create'],
+        'purchase > goods receipt (grn) > grn to stock update' => ['/app/purchase/receipts?status=draft', 'purchase.receipts.post'],
+        'purchase > goods receipt (grn) > grn history' => ['/app/purchase/receipts?status=posted', 'purchase.receipts.view'],
+
         // §10 HRM — attendance, leave, structure (pages that really exist)
         'employee > attendance > attendance list' => ['/app/hr/attendance', 'attendance.view'],
         'employee > attendance > live attendance' => ['/app/hr/attendance', 'attendance.view'],

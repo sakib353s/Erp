@@ -13,6 +13,7 @@
  *   table        — row selection + bulk action bar + sticky bulk summary
  *   forms        — unsaved-change guard, submit-once, dependent selects
  *   matrix       — permission matrix counters (roles screen)
+ *   docLines     — document line grids (purchase orders/receipts)
  *   repeaters    — workflow approver/step repeaters
  *   poller       — notification bell (server-truthful counts)
  *   scanner      — barcode/QR capture into a target input
@@ -531,6 +532,128 @@ const repeaters = (() => {
     return { init };
 })();
 
+/* ------------------------------------------------- 7b. document line grids */
+/**
+ * Line editor for document tables (purchase orders, goods receipts).
+ *
+ * The server recomputes every figure on save — this only keeps the screen
+ * honest while typing, so the number the operator sees is the number the
+ * service will store: qty × price − discount, then tax on the taxable part.
+ */
+const docLines = (() => {
+    const money = (value) => `৳ ${Number(value || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+    function scopeOf(node) {
+        return node.closest('[data-erp-lines]');
+    }
+
+    function rows(scope) {
+        return $$('[data-erp-line]', scope);
+    }
+
+    function reindex(scope) {
+        rows(scope).forEach((row, index) => {
+            $$('[name]', row).forEach((input) => {
+                input.name = input.name.replace(/lines\[\d+\]/, `lines[${index}]`);
+            });
+        });
+
+        const count = $('[data-erp-line-count]', scope);
+        if (count) count.textContent = String(rows(scope).length);
+    }
+
+    function clear(row) {
+        $$('input, select, textarea', row).forEach((field) => {
+            if (field.tagName === 'SELECT') {
+                field.selectedIndex = 0;
+            } else if (field.type === 'number') {
+                field.value = '0';
+            } else {
+                field.value = '';
+            }
+        });
+    }
+
+    function recalc(scope) {
+        if (!scope) return;
+
+        let sum = 0;
+
+        rows(scope).forEach((row) => {
+            const qtyField = $('[data-erp-line-qty]', row) ?? $('[name$="[qty_ordered]"]', row);
+            const priceField = $('[data-erp-line-price]', row) ?? $('[name$="[unit_price]"]', row);
+            const discountField = $('[name$="[discount]"]', row);
+            const taxField = $('[name$="[tax_rate]"]', row);
+
+            const qty = Number.parseFloat(qtyField?.value ?? '0') || 0;
+            const price = Number.parseFloat(priceField?.value ?? '0') || 0;
+            const discount = Math.min(Number.parseFloat(discountField?.value ?? '0') || 0, qty * price);
+            const tax = Math.max(0, (qty * price - discount)) * ((Number.parseFloat(taxField?.value ?? '0') || 0) / 100);
+            const total = qty * price - discount + tax;
+
+            const cell = $('[data-erp-line-total]', row);
+            if (cell) cell.textContent = money(total);
+
+            sum += total;
+        });
+
+        const sumCell = $('[data-erp-lines-sum]', scope);
+        if (sumCell) sumCell.textContent = money(sum);
+
+        reindex(scope);
+    }
+
+    function init() {
+        document.addEventListener('click', (event) => {
+            const add = event.target.closest('[data-erp-add-line]');
+            if (add) {
+                const scope = scopeOf(add);
+                const last = rows(scope).pop();
+                if (!scope || !last) return;
+
+                const clone = last.cloneNode(true);
+                clear(clone);
+                $('[data-erp-lines-body]', scope)?.appendChild(clone);
+
+                const firstField = $('select, input', clone);
+                firstField?.focus();
+
+                recalc(scope);
+                return;
+            }
+
+            const remove = event.target.closest('[data-erp-remove-line]');
+            if (remove) {
+                const scope = scopeOf(remove);
+                const row = remove.closest('[data-erp-line]');
+                if (!scope || !row) return;
+
+                if (rows(scope).length > 1) {
+                    row.remove();
+                } else {
+                    clear(row);
+                }
+
+                recalc(scope);
+            }
+        });
+
+        document.addEventListener('input', (event) => {
+            const scope = scopeOf(event.target);
+            if (scope) recalc(scope);
+        });
+
+        document.addEventListener('change', (event) => {
+            const scope = scopeOf(event.target);
+            if (scope) recalc(scope);
+        });
+
+        $$('[data-erp-lines]').forEach(recalc);
+    }
+
+    return { init, recalc };
+})();
+
 /* --------------------------------------------------------------- 8. poller */
 const poller = (() => {
     function init() {
@@ -619,7 +742,8 @@ tables.init();
 forms.init();
 matrix.init();
 repeaters.init();
+docLines.init();
 poller.init();
 scanner.init();
 
-window.erpUI = { toasts, palette, shell, tables, syncApproverTypes };
+window.erpUI = { toasts, palette, shell, tables, syncApproverTypes, docLines };

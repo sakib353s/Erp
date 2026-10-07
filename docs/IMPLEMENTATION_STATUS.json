@@ -46,10 +46,11 @@
    "trace": "docs/TRACEABILITY/02-sales.md"
   },
   "03_purchase": {
-   "status": "PLANNED",
+   "status": "IN PROGRESS",
    "rows_total": 73,
-   "rows_done": 0,
-   "trace": "docs/TRACEABILITY/03-purchase.md"
+   "rows_done": 9,
+   "trace": "docs/TRACEABILITY/03-purchase.md",
+   "notes": "Purchasing core implemented: supplier master deepening (03-01/02/04), purchase orders with server-derived totals, two-permission approval with creator-not-approver (03-22/23/24), receipt-state facets from posted quantities (03-25), PO→GRN conversion with a hard over-receipt guard (03-29), goods receipts as the only inbound stock path with idempotent postings and valuation at cost paid (03-32/33/36), batch capture (03-34). Partial: contacts/bank/TIN on one record (03-05), fixed category vocabulary (03-06), payment terms without a schedule (03-11), spend without scoring (03-12), no outbox so no 'sent to supplier' state (03-24), KPIs without report routes (03-31). Not started by design: purchase requests, amendments, print/outbox, bills (03-44…03-51), payments (03-52…03-58), returns (03-59…03-64), RFQ, import/LC and the report family. Approval uses the direct permission purchase.orders.approve, not the Workflow engine."
   },
   "04_inventory": {
    "status": "IN PROGRESS",
@@ -65,10 +66,11 @@
    "notes": "CRM core implemented in the redesign pass: profile, create/update, address book, contacts, derived ledger + statement, ageing buckets, credit control with history, wishlist, feedback/NPS, referrals, blacklist, CSV export. Pending: queued import, collection assignment/follow-up/promise-to-pay/legal notice, EMI plans, report family."
   },
   "06_suppliers": {
-   "status": "PLANNED",
+   "status": "IN PROGRESS",
    "rows_total": 15,
-   "rows_done": 0,
-   "trace": "docs/TRACEABILITY/06-suppliers.md"
+   "rows_done": 3,
+   "trace": "docs/TRACEABILITY/06-suppliers.md",
+   "notes": "Supplier master slice: list with real KPIs and filters (06-01), create/update with duplicate name/BIN/phone refusal and a dedicated blacklist permission carrying a mandatory reason plus reinstatement (06-02), and a profile built from actual documents — outstanding delivery lines, recent orders/receipts, spend by month (06-05). Partial: fixed category vocabulary (06-04), single contact and plain bank fields (06-06/06-07), spend without a report family (06-15). Not started: import/export, supplier ledger and due (need purchase bills), payments, contracts, performance scoring, documents, statements."
   },
   "07_returns": {
    "status": "IN PROGRESS",

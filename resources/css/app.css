@@ -1304,7 +1304,10 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-status-reconciled,
 .erp-status-posted,
 .erp-status-issued,
-.erp-status-allocated {
+.erp-status-allocated,
+.erp-status-present,
+.erp-status-received,
+.erp-status-fully-received {
     background: var(--ok-soft);
     color: var(--ok);
 }
@@ -1327,7 +1330,11 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-status-ready-to-ship,
 .erp-status-assigned,
 .erp-status-confirmed,
-.erp-status-open {
+.erp-status-open,
+.erp-status-leave,
+.erp-status-holiday,
+.erp-status-partially_received,
+.erp-status-partially-received {
     background: var(--info-soft);
     color: var(--info);
 }
@@ -1351,7 +1358,10 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-status-refund_due,
 .erp-status-refund-due,
 .erp-status-held,
-.erp-status-draft {
+.erp-status-draft,
+.erp-status-late,
+.erp-status-half_day,
+.erp-status-half-day {
     background: var(--warn-soft);
     color: var(--warn);
 }
@@ -1370,7 +1380,8 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-status-broken,
 .erp-status-overdue,
 .erp-status-suspended,
-.erp-status-expired {
+.erp-status-expired,
+.erp-status-absent {
     background: var(--danger-soft);
     color: var(--danger);
 }
@@ -1383,7 +1394,9 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-status-closed,
 .erp-status-refunded,
 .erp-status-reversed,
-.erp-status-archived {
+.erp-status-archived,
+.erp-status-weekend,
+.erp-status-inactive {
     background: var(--neutral-soft);
     color: var(--neutral-ink);
 }
@@ -2107,6 +2120,8 @@ textarea.form-control { height: auto; min-height: 88px; padding: 9px 11px; }
 .erp-spark { display: flex; align-items: flex-end; gap: 3px; height: 34px; margin-top: 6px; }
 .erp-spark span { flex: 1; background: var(--accent-soft-2); border-radius: 2px 2px 0 0; min-height: 3px; }
 .erp-spark span:last-child { background: var(--accent); }
+.erp-spark-bar { flex: 1; background: var(--accent-soft-2); border-radius: 2px 2px 0 0; min-height: 3px; align-self: flex-end; }
+.erp-spark-bar:last-child { background: var(--accent); }
 
 /* --------------------------------------------------------- 20. checklist */
 .erp-checklist { list-style: none; margin: 0; padding: 0; }
@@ -2682,6 +2697,18 @@ hr { border-color: var(--line); opacity: 1; }
 /* Attendance day sheet: the mark form sits inside a table cell, so the time
    inputs stay narrow and the reason gets the leftover width. */
 .erp-input-time { max-width: 108px; }
+
+/* Document line grids (purchase orders/receipts): a quantity column is a
+   number first — right-aligned tabular figures, never a wide text field. */
+.erp-num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+    max-width: 140px;
+}
+
+/* Line editor header for the totals row of a document table. */
+.erp-table tfoot th { font-size: 12.5px; color: var(--ink-2); background: var(--surface-2); }
 
 /* ------------------------------------------------- 31. detail layout & docs */
 /*

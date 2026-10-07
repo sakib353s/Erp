@@ -19,7 +19,10 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeliveryZoneController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\GoodsReceiptController;
 use App\Http\Controllers\HrController;
+use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\FailedDeliveryController;
 use App\Http\Controllers\FinancialReportController;
 use App\Http\Controllers\InventoryController;
@@ -414,6 +417,75 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::delete('/app/customers/{customer}/wishlist/{wishlist}', [CustomerController::class, 'destroyWishlist'])
         ->middleware('permission:customers.edit')
         ->name('customers.wishlist.destroy');
+
+    /* ---- Suppliers (§06) ---- */
+    Route::middleware('permission:suppliers.view')->group(function () {
+        Route::get('/app/suppliers', [SupplierController::class, 'index'])->name('suppliers.index');
+    });
+    Route::get('/app/suppliers/create', [SupplierController::class, 'create'])
+        ->middleware('permission:suppliers.create')
+        ->name('suppliers.create');
+    Route::get('/app/suppliers/{supplier}/edit', [SupplierController::class, 'edit'])
+        ->middleware('permission:suppliers.edit')
+        ->name('suppliers.edit');
+    Route::middleware('permission:suppliers.view')->group(function () {
+        Route::get('/app/suppliers/{supplier}', [SupplierController::class, 'show'])->name('suppliers.show');
+    });
+    Route::post('/app/suppliers', [SupplierController::class, 'store'])
+        ->middleware('permission:suppliers.create')
+        ->name('suppliers.store');
+    Route::put('/app/suppliers/{supplier}', [SupplierController::class, 'update'])
+        ->middleware('permission:suppliers.edit')
+        ->name('suppliers.update');
+    Route::post('/app/suppliers/{supplier}/blacklist', [SupplierController::class, 'blacklist'])
+        ->middleware('permission:suppliers.blacklist')
+        ->name('suppliers.blacklist');
+    Route::post('/app/suppliers/{supplier}/reinstate', [SupplierController::class, 'unblacklist'])
+        ->middleware('permission:suppliers.blacklist')
+        ->name('suppliers.reinstate');
+
+    /* ---- Purchase orders (§03) ---- */
+    Route::middleware('permission:purchase.orders.view')->group(function () {
+        Route::get('/app/purchase/orders', [PurchaseOrderController::class, 'index'])->name('purchase.orders.index');
+    });
+    Route::get('/app/purchase/orders/create', [PurchaseOrderController::class, 'create'])
+        ->middleware('permission:purchase.orders.create')
+        ->name('purchase.orders.create');
+    Route::post('/app/purchase/orders', [PurchaseOrderController::class, 'store'])
+        ->middleware('permission:purchase.orders.create')
+        ->name('purchase.orders.store');
+    Route::middleware('permission:purchase.orders.view')->group(function () {
+        Route::get('/app/purchase/orders/{order}', [PurchaseOrderController::class, 'show'])->name('purchase.orders.show');
+    });
+    Route::post('/app/purchase/orders/{order}/submit', [PurchaseOrderController::class, 'submit'])
+        ->middleware('permission:purchase.orders.create')
+        ->name('purchase.orders.submit');
+    Route::post('/app/purchase/orders/{order}/approve', [PurchaseOrderController::class, 'approve'])
+        ->middleware('permission:purchase.orders.approve')
+        ->name('purchase.orders.approve');
+    Route::post('/app/purchase/orders/{order}/cancel', [PurchaseOrderController::class, 'cancel'])
+        ->middleware('permission:purchase.orders.cancel')
+        ->name('purchase.orders.cancel');
+
+    /* ---- Goods receipts (§03) ---- */
+    Route::middleware('permission:purchase.receipts.view')->group(function () {
+        Route::get('/app/purchase/receipts', [GoodsReceiptController::class, 'index'])->name('purchase.receipts.index');
+    });
+    Route::get('/app/purchase/receipts/create', [GoodsReceiptController::class, 'create'])
+        ->middleware('permission:purchase.receipts.create')
+        ->name('purchase.receipts.create');
+    Route::post('/app/purchase/receipts', [GoodsReceiptController::class, 'store'])
+        ->middleware('permission:purchase.receipts.create')
+        ->name('purchase.receipts.store');
+    Route::middleware('permission:purchase.receipts.view')->group(function () {
+        Route::get('/app/purchase/receipts/{receipt}', [GoodsReceiptController::class, 'show'])->name('purchase.receipts.show');
+    });
+    Route::post('/app/purchase/receipts/{receipt}/post', [GoodsReceiptController::class, 'post'])
+        ->middleware('permission:purchase.receipts.post')
+        ->name('purchase.receipts.post');
+    Route::post('/app/purchase/receipts/{receipt}/cancel', [GoodsReceiptController::class, 'cancel'])
+        ->middleware('permission:purchase.receipts.cancel')
+        ->name('purchase.receipts.cancel');
 
     /* ---- Masters (§14) — permission keys come from MasterCatalog ---- */
     foreach (MasterCatalog::all() as $slug => $entry) {

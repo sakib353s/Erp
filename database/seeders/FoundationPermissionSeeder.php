@@ -141,6 +141,20 @@ class FoundationPermissionSeeder extends Seeder
             ['hr', 'structure', 'manage', 'hr.structure.manage', 'Manage departments and designations'],
             ['hr', 'leave_types', 'manage', 'hr.leave_types.manage', 'Manage leave types'],
 
+            // Phase I — purchasing (§03) and supplier parties (§06)
+            ['purchase', 'suppliers', 'view', 'suppliers.view', 'View suppliers'],
+            ['purchase', 'suppliers', 'create', 'suppliers.create', 'Create suppliers'],
+            ['purchase', 'suppliers', 'edit', 'suppliers.edit', 'Edit suppliers'],
+            ['purchase', 'suppliers', 'blacklist', 'suppliers.blacklist', 'Blacklist and reinstate suppliers'],
+            ['purchase', 'orders', 'view', 'purchase.orders.view', 'View purchase orders'],
+            ['purchase', 'orders', 'create', 'purchase.orders.create', 'Raise purchase orders'],
+            ['purchase', 'orders', 'approve', 'purchase.orders.approve', 'Approve purchase orders'],
+            ['purchase', 'orders', 'cancel', 'purchase.orders.cancel', 'Cancel purchase orders'],
+            ['purchase', 'receipts', 'view', 'purchase.receipts.view', 'View goods receipts'],
+            ['purchase', 'receipts', 'create', 'purchase.receipts.create', 'Draft goods receipts'],
+            ['purchase', 'receipts', 'post', 'purchase.receipts.post', 'Post goods receipts to stock'],
+            ['purchase', 'receipts', 'cancel', 'purchase.receipts.cancel', 'Cancel draft goods receipts'],
+
             ['accounting', 'fiscal_years', 'manage', 'fiscal.manage', 'Manage fiscal years'],
 
             // Phase D — accounting core (09-03…09-10, 09-32)

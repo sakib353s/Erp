@@ -6,7 +6,9 @@
     @php
         $canConfirm = $perm('sales.orders.confirm');
         $canCancel = $perm('sales.orders.cancel');
-        $canAssign = $perm('sales.orders.assign') || $perm('sales.delivery.assign');
+        // Courier assignment is gated on sales.delivery.assign (the key the bulk
+        // route itself enforces) — never on a permission that nobody can hold.
+        $canAssign = $perm('sales.delivery.assign');
         $canPrint = $perm('sales.invoices.print');
         $canPrintSlip = $perm('sales.orders.print');
         $canPrintLabel = $perm('sales.delivery.print');

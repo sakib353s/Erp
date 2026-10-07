@@ -31,6 +31,10 @@ class StockMovement extends Model
 
     public const TYPE_WRITE_OFF = 'WRITE_OFF';
 
+    public const TYPE_PURCHASE_RECEIPT = 'PURCHASE_RECEIPT';
+
+    public const TYPE_PURCHASE_RETURN_OUT = 'PURCHASE_RETURN_OUT';
+
     public const TYPE_SALES_OUT = 'SALES_OUT';
 
     public const TYPE_SALES_RETURN = 'SALES_RETURN';
@@ -52,6 +56,7 @@ class StockMovement extends Model
         self::TYPE_ADJUST_IN,
         self::TYPE_TRANSIT_IN,
         self::TYPE_SALES_RETURN,
+        self::TYPE_PURCHASE_RECEIPT,
     ];
 
     protected $fillable = [
