@@ -61,6 +61,12 @@ class GoodsReceipt extends Model
         return $this->hasMany(GoodsReceiptLine::class)->orderBy('sort_order');
     }
 
+    /** Bills raised against this delivery (a delivery is normally billed once). */
+    public function bills(): HasMany
+    {
+        return $this->hasMany(PurchaseBill::class);
+    }
+
     public function receiver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'received_by');

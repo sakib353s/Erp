@@ -1307,7 +1307,8 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-status-allocated,
 .erp-status-present,
 .erp-status-received,
-.erp-status-fully-received {
+.erp-status-fully-received,
+.erp-status-matched {
     background: var(--ok-soft);
     color: var(--ok);
 }
@@ -1361,7 +1362,9 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-status-draft,
 .erp-status-late,
 .erp-status-half_day,
-.erp-status-half-day {
+.erp-status-half-day,
+.erp-status-price_mismatch,
+.erp-status-price-mismatch {
     background: var(--warn-soft);
     color: var(--warn);
 }
@@ -1381,7 +1384,10 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-status-overdue,
 .erp-status-suspended,
 .erp-status-expired,
-.erp-status-absent {
+.erp-status-absent,
+.erp-status-qty_mismatch,
+.erp-status-qty-mismatch,
+.erp-status-unmatched {
     background: var(--danger-soft);
     color: var(--danger);
 }
@@ -1396,7 +1402,9 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-status-reversed,
 .erp-status-archived,
 .erp-status-weekend,
-.erp-status-inactive {
+.erp-status-inactive,
+.erp-status-not_applicable,
+.erp-status-not-applicable {
     background: var(--neutral-soft);
     color: var(--neutral-ink);
 }

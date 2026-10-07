@@ -223,6 +223,7 @@ class CompanyService
             AccountingCoreSeeder::class,
             InventoryCoreSeeder::class,
             SalesCoreSeeder::class,
+            PurchaseCoreSeeder::class,
         ] as $seeder) {
             app($seeder)->run();
         }

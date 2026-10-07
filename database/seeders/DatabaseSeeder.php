@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
             AccountingCoreSeeder::class,
             InventoryCoreSeeder::class,
             SalesCoreSeeder::class,
+            PurchaseCoreSeeder::class,
         ]);
     }
 }

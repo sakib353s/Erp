@@ -62,7 +62,8 @@ class SystemRoleSeeder extends Seeder
                 // Purchase (§03): a manager signs orders off but does not raise
                 // the ones they will approve — self-approval is refused in code.
                 'purchase.orders.view', 'purchase.orders.approve', 'purchase.orders.cancel',
-                'purchase.receipts.view', 'suppliers.view', 'inventory.stock.view',
+                'purchase.receipts.view', 'purchase.bills.view', 'purchase.bills.approve',
+                'suppliers.view', 'inventory.stock.view',
             ]],
             ['slug' => 'employee', 'name' => 'Employee', 'description' => 'Staff account: own portal access only — own leave, own payslips.', 'keys' => [
                 'dashboard.view', 'employees.view', 'documents.view', 'search.view',
@@ -79,13 +80,14 @@ class SystemRoleSeeder extends Seeder
                 'suppliers.view', 'suppliers.create', 'suppliers.edit',
                 'purchase.orders.view', 'purchase.orders.create',
                 'purchase.receipts.view', 'purchase.receipts.create',
+                'purchase.bills.view', 'purchase.bills.create',
                 'inventory.products.view', 'inventory.stock.view',
             ]],
             ['slug' => 'storekeeper', 'name' => 'Store keeper', 'description' => 'Receiving desk: books goods in against approved orders and posts them to stock.', 'keys' => [
                 'dashboard.view', 'search.view',
                 'suppliers.view',
                 'purchase.orders.view', 'purchase.receipts.view',
-                'purchase.receipts.create', 'purchase.receipts.post',
+                'purchase.receipts.create', 'purchase.receipts.post', 'purchase.bills.view',
                 'inventory.stock.view', 'inventory.ledger.view', 'inventory.transfers.receive',
             ]],
         ];

@@ -154,6 +154,10 @@ class FoundationPermissionSeeder extends Seeder
             ['purchase', 'receipts', 'create', 'purchase.receipts.create', 'Draft goods receipts'],
             ['purchase', 'receipts', 'post', 'purchase.receipts.post', 'Post goods receipts to stock'],
             ['purchase', 'receipts', 'cancel', 'purchase.receipts.cancel', 'Cancel draft goods receipts'],
+            ['purchase', 'bills', 'view', 'purchase.bills.view', 'View purchase bills'],
+            ['purchase', 'bills', 'create', 'purchase.bills.create', 'Enter purchase bills'],
+            ['purchase', 'bills', 'approve', 'purchase.bills.approve', 'Approve purchase bills (posts the payable)'],
+            ['purchase', 'bills', 'cancel', 'purchase.bills.cancel', 'Cancel an unposted purchase bill'],
 
             ['accounting', 'fiscal_years', 'manage', 'fiscal.manage', 'Manage fiscal years'],
 

@@ -1,17 +1,20 @@
 # 03. PURCHASE — Traceability
 
-**Implemented slice (2026-10-08):** the operating core of purchasing — supplier master deepening (03-01, 03-02, 03-04),
-purchase orders with server-derived totals and a two-permission approval gate (03-22, 03-23, 03-24 partial,
+**Implemented slices (2026-10-08):** the operating core of purchasing — supplier master deepening (03-01, 03-02,
+03-04), purchase orders with server-derived totals and a two-permission approval gate (03-22, 03-23, 03-24 partial,
 03-25 partial), goods receipt as the only stock-entry path (03-32, 03-33, 03-36), PO → GRN conversion with a real
-over-receipt guard (03-29), and batch capture on receipt lines (03-34 partial).
+over-receipt guard (03-29), batch capture on receipt lines (03-34 partial) — followed in the same day by **purchase
+bills (03-44, 03-45, 03-46, 03-50)**: the payable is now real, posted to the ledger through `posting_rules` on
+approval, with the three-way match (order ↔ receipt ↔ bill) computed, stored on the bill and shown beside it, plus
+supplier payables with ageing (03-48 partial).
 
-**Deliberately out of this slice** (planned, not stubbed — no screen claims a capability it does not have):
-purchase requests (03-16…03-21), PO amendment / duplication / print / outbox (03-26…03-28), PO→Bill conversion
-(03-30), GRN amendment / print (03-35, 03-38), RFQ & comparison (03-39…03-43), **purchase bills (03-44…03-51)**,
-**supplier payments, advances, BEFTN, schedules (03-52…03-58)**, **purchase returns and debit notes (03-59…03-64)**,
-import purchase / LC / landing cost (03-65…03-67) and the report family (03-68…03-73). Bills are the immediate
-next change: until a bill exists there is no AP liability, no three-way match and no supplier ledger, which is why
-03-07 / 03-08 / 06-08 / 06-09 remain untouched by design rather than by omission.
+**Deliberately out of these slices** (planned, not stubbed — no screen claims a capability it does not have):
+purchase requests (03-16…03-21), PO amendment / duplication / print / outbox (03-26…03-28), GRN amendment / print
+(03-35, 03-38), RFQ & comparison (03-39…03-43), bill payment recording / print / reports (03-47, 03-49, 03-51),
+**supplier payments, advances, BEFTN, schedules (03-52…03-58)**, **purchase returns and debit notes
+(03-59…03-64)**, import purchase / LC / landing cost (03-65…03-67) and the report family (03-68…03-73).
+Supplier payments are the immediate next change: a bill now carries a real balance (`paid_amount` / `due_amount`)
+that nothing can settle yet, and purchase returns are what make a posted receipt or bill correctable.
 
 **Known deviations in the implemented slice (honest, not silent):**
 - Approval runs on the direct permission `purchase.orders.approve` (creator ≠ approver enforced in the service),
@@ -27,6 +30,18 @@ next change: until a bill exists there is no AP liability, no three-way match an
   reverse path until purchase returns (03-59) exist — the cancel guard says exactly that.
 - Supplier "performance" on the profile is spend history from real documents, not a score: no formula, no score
   field, nothing presented as a rating (03-12).
+- **Bill approval is the posting moment and it uses `purchase.bills.approve`** rather than a separate
+  `purchase.bills.match` / Workflow step (03-50). The three-way match is computed on approval, stored on the bill
+  and displayed — but with no configurable tolerance yet it *records* a mismatch instead of blocking, because
+  refusing to book a liability the company really owes would push the truth off the system. The mismatch stays on
+  the record and is shown in full on the bill.
+- Input VAT is posted as a **debit to Tax Payable (2120)** — net-VAT treatment, so input and output VAT net on one
+  account instead of a separate recoverable-VAT asset. A zero tax line is dropped rather than posted as 0.00.
+- Goods-backed bills capitalise **Inventory (1140)**; direct/service bills land on **Purchases & Services (5225)**.
+  Both routes are `posting_rules` rows (`purchase_bill_posted` / `purchase_bill_expense_posted`) seeded by
+  `PurchaseCoreSeeder` — no account id appears in the service.
+- Bill numbering is `BILL-00001` per company from the service (like `PO-` and `GRN-`), not NumberingService:
+  purchase documents have no `document_types` row yet, so nothing claims a Mushak-style document type.
 
 Baseline (`BL`) applies. Core rule honoured literally: draft PO creates **no stock and no liability**; stock posts
 at GRN posting stage; liability will post at bill posting (Spec §13).
@@ -104,16 +119,16 @@ Shared services: this slice is `Purchase\Services\{PurchaseOrderService, GoodsRe
 
 ## 3.6 Purchase Bills
 
-| Ref | Menu path | Route | Permission | Status |
-|---|---|---|---|---|
-| 03-44 | Purchase › Purchase Bills › All Bills | — | — | NOT STARTED — next change |
-| 03-45 | Purchase › Purchase Bills › Create Bill / Bill from GRN | — | — | NOT STARTED — next change |
-| 03-46 | Purchase › Purchase Bills › Pending / Paid / Overdue | — | — | NOT STARTED |
-| 03-47 | Purchase › Purchase Bills › Bill Payment Recording | — | — | NOT STARTED |
-| 03-48 | Purchase › Purchase Bills › Bill Aging | — | — | NOT STARTED |
-| 03-49 | Purchase › Purchase Bills › Bill Print | — | — | NOT STARTED |
-| 03-50 | Purchase › Purchase Bills › 3-Way Match | — | — | NOT STARTED |
-| 03-51 | Purchase › Purchase Bills › Bill Reports | — | — | NOT STARTED |
+| Ref | Menu path | Route | Permission | Backend | DB entities | WF / Effects | Tests | Status |
+|---|---|---|---|---|---|---|---|---|
+| 03-44 | Purchase › Purchase Bills › All Bills | `GET /app/purchase/bills` | `purchase.bills.view` | `PurchaseBillController@index`, `PurchaseQuery::bills` + `billSummary` — search (code / supplier bill no / supplier), status (`open`, `overdue`, `draft`, `pending_approval`, `approved`, `paid`, `cancelled`), supplier, bill-date range, sort by due date or value | `purchase_bills`, `_lines` | AUD; KPI grid (payable, overdue, due within 7 days, awaiting approval) from posted bills | `PurchaseBillTest::test_payables_reach_the_supplier_profile_and_the_bill_summary` | DONE |
+| 03-45 | Purchase › Purchase Bills › Create Bill / Bill from GRN | `GET|POST /app/purchase/bills/create` | `purchase.bills.create` | `StorePurchaseBillRequest::payload()` (no header money at all), `PurchaseBillService@create` / `@createFromReceipt` — only a **posted** receipt can be billed, and only once (the picker lists posted receipts that have no bill yet); due date from supplier terms | `purchase_bills`, `purchase_bill_lines`, `purchase_orders` | AUD; `BILL-00001` per company | `PurchaseBillTest::test_bill_totals_come_from_the_lines_and_the_due_date_from_terms`, `::test_billing_a_receipt_copies_its_lines_and_links_the_document`, `::test_only_a_posted_receipt_can_be_billed` | DONE |
+| 03-46 | Purchase › Purchase Bills › Pending / Paid / Overdue | `?status=` facets on 03-44 | `purchase.bills.view` | status facets including `overdue` (open + due date in the past) and `pending_approval`; `submit`, `approve` (`purchase.bills.approve`, maker never approves own bill), `cancel` (unposted only, reason required) | `purchase_bills` | ACCT on approval; AUD | `PurchaseBillTest::test_the_maker_cannot_approve_their_own_bill`, `::test_cancelling_an_unposted_bill_needs_a_reason_and_posted_bills_are_immutable` | DONE |
+| 03-47 | Purchase › Purchase Bills › Bill Payment Recording | — | — | needs the supplier-payment slice (03-52) — `due_amount` is ready for allocation but nothing settles it yet | — | — | — | NOT STARTED |
+| 03-48 | Purchase › Purchase Bills › Bill Aging | (ageing on the supplier profile + `?sort=due`) | `suppliers.view` / `purchase.bills.view` | `PurchaseQuery::supplierPayables` — current / 1–30 / 31–60 / 61–90 / 90+ buckets derived from each bill's own due date; a bill with no due date is never counted late | `purchase_bills` | — | `PurchaseBillTest::test_payables_reach_the_supplier_profile_and_the_bill_summary` | PARTIAL — buckets and the open-bill table exist; no dedicated report route (03-51) |
+| 03-49 | Purchase › Purchase Bills › Bill Print | — | — | no document renderer in this slice | — | — | — | NOT STARTED |
+| 03-50 | Purchase › Purchase Bills › 3-Way Match | shown on `GET /app/purchase/bills/{bill}` | `purchase.bills.view` (match runs under `purchase.bills.approve`) | `PurchaseBillService::runThreeWayMatch` → `match_state` + human `match_summary` stored on the bill; `PurchaseQuery::matchRows` renders ordered / received / billed quantities and prices per line | `purchase_bills`, `purchase_bill_lines`, `purchase_order_lines`, `goods_receipt_lines` | ACCT only if approved; AUD | `PurchaseBillTest::test_approval_posts_a_balanced_payable_journal_entry`, `::test_billing_more_than_was_received_is_recorded_as_a_mismatch_not_swallowed` | DONE — permission is `purchase.bills.approve`, tolerances not configurable (records, does not block) |
+| 03-51 | Purchase › Purchase Bills › Bill Reports | — | — | — | — | — | — | NOT STARTED |
 
 ## 3.7 Supplier Payments
 
@@ -156,10 +171,15 @@ Shared services: this slice is `Purchase\Services\{PurchaseOrderService, GoodsRe
 
 | | Count |
 |---|---|
-| DONE | 9 (03-01, 03-02, 03-04, 03-22, 03-23, 03-29, 03-32, 03-33, 03-36) |
-| PARTIAL | 8 (03-05, 03-06, 03-11, 03-12, 03-24, 03-25, 03-31, 03-34) |
-| NOT STARTED | 56 |
+| DONE | 13 (03-01, 03-02, 03-04, 03-22, 03-23, 03-29, 03-32, 03-33, 03-36, 03-44, 03-45, 03-46, 03-50) |
+| PARTIAL | 9 (03-05, 03-06, 03-11, 03-12, 03-24, 03-25, 03-31, 03-34, 03-48) |
+| NOT STARTED | 51 |
 
 Stock consequence of the slice: **purchase is now the only inbound stock path with documents behind it** — a receipt
 posts an immutable `purchase_receipt` movement and a valuation layer at the cost actually paid, and the cached
 balance provably replays from the ledger (`rebuildBalances` test). Nothing else in purchasing moves stock.
+
+Money consequence of the bill slice: **a delivery now becomes a liability through one auditable path** — approve a
+bill and a balanced journal entry exists (Dr inventory or purchases, Dr input tax, Cr accounts payable) with the
+entry number stamped on the bill, the supplier's balance ageing from the bill's own due date, and the three-way
+match result stored beside it. Nothing else in purchasing touches the ledger.

@@ -67,6 +67,8 @@ class AccountingCoreSeeder extends Seeder
         ['5210', 'Salaries & Wages', 'expense', 'EXPENSE', ['parent' => '5200', 'is_system' => true]],
         ['5220', 'Rent Expense', 'expense', 'EXPENSE', ['parent' => '5200', 'is_system' => true]],
         ['5230', 'Utilities Expense', 'expense', 'EXPENSE', ['parent' => '5200', 'is_system' => true]],
+        // Direct/service purchases (§03.6): bills that capitalise no stock land here.
+        ['5225', 'Purchases & Services', 'expense', 'EXPENSE', ['parent' => '5200', 'is_system' => true]],
         ['5240', 'Sales Commission Expense', 'expense', 'EXPENSE', ['parent' => '5200', 'is_system' => true]],
         // COD remittance variance (02-97): office received less/more cash
         // than riders recorded as collected.

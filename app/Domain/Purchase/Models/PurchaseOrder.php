@@ -78,6 +78,12 @@ class PurchaseOrder extends Model
         return $this->hasMany(GoodsReceipt::class);
     }
 
+    /** Bills raised against this order. */
+    public function bills(): HasMany
+    {
+        return $this->hasMany(PurchaseBill::class);
+    }
+
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');

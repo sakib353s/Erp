@@ -4,6 +4,7 @@ namespace App\Domain\Purchase\Queries;
 
 use App\Domain\Masters\Supplier;
 use App\Domain\Purchase\Models\GoodsReceipt;
+use App\Domain\Purchase\Models\PurchaseBill;
 use App\Domain\Purchase\Models\PurchaseOrder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -185,5 +186,148 @@ class PurchaseQuery
         }
 
         return $out;
+    }
+
+    /* ------------------------------------------- purchase bills (§03.6) */
+
+    /**
+     * @param  array{q?:?string,status?:?string,supplier?:?int,from?:?string,to?:?string,sort?:?string}  $filters
+     */
+    public function bills(array $filters, array $accessibleBranchIds = [], int $perPage = 20): LengthAwarePaginator
+    {
+        return PurchaseBill::query()
+            ->with(['supplier:id,name,code', 'branch:id,name', 'receipt:id,code'])
+            ->withCount('lines')
+            ->when($accessibleBranchIds !== [], fn ($q) => $q->whereIn('branch_id', $accessibleBranchIds))
+            ->when(($filters['q'] ?? null), fn ($q, $term) => $q->search($term))
+            ->when(($filters['status'] ?? null) === 'open', fn ($q) => $q->open())
+            ->when(($filters['status'] ?? null) === 'overdue', fn ($q) => $q->overdue())
+            ->when(
+                ($filters['status'] ?? null) && ! in_array($filters['status'], ['open', 'overdue'], true),
+                fn ($q, $status) => $q->where('status', $status)
+            )
+            ->when(($filters['supplier'] ?? null), fn ($q, $id) => $q->where('supplier_id', $id))
+            ->when(($filters['from'] ?? null), fn ($q, $d) => $q->whereDate('bill_date', '>=', $d))
+            ->when(($filters['to'] ?? null), fn ($q, $d) => $q->whereDate('bill_date', '<=', $d))
+            ->when(($filters['sort'] ?? null) === 'due', fn ($q) => $q->orderByRaw('due_date IS NULL')->orderBy('due_date'))
+            ->when(($filters['sort'] ?? null) === 'value', fn ($q) => $q->orderByDesc('total'))
+            ->when(
+                ! in_array($filters['sort'] ?? null, ['due', 'value'], true),
+                fn ($q) => $q->orderByDesc('bill_date')->orderByDesc('id')
+            )
+            ->paginate($perPage)
+            ->withQueryString();
+    }
+
+    /**
+     * Payables headline: what is owed, what is late, and what is waiting on a
+     * human. Every figure comes from posted bills — never from a counter.
+     *
+     * @return array{payable:float, overdue:float, open_bills:int, overdue_bills:int, due_week:float, drafts:int, awaiting:int, posted_month:float}
+     */
+    public function billSummary(array $accessibleBranchIds = []): array
+    {
+        $scoped = fn () => PurchaseBill::query()
+            ->when($accessibleBranchIds !== [], fn ($q) => $q->whereIn('branch_id', $accessibleBranchIds));
+
+        $open = $scoped()->open();
+        $overdue = $scoped()->overdue();
+
+        return [
+            'payable' => (float) (clone $open)->sum('due_amount'),
+            'overdue' => (float) (clone $overdue)->sum('due_amount'),
+            'open_bills' => (clone $open)->count(),
+            'overdue_bills' => (clone $overdue)->count(),
+            'due_week' => (float) $scoped()->open()
+                ->whereNotNull('due_date')
+                ->whereBetween('due_date', [now()->toDateString(), now()->addDays(7)->toDateString()])
+                ->sum('due_amount'),
+            'drafts' => $scoped()->whereIn('status', ['draft', 'pending_approval'])->count(),
+            'awaiting' => $scoped()->where('status', 'pending_approval')->count(),
+            'posted_month' => (float) $scoped()->where('posting_state', 'posted')
+                ->whereYear('bill_date', now()->year)
+                ->whereMonth('bill_date', now()->month)
+                ->sum('total'),
+        ];
+    }
+
+    /**
+     * Three-way match detail for one bill: per line, what was ordered, what
+     * arrived, what was billed, and where they disagree. Read-only — the state
+     * stored on the bill is written by PurchaseBillService::runThreeWayMatch().
+     *
+     * @return array{state:?string, summary:?string, lines:Collection<int, array<string, mixed>>}
+     */
+    public function matchRows(PurchaseBill $bill): array
+    {
+        $bill->loadMissing('lines.product:id,sku,name', 'lines.orderLine', 'lines.receiptLine');
+
+        $lines = $bill->lines->map(function ($line) {
+            $orderedLine = $line->orderLine;
+            $receivedLine = $line->receiptLine;
+
+            $orderedQty = $orderedLine ? (float) $orderedLine->qty_ordered : null;
+            $orderedPrice = $orderedLine ? (float) $orderedLine->unit_price : null;
+            $receivedQty = $receivedLine ? (float) $receivedLine->qty_received : null;
+            $billedQty = (float) $line->qty;
+            $billedPrice = (float) $line->unit_cost;
+
+            return [
+                'id' => $line->id,
+                'label' => $line->product?->name ?? $line->description ?? 'line #'.$line->id,
+                'sku' => $line->product?->sku,
+                'ordered' => $orderedQty,
+                'received' => $receivedQty,
+                'billed' => $billedQty,
+                'ordered_price' => $orderedPrice,
+                'billed_price' => $billedPrice,
+                'qty_agrees' => $receivedQty === null ? null : round($billedQty, 4) <= round($receivedQty, 4),
+                'price_agrees' => $orderedPrice === null ? null : round($billedPrice, 4) === round($orderedPrice, 4),
+                'line_total' => (float) $line->line_total,
+            ];
+        });
+
+        return ['state' => $bill->match_state, 'summary' => $bill->match_summary, 'lines' => $lines];
+    }
+
+    /**
+     * Payables for one supplier with ageing buckets — the input for the
+     * supplier profile's "what we owe" panel and the due screens.
+     *
+     * @return array{due:float, overdue:float, buckets:array<string, array{count:int, amount:float}>, rows:Collection<int, PurchaseBill>}
+     */
+    public function supplierPayables(int $supplierId): array
+    {
+        $rows = PurchaseBill::query()
+            ->where('supplier_id', $supplierId)
+            ->open()
+            ->orderBy('due_date')
+            ->get();
+
+        $buckets = [
+            'current' => ['count' => 0, 'amount' => 0.0],
+            'd1_30' => ['count' => 0, 'amount' => 0.0],
+            'd31_60' => ['count' => 0, 'amount' => 0.0],
+            'd61_90' => ['count' => 0, 'amount' => 0.0],
+            'd90_plus' => ['count' => 0, 'amount' => 0.0],
+        ];
+
+        $due = 0.0;
+        $overdue = 0.0;
+
+        foreach ($rows as $row) {
+            $amount = (float) $row->due_amount;
+            $bucket = $row->ageingBucket();
+
+            $buckets[$bucket]['count']++;
+            $buckets[$bucket]['amount'] += $amount;
+            $due += $amount;
+
+            if ($bucket !== 'current') {
+                $overdue += $amount;
+            }
+        }
+
+        return ['due' => $due, 'overdue' => $overdue, 'buckets' => $buckets, 'rows' => $rows];
     }
 }

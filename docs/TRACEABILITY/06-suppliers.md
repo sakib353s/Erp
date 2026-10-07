@@ -6,10 +6,14 @@ open purchase orders, recent orders, recent receipts and spend by month (06-05),
 the earlier party table did not have (blacklist with a mandatory reason, reinstate on the same screen, and a
 `scopeOrderable` guard that stops a barred supplier being put on a new PO).
 
-**Deliberately out of this slice** (no screens claim otherwise): CSV/queued import & export (06-03), supplier due &
-ageing (06-09), supplier payments (06-10), contracts (06-11), performance scoring (06-12), documents (06-13),
-statements (06-14) and the report family (06-15). Everything money-related waits for purchase bills (03-44), because
-a supplier balance that is not backed by a posted bill would be a second, drifting truth.
+**Since the bill slice (03-44…03-50) the money half of the profile is real:** the supplier screen now shows what is
+owed (`PurchaseQuery::supplierPayables`), the ageing buckets those bills fall into, and the list of open bills — all
+derived from posted `purchase_bills` rows, never from a cached balance.
+
+**Deliberately out of these slices** (no screens claim otherwise): CSV/queued import & export (06-03), a GL-derived
+supplier ledger and printable statement (06-08, 06-14 — the profile shows documents, not journal lines), payments
+and advance adjustment (06-10), contracts (06-11), performance scoring (06-12), documents (06-13) and the report
+family (06-15).
 
 **Known deviations in the implemented slice (honest, not silent):**
 - Contacts and bank details live **on the supplier record** (`contact_person`, `phone`, `phone_alt`, `email`;
@@ -34,19 +38,19 @@ Baseline (`BL`) applies. Shared with `03-purchase.md`: the same `SupplierService
 | 06-05 | Suppliers › Supplier Profile | `GET /app/suppliers/{supplier}` | `suppliers.view` | `SupplierController@show` — party/tax/bank/terms block, outstanding delivery lines (`PurchaseQuery::openLines`), recent POs, recent receipts, monthly spend | `suppliers`, `purchase_orders`, `purchase_order_lines`, `goods_receipts` | AUD | `PurchaseFlowTest` | DONE |
 | 06-06 | Suppliers › Supplier Contacts | (fields on the party) | `suppliers.edit` | `contact_person`, `phone`, `phone_alt`, `email` | `suppliers` | AUD diff | — | PARTIAL — one contact per supplier; no multi-contact table |
 | 06-07 | Suppliers › Supplier Bank Details | (fields on the party) | `suppliers.edit` | `bank_name`, `bank_account_no`, `mobile_wallet` shown to whoever may edit the party | `suppliers` | AUD diff | — | PARTIAL — plain attributes, no encryption-at-rest sub-record, no verification trail |
-| 06-08 | Suppliers › Supplier Ledger | — | — | needs bills + AP journal (03-44) | — | — | — | NOT STARTED |
-| 06-09 | Suppliers › Supplier Due › All / 0-30 / 31-60 / 60+ | — | — | needs bills | — | — | — | NOT STARTED |
+| 06-08 | Suppliers › Supplier Ledger | — | — | a GL-side ledger (`LedgerService` by the AP control account) is still pending; the profile lists the documents that make up the balance instead of pretending to be a journal | — | — | — | NOT STARTED |
+| 06-09 | Suppliers › Supplier Due › All / 0-30 / 31-60 / 60+ | ageing shown on `GET /app/suppliers/{supplier}` | `suppliers.view` | `PurchaseQuery::supplierPayables` — due / overdue plus current, 1–30, 31–60, 61–90 and 90+ buckets from each bill's due date | `purchase_bills` | — | `PurchaseBillTest::test_payables_reach_the_supplier_profile_and_the_bill_summary` | PARTIAL — buckets + open-bill table on the profile; no company-wide due screen |
 | 06-10 | Suppliers › Supplier Payments | — | — | — | — | — | — | NOT STARTED |
 | 06-11 | Suppliers › Supplier Contracts | — | — | — | — | — | — | NOT STARTED |
 | 06-12 | Suppliers › Supplier Performance / Quality Score | (spend panel on the profile) | `suppliers.view` | `PurchaseQuery::supplierSpend` | `goods_receipts` | — | — | PARTIAL — spend only; no score, formula or rating |
 | 06-13 | Suppliers › Supplier Documents | — | — | — | — | — | — | NOT STARTED |
 | 06-14 | Suppliers › Supplier Statements | — | — | needs bills/ledger | — | — | — | NOT STARTED |
-| 06-15 | Suppliers › Supplier Reports | (profile spend) | `suppliers.view` | spend by month on the profile | `goods_receipts` | — | — | PARTIAL — no report routes |
+| 06-15 | Suppliers › Supplier Reports | (profile spend + payables) | `suppliers.view` | spend by month and open payables on the profile | `goods_receipts`, `purchase_bills` | — | — | PARTIAL — no report routes |
 
 ## Slice scorecard
 
 | | Count |
 |---|---|
 | DONE | 3 (06-01, 06-02, 06-05) |
-| PARTIAL | 4 (06-04, 06-06, 06-07, 06-15) |
-| NOT STARTED | 8 |
+| PARTIAL | 5 (06-04, 06-06, 06-07, 06-09, 06-15) |
+| NOT STARTED | 7 |

@@ -15,6 +15,8 @@ use App\Domain\Purchase\Models\PurchaseOrder;
 use App\Domain\Purchase\Services\GoodsReceiptService;
 use App\Domain\Purchase\Services\PurchaseOrderService;
 use App\Domain\Purchase\Services\SupplierService;
+use Database\Seeders\AccountingCoreSeeder;
+use Database\Seeders\DocumentTypeSeeder;
 use Database\Seeders\FoundationPermissionSeeder;
 use Database\Seeders\InventoryCoreSeeder;
 use Database\Seeders\NavigationSeeder;
@@ -53,22 +55,35 @@ class PurchaseFlowTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed(FoundationPermissionSeeder::class);
-        $this->seed(InventoryCoreSeeder::class);
-        $this->seed(NavigationSeeder::class);
-
+        // The real first-boot flow first: structural seeders are company-scoped
+        // and would silently skip before the company exists.
         $this->admin = $this->bootInstance();
-        $this->bindTenantContext($this->admin);
+        $this->bindTenantContext($this->admin, $this->defaultBranch());
 
-        $this->warehouse = Warehouse::query()->where('code', 'MAIN')->firstOrFail();
+        $this->seed(DocumentTypeSeeder::class);
+        $this->seed(FoundationPermissionSeeder::class);
+        $this->seed(NavigationSeeder::class);
+        $this->seed(InventoryCoreSeeder::class);
+        $this->seed(AccountingCoreSeeder::class);
+
+        $this->warehouse = Warehouse::query()
+            ->where('company_id', $this->admin->company_id)
+            ->where('code', 'MAIN')
+            ->firstOrFail();
+
         $this->product = $this->makeProduct('PUR-1', 'Purchase Probe');
+    }
+
+    protected function httpRequest(): Request
+    {
+        $request = Request::create('/__purchase', 'POST', [], [], [], ['HTTP_HOST' => 'instance.test']);
+        $request->setUserResolver(fn () => $this->admin);
+
+        return $request;
     }
 
     protected function makeProduct(string $code, string $name): Product
     {
-        $request = Request::create('/app/products', 'POST');
-        $request->setUserResolver(fn () => $this->admin);
-
         return app(CreateProduct::class)->handle([
             'code' => $code,
             'sku' => $code.'-SKU',
@@ -77,7 +92,7 @@ class PurchaseFlowTest extends TestCase
             'standard_cost' => 100,
             'is_stocked' => true,
             'is_active' => true,
-        ], $request);
+        ], $this->httpRequest());
     }
 
     protected function makeSupplier(array $attributes = []): Supplier

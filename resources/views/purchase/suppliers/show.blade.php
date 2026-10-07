@@ -53,7 +53,77 @@
         <x-ui.kpi label="Goods receipts" :value="number_format($supplier->receipts_count)" icon="bi-box-arrow-in-down" hint="Posted and draft" />
         <x-ui.kpi label="Line items still short" :value="number_format($openLines->count())" icon="bi-hourglass-split" hint="From approved open orders" />
         <x-ui.kpi label="Spend this year" value="৳ {{ number_format(array_sum($spend), 2) }}" icon="bi-cash-stack" hint="Posted receipts only" />
+        <x-ui.kpi label="Owed to them" value="৳ {{ number_format($payables['due'], 2) }}" icon="bi-receipt"
+                  :hint="$payables['rows']->count().' open bill(s)'" />
+        <x-ui.kpi label="Past due" value="৳ {{ number_format($payables['overdue'], 2) }}" icon="bi-exclamation-triangle"
+                  hint="From approved bills and their due dates" />
     </div>
+
+    @if ($payables['rows']->isNotEmpty())
+        <div class="erp-card mb-3">
+            <div class="erp-card-head">
+                <h2 class="erp-card-title">
+                    Bills we still owe
+                    <span class="erp-chip erp-chip-outline">{{ $payables['rows']->count() }}</span>
+                </h2>
+                <div class="erp-card-actions">
+                    @if ($perm('purchase.bills.view'))
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ route('purchase.bills.index', ['supplier' => $supplier->id]) }}">
+                            <i class="bi bi-receipt" aria-hidden="true"></i> All their bills
+                        </a>
+                    @endif
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table erp-table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Bill</th>
+                            <th>Bill date</th>
+                            <th>Due</th>
+                            <th class="erp-th-num">Total</th>
+                            <th class="erp-th-num">Still owed</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($payables['rows'] as $bill)
+                            <tr>
+                                <td data-label="Bill">
+                                    <a class="erp-row-link" href="{{ route('purchase.bills.show', $bill) }}">{{ $bill->code }}</a>
+                                    @if ($bill->supplier_bill_no)
+                                        <span class="erp-td-muted d-block small">their ref {{ $bill->supplier_bill_no }}</span>
+                                    @endif
+                                </td>
+                                <td data-label="Bill date">{{ $bill->bill_date?->format('d M Y') }}</td>
+                                <td data-label="Due">
+                                    @if ($bill->due_date)
+                                        {{ $bill->due_date->format('d M Y') }}
+                                        @php($late = $bill->daysOverdue())
+                                        @if ($late > 0)
+                                            <span class="erp-td-muted d-block small">{{ $late }} day(s) late</span>
+                                        @endif
+                                    @else
+                                        <span class="erp-td-muted">On demand</span>
+                                    @endif
+                                </td>
+                                <td data-label="Total" class="erp-td-num">৳ {{ number_format((float) $bill->total, 2) }}</td>
+                                <td data-label="Still owed" class="erp-td-num erp-cell-strong">৳ {{ number_format((float) $bill->due_amount, 2) }}</td>
+                                <td data-label="Status"><x-ui.status :value="$bill->status" /></td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="erp-help px-3 pb-3">
+                Ageing follows the bill's own due date: {{ $payables['buckets']['current']['count'] }} current,
+                {{ $payables['buckets']['d1_30']['count'] }} 1–30 days late,
+                {{ $payables['buckets']['d31_60']['count'] }} 31–60,
+                {{ $payables['buckets']['d61_90']['count'] }} 61–90,
+                {{ $payables['buckets']['d90_plus']['count'] }} over 90.
+            </div>
+        </div>
+    @endif
 
     <div class="erp-split">
         <div class="erp-card">

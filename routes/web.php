@@ -21,6 +21,7 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\GoodsReceiptController;
 use App\Http\Controllers\HrController;
+use App\Http\Controllers\PurchaseBillController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\FailedDeliveryController;
@@ -486,6 +487,31 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::post('/app/purchase/receipts/{receipt}/cancel', [GoodsReceiptController::class, 'cancel'])
         ->middleware('permission:purchase.receipts.cancel')
         ->name('purchase.receipts.cancel');
+
+    /* ---- Purchase bills (§03.6) — the payable, and its posting to the GL ---- */
+    Route::middleware('permission:purchase.bills.view')->group(function () {
+        Route::get('/app/purchase/bills', [PurchaseBillController::class, 'index'])->name('purchase.bills.index');
+    });
+    Route::get('/app/purchase/bills/create', [PurchaseBillController::class, 'create'])
+        ->middleware('permission:purchase.bills.create')
+        ->name('purchase.bills.create');
+    Route::post('/app/purchase/bills', [PurchaseBillController::class, 'store'])
+        ->middleware('permission:purchase.bills.create')
+        ->name('purchase.bills.store');
+    Route::middleware('permission:purchase.bills.view')->group(function () {
+        Route::get('/app/purchase/bills/{bill}', [PurchaseBillController::class, 'show'])->name('purchase.bills.show');
+    });
+    Route::post('/app/purchase/bills/{bill}/submit', [PurchaseBillController::class, 'submit'])
+        ->middleware('permission:purchase.bills.create')
+        ->name('purchase.bills.submit');
+    // Approval is the moment the liability exists: its own permission, and the
+    // maker can never approve their own bill (enforced in the service).
+    Route::post('/app/purchase/bills/{bill}/approve', [PurchaseBillController::class, 'approve'])
+        ->middleware('permission:purchase.bills.approve')
+        ->name('purchase.bills.approve');
+    Route::post('/app/purchase/bills/{bill}/cancel', [PurchaseBillController::class, 'cancel'])
+        ->middleware('permission:purchase.bills.cancel')
+        ->name('purchase.bills.cancel');
 
     /* ---- Masters (§14) — permission keys come from MasterCatalog ---- */
     foreach (MasterCatalog::all() as $slug => $entry) {

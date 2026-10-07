@@ -113,6 +113,14 @@ class CatalogImporter
         'purchase > goods receipt (grn) > create grn' => ['/app/purchase/receipts/create', 'purchase.receipts.create'],
         'purchase > goods receipt (grn) > grn to stock update' => ['/app/purchase/receipts?status=draft', 'purchase.receipts.post'],
         'purchase > goods receipt (grn) > grn history' => ['/app/purchase/receipts?status=posted', 'purchase.receipts.view'],
+        'purchase > purchase bills > all bills' => ['/app/purchase/bills', 'purchase.bills.view'],
+        'purchase > purchase bills > create bill' => ['/app/purchase/bills/create', 'purchase.bills.create'],
+        'purchase > purchase bills > bill from grn' => ['/app/purchase/bills/create', 'purchase.bills.create'],
+        'purchase > purchase bills > pending bills' => ['/app/purchase/bills?status=pending_approval', 'purchase.bills.view'],
+        'purchase > purchase bills > paid bills' => ['/app/purchase/bills?status=paid', 'purchase.bills.view'],
+        'purchase > purchase bills > overdue bills' => ['/app/purchase/bills?status=overdue', 'purchase.bills.view'],
+        'purchase > purchase bills > 3-way match' => ['/app/purchase/bills?status=open', 'purchase.bills.view'],
+        'purchase > purchase bills > bill aging' => ['/app/purchase/bills?status=open&sort=due', 'purchase.bills.view'],
 
         // §10 HRM — attendance, leave, structure (pages that really exist)
         'employee > attendance > attendance list' => ['/app/hr/attendance', 'attendance.view'],

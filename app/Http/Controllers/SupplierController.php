@@ -68,6 +68,7 @@ class SupplierController extends Controller
         return view('purchase.suppliers.show', [
             'supplier' => $supplier->loadCount(['orders', 'receipts'])->load(['district:id,name', 'blacklistedBy:id,name']),
             'openLines' => $this->query->openLines($supplier->id),
+            'payables' => $this->query->supplierPayables($supplier->id),
             'spend' => $this->query->supplierSpend($supplier->id),
             'recentOrders' => $supplier->orders()->with('warehouse:id,name')->orderByDesc('order_date')->limit(10)->get(),
             'recentReceipts' => $supplier->receipts()->with('order:id,code')->orderByDesc('received_date')->limit(10)->get(),
