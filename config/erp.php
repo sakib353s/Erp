@@ -572,6 +572,14 @@ return [
                         'max' => 100000000,
                         'help' => 'A stock adjustment worth at least this much is stored as waiting for approval and moves no stock until a second person decides it. 0 posts every adjustment immediately.',
                     ],
+                    'transfer_approval_above' => [
+                        'label' => 'Transfers above this value need approval',
+                        'type' => 'number',
+                        'default' => 0,
+                        'min' => 0,
+                        'max' => 100000000,
+                        'help' => 'A stock transfer worth at least this much waits for approval and cannot be dispatched until a second person clears it. 0 dispatches every transfer as it always did.',
+                    ],
                     'dead_stock_days' => [
                         'label' => 'Dead stock after (days without movement)',
                         'type' => 'number',

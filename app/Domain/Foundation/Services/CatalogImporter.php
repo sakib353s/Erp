@@ -268,6 +268,13 @@ class CatalogImporter
         'inventory > stock > create adjustment' => ['/app/inventory/adjustments/create', 'inventory.adjustments.create'],
         'inventory > stock > stock transfer' => ['/app/inventory/transfers', 'inventory.transfers.create'],
         'inventory > stock > create transfer' => ['/app/inventory/transfers/create', 'inventory.transfers.create'],
+        // §04-28: approval is the same register filtered, and the rest of the
+        // transfer leaves are the same register under the status they describe.
+        'inventory > stock > transfer approval' => ['/app/inventory/transfers?status=pending_approval', 'inventory.transfers.approve'],
+        'inventory > stock > transfer dispatch' => ['/app/inventory/transfers?status=draft', 'inventory.transfers.dispatch'],
+        'inventory > stock > transfer in transit' => ['/app/inventory/transfers?status=dispatched', 'inventory.transfers.dispatch'],
+        'inventory > stock > transfer received' => ['/app/inventory/transfers?status=received', 'inventory.transfers.receive'],
+        'inventory > stock > transfer discrepancy' => ['/app/inventory/transfers?status=discrepancy', 'inventory.transfers.receive'],
         'inventory > stock > stock movement ledger' => ['/app/inventory/movements', 'inventory.ledger.view'],
         'inventory > stock > stock reservation' => ['/app/inventory/reservations', 'inventory.reservations.view'],
         'inventory > stock > stock aging' => ['/app/reports/inventory/aging', 'inventory.reports.view'],

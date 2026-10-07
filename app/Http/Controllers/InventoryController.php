@@ -254,18 +254,38 @@ class InventoryController extends Controller
 
     public function transfers(Request $request): View
     {
+        $status = (string) $request->query('status');
+
         $query = StockTransfer::query()
-            ->with(['fromWarehouse', 'toWarehouse', 'lines.product'])
+            ->with(['fromWarehouse', 'toWarehouse', 'creator', 'approver', 'lines.product'])
             ->orderByDesc('transfer_date')
             ->orderByDesc('id');
 
-        if ($status = $request->query('status')) {
+        if ($status !== '') {
             $query->where('status', $status);
         }
 
+        if ($search = trim((string) $request->query('q'))) {
+            $query->where(fn ($q) => $q->where('transfer_no', 'like', "%{$search}%")
+                ->orWhere('narration', 'like', "%{$search}%"));
+        }
+
+        $counts = [
+            'pending_approval' => StockTransfer::query()->where('status', StockTransfer::STATUS_PENDING)->count(),
+            'draft' => StockTransfer::query()->where('status', StockTransfer::STATUS_DRAFT)->count(),
+            'dispatched' => StockTransfer::query()->where('status', StockTransfer::STATUS_DISPATCHED)->count(),
+            'received' => StockTransfer::query()->whereIn('status', [StockTransfer::STATUS_RECEIVED, StockTransfer::STATUS_DISCREPANCY])->count(),
+        ];
+
         return view('inventory.transfers.index', [
             'transfers' => $query->paginate(15)->withQueryString(),
-            'status' => $status ?? '',
+            'status' => $status,
+            'q' => $search,
+            'counts' => $counts,
+            'pendingValue' => (float) StockTransfer::query()
+                ->where('status', StockTransfer::STATUS_PENDING)
+                ->sum('total_value'),
+            'threshold' => $this->transfers->approvalThreshold(),
         ]);
     }
 
@@ -274,6 +294,7 @@ class InventoryController extends Controller
         return view('inventory.transfers.form', [
             'products' => Product::query()->active()->stocked()->orderBy('sku')->get(),
             'warehouses' => Warehouse::query()->where('is_active', true)->orderBy('name')->get(),
+            'threshold' => $this->transfers->approvalThreshold(),
         ]);
     }
 
@@ -285,9 +306,45 @@ class InventoryController extends Controller
             return back()->withInput()->withErrors(['lines' => $e->getMessage()]);
         }
 
+        if ($transfer->isPending()) {
+            return redirect()
+                ->route('inventory.transfers.index', ['status' => StockTransfer::STATUS_PENDING])
+                ->with('status', sprintf(
+                    'Transfer %s is worth %s and is waiting for approval — nothing has left the warehouse.',
+                    $transfer->transfer_no,
+                    number_format((float) $transfer->total_value, 2),
+                ));
+        }
+
         return redirect()
             ->route('inventory.transfers.index')
             ->with('status', "Transfer {$transfer->transfer_no} created.");
+    }
+
+    /** Approve a held transfer: it becomes dispatchable, and nothing has moved yet. */
+    public function approveTransfer(Request $request, StockTransfer $transfer): RedirectResponse
+    {
+        $note = trim((string) $request->input('note'));
+
+        try {
+            $this->transfers->approve($transfer, $request->user(), $note !== '' ? $note : null);
+        } catch (\RuntimeException $e) {
+            return back()->withErrors(['transfer' => $e->getMessage()]);
+        }
+
+        return back()->with('status', "Transfer {$transfer->transfer_no} approved — it can be dispatched now.");
+    }
+
+    /** Refuse a held transfer: it can never be dispatched afterwards. */
+    public function rejectTransfer(Request $request, StockTransfer $transfer): RedirectResponse
+    {
+        try {
+            $this->transfers->reject($transfer, $request->user(), (string) $request->input('note'));
+        } catch (\RuntimeException $e) {
+            return back()->withErrors(['transfer' => $e->getMessage()]);
+        }
+
+        return back()->with('status', "Transfer {$transfer->transfer_no} rejected — the stock stayed where it is.");
     }
 
     public function dispatchTransfer(StockTransfer $transfer, Request $request): RedirectResponse

@@ -962,6 +962,16 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::post('/app/inventory/transfers', [InventoryController::class, 'storeTransfer'])
         ->middleware('permission:inventory.transfers.create')
         ->name('inventory.transfers.store');
+    /* §04-28: above the configured value a transfer waits here, and dispatch
+       refuses it until somebody else approves — "in transit" then always means
+       approved. Deciding one is its own permission. */
+    Route::post('/app/inventory/transfers/{transfer}/approve', [InventoryController::class, 'approveTransfer'])
+        ->middleware('permission:inventory.transfers.approve')
+        ->name('inventory.transfers.approve');
+    Route::post('/app/inventory/transfers/{transfer}/reject', [InventoryController::class, 'rejectTransfer'])
+        ->middleware('permission:inventory.transfers.approve')
+        ->name('inventory.transfers.reject');
+
     Route::post('/app/inventory/transfers/{transfer}/dispatch', [InventoryController::class, 'dispatchTransfer'])
         ->middleware('permission:inventory.transfers.dispatch')
         ->name('inventory.transfers.dispatch');

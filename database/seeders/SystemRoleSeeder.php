@@ -74,6 +74,14 @@ class SystemRoleSeeder extends Seeder
                 'inventory.damage.create', 'inventory.loss.create',
                 'inventory.writeoffs.create', 'inventory.writeoffs.approve',
                 'inventory.counts.view', 'inventory.counts.create', 'inventory.counts.post',
+                // §04-28: stock leaving the building on a transfer is the same
+                // kind of decision as stock being written off, so it is the same
+                // desk that signs it off — and never the person who raised it.
+                'inventory.transfers.approve',
+                // Seeing the register is part of the create key it always was;
+                // the maker-checker rule lives in the service, not in a hidden
+                // button, so a manager holding both still cannot clear their own.
+                'inventory.transfers.create',
             ]],
             ['slug' => 'employee', 'name' => 'Employee', 'description' => 'Staff account: own portal access only — own leave, own payslips.', 'keys' => [
                 'dashboard.view', 'employees.view', 'documents.view', 'search.view',

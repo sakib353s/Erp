@@ -11,6 +11,17 @@
         <a class="btn btn-outline-secondary" href="{{ route('inventory.transfers.index') }}">Back</a>
     </div>
 
+    @if (($threshold ?? 0) > 0)
+        <div class="erp-note erp-note-info mb-3">
+            <i class="bi bi-info-circle" aria-hidden="true"></i>
+            <div>
+                <strong>Transfers worth {{ number_format($threshold, 2) }} or more wait for approval.</strong>
+                One of those is saved as waiting, and <em>dispatch refuses it</em> until somebody else clears it —
+                so nothing leaves the building on an unapproved transfer. You cannot approve your own.
+            </div>
+        </div>
+    @endif
+
     <div class="erp-card" style="max-width: 960px">
         <form method="POST" action="{{ route('inventory.transfers.store') }}">
             @csrf

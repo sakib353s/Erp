@@ -6,9 +6,13 @@ use App\Domain\Audit\Services\AuditRecorder;
 use App\Domain\Documents\DocumentType;
 use App\Domain\Foundation\Services\NumberingService;
 use App\Domain\Foundation\Services\TenantContext;
+use App\Domain\Foundation\User;
+use App\Domain\Foundation\Warehouse;
+use App\Domain\Inventory\Product;
 use App\Domain\Inventory\Services\StockLedgerService;
 use App\Domain\Inventory\Services\ValuationService;
 use App\Domain\Inventory\StockMovement;
+use App\Domain\Settings\Services\SettingService;
 use App\Domain\Inventory\StockTransfer;
 use App\Domain\Inventory\StockTransferLine;
 use Illuminate\Http\Request;
@@ -16,19 +20,32 @@ use Illuminate\Support\Facades\DB;
 use RuntimeException;
 
 /**
- * Transfer lifecycle (04-27…04-30):
- *  - CreateStockTransfer → draft document (no stock yet)
- *  - DispatchTransfer → TRANSIT_OUT at origin
+ * Transfer lifecycle (04-27…04-30, approval in 04-28):
+ *  - CreateStockTransfer → draft document (no stock yet), or `pending_approval`
+ *    when it is worth at least `inventory.transfer_approval_above`
+ *  - ApproveTransfer / RejectTransfer → clears or refuses the gate (§04-28)
+ *  - DispatchTransfer → TRANSIT_OUT at origin (draft only, so in-transit always
+ *    means approved)
  *  - ReceiveTransfer → TRANSIT_IN at destination; short receive opens discrepancy
+ *
+ * A held transfer is not a draft with a label on it: `dispatch()` refuses
+ * anything that is not a draft, so the gate cannot be walked around by calling
+ * the next step directly.
  */
 class StockTransferService
 {
+    /** 0 (or less) means every transfer dispatches as it always has. */
+    public const SETTING_GROUP = 'inventory';
+
+    public const SETTING_KEY = 'transfer_approval_above';
+
     public function __construct(
         protected StockLedgerService $ledger,
         protected ValuationService $valuation,
         protected NumberingService $numbering,
         protected TenantContext $context,
         protected AuditRecorder $audit,
+        protected SettingService $settings,
     ) {}
 
     /**
@@ -64,6 +81,47 @@ class StockTransferService
                 $request->user()->default_branch_id,
             );
 
+            $prepared = [];
+            $value = 0.0;
+
+            // The source warehouse, once: a line with no stated cost is valued at
+            // what the goods cost where they are leaving from.
+            $from = Warehouse::withoutGlobalScope(\App\Domain\Foundation\Concerns\BranchScope::class)
+                ->where('company_id', $companyId)
+                ->whereKey($fromId)
+                ->firstOrFail();
+
+            foreach ($lines as $index => $line) {
+                $qty = (float) ($line['qty_sent'] ?? 0);
+
+                if ($qty <= 0) {
+                    throw new RuntimeException('Transfer quantities must be greater than zero.');
+                }
+
+                $product = Product::query()->findOrFail((int) $line['product_id']);
+                $given = $line['unit_cost'] ?? null;
+
+                // The figure the threshold judges: what the line says it costs,
+                // or what the goods cost at the source. Dispatch finally values
+                // the outbound leg by the layers it consumes.
+                $cost = ($given === null || $given === '' || (float) $given <= 0)
+                    ? $this->valuation->unitCost($product, $from)
+                    : (float) $given;
+
+                $value += $qty * $cost;
+
+                $prepared[] = [
+                    'product_id' => $product->id,
+                    'qty_sent' => number_format($qty, 4, '.', ''),
+                    'unit_cost' => $line['unit_cost'] ?? 0,
+                    'line_no' => $index + 1,
+                ];
+            }
+
+            $value = round($value, 4);
+            $threshold = $this->approvalThreshold();
+            $pending = $threshold > 0 && $value >= $threshold;
+
             $transfer = StockTransfer::create([
                 'company_id' => $companyId,
                 'branch_id' => $request->user()->default_branch_id,
@@ -71,26 +129,16 @@ class StockTransferService
                 'to_warehouse_id' => $toId,
                 'transfer_no' => $transferNo,
                 'transfer_date' => $payload['transfer_date'] ?? now()->toDateString(),
-                'status' => StockTransfer::STATUS_DRAFT,
+                'status' => $pending ? StockTransfer::STATUS_PENDING : StockTransfer::STATUS_DRAFT,
                 'narration' => $payload['narration'] ?? null,
+                'total_value' => $value,
                 'created_by' => $request->user()->id,
             ]);
 
             $lineNo = 0;
-            foreach ($lines as $line) {
+            foreach ($prepared as $line) {
                 $lineNo++;
-                $qty = (float) ($line['qty_sent'] ?? 0);
-                if ($qty <= 0) {
-                    throw new RuntimeException('Transfer quantities must be greater than zero.');
-                }
-
-                StockTransferLine::create([
-                    'stock_transfer_id' => $transfer->id,
-                    'product_id' => (int) $line['product_id'],
-                    'qty_sent' => number_format($qty, 4, '.', ''),
-                    'unit_cost' => $line['unit_cost'] ?? 0,
-                    'line_no' => $lineNo,
-                ]);
+                StockTransferLine::create($line + ['stock_transfer_id' => $transfer->id]);
             }
 
             $this->audit->record([
@@ -103,17 +151,124 @@ class StockTransferService
                     'from_warehouse_id' => $fromId,
                     'to_warehouse_id' => $toId,
                     'line_count' => $lineNo,
+                    'total_value' => $value,
+                    'awaiting_approval' => $pending,
                 ],
             ]);
+
+            if ($pending) {
+                $this->audit->record([
+                    'action' => 'inventory.transfer_submitted',
+                    'entity_type' => 'stock_transfer',
+                    'entity_id' => $transfer->id,
+                    'branch_id' => $transfer->branch_id,
+                    'actor_id' => $request->user()->id,
+                    'after' => [
+                        'transfer_no' => $transferNo,
+                        'total_value' => $value,
+                        'line_count' => $lineNo,
+                    ],
+                ]);
+            }
 
             return $transfer->load('lines');
         });
     }
 
+    /** The value above which a transfer needs a second pair of eyes. 0 = never. */
+    public function approvalThreshold(): float
+    {
+        return max(0.0, (float) $this->settings->get(self::SETTING_GROUP, self::SETTING_KEY, 0));
+    }
+
+    /**
+     * Approve a held transfer: it becomes a draft, and only then can it be
+     * dispatched. Nothing has moved at this point and nothing moves now — the
+     * approval opens the door, the dispatch walks through it.
+     */
+    public function approve(StockTransfer $transfer, User $actor, ?string $note = null): StockTransfer
+    {
+        $this->assertApprovable($transfer, $actor);
+
+        $transfer->forceFill([
+            'status' => StockTransfer::STATUS_DRAFT,
+            'approved_by' => $actor->id,
+            'approved_at' => now(),
+            'approval_note' => $note,
+        ])->save();
+
+        $this->audit->record([
+            'action' => 'inventory.transfer_approved',
+            'entity_type' => 'stock_transfer',
+            'entity_id' => $transfer->id,
+            'branch_id' => $transfer->branch_id,
+            'actor_id' => $actor->id,
+            'after' => [
+                'transfer_no' => $transfer->transfer_no,
+                'total_value' => (string) $transfer->total_value,
+                'note' => $note,
+            ],
+        ]);
+
+        return $transfer->refresh()->load('lines');
+    }
+
+    /** Refuse a held transfer. It can never be dispatched afterwards. */
+    public function reject(StockTransfer $transfer, User $actor, string $note): StockTransfer
+    {
+        $this->assertApprovable($transfer, $actor);
+
+        $note = trim($note);
+
+        if ($note === '') {
+            throw new RuntimeException('A rejection needs a reason — the person who raised it has to know what to fix.');
+        }
+
+        $transfer->forceFill([
+            'status' => StockTransfer::STATUS_REJECTED,
+            'approved_by' => $actor->id,
+            'approved_at' => now(),
+            'approval_note' => $note,
+        ])->save();
+
+        $this->audit->record([
+            'action' => 'inventory.transfer_rejected',
+            'entity_type' => 'stock_transfer',
+            'entity_id' => $transfer->id,
+            'branch_id' => $transfer->branch_id,
+            'actor_id' => $actor->id,
+            'after' => [
+                'transfer_no' => $transfer->transfer_no,
+                'total_value' => (string) $transfer->total_value,
+                'note' => $note,
+            ],
+        ]);
+
+        return $transfer->refresh()->load('lines');
+    }
+
+    protected function assertApprovable(StockTransfer $transfer, User $actor): void
+    {
+        if ($this->context->companyId() !== null
+            && (int) $transfer->company_id !== (int) $this->context->companyId()) {
+            throw new RuntimeException('That transfer belongs to another company.');
+        }
+
+        if (! $transfer->isPending()) {
+            throw new RuntimeException('Only a transfer waiting for approval can be decided.');
+        }
+
+        if ((int) $transfer->created_by === (int) $actor->id) {
+            throw new RuntimeException('A transfer cannot be approved or rejected by the person who raised it.');
+        }
+    }
+
     public function dispatch(StockTransfer $transfer, Request $request): StockTransfer
     {
         if ($transfer->status !== StockTransfer::STATUS_DRAFT) {
-            throw new RuntimeException('Only draft transfers can be dispatched.');
+            throw new RuntimeException($transfer->isPending()
+                ? 'This transfer is still waiting for approval — it cannot leave the warehouse yet.'
+                : 'Only draft transfers can be dispatched.');
         }
 
         return DB::transaction(function () use ($transfer, $request) {

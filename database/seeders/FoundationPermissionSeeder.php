@@ -195,6 +195,7 @@ class FoundationPermissionSeeder extends Seeder
             ['inventory', 'transfers', 'create', 'inventory.transfers.create', 'Create stock transfers'],
             ['inventory', 'transfers', 'dispatch', 'inventory.transfers.dispatch', 'Dispatch stock transfers'],
             ['inventory', 'transfers', 'receive', 'inventory.transfers.receive', 'Receive stock transfers'],
+            ['inventory', 'transfers', 'approve', 'inventory.transfers.approve', 'Approve stock transfers before dispatch'],
             ['inventory', 'ledger', 'view', 'inventory.ledger.view', 'View stock movement ledger'],
             ['inventory', 'valuation', 'view', 'inventory.valuation.view', 'View stock valuation'],
             ['inventory', 'reports', 'view', 'inventory.reports.view', 'View inventory reports'],
