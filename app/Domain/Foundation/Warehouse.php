@@ -6,6 +6,7 @@ use App\Domain\Foundation\Concerns\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Warehouse extends Model
 {
@@ -34,5 +35,16 @@ class Warehouse extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'warehouse_user')->withTimestamps();
+    }
+
+    /** §04-43: the physical structure — zones, and the bins inside them. */
+    public function zones(): HasMany
+    {
+        return $this->hasMany(\App\Domain\Inventory\WarehouseZone::class)->orderBy('sort_order')->orderBy('code');
+    }
+
+    public function bins(): HasMany
+    {
+        return $this->hasMany(\App\Domain\Inventory\WarehouseBin::class);
     }
 }

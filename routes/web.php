@@ -353,6 +353,32 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
         ->middleware('permission:warehouses.delete')
         ->name('warehouses.destroy');
 
+    /* ---- §04-43/04-45 Zones, bins, product bin assignment and the map ----
+       Reading the layout is `warehouses.view`; changing it is `warehouses.update`,
+       because a zone or a bin *is* the warehouse's shape — the physical layout
+       does not get a permission key of its own. */
+    Route::get('/app/warehouses/{warehouse}', [WarehouseController::class, 'show'])
+        ->middleware('permission:warehouses.view')
+        ->name('warehouses.show');
+    Route::post('/app/warehouses/{warehouse}/zones', [WarehouseController::class, 'storeZone'])
+        ->middleware('permission:warehouses.update')
+        ->name('warehouses.zones.store');
+    Route::delete('/app/warehouse-zones/{zone}', [WarehouseController::class, 'destroyZone'])
+        ->middleware('permission:warehouses.update')
+        ->name('warehouses.zones.destroy');
+    Route::post('/app/warehouse-zones/{zone}/bins', [WarehouseController::class, 'storeBin'])
+        ->middleware('permission:warehouses.update')
+        ->name('warehouses.bins.store');
+    Route::delete('/app/warehouse-bins/{bin}', [WarehouseController::class, 'destroyBin'])
+        ->middleware('permission:warehouses.update')
+        ->name('warehouses.bins.destroy');
+    Route::post('/app/warehouses/{warehouse}/assignments', [WarehouseController::class, 'assignBin'])
+        ->middleware('permission:warehouses.update')
+        ->name('warehouses.bins.assign');
+    Route::delete('/app/bin-assignments/{assignment}', [WarehouseController::class, 'unassignBin'])
+        ->middleware('permission:warehouses.update')
+        ->name('warehouses.bins.unassign');
+
     /* ---- Customers / CRM (§05) ----
        The customer master existed so sales documents could reference a party;
        this block adds the CRM itself: profile, ledger, ageing, credit control

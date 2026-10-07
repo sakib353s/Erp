@@ -11,6 +11,10 @@
         <a class="btn btn-outline-secondary" href="{{ route('warehouses.index') }}">Back to warehouses</a>
     </div>
 
+    @error('warehouse')
+        <div class="alert alert-danger">{{ $message }}</div>
+    @enderror
+
     <form method="POST" action="{{ $mode === 'create' ? route('warehouses.store') : route('warehouses.update', $warehouse) }}">
         @csrf
         @if ($mode === 'edit')@method('PUT')@endif
@@ -58,17 +62,24 @@
                 <section class="erp-card">
                     <header class="erp-card-head"><h2 class="erp-card-title">Flags</h2></header>
                     <div class="form-check form-switch mb-2">
+                        <input type="hidden" name="is_active" value="0">
                         <input class="form-check-input" type="checkbox" role="switch" id="is_active" name="is_active" value="1"
-                               @checked(old('is_active', $warehouse->is_active ?? true))>
+                               @checked((bool) old('is_active', $warehouse->is_active ?? true))>
                         <label class="form-check-label" for="is_active">Active — selectable as a context</label>
                     </div>
                     @error('is_active')<div class="text-danger small">{{ $message }}</div>@enderror
                     <div class="form-check form-switch">
+                        <input type="hidden" name="is_default" value="0">
                         <input class="form-check-input" type="checkbox" role="switch" id="is_default" name="is_default" value="1"
-                               @checked(old('is_default', $warehouse->is_default ?? false))>
+                               @checked((bool) old('is_default', $warehouse->is_default ?? false))>
                         <label class="form-check-label" for="is_default">Default warehouse of this branch</label>
                     </div>
                     @error('is_default')<div class="text-danger small">{{ $message }}</div>@enderror
+                    <p class="form-text mt-2 mb-0">
+                        A warehouse that has moved stock keeps its branch and cannot be switched off — the ledger points
+                        at it. Renaming the code is always allowed; moving to another branch is not, because stock is
+                        reported branch by branch.
+                    </p>
                 </section>
 
                 <div class="d-grid gap-2 mt-3">

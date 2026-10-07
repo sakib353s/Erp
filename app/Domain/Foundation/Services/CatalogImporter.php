@@ -95,7 +95,6 @@ class CatalogImporter
         'settings > bengali settings > bengali numerals' => ['/app/settings/localization#numerals', 'settings.view'],
         'settings > bengali settings > amount in words (bengali)' => ['/app/settings/localization#amount-words', 'settings.view'],
         'settings > bengali settings > lakh / crore format' => ['/app/settings/localization#lakh-crore', 'settings.view'],
-        'inventory > warehouse > warehouses' => ['/app/warehouses', 'warehouses.view'],
         'employee > employees > all employees' => ['/app/employees', 'employees.view'],
 
         // §03 purchase + §06 suppliers — the pages that now exist
@@ -279,6 +278,18 @@ class CatalogImporter
         // §04-31: a count sheet is opened here; "Cycle Count" starts a subset sheet.
         'inventory > stock > stock count' => ['/app/inventory/counts', 'inventory.counts.view'],
         'inventory > stock > cycle count' => ['/app/inventory/counts/create?scope=cycle', 'inventory.counts.create'],
+        // §04-42/04-43/04-45: a warehouse is opened to see its layout. Zones, bins
+        // and assignments live on that screen, so their leaves land on the list
+        // rather than pretending to be separate pages. Warehousing lives at
+        // /app/warehouses — one surface, not a second module hidden beside it,
+        // so each structure leaf lands on the list and the warehouse is opened
+        // from there.
+        'inventory > warehouse > warehouses' => ['/app/warehouses', 'warehouses.view'],
+        'inventory > warehouse > add warehouse' => ['/app/warehouses/create', 'warehouses.create'],
+        'inventory > warehouse > warehouse zones' => ['/app/warehouses', 'warehouses.view'],
+        'inventory > warehouse > bin locations' => ['/app/warehouses', 'warehouses.view'],
+        'inventory > warehouse > product bin assignment' => ['/app/warehouses', 'warehouses.view'],
+        'inventory > warehouse > warehouse map' => ['/app/warehouses', 'warehouses.view'],
         'inventory > stock > maximum stock level' => ['/app/inventory/reorder-levels', 'inventory.reorder.view'],
         // §04-46…04-51: damage and loss are their own register, and the write-off
         // is the document that needs a second person — so it gets its own queue.
