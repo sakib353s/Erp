@@ -38,6 +38,17 @@ class PurchaseCoreSeeder extends Seeder
             ['tax_payable', 'debit', '2120', 20],
             ['ap', 'credit', '2110', 30],
         ],
+        // Supplier payments (§03.7): Dr Accounts Payable, Cr Cash/Bank. The
+        // `counter` role is the seeded role name for the bank account (1120),
+        // matching the sales rules so one account is never described two ways.
+        'supplier_payment' => [
+            ['ap', 'debit', '2110', 10],
+            ['cash', 'credit', '1110', 20],
+        ],
+        'supplier_payment_bank' => [
+            ['ap', 'debit', '2110', 10],
+            ['counter', 'credit', '1120', 20],
+        ],
     ];
 
     public function run(): void

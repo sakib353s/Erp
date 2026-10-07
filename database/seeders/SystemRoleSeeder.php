@@ -63,6 +63,7 @@ class SystemRoleSeeder extends Seeder
                 // the ones they will approve — self-approval is refused in code.
                 'purchase.orders.view', 'purchase.orders.approve', 'purchase.orders.cancel',
                 'purchase.receipts.view', 'purchase.bills.view', 'purchase.bills.approve',
+                'purchase.payments.view', 'purchase.payments.create',
                 'suppliers.view', 'inventory.stock.view',
             ]],
             ['slug' => 'employee', 'name' => 'Employee', 'description' => 'Staff account: own portal access only — own leave, own payslips.', 'keys' => [

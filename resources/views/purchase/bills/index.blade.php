@@ -17,6 +17,11 @@
                     <i class="bi bi-clipboard-check" aria-hidden="true"></i> Orders
                 </a>
             @endif
+            @if ($perm('purchase.payments.view'))
+                <a class="btn btn-outline-secondary" href="{{ route('purchase.payments.index') }}">
+                    <i class="bi bi-cash-coin" aria-hidden="true"></i> Payments
+                </a>
+            @endif
             @if ($perm('purchase.bills.create'))
                 <a class="btn btn-primary" href="{{ route('purchase.bills.create') }}">
                     <i class="bi bi-plus-lg" aria-hidden="true"></i> Enter a bill

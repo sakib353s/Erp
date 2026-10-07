@@ -6,6 +6,10 @@ open purchase orders, recent orders, recent receipts and spend by month (06-05),
 the earlier party table did not have (blacklist with a mandatory reason, reinstate on the same screen, and a
 `scopeOrderable` guard that stops a barred supplier being put on a new PO).
 
+**Since the payment slice (03-47, 03-52) the profile can also show money going out:** the same posted bills are
+settled by real payments (Dr accounts payable / Cr cash or bank), so what the screen reports as owed is the
+unsettled balance of documents rather than an estimate.
+
 **Since the bill slice (03-44…03-50) the money half of the profile is real:** the supplier screen now shows what is
 owed (`PurchaseQuery::supplierPayables`), the ageing buckets those bills fall into, and the list of open bills — all
 derived from posted `purchase_bills` rows, never from a cached balance.
@@ -52,5 +56,5 @@ Baseline (`BL`) applies. Shared with `03-purchase.md`: the same `SupplierService
 | | Count |
 |---|---|
 | DONE | 3 (06-01, 06-02, 06-05) |
-| PARTIAL | 5 (06-04, 06-06, 06-07, 06-09, 06-15) |
-| NOT STARTED | 7 |
+| PARTIAL | 6 (06-04, 06-06, 06-07, 06-09, 06-10, 06-15) |
+| NOT STARTED | 6 |

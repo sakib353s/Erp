@@ -8,6 +8,7 @@ use App\Domain\Foundation\Company;
 use App\Domain\Foundation\Concerns\Auditable;
 use App\Domain\Masters\Customer;
 use App\Domain\Masters\PaymentMethod;
+use App\Domain\Masters\Supplier;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -17,7 +18,7 @@ class Payment extends Model
     use Auditable;
 
     protected $fillable = [
-        'company_id', 'branch_id', 'customer_id', 'payment_method_id',
+        'company_id', 'branch_id', 'customer_id', 'supplier_id', 'payment_method_id',
         'account_id', 'receipt_no', 'direction', 'method', 'amount',
         'status', 'paid_at', 'reference', 'narration', 'idempotency_key',
         'journal_entry_id', 'created_by',
@@ -36,6 +37,11 @@ class Payment extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function supplier(): BelongsTo
+    {
+        return $this->belongsTo(Supplier::class);
     }
 
     public function paymentMethod(): BelongsTo

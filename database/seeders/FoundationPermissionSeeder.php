@@ -158,6 +158,8 @@ class FoundationPermissionSeeder extends Seeder
             ['purchase', 'bills', 'create', 'purchase.bills.create', 'Enter purchase bills'],
             ['purchase', 'bills', 'approve', 'purchase.bills.approve', 'Approve purchase bills (posts the payable)'],
             ['purchase', 'bills', 'cancel', 'purchase.bills.cancel', 'Cancel an unposted purchase bill'],
+            ['purchase', 'payments', 'view', 'purchase.payments.view', 'View supplier payments'],
+            ['purchase', 'payments', 'create', 'purchase.payments.create', 'Record a supplier payment'],
 
             ['accounting', 'fiscal_years', 'manage', 'fiscal.manage', 'Manage fiscal years'],
 

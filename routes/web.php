@@ -23,6 +23,7 @@ use App\Http\Controllers\GoodsReceiptController;
 use App\Http\Controllers\HrController;
 use App\Http\Controllers\PurchaseBillController;
 use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\SupplierPaymentController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\FailedDeliveryController;
 use App\Http\Controllers\FinancialReportController;
@@ -512,6 +513,17 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::post('/app/purchase/bills/{bill}/cancel', [PurchaseBillController::class, 'cancel'])
         ->middleware('permission:purchase.bills.cancel')
         ->name('purchase.bills.cancel');
+
+    /* ---- Supplier payments (§03.7) — money out against the payable ---- */
+    Route::middleware('permission:purchase.payments.view')->group(function () {
+        Route::get('/app/purchase/payments', [SupplierPaymentController::class, 'index'])->name('purchase.payments.index');
+    });
+    Route::get('/app/purchase/payments/create', [SupplierPaymentController::class, 'create'])
+        ->middleware('permission:purchase.payments.create')
+        ->name('purchase.payments.create');
+    Route::post('/app/purchase/payments', [SupplierPaymentController::class, 'store'])
+        ->middleware('permission:purchase.payments.create')
+        ->name('purchase.payments.store');
 
     /* ---- Masters (§14) — permission keys come from MasterCatalog ---- */
     foreach (MasterCatalog::all() as $slug => $entry) {

@@ -1531,6 +1531,8 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-dl-striped dd { padding-bottom: 8px; border-bottom: 1px dashed var(--line-soft); }
 .erp-dl-striped dt { padding-bottom: 8px; border-bottom: 1px dashed var(--line-soft); }
 
+.erp-list { list-style: none; margin: 0; padding: 0; }
+
 .erp-list-row {
     display: flex;
     align-items: center;
@@ -1698,6 +1700,10 @@ textarea.form-control { height: auto; min-height: 88px; padding: 9px 11px; }
 /* FormSection (§18.2) */
 /* Two-column form layout: identity/terms left, address/notes right (§18.2
    FormSection). Collapses to one column below 992px. */
+.erp-form { display: grid; gap: 18px; }
+.erp-form > .erp-form-section { margin-bottom: 0; }
+.erp-form > .erp-form-grid { padding-left: 0; padding-right: 0; }
+
 .erp-form-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -25,6 +25,11 @@
                     </button>
                 </form>
             @endif
+            @if ($perm('purchase.payments.create') && $bill->isPosted() && (float) $bill->due_amount > 0)
+                <a class="btn btn-primary" href="{{ route('purchase.payments.create', ['bill' => $bill->id]) }}">
+                    <i class="bi bi-cash-coin" aria-hidden="true"></i> Record payment
+                </a>
+            @endif
             @if ($bill->receipt)
                 <a class="btn btn-outline-secondary" href="{{ route('purchase.receipts.show', $bill->receipt) }}">
                     <i class="bi bi-box-arrow-in-down" aria-hidden="true"></i> {{ $bill->receipt->code }}
@@ -188,6 +193,13 @@
                     {{ (int) ($bill->supplier?->payment_terms_days ?? 0) > 0 ? (int) $bill->supplier->payment_terms_days.' days' : 'On demand' }}
                     @if ($bill->due_date)
                         <span class="erp-td-muted d-block small">due {{ $bill->due_date->format('d M Y') }}</span>
+                    @endif
+                </dd>
+                <dt>Paid to date</dt>
+                <dd>
+                    ৳ {{ number_format((float) $bill->paid_amount, 2) }}
+                    @if ((float) $bill->paid_amount > 0)
+                        <a class="erp-td-muted d-block small" href="{{ route('purchase.payments.index', ['bill' => $bill->id]) }}">see the payments</a>
                     @endif
                 </dd>
                 <dt>Subtotal · discount · tax</dt>

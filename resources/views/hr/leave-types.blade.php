@@ -13,7 +13,7 @@
                 <i class="bi bi-arrow-left" aria-hidden="true"></i> Leave
             </a>
             @if ($perm('masters.manage'))
-                <a class="btn btn-outline-secondary" href="{{ route('masters.leave-types.index') }}">
+                <a class="btn btn-outline-secondary" href="{{ route('masters.index') }}">
                     <i class="bi bi-list-check" aria-hidden="true"></i> Master data
                 </a>
             @endif

@@ -6,15 +6,16 @@
 over-receipt guard (03-29), batch capture on receipt lines (03-34 partial) — followed in the same day by **purchase
 bills (03-44, 03-45, 03-46, 03-50)**: the payable is now real, posted to the ledger through `posting_rules` on
 approval, with the three-way match (order ↔ receipt ↔ bill) computed, stored on the bill and shown beside it, plus
-supplier payables with ageing (03-48 partial).
+supplier payables with ageing (03-48 partial) and then by **supplier payments (03-47)**: money now leaves the company
+against a specific bill — Dr Accounts Payable / Cr Cash or Bank through `posting_rules` — so the balance a bill
+carries can actually be settled rather than only reported.
 
 **Deliberately out of these slices** (planned, not stubbed — no screen claims a capability it does not have):
 purchase requests (03-16…03-21), PO amendment / duplication / print / outbox (03-26…03-28), GRN amendment / print
-(03-35, 03-38), RFQ & comparison (03-39…03-43), bill payment recording / print / reports (03-47, 03-49, 03-51),
-**supplier payments, advances, BEFTN, schedules (03-52…03-58)**, **purchase returns and debit notes
-(03-59…03-64)**, import purchase / LC / landing cost (03-65…03-67) and the report family (03-68…03-73).
-Supplier payments are the immediate next change: a bill now carries a real balance (`paid_amount` / `due_amount`)
-that nothing can settle yet, and purchase returns are what make a posted receipt or bill correctable.
+(03-35, 03-38), RFQ & comparison (03-39…03-43), bill print (03-49) and the report family (03-51, 03-68…03-73),
+advances / BEFTN / schedules / reminders (03-53…03-57), **purchase returns and debit notes (03-59…03-64)** and
+import purchase / LC / landing cost (03-65…03-67). Purchase returns are the immediate next change: a posted receipt
+and a posted bill are both immutable, and a return with its debit note is the only honest way to correct them.
 
 **Known deviations in the implemented slice (honest, not silent):**
 - Approval runs on the direct permission `purchase.orders.approve` (creator ≠ approver enforced in the service),
@@ -124,23 +125,23 @@ Shared services: this slice is `Purchase\Services\{PurchaseOrderService, GoodsRe
 | 03-44 | Purchase › Purchase Bills › All Bills | `GET /app/purchase/bills` | `purchase.bills.view` | `PurchaseBillController@index`, `PurchaseQuery::bills` + `billSummary` — search (code / supplier bill no / supplier), status (`open`, `overdue`, `draft`, `pending_approval`, `approved`, `paid`, `cancelled`), supplier, bill-date range, sort by due date or value | `purchase_bills`, `_lines` | AUD; KPI grid (payable, overdue, due within 7 days, awaiting approval) from posted bills | `PurchaseBillTest::test_payables_reach_the_supplier_profile_and_the_bill_summary` | DONE |
 | 03-45 | Purchase › Purchase Bills › Create Bill / Bill from GRN | `GET|POST /app/purchase/bills/create` | `purchase.bills.create` | `StorePurchaseBillRequest::payload()` (no header money at all), `PurchaseBillService@create` / `@createFromReceipt` — only a **posted** receipt can be billed, and only once (the picker lists posted receipts that have no bill yet); due date from supplier terms | `purchase_bills`, `purchase_bill_lines`, `purchase_orders` | AUD; `BILL-00001` per company | `PurchaseBillTest::test_bill_totals_come_from_the_lines_and_the_due_date_from_terms`, `::test_billing_a_receipt_copies_its_lines_and_links_the_document`, `::test_only_a_posted_receipt_can_be_billed` | DONE |
 | 03-46 | Purchase › Purchase Bills › Pending / Paid / Overdue | `?status=` facets on 03-44 | `purchase.bills.view` | status facets including `overdue` (open + due date in the past) and `pending_approval`; `submit`, `approve` (`purchase.bills.approve`, maker never approves own bill), `cancel` (unposted only, reason required) | `purchase_bills` | ACCT on approval; AUD | `PurchaseBillTest::test_the_maker_cannot_approve_their_own_bill`, `::test_cancelling_an_unposted_bill_needs_a_reason_and_posted_bills_are_immutable` | DONE |
-| 03-47 | Purchase › Purchase Bills › Bill Payment Recording | — | — | needs the supplier-payment slice (03-52) — `due_amount` is ready for allocation but nothing settles it yet | — | — | — | NOT STARTED |
-| 03-48 | Purchase › Purchase Bills › Bill Aging | (ageing on the supplier profile + `?sort=due`) | `suppliers.view` / `purchase.bills.view` | `PurchaseQuery::supplierPayables` — current / 1–30 / 31–60 / 61–90 / 90+ buckets derived from each bill's own due date; a bill with no due date is never counted late | `purchase_bills` | — | `PurchaseBillTest::test_payables_reach_the_supplier_profile_and_the_bill_summary` | PARTIAL — buckets and the open-bill table exist; no dedicated report route (03-51) |
+| 03-47 | Purchase › Purchase Bills › Bill Payment Recording | `GET|POST /app/purchase/payments/create`, `GET /app/purchase/payments` | `purchase.payments.view` / `purchase.payments.create` | `SupplierPaymentService::handle` — bill must be posted and unsettled, payment may not exceed the balance, one payment per idempotency key; allocates to the bill and moves `paid_amount` / `due_amount` / status in the same transaction | `payments` (direction `out`, `supplier_id`), `payment_allocations`, `purchase_bills` | ACCT (Dr 2110 / Cr 1110 or 1120); AUD | `SupplierPaymentTest` (7 cases) | DONE |
+| 03-48 | Purchase › Purchase Bills › Bill Aging | (ageing on the supplier profile + `?status=open`) | `suppliers.view` / `purchase.bills.view` | `PurchaseQuery::supplierPayables` / `billSummary` — current / 1–30 / 31–60 / 61–90 / 90+ buckets derived from each bill's own due date; a bill with no due date is never counted late; payment history shows what came off each bill | `purchase_bills`, `payments` | — | `PurchaseBillTest::…payables…`, `SupplierPaymentTest::test_a_part_payment_leaves_the_bill_open_and_ages_the_remainder` | PARTIAL — buckets, the open-bill table and payment history exist; no dedicated report route (03-51) |
 | 03-49 | Purchase › Purchase Bills › Bill Print | — | — | no document renderer in this slice | — | — | — | NOT STARTED |
 | 03-50 | Purchase › Purchase Bills › 3-Way Match | shown on `GET /app/purchase/bills/{bill}` | `purchase.bills.view` (match runs under `purchase.bills.approve`) | `PurchaseBillService::runThreeWayMatch` → `match_state` + human `match_summary` stored on the bill; `PurchaseQuery::matchRows` renders ordered / received / billed quantities and prices per line | `purchase_bills`, `purchase_bill_lines`, `purchase_order_lines`, `goods_receipt_lines` | ACCT only if approved; AUD | `PurchaseBillTest::test_approval_posts_a_balanced_payable_journal_entry`, `::test_billing_more_than_was_received_is_recorded_as_a_mismatch_not_swallowed` | DONE — permission is `purchase.bills.approve`, tolerances not configurable (records, does not block) |
 | 03-51 | Purchase › Purchase Bills › Bill Reports | — | — | — | — | — | — | NOT STARTED |
 
 ## 3.7 Supplier Payments
 
-| Ref | Menu path | Route | Permission | Status |
-|---|---|---|---|---|
-| 03-52 | Purchase › Supplier Payments › Record / History | — | — | NOT STARTED |
-| 03-53 | Purchase › Supplier Payments › Advance Payments / Adjustment | — | — | NOT STARTED |
-| 03-54 | Purchase › Supplier Payments › BEFTN | — | — | NOT STARTED |
-| 03-55 | Purchase › Supplier Payments › Payment Schedule | — | — | NOT STARTED |
-| 03-56 | Purchase › Supplier Payments › Payment Approval | — | — | NOT STARTED |
-| 03-57 | Purchase › Supplier Payments › Payment Reminder | — | — | NOT STARTED |
-| 03-58 | Purchase › Supplier Payments › Payment Reports | — | — | NOT STARTED |
+| Ref | Menu path | Route | Permission | Backend | DB entities | WF / Effects | Tests | Status |
+|---|---|---|---|---|---|---|---|---|
+| 03-52 | Purchase › Supplier Payments › Record / History | `GET /app/purchase/payments` | `purchase.payments.view` | `PurchaseQuery::payments` — voucher search (number / bank reference / supplier), supplier, method, date range; `paymentSummary` puts paid-this-month next to what is still payable; the row links back to the bill it settled | `payments`, `payment_allocations` | — | `SupplierPaymentTest::test_the_payment_screens_are_gated_and_render_for_permitted_users` | DONE |
+| 03-53 | Purchase › Supplier Payments › Advance Payments / Adjustment | — | — | a payment must be allocated to a posted bill today; paying ahead of a bill needs the supplier-advance account and an ageing of advances, so it is not claimed yet | — | — | — | NOT STARTED |
+| 03-54 | Purchase › Supplier Payments › BEFTN | — | — | file generation for the Bangladesh clearing house (batch, bank codes, beneficiary) needs banking details per supplier and a review step | — | — | — | NOT STARTED |
+| 03-55 | Purchase › Supplier Payments › Payment Schedule | — | — | the bill list sorts by due date and shows what falls in the next 7 days, but a dated schedule run (and its reminder mail) is not built | — | — | — | NOT STARTED |
+| 03-56 | Purchase › Supplier Payments › Payment Approval | — | — | recording a payment is gated on `purchase.payments.create`; a maker–checker step on money out needs the Workflow engine wired to purchasing | — | — | — | NOT STARTED |
+| 03-57 | Purchase › Supplier Payments › Payment Reminder | — | — | outbound mail/outbox is not wired (same gap as 03-24) | — | — | — | NOT STARTED |
+| 03-58 | Purchase › Supplier Payments › Payment Reports | (payment history + summary) | `purchase.payments.view` | paid-this-month / paid-today / still-payable summary above the history; supplier and method facets | `payments` | — | — | PARTIAL — no report routes or exports |
 
 ## 3.8 Supplier Returns
 
@@ -171,9 +172,9 @@ Shared services: this slice is `Purchase\Services\{PurchaseOrderService, GoodsRe
 
 | | Count |
 |---|---|
-| DONE | 13 (03-01, 03-02, 03-04, 03-22, 03-23, 03-29, 03-32, 03-33, 03-36, 03-44, 03-45, 03-46, 03-50) |
-| PARTIAL | 9 (03-05, 03-06, 03-11, 03-12, 03-24, 03-25, 03-31, 03-34, 03-48) |
-| NOT STARTED | 51 |
+| DONE | 15 (03-01, 03-02, 03-04, 03-22, 03-23, 03-29, 03-32, 03-33, 03-36, 03-44, 03-45, 03-46, 03-47, 03-50, 03-52) |
+| PARTIAL | 10 (03-05, 03-06, 03-11, 03-12, 03-24, 03-25, 03-31, 03-34, 03-48, 03-58) |
+| NOT STARTED | 48 |
 
 Stock consequence of the slice: **purchase is now the only inbound stock path with documents behind it** — a receipt
 posts an immutable `purchase_receipt` movement and a valuation layer at the cost actually paid, and the cached
@@ -182,4 +183,8 @@ balance provably replays from the ledger (`rebuildBalances` test). Nothing else 
 Money consequence of the bill slice: **a delivery now becomes a liability through one auditable path** — approve a
 bill and a balanced journal entry exists (Dr inventory or purchases, Dr input tax, Cr accounts payable) with the
 entry number stamped on the bill, the supplier's balance ageing from the bill's own due date, and the three-way
-match result stored beside it. Nothing else in purchasing touches the ledger.
+match result stored beside it.
+
+Money consequence of the payment slice: **the liability can now be discharged** — a payment posts Dr accounts
+payable / Cr cash or bank in the same transaction that moves the bill's balance and status, allocations keep the
+link between money and document, and the same idempotency key can never pay a supplier twice.

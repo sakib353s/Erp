@@ -121,6 +121,9 @@ class CatalogImporter
         'purchase > purchase bills > overdue bills' => ['/app/purchase/bills?status=overdue', 'purchase.bills.view'],
         'purchase > purchase bills > 3-way match' => ['/app/purchase/bills?status=open', 'purchase.bills.view'],
         'purchase > purchase bills > bill aging' => ['/app/purchase/bills?status=open&sort=due', 'purchase.bills.view'],
+        'purchase > supplier payments > record payment' => ['/app/purchase/payments/create', 'purchase.payments.create'],
+        'purchase > supplier payments > payment history' => ['/app/purchase/payments', 'purchase.payments.view'],
+        'purchase > purchase bills > bill payment recording' => ['/app/purchase/payments/create', 'purchase.payments.create'],
 
         // §10 HRM — attendance, leave, structure (pages that really exist)
         'employee > attendance > attendance list' => ['/app/hr/attendance', 'attendance.view'],

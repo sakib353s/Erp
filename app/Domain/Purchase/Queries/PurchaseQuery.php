@@ -6,6 +6,7 @@ use App\Domain\Masters\Supplier;
 use App\Domain\Purchase\Models\GoodsReceipt;
 use App\Domain\Purchase\Models\PurchaseBill;
 use App\Domain\Purchase\Models\PurchaseOrder;
+use App\Domain\Sales\Payment;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -32,6 +33,9 @@ class PurchaseQuery
                 fn ($q, $status) => $q->where('status', $status)
             )
             ->when(($filters['supplier'] ?? null), fn ($q, $id) => $q->where('supplier_id', $id))
+            ->when(($filters['bill'] ?? null), fn ($q, $id) => $q->whereHas('allocations', fn ($a) => $a
+                ->where('allocatable_type', PurchaseBill::class)
+                ->where('allocatable_id', $id)))
             ->when(($filters['from'] ?? null), fn ($q, $d) => $q->whereDate('order_date', '>=', $d))
             ->when(($filters['to'] ?? null), fn ($q, $d) => $q->whereDate('order_date', '<=', $d))
             ->when(($filters['sort'] ?? null) === 'value', fn ($q) => $q->orderByDesc('total'))
@@ -329,5 +333,70 @@ class PurchaseQuery
         }
 
         return ['due' => $due, 'overdue' => $overdue, 'buckets' => $buckets, 'rows' => $rows];
+    }
+
+    /* ----------------------------------- supplier payments (§03.7) */
+
+    /**
+     * @param  array{q?:?string,supplier?:?int,bill?:?int,from?:?string,to?:?string,method?:?string}  $filters
+     */
+    public function payments(array $filters, array $accessibleBranchIds = [], int $perPage = 20): LengthAwarePaginator
+    {
+        return Payment::query()
+            ->where('direction', 'out')
+            ->whereNotNull('supplier_id')
+            ->with(['supplier:id,name,code', 'branch:id,name', 'allocations.allocatable'])
+            ->when($accessibleBranchIds !== [], fn ($q) => $q->whereIn('branch_id', $accessibleBranchIds))
+            ->when(($filters['supplier'] ?? null), fn ($q, $id) => $q->where('supplier_id', $id))
+            ->when(($filters['method'] ?? null), fn ($q, $m) => $q->where('method', $m))
+            ->when(($filters['from'] ?? null), fn ($q, $d) => $q->whereDate('paid_at', '>=', $d))
+            ->when(($filters['to'] ?? null), fn ($q, $d) => $q->whereDate('paid_at', '<=', $d))
+            ->when(($filters['q'] ?? null), function ($q, $term) {
+                $q->where(function ($inner) use ($term) {
+                    $inner->where('receipt_no', 'like', "%{$term}%")
+                        ->orWhere('reference', 'like', "%{$term}%")
+                        ->orWhereHas('supplier', fn ($s) => $s->where('name', 'like', "%{$term}%")->orWhere('code', 'like', "%{$term}%"));
+                });
+            })
+            ->orderByDesc('paid_at')
+            ->orderByDesc('id')
+            ->paginate($perPage)
+            ->withQueryString();
+    }
+
+    /**
+     * Payments headline for the month, plus what is still owed so the two
+     * numbers sit side by side instead of in separate reports.
+     *
+     * @return array{paid_month:float, payments_month:int, paid_today:float, payable:float, open_bills:int}
+     */
+    public function paymentSummary(array $accessibleBranchIds = []): array
+    {
+        $scoped = fn () => Payment::query()
+            ->where('direction', 'out')
+            ->whereNotNull('supplier_id')
+            ->when($accessibleBranchIds !== [], fn ($q) => $q->whereIn('branch_id', $accessibleBranchIds));
+
+        $bills = $this->billSummary($accessibleBranchIds);
+
+        return [
+            'paid_month' => (float) $scoped()->whereYear('paid_at', now()->year)->whereMonth('paid_at', now()->month)->sum('amount'),
+            'payments_month' => $scoped()->whereYear('paid_at', now()->year)->whereMonth('paid_at', now()->month)->count(),
+            'paid_today' => (float) $scoped()->whereDate('paid_at', now()->toDateString())->sum('amount'),
+            'payable' => $bills['payable'],
+            'open_bills' => $bills['open_bills'],
+        ];
+    }
+
+    /** Posted bills with a balance, for the payment form. */
+    public function payableBills(int $limit = 100): Collection
+    {
+        return PurchaseBill::query()
+            ->open()
+            ->with('supplier:id,name')
+            ->orderBy('due_date')
+            ->orderBy('bill_date')
+            ->limit($limit)
+            ->get(['id', 'code', 'supplier_id', 'bill_date', 'due_date', 'total', 'due_amount', 'status', 'branch_id']);
     }
 }
