@@ -49,8 +49,22 @@
                                         <span class="erp-status {{ $record->getAttribute($column) ? 'erp-status-active' : 'erp-status-disabled' }}">
                                             {{ $record->getAttribute($column) ? 'yes' : 'no' }}
                                         </span>
+                                    @elseif($column === 'parent_id')
+                                        @php($parentId = $record->getAttribute($column))
+                                        <span class="text-body-secondary">
+                                            {{ $parentId ? ($tree['names'][$parentId] ?? '—') : 'Top level' }}
+                                        </span>
                                     @elseif($column === 'name' || $column === 'full_name')
-                                        <span class="fw-semibold">{{ $record->getAttribute($column) }}</span>
+                                        {{-- §04-05: the flat list still shows the nesting it holds — depth
+                                             as indentation, so a two-level taxonomy reads as one. --}}
+                                        @php($level = (int) ($tree['depth'][$record->getKey()] ?? 0))
+                                        <span class="fw-semibold d-inline-block"
+                                              @if($level > 0) style="padding-left: {{ 16 * $level }}px" @endif>
+                                            @if($level > 0)
+                                                <i class="bi bi-arrow-return-right me-1 text-body-secondary" aria-hidden="true"></i>
+                                            @endif
+                                            {{ $record->getAttribute($column) }}
+                                        </span>
                                     @else
                                         <span class="text-body-secondary">{{ $record->getAttribute($column) ?? '—' }}</span>
                                     @endif

@@ -256,6 +256,19 @@ class CatalogImporter
         // Phase E inventory core (04-01…04-33)
         'inventory > products > all products' => ['/app/inventory/products', 'inventory.products.view'],
         'inventory > products > add product' => ['/app/inventory/products/create', 'inventory.products.create'],
+        // §04-04…04-14: the catalogue's own leaves. Screens that need a product
+        // id cannot be a menu target, so their leaf lands on the list — which is
+        // where the row action lives.
+        'inventory > products > duplicate product' => ['/app/inventory/products', 'inventory.products.create'],
+        'inventory > products > product categories' => ['/app/masters/product-categories', 'masters.manage'],
+        'inventory > products > add category' => ['/app/masters/product-categories/create', 'masters.manage'],
+        'inventory > products > category tree' => ['/app/masters/product-categories', 'masters.manage'],
+        'inventory > products > product brands' => ['/app/masters/brands', 'masters.manage'],
+        'inventory > products > add brand' => ['/app/masters/brands/create', 'masters.manage'],
+        'inventory > products > product units of measure' => ['/app/masters/units', 'masters.manage'],
+        'inventory > products > product conversion unit' => ['/app/masters/units', 'masters.manage'],
+        'inventory > products > product cost history' => ['/app/inventory/cost-history', 'inventory.products.view'],
+        'inventory > products > product price history' => ['/app/pricing/history', 'pricing.view'],
         'inventory > stock > stock overview' => ['/app/inventory/stock', 'inventory.stock.view'],
         'inventory > stock > stock list' => ['/app/inventory/stock', 'inventory.stock.view'],
         'inventory > stock > stock per branch' => ['/app/inventory/stock', 'inventory.stock.view'],

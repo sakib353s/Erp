@@ -29,6 +29,9 @@ class UpdateProductRequest extends FormRequest
             'unit_id' => ['nullable', 'integer', 'exists:units,id'],
             'cost_method' => ['required', Rule::in(['fifo', 'lifo', 'wac', 'standard'])],
             'standard_cost' => ['nullable', 'numeric', 'min:0'],
+            // §04-10: only read when the edit moves the cost. The record is
+            // append-only, so the reason is captured with the change itself.
+            'cost_change_reason' => ['nullable', 'string', 'max:500'],
             'is_stocked' => ['sometimes', 'boolean'],
             'track_batch' => ['sometimes', 'boolean'],
             'track_serial' => ['sometimes', 'boolean'],

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Domain\Foundation\Services\PermissionCatalog;
+use App\Domain\Inventory\Product;
 use App\Domain\Masters\PriceList;
 use App\Domain\Masters\ProductPriceHistory;
 use Illuminate\Http\Request;
@@ -68,14 +69,63 @@ class PriceHistoryController extends Controller
             $query->whereDate('created_at', '<=', $data['to']);
         }
 
+        return $this->render($query, $user, $data, $search, null);
+    }
+
+    /**
+     * §04-14: the same append-only history, scoped to one product — the screen a
+     * product page links to when somebody asks "why is this price what it is?".
+     */
+    public function forProduct(Request $request, Product $product): View
+    {
+        $user = $request->user();
+
+        abort_unless((int) $product->company_id === (int) $user->company_id, 404, 'That product does not exist.');
+
+        $data = $request->validate([
+            'source' => ['nullable', 'in:manual,bulk_update'],
+            'from' => ['nullable', 'date'],
+            'to' => ['nullable', 'date'],
+        ]);
+
+        $query = ProductPriceHistory::query()
+            ->where('company_id', $user->company_id)
+            ->where('product_id', $product->id)
+            ->with(['product:id,code,name', 'priceList:id,code,name', 'changedBy:id,name', 'bulkUpdate:id,status'])
+            ->orderByDesc('created_at')
+            ->orderByDesc('id');
+
+        if (! empty($data['source'])) {
+            $query->where('source', $data['source']);
+        }
+
+        if (! empty($data['from'])) {
+            $query->whereDate('created_at', '>=', $data['from']);
+        }
+
+        if (! empty($data['to'])) {
+            $query->whereDate('created_at', '<=', $data['to']);
+        }
+
+        return $this->render($query, $user, $data, '', $product);
+    }
+
+    /**
+     * @param  \Illuminate\Database\Eloquent\Builder<ProductPriceHistory>  $query
+     * @param  array<string, mixed>  $data
+     */
+    protected function render($query, $user, array $data, string $search, ?Product $product): View
+    {
         return view('pricing.history', [
             'rows' => $query->paginate(25)->withQueryString(),
+            'product' => $product,
             'lists' => PriceList::query()
                 ->where('company_id', $user->company_id)
                 ->orderBy('name')
                 ->get(['id', 'code', 'name']),
             'filters' => [
                 'q' => $search,
+                'product_id' => $product?->id,
                 'price_list_id' => isset($data['price_list_id']) ? (int) $data['price_list_id'] : null,
                 'source' => $data['source'] ?? null,
                 'from' => $data['from'] ?? null,

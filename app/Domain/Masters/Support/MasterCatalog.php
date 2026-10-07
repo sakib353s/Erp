@@ -60,10 +60,15 @@ class MasterCatalog
                 'label' => 'Product Categories',
                 'permission' => self::PERMISSION_MANAGE,
                 'company_scoped' => true,
+                // Nested taxonomy: the parent is a row of this very table, so
+                // the options, the cycle guard and the child check all come
+                // from the controller's hierarchy support.
+                'hierarchy' => true,
                 'columns' => ['code', 'name', 'parent_id', 'is_global', 'is_active'],
                 'fields' => [
                     'code' => ['label' => 'Code', 'type' => 'text', 'required' => true, 'max' => 32, 'upper' => true],
                     'name' => ['label' => 'Name', 'type' => 'text', 'required' => true, 'max' => 191],
+                    'parent_id' => ['label' => 'Parent category', 'type' => 'select', 'required' => false, 'source' => 'product-categories', 'blank' => 'No parent (top level)'],
                     'description' => ['label' => 'Description', 'type' => 'text', 'required' => false, 'max' => 500],
                     'is_global' => ['label' => 'Global (company-wide)', 'type' => 'boolean'],
                     'is_active' => ['label' => 'Active', 'type' => 'boolean'],

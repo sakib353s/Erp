@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Domain\Foundation\User;
 use App\Domain\Inventory\Actions\CreateProduct;
+use App\Domain\Inventory\Actions\DuplicateProduct;
 use App\Domain\Inventory\Product;
+use App\Domain\Inventory\StockBalance;
 use App\Domain\Inventory\Services\ProductService;
 use App\Domain\Masters\Brand;
 use App\Domain\Masters\ProductCategory;
 use App\Domain\Masters\Unit;
+use App\Http\Requests\DuplicateProductRequest;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use Illuminate\Http\RedirectResponse;
@@ -22,6 +26,7 @@ class ProductController extends Controller
     public function __construct(
         protected ProductService $products,
         protected CreateProduct $createProduct,
+        protected DuplicateProduct $duplicateProduct,
     ) {}
 
     public function index(Request $request): View
@@ -48,6 +53,7 @@ class ProductController extends Controller
             'products' => $query->paginate(15)->withQueryString(),
             'q' => $search,
             'status' => $request->query('status'),
+            'counts' => $this->counts($request->user()),
         ]);
     }
 
@@ -91,7 +97,7 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product): RedirectResponse
     {
         try {
-            $this->products->update($product, $request->validated());
+            $this->products->update($product, $request->validated(), $request->user());
         } catch (\RuntimeException $e) {
             return back()->withInput()->withErrors(['sku' => $e->getMessage()]);
         }
@@ -99,6 +105,36 @@ class ProductController extends Controller
         return redirect()
             ->route('inventory.products.index')
             ->with('status', 'Product updated.');
+    }
+
+    /** The copy form (§04-04) — prefilled with an identity that is actually free. */
+    public function duplicateForm(Request $request, Product $product): View
+    {
+        $this->assertSameCompany($request, $product);
+
+        return view('inventory.products.duplicate', [
+            'product' => $product,
+            'suggestedCode' => $this->freeCode($product),
+            'suggestedSku' => $this->freeSku($product),
+            'sourceStock' => (float) StockBalance::query()
+                ->where('product_id', $product->id)
+                ->sum('on_hand'),
+        ]);
+    }
+
+    public function duplicate(DuplicateProductRequest $request, Product $product): RedirectResponse
+    {
+        $this->assertSameCompany($request, $product);
+
+        try {
+            $copy = $this->duplicateProduct->handle($product, $request->validated(), $request->user());
+        } catch (\RuntimeException $e) {
+            return back()->withInput()->withErrors(['code' => $e->getMessage()]);
+        }
+
+        return redirect()
+            ->route('inventory.products.edit', $copy)
+            ->with('status', "Product {$copy->sku} copied from {$product->sku} — its own stock starts at zero.");
     }
 
     public function destroy(Product $product): RedirectResponse
@@ -112,5 +148,60 @@ class ProductController extends Controller
         return redirect()
             ->route('inventory.products.index')
             ->with('status', 'Product deleted.');
+    }
+
+    /**
+     * A product from another company is not this company's product. The instance
+     * is single-company by decision D1, so this should never fire — which is
+     * exactly why it is a one-line refusal and not an assumption.
+     */
+    protected function assertSameCompany(Request $request, Product $product): void
+    {
+        abort_unless(
+            (int) $product->company_id === (int) $request->user()?->company_id,
+            404,
+            'That product does not exist.',
+        );
+    }
+
+    protected function freeCode(Product $product): string
+    {
+        $n = 2;
+
+        while (Product::query()
+            ->where('company_id', $product->company_id)
+            ->where('code', $candidate = $product->code.'-'.$n)
+            ->exists()) {
+            $n++;
+        }
+
+        return $candidate;
+    }
+
+    protected function freeSku(Product $product): string
+    {
+        $n = 2;
+
+        while (Product::query()
+            ->where('company_id', $product->company_id)
+            ->where('sku', $candidate = $product->sku.'-'.$n)
+            ->exists()) {
+            $n++;
+        }
+
+        return $candidate;
+    }
+
+    /** @return array<string, int> */
+    protected function counts(?User $user): array
+    {
+        $base = fn () => Product::query()->where('company_id', $user?->company_id);
+
+        return [
+            'total' => $base()->count(),
+            'active' => $base()->where('is_active', true)->count(),
+            'inactive' => $base()->where('is_active', false)->count(),
+            'tracked' => $base()->where(fn ($q) => $q->where('track_batch', true)->orWhere('track_serial', true))->count(),
+        ];
     }
 }

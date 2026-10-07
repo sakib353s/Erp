@@ -74,6 +74,16 @@ class Product extends Model
         return $this->hasMany(StockLayer::class);
     }
 
+    /**
+     * §04-10: changes somebody made to what this product says it costs. Left
+     * unordered on purpose — `withCount()` aggregates this relation, and an
+     * ORDER BY inside a count subquery is noise at best.
+     */
+    public function costHistory(): HasMany
+    {
+        return $this->hasMany(ProductCostHistory::class);
+    }
+
     public function reorderPolicy(): HasOne
     {
         return $this->hasOne(ReorderPolicy::class);

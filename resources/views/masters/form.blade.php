@@ -30,12 +30,16 @@
                                 </label>
 
                                 @if(($meta['type'] ?? 'text') === 'select')
+                                    {{-- Options come as either a plain list (fixed vocabulary,
+                                         upper-case gone) or as an id → label map, which is what a
+                                         select sourced from another table produces. --}}
                                     <select class="form-select @error($field) is-invalid @enderror" id="{{ $field }}" name="{{ $field }}"
                                             @if($meta['required'] ?? false) required @endif>
-                                        <option value="">— select —</option>
-                                        @foreach($meta['options'] ?? [] as $option)
-                                            <option value="{{ $option }}" @selected(old($field, $record->getAttribute($field)) === $option)>
-                                                {{ ucfirst($option) }}
+                                        <option value="">{{ $meta['blank'] ?? '— select —' }}</option>
+                                        @foreach($meta['options'] ?? [] as $optionValue => $optionLabel)
+                                            @php($value = is_int($optionValue) ? $optionLabel : $optionValue)
+                                            <option value="{{ $value }}" @selected((string) old($field, $record->getAttribute($field)) === (string) $value)>
+                                                {{ is_int($optionValue) ? ucfirst($optionLabel) : $optionLabel }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -49,11 +53,10 @@
                                            step="{{ $meta['step'] ?? 'any' }}"
                                            @if($meta['required'] ?? false) required @endif>
                                 @else
-                                    <input class="form-control @error($field) is-invalid @enderror" type="text" id="{{ $field }}"
+                                    <input class="form-control @error($field) is-invalid @enderror {{ ($meta['upper'] ?? false) ? 'text-uppercase' : '' }}" type="text" id="{{ $field }}"
                                            name="{{ $field }}"
                                            value="{{ old($field, $record->getAttribute($field)) }}"
                                            maxlength="{{ $meta['max'] ?? 191 }}"
-                                           @if($meta['upper'] ?? false) class="form-control text-uppercase" @endif
                                            @if($meta['required'] ?? false) required @endif>
                                 @endif
 

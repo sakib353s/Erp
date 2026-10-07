@@ -4,8 +4,10 @@ namespace App\Domain\Masters;
 
 use App\Domain\Foundation\Company;
 use App\Domain\Foundation\Concerns\Auditable;
+use App\Domain\Inventory\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Brand extends Model
 {
@@ -22,6 +24,12 @@ class Brand extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    /** Products pointing at this row — the reason a delete may have to wait. */
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'brand_id');
     }
 
     public function scopeActive($query)

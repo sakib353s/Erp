@@ -15,6 +15,18 @@
         @endif
     </div>
 
+    <div class="erp-kpi-grid mb-3">
+        <x-ui.kpi label="Products" :value="number_format($counts['total'])" icon="bi-box-seam"
+                  hint="Catalogue rows for this company" />
+        <x-ui.kpi label="Active" :value="number_format($counts['active'])" icon="bi-check2-circle"
+                  hint="Available to buy, receive and sell" />
+        <x-ui.kpi label="Inactive" :value="number_format($counts['inactive'])" icon="bi-slash-circle"
+                  hint="Hidden from documents, history kept" />
+        <x-ui.kpi label="Batch or serial tracked" :value="number_format($counts['tracked'])" icon="bi-upc-scan"
+                  hint="Receipts for these must carry a batch number"
+                  :href="route('inventory.batches.index')" />
+    </div>
+
     <div class="erp-card mb-3">
         <form method="GET" class="row g-2 align-items-end">
             <div class="col-md-4">
@@ -69,8 +81,16 @@
                                     {{ $product->is_active ? 'active' : 'inactive' }}
                                 </span>
                             </td>
-                            <td class="text-end">
+                            <td class="text-end erp-td-actions">
                                 <a class="btn btn-sm btn-light" href="{{ route('inventory.products.ledger', $product) }}">Ledger</a>
+                                @if ($perm('inventory.products.view'))
+                                    <a class="btn btn-sm btn-light"
+                                       href="{{ route('inventory.products.cost-history', $product) }}">Cost</a>
+                                @endif
+                                @if ($perm('inventory.products.create'))
+                                    <a class="btn btn-sm btn-outline-secondary"
+                                       href="{{ route('inventory.products.duplicate.form', $product) }}">Copy</a>
+                                @endif
                                 @if ($perm('inventory.products.edit'))
                                     <a class="btn btn-sm btn-outline-secondary" href="{{ route('inventory.products.edit', $product) }}">Edit</a>
                                 @endif

@@ -47,6 +47,7 @@ use App\Http\Controllers\PriceCompareController;
 use App\Http\Controllers\PriceHistoryController;
 use App\Http\Controllers\PriceListController;
 use App\Http\Controllers\PricingRuleController;
+use App\Http\Controllers\ProductCostHistoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProofOfDeliveryController;
@@ -812,6 +813,25 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::get('/app/inventory/movements', [InventoryController::class, 'movements'])
         ->middleware('permission:inventory.ledger.view')
         ->name('inventory.movements');
+    // §04-04 — a copy of the catalogue row, never a copy of the stock.
+    Route::get('/app/inventory/products/{product}/duplicate', [ProductController::class, 'duplicateForm'])
+        ->middleware('permission:inventory.products.create')
+        ->name('inventory.products.duplicate.form');
+    Route::post('/app/inventory/products/{product}/duplicate', [ProductController::class, 'duplicate'])
+        ->middleware('permission:inventory.products.create')
+        ->name('inventory.products.duplicate');
+    // §04-10 — what the product record said it cost, and who changed it.
+    Route::get('/app/inventory/cost-history', [ProductCostHistoryController::class, 'index'])
+        ->middleware('permission:inventory.products.view')
+        ->name('inventory.cost-history');
+    Route::get('/app/inventory/products/{product}/cost-history', [ProductCostHistoryController::class, 'forProduct'])
+        ->middleware('permission:inventory.products.view')
+        ->name('inventory.products.cost-history');
+    // §04-14 — the same append-only price history, scoped to one product.
+    Route::get('/app/inventory/products/{product}/price-history', [PriceHistoryController::class, 'forProduct'])
+        ->middleware('permission:pricing.view')
+        ->name('inventory.products.price-history');
+
     Route::get('/app/inventory/products/{product}/ledger', [InventoryController::class, 'productLedger'])
         ->middleware('permission:inventory.ledger.view')
         ->name('inventory.products.ledger');

@@ -77,7 +77,13 @@ class StoreMasterRequest extends FormRequest
                     $fieldRules[] = 'date';
                     break;
                 case 'select':
-                    $fieldRules[] = Rule::in($meta['options'] ?? []);
+                    // A select whose options live in the database (a parent row,
+                    // say) cannot be pinned to a static list: the allowed ids
+                    // depend on the company and, on edit, on the record itself.
+                    // Bounded here as an integer; the controller owns the rest.
+                    $fieldRules[] = isset($meta['source'])
+                        ? 'integer'
+                        : Rule::in($meta['options'] ?? []);
                     break;
                 default:
                     $fieldRules[] = 'string';

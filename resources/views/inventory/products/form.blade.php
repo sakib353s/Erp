@@ -8,7 +8,24 @@
             <h1 class="erp-h1">{{ $mode === 'create' ? 'Add Product' : 'Edit Product' }}</h1>
             <p class="erp-page-sub">SKU unique per company. Cost method change never rewrites posted valuation layers.</p>
         </div>
-        <a class="btn btn-outline-secondary" href="{{ route('inventory.products.index') }}">Back</a>
+        <div class="d-flex flex-wrap gap-2">
+            @if ($mode === 'edit')
+                <a class="btn btn-outline-secondary" href="{{ route('inventory.products.cost-history', $product) }}">
+                    <i class="bi bi-clock-history" aria-hidden="true"></i> Cost history
+                </a>
+                @if ($perm('pricing.view'))
+                    <a class="btn btn-outline-secondary" href="{{ route('inventory.products.price-history', $product) }}">
+                        <i class="bi bi-tags" aria-hidden="true"></i> Price history
+                    </a>
+                @endif
+                @if ($perm('inventory.products.create'))
+                    <a class="btn btn-outline-secondary" href="{{ route('inventory.products.duplicate.form', $product) }}">
+                        <i class="bi bi-files" aria-hidden="true"></i> Copy
+                    </a>
+                @endif
+            @endif
+            <a class="btn btn-outline-secondary" href="{{ route('inventory.products.index') }}">Back</a>
+        </div>
     </div>
 
     <div class="erp-card" style="max-width: 860px">
@@ -103,8 +120,30 @@
                     <label class="form-label" for="standard_cost">Standard cost</label>
                     <input type="number" step="0.0001" min="0" class="form-control" id="standard_cost"
                            name="standard_cost" value="{{ old('standard_cost', $product->standard_cost ?? 0) }}">
+                    @error('standard_cost') <div class="text-danger small">{{ $message }}</div> @enderror
                 </div>
             </div>
+
+            @if ($mode === 'edit')
+                {{-- §04-10: the reason is only used when this edit actually moves the cost
+                     or the method — and when it does, it is what makes the change
+                     explainable six months later. --}}
+                <div class="row g-3 mb-4">
+                    <div class="col-md-8">
+                        <label class="form-label" for="cost_change_reason">Reason for a cost change</label>
+                        <input class="form-control @error('cost_change_reason') is-invalid @enderror"
+                               id="cost_change_reason" name="cost_change_reason"
+                               value="{{ old('cost_change_reason') }}" maxlength="500"
+                               placeholder="e.g. supplier raised the rate from 1 September">
+                        @error('cost_change_reason') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <div class="form-text">
+                            Ignored unless the standard cost or the cost method moves — changes are recorded in the
+                            <a href="{{ route('inventory.products.cost-history', $product) }}">cost history</a> with
+                            your name on them. Posted valuation layers are never rewritten.
+                        </div>
+                    </div>
+                </div>
+            @endif
 
             <div class="d-flex flex-wrap gap-3 mb-4">
                 <div class="form-check">

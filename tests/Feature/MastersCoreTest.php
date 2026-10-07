@@ -16,6 +16,7 @@ use App\Domain\Masters\District;
 use App\Domain\Masters\Holiday;
 use App\Domain\Masters\PaymentMethod;
 use App\Domain\Masters\PriceList;
+use App\Domain\Masters\ProductCategory;
 use App\Domain\Masters\Services\TaxService;
 use App\Domain\Masters\SmsProvider;
 use App\Domain\Masters\TaxRate;
@@ -403,5 +404,148 @@ class MastersCoreTest extends TestCase
         $this->actingAs($this->admin)
             ->get('/app/masters')
             ->assertRedirect('/app/masters/units');
+    }
+
+    /**
+     * §04-05: product categories are a tree, and a tree that can point at itself
+     * is a loop. The parent is checked against the company, the row and the row's
+     * own descendants — and a branch cannot be deleted out from under its children.
+     */
+    public function test_category_tree_refuses_self_and_descendant_parents(): void
+    {
+        $this->actingAs($this->admin);
+
+        $this->post(route('masters.product-categories.store'), [
+            'code' => 'ROOT',
+            'name' => 'Root category',
+            'is_global' => 0,
+            'is_active' => 1,
+        ])->assertSessionHasNoErrors();
+
+        $root = ProductCategory::query()->where('code', 'ROOT')->sole();
+
+        $this->post(route('masters.product-categories.store'), [
+            'code' => 'CHILD',
+            'name' => 'Child category',
+            'parent_id' => $root->id,
+            'is_global' => 0,
+            'is_active' => 1,
+        ])->assertSessionHasNoErrors();
+
+        $child = ProductCategory::query()->where('code', 'CHILD')->sole();
+        $this->assertSame($root->id, (int) $child->parent_id);
+
+        // Its own id is not a parent…
+        $this->put(route('masters.product-categories.update', ['record' => $root->getKey()]), [
+            'code' => 'ROOT',
+            'name' => 'Root category',
+            'parent_id' => $root->id,
+            'is_global' => 0,
+            'is_active' => 1,
+        ])->assertSessionHasErrors('parent_id');
+
+        // …and neither is a row that already sits underneath it.
+        $this->put(route('masters.product-categories.update', ['record' => $root->getKey()]), [
+            'code' => 'ROOT',
+            'name' => 'Root category',
+            'parent_id' => $child->id,
+            'is_global' => 0,
+            'is_active' => 1,
+        ])->assertSessionHasErrors('parent_id');
+
+        $this->assertNull($root->refresh()->parent_id);
+
+        // A parent from another company is not a parent either.
+        $strangerId = (int) DB::table('product_categories')->insertGetId([
+            'company_id' => $this->shadowCompanyId(),
+            'code' => 'STRANGER-CAT',
+            'name' => 'Somebody else us tree',
+            'is_global' => 0,
+            'is_active' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $this->put(route('masters.product-categories.update', ['record' => $root->getKey()]), [
+            'code' => 'ROOT',
+            'name' => 'Root category',
+            'parent_id' => $strangerId,
+            'is_global' => 0,
+            'is_active' => 1,
+        ])->assertSessionHasErrors('parent_id');
+
+        $this->assertNull($root->refresh()->parent_id);
+    }
+
+    public function test_a_category_with_children_cannot_be_deleted(): void
+    {
+        $this->actingAs($this->admin);
+
+        $parent = ProductCategory::query()->create([
+            'company_id' => $this->admin->company_id,
+            'code' => 'DEL-PARENT',
+            'name' => 'Parent with children',
+            'is_active' => true,
+        ]);
+
+        $child = ProductCategory::query()->create([
+            'company_id' => $this->admin->company_id,
+            'parent_id' => $parent->id,
+            'code' => 'DEL-CHILD',
+            'name' => 'Child that stays',
+            'is_active' => true,
+        ]);
+
+        $this->delete(route('masters.product-categories.destroy', $parent))
+            ->assertSessionHasErrors('record');
+
+        $this->assertDatabaseHas('product_categories', ['id' => $parent->id]);
+
+        // Move the child out of the way and the parent is deletable again.
+        $child->forceFill(['parent_id' => null])->save();
+
+        $this->delete(route('masters.product-categories.destroy', $parent))
+            ->assertSessionHasNoErrors();
+
+        $this->assertDatabaseMissing('product_categories', ['id' => $parent->id]);
+    }
+
+    public function test_category_form_excludes_the_row_and_its_descendants_from_the_parent_list(): void
+    {
+        $this->actingAs($this->admin);
+
+        $root = ProductCategory::query()->create([
+            'company_id' => $this->admin->company_id,
+            'code' => 'FORM-ROOT',
+            'name' => 'Form root',
+            'is_active' => true,
+        ]);
+
+        ProductCategory::query()->create([
+            'company_id' => $this->admin->company_id,
+            'parent_id' => $root->id,
+            'code' => 'FORM-CHILD',
+            'name' => 'Form child',
+            'is_active' => true,
+        ]);
+
+        ProductCategory::query()->create([
+            'company_id' => $this->admin->company_id,
+            'code' => 'FORM-SIBLING',
+            'name' => 'Form sibling',
+            'is_active' => true,
+        ]);
+
+        // Editing the root: the sibling may be a parent, the root and its child may not.
+        $this->get(route('masters.product-categories.edit', ['record' => $root->getKey()]))
+            ->assertOk()
+            ->assertSee('Form sibling')
+            ->assertDontSee('Form child');
+
+        // The list shows the nesting it holds.
+        $this->get(route('masters.product-categories.index'))
+            ->assertOk()
+            ->assertSee('Form child')
+            ->assertSee('Top level');
     }
 }

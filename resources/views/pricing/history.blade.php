@@ -1,14 +1,35 @@
 @extends('layouts.app')
 
-@section('page_title', 'Price History')
+@section('page_title', $product ? 'Price History · '.$product->sku : 'Price History')
 
 @section('content')
     <div class="erp-page-head">
         <div>
-            <h1 class="erp-h1">Price History</h1>
-            <p class="erp-page-sub">Append-only record of every price change — newest first, never edited in place.</p>
+            <h1 class="erp-h1">{{ $product ? 'Price History — '.$product->name : 'Price History' }}</h1>
+            <p class="erp-page-sub">
+                @if ($product)
+                    Every price this product has carried, newest first — append-only, never edited in place.
+                    The general history across all products stays one click away.
+                @else
+                    Append-only record of every price change — newest first, never edited in place.
+                @endif
+            </p>
         </div>
-        @if ($canBulk)
+        @if ($product)
+            <div class="d-flex gap-2">
+                @if ($perm('inventory.products.view'))
+                    <a class="btn btn-outline-secondary" href="{{ route('inventory.products.cost-history', $product) }}">
+                        <i class="bi bi-clock-history" aria-hidden="true"></i> Cost history
+                    </a>
+                @endif
+                @if ($perm('inventory.products.view'))
+                    <a class="btn btn-outline-secondary" href="{{ route('inventory.products.ledger', $product) }}">
+                        <i class="bi bi-journal-text" aria-hidden="true"></i> Stock ledger
+                    </a>
+                @endif
+                <a class="btn btn-light" href="{{ route('pricing.history') }}">All products</a>
+            </div>
+        @elseif ($canBulk)
             <a class="btn btn-primary" href="{{ route('pricing.bulk-update') }}">
                 <i class="bi bi-arrow-down-up" aria-hidden="true"></i> Bulk price update
             </a>
@@ -17,22 +38,42 @@
 
     <div class="erp-card mb-3">
         <form method="GET" class="row g-2 align-items-end">
-            <div class="col-md-3">
-                <label class="form-label" for="q">Product</label>
-                <input class="form-control" id="q" name="q" value="{{ $filters['q'] }}"
-                       placeholder="Code or name" maxlength="120">
-            </div>
-            <div class="col-md-2">
-                <label class="form-label" for="price_list_id">Price list</label>
-                <select class="form-select" id="price_list_id" name="price_list_id">
-                    <option value="">All lists</option>
-                    @foreach ($lists as $list)
-                        <option value="{{ $list->id }}" @selected($filters['price_list_id'] === $list->id)>
-                            {{ $list->code }} — {{ $list->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+            @unless ($product)
+                <div class="col-md-3">
+                    <label class="form-label" for="q">Product</label>
+                    <input class="form-control" id="q" name="q" value="{{ $filters['q'] }}"
+                           placeholder="Code or name" maxlength="120">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="price_list_id">Price list</label>
+                    <select class="form-select" id="price_list_id" name="price_list_id">
+                        <option value="">All lists</option>
+                        @foreach ($lists as $list)
+                            <option value="{{ $list->id }}" @selected($filters['price_list_id'] === $list->id)>
+                                {{ $list->code }} — {{ $list->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            @else
+                <div class="col-md-3">
+                    <label class="form-label">Product</label>
+                    <div class="form-control-plaintext">
+                        <code>{{ $product->code }}</code> {{ $product->name }}
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="price_list_id">Price list</label>
+                    <select class="form-select" id="price_list_id" name="price_list_id">
+                        <option value="">All lists</option>
+                        @foreach ($lists as $list)
+                            <option value="{{ $list->id }}" @selected($filters['price_list_id'] === $list->id)>
+                                {{ $list->code }} — {{ $list->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            @endunless
             <div class="col-md-2">
                 <label class="form-label" for="source">Source</label>
                 <select class="form-select" id="source" name="source">
@@ -61,7 +102,9 @@
                 <thead>
                     <tr>
                         <th>Changed at</th>
-                        <th>Product</th>
+                        @unless ($product)
+                            <th>Product</th>
+                        @endunless
                         <th>Price list</th>
                         <th class="text-end">Old price</th>
                         <th class="text-end">New price</th>
@@ -75,10 +118,12 @@
                     @forelse ($rows as $row)
                         <tr>
                             <td class="text-nowrap small">{{ $row->created_at->format('Y-m-d H:i') }}</td>
-                            <td>
-                                <code>{{ $row->product?->code ?? '—' }}</code>
-                                <div class="small text-muted">{{ $row->product?->name ?? 'Product removed' }}</div>
-                            </td>
+                            @unless ($product)
+                                <td>
+                                    <code>{{ $row->product?->code ?? '—' }}</code>
+                                    <div class="small text-muted">{{ $row->product?->name ?? 'Product removed' }}</div>
+                                </td>
+                            @endunless
                             <td class="small">{{ $row->priceList?->code ?? '—' }}</td>
                             <td class="text-end">{{ number_format((float) $row->old_price, 2) }}</td>
                             <td class="text-end fw-semibold">{{ number_format((float) $row->new_price, 2) }}</td>
@@ -111,7 +156,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="text-center text-muted py-4">No price changes recorded yet.</td>
+                            <td colspan="{{ $product ? 8 : 9 }}" class="text-center text-muted py-4">No price changes recorded yet.</td>
                         </tr>
                     @endforelse
                 </tbody>
