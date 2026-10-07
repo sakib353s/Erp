@@ -75,6 +75,9 @@ class SystemRoleSeeder extends Seeder
                 // purchase module's own create key is what drafts the order, so
                 // this desk never gains the power to raise paperwork alone.
                 'inventory.reorder.view', 'inventory.reorder.suggest',
+                // §04-59: what the goods travel in is a cost decision, so the
+                // desk that declares and retires packaging types is this one.
+                'inventory.packaging', 'inventory.packaging.manage',
                 'inventory.damage.create', 'inventory.loss.create',
                 'inventory.writeoffs.create', 'inventory.writeoffs.approve',
                 'inventory.counts.view', 'inventory.counts.create', 'inventory.counts.post',
@@ -143,6 +146,10 @@ class SystemRoleSeeder extends Seeder
                 // empty, so the desk is readable here — proposing a purchase and
                 // drafting one stay with the buyer (inventory.reorder.suggest).
                 'inventory.reorder.view',
+                // §04-59/60: this desk packs the orders, so it reads which types
+                // exist and what is left of them; declaring and retiring a type
+                // changes what everybody can use, so that stays with a manager.
+                'inventory.packaging',
                 // §04-38: the label on the shelf is read at this desk, so the
                 // register and its date corrections belong here first.
                 'inventory.batch.view', 'inventory.batch.manage',

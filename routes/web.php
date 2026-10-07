@@ -33,6 +33,7 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\InventoryReportController;
 use App\Http\Controllers\InventoryCountController;
 use App\Http\Controllers\InventoryDamageController;
+use App\Http\Controllers\InventoryPackagingController;
 use App\Http\Controllers\InventoryReservationController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\MaintenanceController;
@@ -1062,6 +1063,40 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::get('/app/reports/inventory/damage', [InventoryReportController::class, 'damage'])
         ->middleware('permission:inventory.reports.view')
         ->name('inventory.reports.damage');
+
+    // §04-62: the packaging report joins the stock report family — same window,
+    // same filters, same CSV, because it is the same kind of question.
+    Route::get('/app/reports/inventory/packaging', [InventoryReportController::class, 'packaging'])
+        ->middleware('permission:inventory.reports.view')
+        ->name('inventory.reports.packaging');
+
+    /* ---- §04-59/04-60/04-61: packaging as inventory, not just as a step in
+           dispatch. Types are declared and retired here; the stock and cost
+           screens read the same ledger and the same usage rows the sales desk
+           writes. Reading the register is inventory.packaging, writing it is the
+           manage key, and the two read-only screens keep the keys their figures
+           belong to — stock to stock.view, cost to reports.view. ---- */
+    Route::get('/app/inventory/packaging', [InventoryPackagingController::class, 'index'])
+        ->middleware('permission:inventory.packaging')
+        ->name('inventory.packaging.index');
+    Route::get('/app/inventory/packaging/stock', [InventoryPackagingController::class, 'stock'])
+        ->middleware('permission:inventory.stock.view')
+        ->name('inventory.packaging.stock');
+    Route::get('/app/inventory/packaging/cost', [InventoryPackagingController::class, 'cost'])
+        ->middleware('permission:inventory.reports.view')
+        ->name('inventory.packaging.cost');
+    Route::post('/app/inventory/packaging/types', [InventoryPackagingController::class, 'store'])
+        ->middleware('permission:inventory.packaging.manage')
+        ->name('inventory.packaging.types.store');
+    Route::put('/app/inventory/packaging/types/{packagingType}', [InventoryPackagingController::class, 'update'])
+        ->middleware('permission:inventory.packaging.manage')
+        ->name('inventory.packaging.types.update');
+    Route::post('/app/inventory/packaging/types/{packagingType}/toggle', [InventoryPackagingController::class, 'toggle'])
+        ->middleware('permission:inventory.packaging.manage')
+        ->name('inventory.packaging.types.toggle');
+    Route::delete('/app/inventory/packaging/types/{packagingType}', [InventoryPackagingController::class, 'destroy'])
+        ->middleware('permission:inventory.packaging.manage')
+        ->name('inventory.packaging.types.destroy');
 
     Route::get('/app/inventory/stock/opening', [InventoryController::class, 'createOpening'])
         ->middleware('permission:inventory.adjustments.create')

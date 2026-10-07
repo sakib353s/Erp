@@ -310,6 +310,10 @@ class CatalogImporter
         // alert list it judges, the desk that proposes, and the register of what
         // was decided. Settings live in the settings engine like every other
         // group, so the leaf points there rather than at a second screen.
+        'inventory > packaging > packaging types' => ['/app/inventory/packaging', 'inventory.packaging'],
+        'inventory > packaging > packaging stock' => ['/app/inventory/packaging/stock', 'inventory.stock.view'],
+        'inventory > packaging > packaging cost' => ['/app/inventory/packaging/cost', 'inventory.reports.view'],
+        'inventory > packaging > packaging reports' => ['/app/reports/inventory/packaging', 'inventory.reports.view'],
         'inventory > reorder > reorder alerts' => ['/app/inventory/stock/alerts?type=low', 'inventory.reorder.view'],
         'inventory > reorder > auto reorder' => ['/app/inventory/reorder-suggestions', 'inventory.reorder.view'],
         'inventory > reorder > auto po suggestion' => ['/app/inventory/reorder-suggestions', 'inventory.reorder.view'],

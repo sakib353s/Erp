@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Domain\Delivery\Services\PackagingService;
 use App\Domain\Inventory\Services\DamageService;
 use App\Domain\Inventory\StockDamageEntry;
 use App\Domain\Inventory\StockMovement;
@@ -22,6 +23,7 @@ class InventoryReportController extends Controller
     public function __construct(
         protected StockReportService $reports,
         protected DamageService $damage,
+        protected PackagingService $packaging,
     ) {}
 
     public function aging(Request $request): View|StreamedResponse
@@ -178,6 +180,50 @@ class InventoryReportController extends Controller
             ],
             'reasons' => StockDamageEntry::DAMAGE_REASONS + StockDamageEntry::LOSS_REASONS,
             'holdings' => $this->damage->compartmentHoldings(StockMovement::STATE_DAMAGED, $warehouseId),
+            'warehouses' => $this->reports->warehouses(),
+        ]);
+    }
+
+    /**
+     * Packaging consumption by month and type (§04-62). Money that leaves the
+     * business in cardboard is still money, and the question is always the same
+     * one: did this month cost more because we shipped more, or because a box
+     * got dearer? Both answers are on the row.
+     */
+    public function packaging(Request $request): View|StreamedResponse
+    {
+        $from = $request->filled('from') ? (string) $request->query('from') : now()->subMonths(3)->startOfMonth()->toDateString();
+        $to = $request->filled('to') ? (string) $request->query('to') : now()->toDateString();
+        $warehouseId = $request->filled('warehouse') ? (int) $request->query('warehouse') : null;
+        $search = trim((string) $request->query('q'));
+
+        $result = $this->packaging->report($from, $to, $warehouseId, $search === '' ? null : $search);
+
+        if ($this->wantsCsv($request)) {
+            return $this->csv('packaging-cost', $result['rows'], [
+                'Month', 'Code', 'Packaging', 'Quantity', 'Cost', 'Average unit cost', 'Orders packed',
+            ], fn ($row) => [
+                $row['period'],
+                $row['type']?->code,
+                $row['type']?->name,
+                $row['qty'],
+                $row['cost'],
+                $row['unit_cost'],
+                $row['orders'],
+            ], [
+                'Quantity' => $result['totals']['qty'],
+                'Cost' => $result['totals']['cost'],
+                'Orders packed' => $result['totals']['orders'],
+                'Types used' => $result['totals']['types'],
+                'Months' => $result['totals']['months'],
+            ]);
+        }
+
+        return view('inventory.reports.packaging', [
+            'rows' => $result['rows'],
+            'months' => $result['months'],
+            'totals' => $result['totals'],
+            'filters' => ['from' => $from, 'to' => $to, 'warehouse' => $warehouseId, 'q' => $search],
             'warehouses' => $this->reports->warehouses(),
         ]);
     }
