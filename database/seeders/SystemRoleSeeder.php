@@ -77,6 +77,9 @@ class SystemRoleSeeder extends Seeder
                 // §04-38: an expired shelf is a value decision, so the desk that
                 // judges writes and loss also reads the dates — and corrects one.
                 'inventory.batch.view', 'inventory.batch.manage',
+                // §04-12: the catalogue is maintained in bulk by the desk that
+                // owns masters, and taking a copy of it out is part of that job.
+                'inventory.products.import', 'inventory.products.export',
                 // §04-28: stock leaving the building on a transfer is the same
                 // kind of decision as stock being written off, so it is the same
                 // desk that signs it off — and never the person who raised it.

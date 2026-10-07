@@ -7,6 +7,7 @@ use App\Domain\Inventory\Actions\CreateProduct;
 use App\Domain\Inventory\Actions\DuplicateProduct;
 use App\Domain\Inventory\Product;
 use App\Domain\Inventory\StockBalance;
+use App\Domain\Inventory\Services\ProductImportService;
 use App\Domain\Inventory\Services\ProductService;
 use App\Domain\Masters\Brand;
 use App\Domain\Masters\ProductCategory;
@@ -17,6 +18,7 @@ use App\Http\Requests\UpdateProductRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Product catalogue admin (04-01…04-03). Domain rules live in ProductService.
@@ -105,6 +107,70 @@ class ProductController extends Controller
         return redirect()
             ->route('inventory.products.index')
             ->with('status', 'Product updated.');
+    }
+
+    /**
+     * The catalogue as CSV (§04-12). The columns are the import template's own,
+     * in its own order, so an export can be edited and imported straight back —
+     * that round trip is the point of an export in an ERP, not a report.
+     */
+    public function export(Request $request): StreamedResponse
+    {
+        $user = $request->user();
+
+        $data = $request->validate([
+            'q' => ['nullable', 'string', 'max:120'],
+            'status' => ['nullable', 'in:active,inactive'],
+        ]);
+
+        $search = trim((string) ($data['q'] ?? ''));
+
+        $query = Product::query()
+            ->where('company_id', $user->company_id)
+            ->with(['category:id,code', 'brand:id,code', 'unit:id,code'])
+            ->orderBy('sku');
+
+        if ($search !== '') {
+            $query->where(function ($q) use ($search) {
+                $q->where('sku', 'like', "%{$search}%")
+                    ->orWhere('code', 'like', "%{$search}%")
+                    ->orWhere('name', 'like', "%{$search}%");
+            });
+        }
+
+        if (($data['status'] ?? null) === 'active') {
+            $query->where('is_active', true);
+        } elseif (($data['status'] ?? null) === 'inactive') {
+            $query->where('is_active', false);
+        }
+
+        $products = $query->get();
+
+        return response()->streamDownload(function () use ($products): void {
+            $out = fopen('php://output', 'w');
+
+            fputcsv($out, ProductImportService::COLUMNS);
+
+            foreach ($products as $product) {
+                fputcsv($out, [
+                    $product->code,
+                    $product->sku,
+                    $product->name,
+                    $product->category?->code,
+                    $product->brand?->code,
+                    $product->unit?->code,
+                    $product->barcode,
+                    $product->description,
+                    $product->cost_method,
+                    number_format((float) $product->standard_cost, 4, '.', ''),
+                    $product->is_stocked ? '1' : '0',
+                    $product->track_batch ? '1' : '0',
+                    $product->is_active ? '1' : '0',
+                ]);
+            }
+
+            fclose($out);
+        }, 'products-'.now()->format('Y-m-d').'.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
     }
 
     /** The copy form (§04-04) — prefilled with an identity that is actually free. */

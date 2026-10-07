@@ -8,11 +8,26 @@
             <h1 class="erp-h1">Products</h1>
             <p class="erp-page-sub">Stock-managed catalogue. SKU is unique per company.</p>
         </div>
-        @if ($perm('inventory.products.create'))
-            <a class="btn btn-primary" href="{{ route('inventory.products.create') }}">
-                <i class="bi bi-plus-lg" aria-hidden="true"></i> Add product
-            </a>
-        @endif
+        <div class="d-flex flex-wrap gap-2">
+            @if ($perm('inventory.products.export'))
+                {{-- §04-12: the export carries the filters you are looking at, and its
+                     columns are the import template's own — export, edit, import back. --}}
+                <a class="btn btn-outline-secondary"
+                   href="{{ route('inventory.products.export', array_filter(['q' => $q, 'status' => $status])) }}">
+                    <i class="bi bi-download" aria-hidden="true"></i> Export CSV
+                </a>
+            @endif
+            @if ($perm('inventory.products.import'))
+                <a class="btn btn-outline-secondary" href="{{ route('inventory.products.import') }}">
+                    <i class="bi bi-upload" aria-hidden="true"></i> Import CSV
+                </a>
+            @endif
+            @if ($perm('inventory.products.create'))
+                <a class="btn btn-primary" href="{{ route('inventory.products.create') }}">
+                    <i class="bi bi-plus-lg" aria-hidden="true"></i> Add product
+                </a>
+            @endif
+        </div>
     </div>
 
     <div class="erp-kpi-grid mb-3">

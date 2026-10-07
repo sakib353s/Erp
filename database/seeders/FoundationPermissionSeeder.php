@@ -188,6 +188,8 @@ class FoundationPermissionSeeder extends Seeder
             ['inventory', 'products', 'view', 'inventory.products.view', 'View products'],
             ['inventory', 'products', 'create', 'inventory.products.create', 'Create products'],
             ['inventory', 'products', 'edit', 'inventory.products.edit', 'Edit products'],
+            ['inventory', 'products', 'import', 'inventory.products.import', 'Import the product catalogue (CSV)'],
+            ['inventory', 'products', 'export', 'inventory.products.export', 'Export the product catalogue (CSV)'],
             ['inventory', 'stock', 'view', 'inventory.stock.view', 'View stock overview'],
             ['inventory', 'adjustments', 'view', 'inventory.adjustments.view', 'View stock adjustments'],
             ['inventory', 'adjustments', 'create', 'inventory.adjustments.create', 'Create stock adjustments / opening'],

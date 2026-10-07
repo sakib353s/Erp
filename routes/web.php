@@ -48,6 +48,7 @@ use App\Http\Controllers\PriceHistoryController;
 use App\Http\Controllers\PriceListController;
 use App\Http\Controllers\PricingRuleController;
 use App\Http\Controllers\ProductCostHistoryController;
+use App\Http\Controllers\ProductImportController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProofOfDeliveryController;
@@ -813,6 +814,28 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::get('/app/inventory/movements', [InventoryController::class, 'movements'])
         ->middleware('permission:inventory.ledger.view')
         ->name('inventory.movements');
+    // §04-12 — the catalogue as CSV, in and out. The import screen and its
+    // history sit behind one key; reading the catalogue out has its own, because
+    // taking a copy of the catalogue is a different permission from changing it.
+    Route::get('/app/inventory/products/import', [ProductImportController::class, 'create'])
+        ->middleware('permission:inventory.products.import')
+        ->name('inventory.products.import');
+    Route::post('/app/inventory/products/import', [ProductImportController::class, 'store'])
+        ->middleware('permission:inventory.products.import')
+        ->name('inventory.products.import.store');
+    Route::get('/app/inventory/products/import/template', [ProductImportController::class, 'template'])
+        ->middleware('permission:inventory.products.import')
+        ->name('inventory.products.import.template');
+    Route::get('/app/inventory/products/import/history', [ProductImportController::class, 'history'])
+        ->middleware('permission:inventory.products.import')
+        ->name('inventory.products.import.history');
+    Route::get('/app/inventory/products/import/{import}', [ProductImportController::class, 'show'])
+        ->middleware('permission:inventory.products.import')
+        ->name('inventory.products.import.show');
+    Route::get('/app/inventory/products/export', [ProductController::class, 'export'])
+        ->middleware('permission:inventory.products.export')
+        ->name('inventory.products.export');
+
     // §04-04 — a copy of the catalogue row, never a copy of the stock.
     Route::get('/app/inventory/products/{product}/duplicate', [ProductController::class, 'duplicateForm'])
         ->middleware('permission:inventory.products.create')
