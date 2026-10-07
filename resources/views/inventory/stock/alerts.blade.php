@@ -24,6 +24,9 @@
                 <a class="btn btn-outline-secondary" href="{{ route('inventory.reorder.index') }}">
                     <i class="bi bi-sliders" aria-hidden="true"></i> Reorder levels
                 </a>
+                <a class="btn btn-outline-secondary" href="{{ route('inventory.reorder.suggestions.index') }}">
+                    <i class="bi bi-clipboard-check" aria-hidden="true"></i> Reorder desk
+                </a>
             @endif
             @if ($perm('inventory.ledger.view'))
                 <a class="btn btn-outline-secondary" href="{{ route('inventory.movements') }}">
@@ -79,6 +82,8 @@
                 <th class="erp-th-num">On hand</th>
                 <th class="erp-th-num">Reserved</th>
                 <th class="erp-th-num">Available</th>
+                <th class="erp-th-num">Avg / day</th>
+                <th class="erp-th-num">Cover</th>
                 <th class="erp-th-num">Minimum</th>
                 <th class="erp-th-num">Maximum</th>
                 <th class="erp-th-num">{{ $type === 'over' ? 'Over by' : 'Short by' }}</th>
@@ -97,6 +102,16 @@
                     <td data-label="On hand" class="erp-td-num">{{ number_format($row['on_hand'], 4) }}</td>
                     <td data-label="Reserved" class="erp-td-num erp-td-muted">{{ number_format($row['reserved'], 4) }}</td>
                     <td data-label="Available" class="erp-td-num">{{ number_format($row['available'], 4) }}</td>
+                    <td data-label="Avg / day" class="erp-td-num">
+                        @if ($row['avg_daily_demand'] > 0)
+                            {{ number_format($row['avg_daily_demand'], 4) }}
+                        @else
+                            <span class="erp-td-muted">no movement</span>
+                        @endif
+                    </td>
+                    <td data-label="Cover" class="erp-td-num erp-td-muted">
+                        {{ $row['days_cover'] !== null ? $row['days_cover'].' d' : '—' }}
+                    </td>
                     <td data-label="Minimum" class="erp-td-num erp-td-muted">{{ number_format((float) $row['policy']->min_level, 4) }}</td>
                     <td data-label="Maximum" class="erp-td-num erp-td-muted">{{ number_format((float) $row['policy']->max_level, 4) }}</td>
                     <td data-label="{{ $type === 'over' ? 'Over by' : 'Short by' }}" class="erp-td-num erp-cell-strong">
@@ -132,7 +147,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="10">
+                    <td colspan="12">
                         <x-ui.empty :icon="$labels[$type][2]"
                                     title="Nothing in this list"
                                     :text="$filters['q'] !== '' || $filters['warehouse']
@@ -147,7 +162,9 @@
     <div class="erp-help mt-2">
         Every row is judged against the policy for that product in that warehouse — a warehouse-specific rule wins over the
         company-wide one. Products without a policy are deliberately absent: an alert is only raised where somebody has said
-        what "too low" means.
+        what "too low" means. <strong>Avg / day</strong> is what actually left this shelf over the last {{ $demandDays }} days —
+        real outbound movements only, so a transfer, a write-off or a correction cannot make a product look popular — and
+        <strong>Cover</strong> is how long today's stock lasts at that rate.
     </div>
 
     <x-ui.related-pages />

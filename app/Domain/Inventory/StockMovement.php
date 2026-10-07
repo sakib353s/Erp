@@ -69,6 +69,24 @@ class StockMovement extends Model
     ];
 
     /**
+     * Movements that count as **demand** on a shelf (§04-55): what left because
+     * somebody wanted it. The direction vocabulary above is about which way the
+     * quantity moves; this one is about what the movement *means*.
+     *
+     * Deliberately absent: `PURCHASE_RETURN_OUT` (goods went back to a supplier
+     * because they were wrong — not a recurring need), `DAMAGE_OUT` (the shelf
+     * agreed to hold a loss), `WRITE_OFF` (value decided against), and every
+     * adjustment or transfer (paper and geography, not appetite). A shelf that
+     * empties because stock was thrown away does not need buying; it needs
+     * investigating, and a demand figure that quietly included it would hide
+     * exactly that.
+     */
+    public const DEMAND_TYPES = [
+        self::TYPE_SALES_OUT,
+        self::TYPE_PACK_CONSUME,
+    ];
+
+    /**
      * Movements that only change WHICH COMPARTMENT goods sit in — no value
      * enters or leaves the company, so no valuation layer is created or
      * consumed. `on_hand` here means sellable stock: damaged and quarantined

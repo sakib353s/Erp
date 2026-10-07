@@ -635,6 +635,33 @@ return [
                 ],
             ],
 
+            'reorder' => [
+                'label' => 'Reorder Settings',
+                'description' => 'How the reorder desk measures demand and what it is allowed to do with it.',
+                'fields' => [
+                    'demand_window_days' => [
+                        'label' => 'Measure demand over this many days',
+                        'type' => 'number',
+                        'default' => 30,
+                        'min' => 7,
+                        'max' => 365,
+                        'help' => 'The window the average day is measured over, and the window the alerts desk shows as days of cover. A shop that sells weekly and a counter that sells hourly need different answers to the same question.',
+                    ],
+                    'suggest_lead_time' => [
+                        'label' => 'Let demand lead the policy',
+                        'type' => 'boolean',
+                        'default' => true,
+                        'help' => 'On: a proposal is sized so the safety stock is still on the shelf when the order lands — average day × the policy\'s lead time. Off: the proposal falls back to the quantity typed on the policy itself, and demand is shown but not acted on.',
+                    ],
+                    'strict_auto_mode' => [
+                        'label' => 'Strict auto mode (hold every proposal for review)',
+                        'type' => 'boolean',
+                        'default' => false,
+                        'help' => 'Off, which is the default, means a person presses the button that drafts the purchase order — the desk proposes, it never buys. On, drafting is refused outright until a review step exists, because a switch labelled "automatic" must never quietly order anything.',
+                    ],
+                ],
+            ],
+
             'appearance' => [
                 'label' => 'Appearance',
                 'description' => 'Workspace identity and default reading density.',

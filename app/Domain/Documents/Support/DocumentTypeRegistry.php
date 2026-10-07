@@ -45,6 +45,9 @@ final class DocumentTypeRegistry
         // other — the number is how the floor refers to the walk.
         ['code' => 'pick_list', 'type_group' => 'inventory', 'name' => 'Pick List', 'printed_title' => 'PICK LIST'],
         ['code' => 'putaway_list', 'type_group' => 'inventory', 'name' => 'Putaway List', 'printed_title' => 'PUTAWAY LIST'],
+        // §04-56: a reorder suggestion is a numbered document too — the number is
+        // how the desk and the purchase order it produced refer to each other.
+        ['code' => 'reorder_suggestion', 'type_group' => 'inventory', 'name' => 'Reorder Suggestion', 'printed_title' => 'REORDER SUGGESTION'],
 
         // ---- Accounting
         ['code' => 'journal_voucher', 'type_group' => 'accounting', 'name' => 'Journal Voucher', 'printed_title' => 'JOURNAL VOUCHER'],
@@ -82,6 +85,7 @@ final class DocumentTypeRegistry
         'stock_count' => 'SC',
         'pick_list' => 'PL',
         'putaway_list' => 'PA',
+        'reorder_suggestion' => 'RS',
         'payroll' => 'PAY',
     ];
 

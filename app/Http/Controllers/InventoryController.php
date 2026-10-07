@@ -404,6 +404,9 @@ class InventoryController extends Controller
             'rows' => $result['rows'],
             'counts' => $result['counts'],
             'warehouses' => Warehouse::query()->orderBy('name')->get(['id', 'name', 'code']),
+            // §04-55: "is this urgent?" needs demand as well as a level — the
+            // window is named on screen so the average day can be argued with.
+            'demandDays' => $this->reorder->demandWindowDays(),
         ]);
     }
 

@@ -306,6 +306,17 @@ class CatalogImporter
         'inventory > stock > out of stock' => ['/app/inventory/stock/alerts?type=out', 'inventory.reorder.view'],
         'inventory > stock > overstock alert' => ['/app/inventory/stock/alerts?type=over', 'inventory.reorder.view'],
         'inventory > stock > minimum stock level' => ['/app/inventory/reorder-levels', 'inventory.reorder.view'],
+        // §04-55/56/58: the reorder desk is the catalogue's Reorder branch — the
+        // alert list it judges, the desk that proposes, and the register of what
+        // was decided. Settings live in the settings engine like every other
+        // group, so the leaf points there rather than at a second screen.
+        'inventory > reorder > reorder alerts' => ['/app/inventory/stock/alerts?type=low', 'inventory.reorder.view'],
+        'inventory > reorder > auto reorder' => ['/app/inventory/reorder-suggestions', 'inventory.reorder.view'],
+        'inventory > reorder > auto po suggestion' => ['/app/inventory/reorder-suggestions', 'inventory.reorder.view'],
+        'inventory > reorder > reorder level setup' => ['/app/inventory/reorder-levels', 'inventory.reorder.view'],
+        'inventory > reorder > reorder quantity setup' => ['/app/inventory/reorder-levels', 'inventory.reorder.view'],
+        'inventory > reorder > reorder history' => ['/app/inventory/reorder-history', 'inventory.reorder.view'],
+        'inventory > reorder > reorder settings' => ['/app/settings/reorder', 'settings.view'],
         // §04-31: a count sheet is opened here; "Cycle Count" starts a subset sheet.
         'inventory > stock > stock count' => ['/app/inventory/counts', 'inventory.counts.view'],
         'inventory > stock > cycle count' => ['/app/inventory/counts/create?scope=cycle', 'inventory.counts.create'],

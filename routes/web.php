@@ -46,6 +46,7 @@ use App\Http\Controllers\PosSettingsController;
 use App\Http\Controllers\PriceCompareController;
 use App\Http\Controllers\PriceHistoryController;
 use App\Http\Controllers\PickListController;
+use App\Http\Controllers\ReorderSuggestionController;
 use App\Http\Controllers\PriceListController;
 use App\Http\Controllers\PricingRuleController;
 use App\Http\Controllers\PutawayListController;
@@ -927,6 +928,28 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::get('/app/inventory/reorder-levels', [InventoryController::class, 'reorderLevels'])
         ->middleware('permission:inventory.reorder.view')
         ->name('inventory.reorder.index');
+
+    /* ---- §04-55/56/58: the reorder desk, its proposals and their history.
+           Reading the desk is the view key it always was; writing a proposal
+           down and turning one into a purchase order needs the suggest key —
+           and drafting an order needs the purchase module's create key too, so
+           a key that only watched the shelves cannot raise paperwork with it.
+           The history is a GET with a literal URI before the wildcard. ---- */
+    Route::get('/app/inventory/reorder-suggestions', [ReorderSuggestionController::class, 'index'])
+        ->middleware('permission:inventory.reorder.view')
+        ->name('inventory.reorder.suggestions.index');
+    Route::get('/app/inventory/reorder-history', [ReorderSuggestionController::class, 'history'])
+        ->middleware('permission:inventory.reorder.view')
+        ->name('inventory.reorder.history');
+    Route::post('/app/inventory/reorder-suggestions', [ReorderSuggestionController::class, 'store'])
+        ->middleware('permission:inventory.reorder.suggest')
+        ->name('inventory.reorder.suggestions.store');
+    Route::post('/app/inventory/reorder-suggestions/{suggestion}/accept', [ReorderSuggestionController::class, 'accept'])
+        ->middleware('permission:inventory.reorder.suggest,purchase.orders.create')
+        ->name('inventory.reorder.suggestions.accept');
+    Route::post('/app/inventory/reorder-suggestions/{suggestion}/dismiss', [ReorderSuggestionController::class, 'dismiss'])
+        ->middleware('permission:inventory.reorder.suggest')
+        ->name('inventory.reorder.suggestions.dismiss');
     Route::post('/app/inventory/reorder-levels', [InventoryController::class, 'storeReorderLevel'])
         ->middleware('permission:inventory.reorder.configure')
         ->name('inventory.reorder.store');

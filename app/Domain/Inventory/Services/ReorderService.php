@@ -8,6 +8,8 @@ use App\Domain\Foundation\Warehouse;
 use App\Domain\Inventory\Product;
 use App\Domain\Inventory\ReorderPolicy;
 use App\Domain\Inventory\StockBalance;
+use App\Domain\Inventory\StockMovement;
+use App\Domain\Settings\Services\SettingService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
@@ -24,13 +26,17 @@ use RuntimeException;
  *     the immutable ledger (the balance cache, which replays from it);
  *   · the thresholds have to make sense together (minimum ≤ reorder point ≤
  *     maximum, safety ≤ reorder point), so a bad policy is refused with the
- *     numbers in the message instead of producing noise for ever after.
+ *     numbers in the message instead of producing noise for ever after;
+ *   · and the one input the alerts desk was missing (§04-55) is **demand**:
+ *     what actually left the shelf, measured over a window, so "days of cover"
+ *     is a fact about this warehouse rather than a guess about it.
  */
 class ReorderService
 {
     public function __construct(
         protected TenantContext $context,
         protected AuditRecorder $audit,
+        protected SettingService $settings,
     ) {}
 
     /**
@@ -221,6 +227,12 @@ class ReorderService
             }))
             ->get();
 
+        $demandDays = $this->demandWindowDays();
+        $demand = $this->demandIndex(
+            $balances->map(fn (StockBalance $balance) => [(int) $balance->product_id, $balance->warehouse_id])->all(),
+            $demandDays,
+        );
+
         $counts = ['low' => 0, 'out' => 0, 'over' => 0];
         $rows = [];
 
@@ -238,6 +250,7 @@ class ReorderService
             }
 
             $onHand = (float) $balance->on_hand;
+            $avgDaily = round((float) ($demand[$product->id.':'.$balance->warehouse_id]['avg_daily'] ?? 0), 4);
             $min = (float) $policy->min_level;
             $max = (float) $policy->max_level;
 
@@ -268,6 +281,13 @@ class ReorderService
                 'state' => $state,
                 'shortage' => $state === 'out' || $state === 'low' ? round(max(0, $min - $onHand), 4) : 0.0,
                 'suggested_qty' => $this->suggestedQty($policy, $onHand),
+                // §04-55: the inputs behind "is this urgent?" — what a day
+                // actually takes off this shelf, over a window somebody chose,
+                // and how long today's stock lasts at that rate.
+                'avg_daily_demand' => $avgDaily,
+                'demand_days' => $demandDays,
+                'last_out' => $demand[$product->id.':'.$balance->warehouse_id]['last_out'] ?? null,
+                'days_cover' => $avgDaily > 0 ? round(($onHand - (float) $balance->reserved) / $avgDaily, 1) : null,
                 'scope' => $policy->warehouse_id === null ? 'company-wide rule' : 'this warehouse',
             ];
         }
@@ -275,6 +295,62 @@ class ReorderService
         usort($rows, fn ($a, $b) => ($b['shortage'] <=> $a['shortage']) ?: strcmp((string) $a['product']->sku, (string) $b['product']->sku));
 
         return ['rows' => $rows, 'counts' => $counts];
+    }
+
+    /**
+     * How many days of outbound history decide "average demand". The window is a
+     * setting (§04-58) because a shop that sells weekly and a counter that sells
+     * hourly need different answers to the same question.
+     */
+    public function demandWindowDays(): int
+    {
+        return max(7, min(365, $this->settings->getInt('reorder', 'demand_window_days', 30)));
+    }
+
+    /**
+     * What actually left each shelf, per product per warehouse, over the window.
+     *
+     * Only real outbound movements count: a transfer to another warehouse is not
+     * a sale, and neither is a write-off — a shelf that empties because stock was
+     * thrown away does not need buying, it needs investigating. Which types count
+     * is config, so the rule is readable rather than buried in a `where`.
+     *
+     * @param  array<int, array{0: int, 1: int|null}>  $pairs
+     * @return array<string, array{avg_daily: float, out_qty: float, days: int, last_out: ?string}>
+     */
+    public function demandIndex(array $pairs, ?int $windowDays = null): array
+    {
+        if ($pairs === []) {
+            return [];
+        }
+
+        $companyId = $this->context->companyId() ?? abort(500, 'No company context for demand.');
+        $days = $windowDays ?? $this->demandWindowDays();
+        $since = now()->subDays($days)->startOfDay();
+
+        $productIds = array_values(array_unique(array_map(fn ($pair) => (int) $pair[0], $pairs)));
+
+        $rows = StockMovement::query()
+            ->where('company_id', $companyId)
+            ->whereIn('movement_type', StockMovement::DEMAND_TYPES)
+            ->whereIn('product_id', $productIds)
+            ->where('occurred_at', '>=', $since)
+            ->groupBy('product_id', 'warehouse_id')
+            ->selectRaw('product_id, warehouse_id, sum(abs(qty_signed)) as out_qty, max(occurred_at) as last_out')
+            ->get();
+
+        $index = [];
+
+        foreach ($rows as $row) {
+            $index[$row->product_id.':'.($row->warehouse_id ?? 0)] = [
+                'avg_daily' => round(((float) $row->out_qty) / $days, 4),
+                'out_qty' => round((float) $row->out_qty, 4),
+                'days' => $days,
+                'last_out' => $row->last_out !== null ? (string) $row->last_out : null,
+            ];
+        }
+
+        return $index;
     }
 
     /** What to order: the policy's own quantity, else enough to reach the maximum. */

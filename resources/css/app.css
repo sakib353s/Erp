@@ -1427,6 +1427,36 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 
 .erp-status-lg { font-size: 12.5px; padding: 4px 12px; }
 
+/* ------------------------------------------------- 11b. inline decision details */
+/* A decision that needs two fields (a supplier, a reason) opens inside the row
+   it belongs to rather than pushing a modal over the register — the numbers
+   being judged stay on screen while the answer is typed. */
+.erp-lookbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--surface-1);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md, 11px);
+}
+
+.erp-details { display: inline-block; text-align: left; }
+.erp-details > summary { list-style: none; cursor: pointer; }
+.erp-details > summary::-webkit-details-marker { display: none; }
+.erp-details[open] { position: relative; }
+.erp-details-body {
+    margin-top: 8px;
+    padding: 12px;
+    min-width: 260px;
+    background: var(--surface-1);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md, 10px);
+    box-shadow: var(--shadow-sm, 0 8px 24px rgba(15, 23, 42, .08));
+}
+
 /* ---------------------------------------------------------------- 12. tables */
 .erp-table-shell {
     background: var(--surface-1);

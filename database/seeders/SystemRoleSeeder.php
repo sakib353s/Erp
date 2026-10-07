@@ -71,6 +71,10 @@ class SystemRoleSeeder extends Seeder
                 // approves write-offs, and the maker-checker rule still applies.
                 'inventory.reservations.view', 'inventory.reservations.manage',
                 'inventory.reports.view',
+                // §04-55/56: deciding what to buy is a manager's call — and the
+                // purchase module's own create key is what drafts the order, so
+                // this desk never gains the power to raise paperwork alone.
+                'inventory.reorder.view', 'inventory.reorder.suggest',
                 'inventory.damage.create', 'inventory.loss.create',
                 'inventory.writeoffs.create', 'inventory.writeoffs.approve',
                 'inventory.counts.view', 'inventory.counts.create', 'inventory.counts.post',
@@ -113,6 +117,10 @@ class SystemRoleSeeder extends Seeder
                 'inventory.products.view', 'inventory.stock.view',
                 // §04-38: a buyer has to see what is about to expire to buy it again.
                 'inventory.batch.view',
+                // §04-55/56: this is the buyer's actual job — the desk says what
+                // is short and why, and turning a proposal into a purchase order
+                // is the same act as raising one by hand.
+                'inventory.reorder.view', 'inventory.reorder.suggest',
             ]],
             ['slug' => 'storekeeper', 'name' => 'Store keeper', 'description' => 'Receiving desk: books goods in against approved orders, posts them to stock and records what breaks.', 'keys' => [
                 'dashboard.view', 'search.view',
@@ -131,6 +139,10 @@ class SystemRoleSeeder extends Seeder
                 // §04-31: the storekeeper counts the shelves; posting the
                 // difference into stock is the manager's signature.
                 'inventory.counts.view', 'inventory.counts.create',
+                // §04-55: the storekeeper is the person who notices the shelf is
+                // empty, so the desk is readable here — proposing a purchase and
+                // drafting one stay with the buyer (inventory.reorder.suggest).
+                'inventory.reorder.view',
                 // §04-38: the label on the shelf is read at this desk, so the
                 // register and its date corrections belong here first.
                 'inventory.batch.view', 'inventory.batch.manage',
