@@ -46,8 +46,12 @@
                 <div class="col-md-4">
                     <label class="form-label" for="sku">SKU</label>
                     <input class="form-control" id="sku" name="sku" value="{{ old('sku', $product->sku) }}"
-                           required maxlength="64">
+                           @if (! $skuFromCode) required @endif maxlength="64">
                     @error('sku') <div class="text-danger small">{{ $message }}</div> @enderror
+                    @if ($skuFromCode)
+                        {{-- §04-20: the shop chose to let a blank SKU mean "use the code". --}}
+                        <div class="form-text">Left blank, the SKU becomes the product code.</div>
+                    @endif
                 </div>
                 <div class="col-md-4">
                     <label class="form-label" for="barcode">Barcode</label>

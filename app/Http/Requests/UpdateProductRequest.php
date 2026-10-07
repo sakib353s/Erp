@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Domain\Settings\Services\SettingService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -10,6 +11,24 @@ class UpdateProductRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
+    }
+
+    /**
+     * §04-20: the same rule on edit as on create. The edit form stops marking the
+     * SKU required when the shop lets a blank SKU mean "use the code", so the
+     * request has to honour that rather than reject the page's own form.
+     */
+    protected function prepareForValidation(): void
+    {
+        if (! app(SettingService::class)->getBool('inventory', 'sku_from_code', false)) {
+            return;
+        }
+
+        if (trim((string) $this->input('sku')) !== '') {
+            return;
+        }
+
+        $this->merge(['sku' => $this->input('code')]);
     }
 
     public function rules(): array

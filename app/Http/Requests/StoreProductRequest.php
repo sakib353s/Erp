@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Domain\Settings\Services\SettingService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -10,6 +11,25 @@ class StoreProductRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
+    }
+
+    /**
+     * §04-20: with `inventory.sku_from_code` on, a product saved without a SKU is
+     * labelled with its code. Derived here rather than in the controller so the
+     * rule below still means what it says — the SKU is required, and this is the
+     * one case where the request itself can supply it.
+     */
+    protected function prepareForValidation(): void
+    {
+        if (! app(SettingService::class)->getBool('inventory', 'sku_from_code', false)) {
+            return;
+        }
+
+        if (trim((string) $this->input('sku')) !== '') {
+            return;
+        }
+
+        $this->merge(['sku' => $this->input('code')]);
     }
 
     public function rules(): array

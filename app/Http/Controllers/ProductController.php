@@ -12,6 +12,7 @@ use App\Domain\Inventory\Services\ProductService;
 use App\Domain\Masters\Brand;
 use App\Domain\Masters\ProductCategory;
 use App\Domain\Masters\Unit;
+use App\Domain\Settings\Services\SettingService;
 use App\Http\Requests\DuplicateProductRequest;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
@@ -29,6 +30,7 @@ class ProductController extends Controller
         protected ProductService $products,
         protected CreateProduct $createProduct,
         protected DuplicateProduct $duplicateProduct,
+        protected SettingService $settings,
     ) {}
 
     public function index(Request $request): View
@@ -62,13 +64,30 @@ class ProductController extends Controller
     public function create(): View
     {
         return view('inventory.products.form', [
-            'product' => new Product(['cost_method' => 'wac', 'is_stocked' => true, 'is_active' => true]),
+            // §04-20: the shop's own defaults, not this file's opinion. A bad
+            // stored method falls back rather than preselected something the
+            // select cannot show.
+            'product' => new Product([
+                'cost_method' => $this->defaultCostMethod(),
+                'is_stocked' => $this->settings->getBool('inventory', 'default_is_stocked', true),
+                'track_batch' => $this->settings->getBool('inventory', 'default_track_batch', false),
+                'is_active' => true,
+            ]),
             'mode' => 'create',
             'categories' => ProductCategory::query()->orderBy('name')->get(),
             'brands' => Brand::query()->orderBy('name')->get(),
             'units' => Unit::query()->orderBy('name')->get(),
             'costMethods' => Product::COST_METHODS,
+            'skuFromCode' => $this->settings->getBool('inventory', 'sku_from_code', false),
         ]);
+    }
+
+    /** The configured default cost method, or WAC when what is stored is not one. */
+    protected function defaultCostMethod(): string
+    {
+        $configured = (string) $this->settings->get('inventory', 'default_cost_method', 'wac');
+
+        return in_array($configured, Product::COST_METHODS, true) ? $configured : 'wac';
     }
 
     public function store(StoreProductRequest $request): RedirectResponse
@@ -93,6 +112,7 @@ class ProductController extends Controller
             'brands' => Brand::query()->orderBy('name')->get(),
             'units' => Unit::query()->orderBy('name')->get(),
             'costMethods' => Product::COST_METHODS,
+            'skuFromCode' => $this->settings->getBool('inventory', 'sku_from_code', false),
         ]);
     }
 

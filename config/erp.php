@@ -580,6 +580,31 @@ return [
                         'max' => 100000000,
                         'help' => 'A stock transfer worth at least this much waits for approval and cannot be dispatched until a second person clears it. 0 dispatches every transfer as it always did.',
                     ],
+                    'default_cost_method' => [
+                        'label' => 'Default cost method for a new product',
+                        'type' => 'select',
+                        'options' => ['fifo', 'lifo', 'wac', 'standard'],
+                        'default' => 'wac',
+                        'help' => 'Preselects the valuation method on the add-product form. It is only a default: the form still decides per product, and changing a method never rewrites a layer that was already posted.',
+                    ],
+                    'default_is_stocked' => [
+                        'label' => 'New products are stock-managed by default',
+                        'type' => 'boolean',
+                        'default' => true,
+                        'help' => 'Turn this off if you mostly sell services through the catalogue; the product form still lets you override it per product.',
+                    ],
+                    'default_track_batch' => [
+                        'label' => 'New products track batches by default',
+                        'type' => 'boolean',
+                        'default' => false,
+                        'help' => 'For a pharmacy or a food business this is usually on: a batch-tracked product must name its batch on every receipt, so its expiry date can be watched.',
+                    ],
+                    'sku_from_code' => [
+                        'label' => 'Leave SKU blank to use the product code',
+                        'type' => 'boolean',
+                        'default' => false,
+                        'help' => 'When on, a product saved without a SKU is labelled with its code instead. The SKU is what the ledger shows, so a short code makes a tidy stock ledger; when off, the form insists on a SKU of its own.',
+                    ],
                     'fefo_picking' => [
                         'label' => 'Issue batch-tracked stock expiry-first (FEFO)',
                         'type' => 'boolean',
