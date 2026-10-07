@@ -44,31 +44,48 @@
     --ink-3: #818b9c;
     --ink-4: #a8b0bd;
 
-    /* Accent — one configurable colour. Default: deep teal (never purple). */
-    --accent: #0f766e;
-    --accent-hover: #0c625c;
-    --accent-press: #0a524d;
-    --accent-soft: #eefaf7;
-    --accent-soft-2: #d9f2ed;
-    --accent-ink: #0a4f4a;
+    /* Accent — one configurable colour, vivid but never garish.
+       Default: vibrant emerald. Purple, indigo, violet and pink are NOT
+       available anywhere in the system (brand rule + §18.1). */
+    --accent: #00a97f;
+    --accent-2: #06b6d4;          /* neighbour hue, only for gradients/marks */
+    --accent-hover: #00926d;
+    --accent-press: #007a5b;
+    --accent-soft: #e7fbf4;
+    --accent-soft-2: #ccf6e7;
+    --accent-ink: #04543f;
     --accent-contrast: #ffffff;
-    --accent-ring: rgba(15, 118, 110, .22);
+    --accent-ring: rgba(0, 169, 127, .26);
+    --accent-grad: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 115%);
 
     /* Semantic — status meaning only, never decoration */
-    --ok: #0f7b4f;
-    --ok-soft: #ecfdf3;
-    --ok-line: #b7e6cd;
+    --ok: #047857;
+    --ok-soft: #ecfdf5;
+    --ok-line: #a7f3d0;
     --warn: #b45309;
-    --warn-soft: #fffaeb;
-    --warn-line: #f5dCA0;
-    --danger: #b42318;
+    --warn-soft: #fffbeb;
+    --warn-line: #fde68a;
+    --danger: #d92d20;
     --danger-soft: #fef3f2;
-    --danger-line: #f4c7c3;
-    --info: #0f6d8c;
-    --info-soft: #eff8fb;
-    --info-line: #bfe3ef;
+    --danger-line: #fecaca;
+    --info: #0284c7;
+    --info-soft: #f0f9ff;
+    --info-line: #bae6fd;
     --neutral-soft: #f2f4f7;
     --neutral-ink: #475467;
+
+    /* Data-visualisation hues — RGB-vibrant, colour-blind-distinguishable,
+       and free of the forbidden violet/pink family. */
+    --c1: #00a97f;  /* emerald   */
+    --c2: #0a6ed1;  /* azure     */
+    --c3: #f59e0b;  /* amber     */
+    --c4: #ea580c;  /* tangerine */
+    --c5: #0891b2;  /* cyan      */
+    --c6: #7cb518;  /* lime      */
+    --c7: #d92d20;  /* red       */
+    --c8: #475467;  /* slate     */
+    --c9: #b7791f;  /* bronze    */
+    --c10: #14b8a6; /* teal      */
 
     /* Elevation — restrained */
     --shadow-xs: 0 1px 2px rgba(13, 17, 23, .04);
@@ -112,7 +129,7 @@
     --bs-body-bg: var(--canvas);
     --bs-border-color: var(--line);
     --bs-primary: var(--accent);
-    --bs-primary-rgb: 15, 118, 110;
+    --bs-primary-rgb: 0, 169, 127;
     --bs-link-color: var(--accent);
     --bs-link-hover-color: var(--accent-hover);
     --bs-focus-ring-color: var(--accent-ring);
@@ -121,38 +138,44 @@
     --bs-border-radius-lg: var(--r-lg);
 }
 
-/* Alternate accents (settings-driven, §18.1) — all non-purple by construction */
-[data-accent="graphite"] {
-    --accent: #1f2937;
-    --accent-hover: #111827;
-    --accent-press: #0b1220;
-    --accent-soft: #f3f4f6;
-    --accent-soft-2: #e5e7eb;
-    --accent-ink: #111827;
-    --accent-ring: rgba(31, 41, 55, .2);
-    --bs-primary-rgb: 31, 41, 55;
-}
-
+/* Alternate accents (settings-driven, §18.1).
+   Every preset is an RGB-vibrant hue: emerald (default), azure, tangerine,
+   graphite. The list is deliberately closed — there is no variable that could
+   produce indigo, violet, magenta or pink. */
 [data-accent="azure"] {
-    --accent: #0b5cab;
-    --accent-hover: #094b8c;
-    --accent-press: #073c70;
-    --accent-soft: #eff6fd;
-    --accent-soft-2: #d9e9f9;
-    --accent-ink: #083a6b;
-    --accent-ring: rgba(11, 92, 171, .2);
-    --bs-primary-rgb: 11, 92, 171;
+    --accent: #0a6ed1;
+    --accent-2: #0891b2;
+    --accent-hover: #085fb8;
+    --accent-press: #064f9c;
+    --accent-soft: #e9f2fd;
+    --accent-soft-2: #d3e6fb;
+    --accent-ink: #0a3f76;
+    --accent-ring: rgba(10, 110, 209, .24);
+    --bs-primary-rgb: 10, 110, 209;
 }
 
-[data-accent="forest"] {
-    --accent: #1c7c4a;
-    --accent-hover: #166239;
-    --accent-press: #114d2d;
-    --accent-soft: #eefaf3;
-    --accent-soft-2: #d7f0e2;
-    --accent-ink: #0f4a2b;
-    --accent-ring: rgba(28, 124, 74, .2);
-    --bs-primary-rgb: 28, 124, 74;
+[data-accent="tangerine"] {
+    --accent: #ea580c;
+    --accent-2: #f59e0b;
+    --accent-hover: #c94a08;
+    --accent-press: #a93c06;
+    --accent-soft: #fff1e8;
+    --accent-soft-2: #ffe0cc;
+    --accent-ink: #8a3208;
+    --accent-ring: rgba(234, 88, 12, .24);
+    --bs-primary-rgb: 234, 88, 12;
+}
+
+[data-accent="graphite"] {
+    --accent: #1b2430;
+    --accent-2: #475467;
+    --accent-hover: #131a24;
+    --accent-press: #0b1017;
+    --accent-soft: #f2f4f7;
+    --accent-soft-2: #e4e7ec;
+    --accent-ink: #131a24;
+    --accent-ring: rgba(27, 36, 48, .2);
+    --bs-primary-rgb: 27, 36, 48;
 }
 
 /* Optional dark mode = token swap, not a second design (§18.1) */
@@ -174,9 +197,9 @@
     --ink-3: #8792a1;
     --ink-4: #6b7583;
 
-    --accent-soft: #12302e;
-    --accent-soft-2: #16403c;
-    --accent-ink: #a9e6de;
+    --accent-soft: #10302a;
+    --accent-soft-2: #153f36;
+    --accent-ink: #9ff0d8;
 
     --ok-soft: #12281d;
     --warn-soft: #2b2113;
@@ -346,21 +369,22 @@ table td.erp-amount { font-variant-numeric: tabular-nums; font-feature-settings:
 
 .erp-brand:hover { color: inherit; }
 
-/* Brand mark: monogram plate — flat ink, no gradient, no purple */
+/* Brand mark: monogram plate on the accent gradient — vivid, premium, and
+   never in the violet/pink family (the gradient endpoints are token-driven). */
 .erp-brand-mark {
     flex: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     border-radius: 9px;
-    background: var(--ink);
+    background: var(--accent-grad);
     color: #fff;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: -.04em;
-    box-shadow: var(--shadow-xs);
+    font-size: 12.5px;
+    font-weight: 780;
+    letter-spacing: .04em;
+    box-shadow: 0 1px 2px rgba(13, 17, 23, .18), inset 0 1px 0 rgba(255, 255, 255, .28);
 }
 
 .erp-brand-text { display: flex; flex-direction: column; line-height: 1.18; min-width: 0; }
@@ -435,6 +459,38 @@ table td.erp-amount { font-variant-numeric: tabular-nums; font-feature-settings:
     color: var(--ink-4);
 }
 
+.erp-nav-section-label i {
+    font-size: 12px;
+    line-height: 1;
+    color: var(--hue, var(--ink-4));
+}
+
+/* Each section carries its own vibrant hue so the rail is scannable by domain
+   (Sales & CRM, Inventory, Accounts, People…) without extra chrome. */
+.erp-nav-section[data-hue="1"] { --hue: var(--c1); }
+.erp-nav-section[data-hue="2"] { --hue: var(--c2); }
+.erp-nav-section[data-hue="3"] { --hue: var(--c3); }
+.erp-nav-section[data-hue="4"] { --hue: var(--c4); }
+.erp-nav-section[data-hue="5"] { --hue: var(--c5); }
+.erp-nav-section[data-hue="6"] { --hue: var(--c6); }
+.erp-nav-section[data-hue="7"] { --hue: var(--c7); }
+.erp-nav-section[data-hue="8"] { --hue: var(--c8); }
+.erp-nav-section[data-hue="9"] { --hue: var(--c9); }
+.erp-nav-section[data-hue="10"] { --hue: var(--c10); }
+
+.erp-nav-section[data-hue] .erp-nav-section-label { color: var(--ink-3); }
+
+.erp-nav-section-count {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .02em;
+    color: var(--ink-4);
+    background: var(--surface-3);
+    border-radius: var(--r-pill);
+    padding: 1px 6px;
+}
+
 .erp-nav-section-label button {
     border: 0;
     background: none;
@@ -450,6 +506,17 @@ table td.erp-amount { font-variant-numeric: tabular-nums; font-feature-settings:
 }
 
 .erp-nav-group { margin: 1px 0; }
+
+/* Vibrant hue dot — used by section headers, KPI cards and legend chips */
+.erp-hue-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--hue, var(--accent));
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--hue, var(--accent)) 16%, transparent);
+    flex: none;
+}
 
 .erp-nav-group-btn,
 .erp-nav-link {
@@ -1293,6 +1360,9 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-status-rejected,
 .erp-status-disabled,
 .erp-status-denied,
+.erp-status-blacklisted,
+.erp-status-over_limit,
+.erp-status-over-limit,
 .erp-status-error,
 .erp-status-failed,
 .erp-status-delivery_failed,
@@ -1388,6 +1458,8 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-amount { font-variant-numeric: tabular-nums; font-weight: 620; white-space: nowrap; }
 .erp-amount-lg { font-size: 17px; font-weight: 700; color: var(--ink); }
 .erp-amount-neg { color: var(--danger); }
+.erp-amount-danger { color: var(--danger); }
+.erp-amount-warn { color: var(--warn); }
 .erp-amount-pos { color: var(--ok); }
 
 /* Table footer: count + pagination */
@@ -1603,6 +1675,21 @@ textarea.form-control { height: auto; min-height: 88px; padding: 9px 11px; }
 }
 
 /* FormSection (§18.2) */
+/* Two-column form layout: identity/terms left, address/notes right (§18.2
+   FormSection). Collapses to one column below 992px. */
+.erp-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    align-items: start;
+}
+
+@media (max-width: 991.98px) {
+    .erp-form-grid { grid-template-columns: 1fr; }
+}
+
+.erp-help { display: block; margin-top: 5px; font-size: 12px; color: var(--ink-3); }
+
 .erp-form-section { border-bottom: 1px solid var(--line-soft); padding-bottom: 18px; margin-bottom: 18px; }
 .erp-form-section:last-child { border-bottom: 0; padding-bottom: 0; margin-bottom: 0; }
 .erp-form-section-head { margin-bottom: 14px; }
@@ -2529,3 +2616,126 @@ hr { border-color: var(--line); opacity: 1; }
     body.erp-body { background: #fff; font-size: 12px; }
     a { color: inherit; text-decoration: none; }
 }
+
+/* ------------------------------------------------- 11b. notes & inline alerts */
+/*
+ * Inline note (§18.6). The old UI stacked big yellow alert boxes at the top of
+ * the page for things that are not emergencies: an onboarding checklist, a
+ * "not configured yet" sentence, a quota hint. This primitive is deliberately
+ * quiet — hairline border, one accent rail, ink-weight title, a sentence of
+ * explanation — and is placed next to the thing it describes, not above the
+ * whole screen. Loud colour is reserved for real errors (--danger) and
+ * destructive confirmation.
+ */
+.erp-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 12px 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--ink-4);
+    border-radius: var(--r-md);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-2);
+}
+
+.erp-note > i {
+    margin-top: 2px;
+    font-size: 15px;
+    color: var(--ink-3);
+    flex: none;
+}
+
+.erp-note strong { color: var(--ink); font-weight: 650; }
+.erp-note a { font-weight: 620; }
+
+.erp-note-info { background: var(--info-soft); border-color: var(--info-line); border-left-color: var(--info); }
+.erp-note-info > i { color: var(--info); }
+
+.erp-note-warn { background: var(--warn-soft); border-color: var(--warn-line); border-left-color: var(--warn); }
+.erp-note-warn > i { color: var(--warn); }
+
+.erp-note-danger { background: var(--danger-soft); border-color: var(--danger-line); border-left-color: var(--danger); }
+.erp-note-danger > i { color: var(--danger); }
+.erp-note-danger strong { color: var(--danger); }
+
+.erp-note-ok { background: var(--ok-soft); border-color: var(--ok-line); border-left-color: var(--ok); }
+.erp-note-ok > i { color: var(--ok); }
+
+/* Error summary that belongs to ONE form, so it renders inside the card */
+.erp-field-error { display: block; margin-top: 5px; font-size: 12.5px; color: var(--danger); }
+
+/* ------------------------------------------------- 31. detail layout & docs */
+/*
+ * Master-detail two-pane layout (§18.2 DetailPanel, §18.4 768-1199):
+ * the record itself on the left, its controls and history on the right.
+ * Below 992px the side panel simply follows the main column.
+ */
+.erp-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 16px;
+    align-items: start;
+}
+
+@media (max-width: 1199.98px) {
+    .erp-split { grid-template-columns: minmax(0, 1fr) 300px; }
+}
+
+@media (max-width: 991.98px) {
+    .erp-split { grid-template-columns: 1fr; }
+}
+
+.erp-split-main, .erp-split-side { min-width: 0; }
+
+/* Form that lives inside a card and manipulates the record it belongs to */
+.erp-inline-form {
+    border-top: 1px solid var(--line-soft);
+    padding-top: 14px;
+}
+
+.erp-table-opening td { background: var(--surface-2); }
+
+/* Printable documents (§18.2 PrintableDocumentFrame) — statement, ledger,
+   invoice, Mushak. Ink on paper, no shell chrome, no screen-only colour. */
+.erp-doc { color: #111827; }
+.erp-doc-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    align-items: flex-start;
+    padding-bottom: 14px;
+    border-bottom: 2px solid #111827;
+}
+.erp-doc-title { font-size: 20px; font-weight: 760; margin: 0 0 2px; letter-spacing: -.01em; }
+.erp-doc-kind { font-size: 15px; font-weight: 700; margin: 0 0 2px; text-transform: uppercase; letter-spacing: .08em; }
+.erp-doc-sub { font-size: 12px; color: #4b5563; margin: 0; }
+.erp-doc-party {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 14px 0;
+    border-bottom: 1px solid #d1d5db;
+}
+.erp-doc-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: .09em; color: #6b7280; margin: 0 0 3px; }
+.erp-doc-strong { font-size: 14.5px; font-weight: 700; margin: 0; }
+.erp-doc-total { font-size: 20px; font-weight: 760; margin: 0; font-variant-numeric: tabular-nums; }
+.erp-doc-table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 12.5px; }
+.erp-doc-table th, .erp-doc-table td { padding: 7px 8px; border-bottom: 1px solid #e5e7eb; }
+.erp-doc-table thead th {
+    background: #f3f4f6;
+    border-bottom: 1.5px solid #9ca3af;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+.erp-doc-table tfoot th { border-top: 1.5px solid #111827; font-weight: 700; text-align: left; }
+.erp-doc-foot { margin-top: 18px; padding-top: 12px; border-top: 1px solid #d1d5db; font-size: 11.5px; color: #4b5563; }
+
+/* Timeline markers get the sentiment hue (feedback NPS) */
+.erp-timeline-marker.erp-timeline-promoter { background: var(--ok); }
+.erp-timeline-marker.erp-timeline-passive { background: var(--warn); }
+.erp-timeline-marker.erp-timeline-detractor { background: var(--danger); }

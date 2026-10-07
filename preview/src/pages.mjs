@@ -830,3 +830,292 @@ export function notFound() {
     </main>
 </div>`;
 }
+
+/* -------------------------------------------------------------- 8. customers (CRM) */
+export function customers() {
+    const buckets = [
+        ['Not yet due', '৳ 7,42,180', '38 invoices', 1],
+        ['Overdue 1-30 days', '৳ 4,10,900', '19 invoices', 2],
+        ['Overdue 31-60 days', '৳ 2,18,450', '11 invoices', 3],
+        ['Overdue 61-90 days', '৳ 1,02,300', '6 invoices', 4],
+        ['Overdue 90+ days', '৳ 88,610', '4 invoices', 7],
+    ];
+
+    const rows = [
+        ['Rahman Traders', 'CUST-00001', 'Business', 'Dhaka · Mirpur', 'Retailer', '৳ 50,000 / 15d', '৳ 24,580', '৳ 4,120', 'active', false],
+        ['Nusrat Jahan', 'CUST-00002', 'Individual', 'Dhaka · Dhanmondi', '—', 'Cash only', '৳ 0', '৳ 0', 'active', false],
+        ['Sylhet Grocers', 'CUST-00003', 'Business', 'Sylhet · Zindabazar', 'Wholesaler', '৳ 1,50,000 / 30d', '৳ 1,86,400', '৳ 96,400', 'over limit', true],
+        ['Agrabad Hardware', 'CUST-00004', 'Business', 'Chattogram · Agrabad', 'Retailer', '৳ 75,000 / 20d', '৳ 12,300', '৳ 0', 'active', false],
+        ['Karim Store', 'CUST-00005', 'Individual', 'Khulna · Sonadanga', '—', 'Cash only', '৳ 0', '৳ 0', 'blacklisted', true],
+    ];
+
+    const tableRows = rows.map(([name, code, type, place, group, limit, due, overdue, status, warn]) => `
+        <tr>
+            <td data-label="Customer">
+                <a class="erp-row-link" href="./customer-profile.html">${name}</a>
+                <span class="erp-td-muted d-block small">${code}${type === 'Business' ? ' · business' : ''}</span>
+            </td>
+            <td data-label="Contact" class="erp-td-muted">${place}</td>
+            <td data-label="Group">${group === '—' ? '<span class="erp-td-muted">—</span>' : `<span class="erp-chip erp-chip-soft">${group}</span>`}</td>
+            <td data-label="Credit limit" class="erp-td-num">${limit}</td>
+            <td data-label="Due" class="erp-td-num">${due}</td>
+            <td data-label="Overdue" class="erp-td-num">${overdue === '৳ 0' ? '<span class="erp-td-muted">—</span>' : `<span class="erp-amount erp-amount-danger">${overdue}</span>`}</td>
+            <td data-label="Status">${status === 'over limit' ? '<span class="erp-status erp-status-pending">over limit</span>' : statusChip(status)}</td>
+            <td data-label="Open" class="erp-td-actions">
+                <a class="btn btn-sm btn-outline-secondary" href="./customer-profile.html">Profile</a>
+                <a class="btn btn-sm btn-light" href="./customer-profile.html#ledger">Ledger</a>
+            </td>
+        </tr>`).join('');
+
+    return `
+${previewBar('customers.html')}
+<div class="erp-shell" data-rail="expanded">
+${sidebar('customers')}
+<div class="erp-main">
+${topbar({ trail: ['Sales & CRM', 'Customers'], title: 'Customers' })}
+<main class="erp-content" id="erpContent">
+    <header class="erp-page-head">
+        <div class="erp-page-head-main">
+            <p class="erp-eyebrow">Sales &amp; CRM</p>
+            <h1 class="erp-h1">Customers</h1>
+            <p class="erp-page-sub">Every party you sell to, with the money they owe derived from the ledgers — never from a hand-edited due column.</p>
+        </div>
+        <div class="erp-page-head-actions">
+            <a class="btn btn-outline-secondary" href="#"><i class="bi bi-download" aria-hidden="true"></i> Export CSV</a>
+            <a class="btn btn-outline-secondary" href="#"><i class="bi bi-alarm" aria-hidden="true"></i> Due &amp; ageing</a>
+            <a class="btn btn-outline-secondary" href="#"><i class="bi bi-collection" aria-hidden="true"></i> Groups</a>
+            <a class="btn btn-primary" href="#"><i class="bi bi-person-plus" aria-hidden="true"></i> New customer</a>
+        </div>
+    </header>
+
+    <div class="erp-kpi-grid mb-3">
+        ${buckets.map(([label, amount, hint, hue]) => `
+        <div class="erp-kpi" style="--hue: var(--c${hue})">
+            <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>${label}</p>
+            <p class="erp-kpi-value">${amount}</p>
+            <p class="erp-kpi-foot">${hint}</p>
+        </div>`).join('')}
+    </div>
+
+    <form class="erp-filterbar" onsubmit="return false">
+        <div class="erp-filter erp-filter-wide">
+            <label class="form-label" for="q">Search</label>
+            <div class="erp-input-group">
+                <i class="bi bi-search" aria-hidden="true"></i>
+                <input class="form-control" type="search" id="q" placeholder="Name, code, phone or e-mail…">
+            </div>
+        </div>
+        <div class="erp-filter">
+            <label class="form-label" for="group">Group</label>
+            <select class="form-select" id="group"><option>All groups</option><option>Retailer</option><option>Wholesaler</option><option>Corporate</option></select>
+        </div>
+        <div class="erp-filter">
+            <label class="form-label" for="district">District</label>
+            <select class="form-select" id="district"><option>All districts</option><option>Dhaka</option><option>Chattogram</option><option>Sylhet</option><option>Khulna</option></select>
+        </div>
+        <div class="erp-filter">
+            <label class="form-label" for="status">Status</label>
+            <select class="form-select" id="status"><option>Any</option><option>Blacklisted</option><option>Inactive</option><option>Over credit limit</option></select>
+        </div>
+        <div class="erp-filterbar-actions">
+            <a class="btn btn-link" href="./customers.html">Reset</a>
+            <button class="btn btn-primary" type="submit"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+        </div>
+    </form>
+
+    <div class="erp-table-shell" data-erp-table>
+        <div class="erp-card-head px-3 pt-3">
+            <h2 class="erp-card-title">Customers <span class="erp-chip erp-chip-outline">5 customers</span></h2>
+        </div>
+        <div class="erp-table-scroll">
+            <table class="table erp-table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Contact</th>
+                        <th>Group</th>
+                        <th class="erp-th-num">Credit limit</th>
+                        <th class="erp-th-num">Due</th>
+                        <th class="erp-th-num">Overdue</th>
+                        <th>Status</th>
+                        <th class="erp-th-actions">Open</th>
+                    </tr>
+                </thead>
+                <tbody>${tableRows}</tbody>
+            </table>
+        </div>
+        <div class="erp-table-foot">
+            <span>5 customers</span>
+            <span class="erp-td-muted">Page 1 of 1</span>
+        </div>
+    </div>
+
+    <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
+        <p class="erp-field-label">More in this module</p>
+        <div class="d-flex flex-wrap gap-2">
+            <a class="erp-chip erp-chip-outline" href="./orders.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Sales orders</a>
+            <a class="erp-chip erp-chip-outline" href="#"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Sales invoices</a>
+            <a class="erp-chip erp-chip-outline" href="#"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Coupons &amp; promotions</a>
+            <a class="erp-chip erp-chip-outline" href="#"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Sales team</a>
+        </div>
+    </nav>
+</main>
+${footer()}
+</div>
+</div>
+<script>window.erpNavIndex = [];</script>`;
+}
+
+/* -------------------------------------------------------- 9. customer 360 profile */
+export function customerProfile() {
+    const docs = [
+        ['INV-2026-00771', '04 Oct 2026', 'paid', '৳ 18,240', '৳ 0'],
+        ['INV-2026-00812', '07 Oct 2026', 'partial', '৳ 24,580', '৳ 4,120'],
+        ['INV-2026-00825', '08 Oct 2026', 'issued', '৳ 9,780', '৳ 9,780'],
+    ];
+
+    const creditHistory = [
+        ['৳ 20,000 → ৳ 50,000', 'Six months of on-time settlement', '12 Sep 2026'],
+        ['৳ 0 → ৳ 20,000', 'First wholesale order', '02 Jun 2026'],
+    ];
+
+    return `
+${previewBar('customer-profile.html')}
+<div class="erp-shell" data-rail="expanded">
+${sidebar('customers')}
+<div class="erp-main">
+${topbar({ trail: ['Sales & CRM', 'Customers', 'Rahman Traders'], title: 'Rahman Traders' })}
+<main class="erp-content" id="erpContent">
+    <header class="erp-page-head">
+        <div class="erp-page-head-main">
+            <p class="erp-eyebrow">Customer · CUST-00001</p>
+            <h1 class="erp-h1">Rahman Traders</h1>
+            <p class="erp-page-sub">Business · 01711-222333 · Dhaka · Group: Retailer</p>
+        </div>
+        <div class="erp-page-head-actions">
+            <a class="btn btn-outline-secondary" href="#ledger"><i class="bi bi-journal-text" aria-hidden="true"></i> Ledger</a>
+            <a class="btn btn-outline-secondary" href="#"><i class="bi bi-printer" aria-hidden="true"></i> Statement</a>
+            <a class="btn btn-primary" href="#"><i class="bi bi-pencil" aria-hidden="true"></i> Edit</a>
+        </div>
+    </header>
+
+    <div class="erp-note erp-note-warn mb-3">
+        <i class="bi bi-shield-exclamation" aria-hidden="true"></i>
+        <div>
+            <strong>Exposure is close to the approved credit limit.</strong>
+            Due ৳ 24,580 against a limit of ৳ 50,000 — 49% used, with 15-day terms.
+        </div>
+    </div>
+
+    <div class="erp-kpi-grid mb-3">
+        <div class="erp-kpi"><p class="erp-kpi-label">Lifetime invoiced</p><p class="erp-kpi-value">৳ 12,84,930</p><p class="erp-kpi-foot">48 invoices</p></div>
+        <div class="erp-kpi"><p class="erp-kpi-label">Received</p><p class="erp-kpi-value">৳ 12,60,350</p><p class="erp-kpi-foot">Posted receipts</p></div>
+        <div class="erp-kpi"><p class="erp-kpi-label">Outstanding</p><p class="erp-kpi-value">৳ 24,580</p><p class="erp-kpi-foot">2 open invoices</p></div>
+        <div class="erp-kpi"><p class="erp-kpi-label">Overdue</p><p class="erp-kpi-value">৳ 4,120</p><p class="erp-kpi-foot">Oldest due 29 Sep 2026</p></div>
+    </div>
+
+    <div class="erp-split">
+        <div class="erp-split-main">
+            <section class="erp-card mb-3">
+                <div class="erp-card-head">
+                    <h2 class="erp-card-title">Recent documents</h2>
+                    <div class="erp-card-actions"><a class="btn btn-sm btn-light" href="./orders.html">All invoices</a></div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table erp-table align-middle mb-0">
+                        <thead><tr><th>Invoice</th><th>Date</th><th>Status</th><th class="erp-th-num">Total</th><th class="erp-th-num">Due</th></tr></thead>
+                        <tbody>
+                            ${docs.map(([no, date, status, total, due]) => `
+                            <tr>
+                                <td><span class="erp-row-link">${no}</span></td>
+                                <td class="erp-td-muted">${date}</td>
+                                <td>${statusChip(status)}</td>
+                                <td class="erp-td-num">${total}</td>
+                                <td class="erp-td-num ${due === '৳ 0' ? 'erp-td-muted' : 'erp-amount-warn'}">${due}</td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="erp-card" id="ledger">
+                <div class="erp-card-head">
+                    <h2 class="erp-card-title">Ledger extract <span class="erp-chip erp-chip-outline">derived</span></h2>
+                    <div class="erp-card-actions"><a class="btn btn-sm btn-light" href="#">Full ledger</a></div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table erp-table align-middle mb-0">
+                        <thead><tr><th>Date</th><th>Reference</th><th>Particulars</th><th class="erp-th-num">Debit</th><th class="erp-th-num">Credit</th><th class="erp-th-num">Balance</th></tr></thead>
+                        <tbody>
+                            <tr class="erp-table-opening"><td class="erp-td-muted">01 Oct 2026</td><td>—</td><td><strong>Opening balance</strong></td><td colspan="3" class="erp-td-num erp-amount">16,460.00</td></tr>
+                            <tr><td class="erp-td-muted">04 Oct 2026</td><td>INV-2026-00771</td><td>Sales invoice</td><td class="erp-td-num">18,240.00</td><td class="erp-td-num">—</td><td class="erp-td-num erp-amount">34,700.00</td></tr>
+                            <tr><td class="erp-td-muted">05 Oct 2026</td><td>MR-2026-00318</td><td>Receipt (Cash)</td><td class="erp-td-num">—</td><td class="erp-td-num">18,240.00</td><td class="erp-td-num erp-amount">16,460.00</td></tr>
+                            <tr><td class="erp-td-muted">07 Oct 2026</td><td>INV-2026-00812</td><td>Sales invoice</td><td class="erp-td-num">24,580.00</td><td class="erp-td-num">—</td><td class="erp-td-num erp-amount">41,040.00</td></tr>
+                            <tr><td class="erp-td-muted">08 Oct 2026</td><td>MR-2026-00331</td><td>Receipt (bKash)</td><td class="erp-td-num">—</td><td class="erp-td-num">20,460.00</td><td class="erp-td-num erp-amount">20,580.00</td></tr>
+                        </tbody>
+                        <tfoot>
+                            <tr><td colspan="3" class="erp-td-muted">Period totals</td><td class="erp-td-num">42,820.00</td><td class="erp-td-num">38,700.00</td><td class="erp-td-num erp-amount">20,580.00</td></tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <aside class="erp-split-side">
+            <section class="erp-card mb-3">
+                <h2 class="erp-card-title mb-3">Credit control</h2>
+                <dl class="erp-dl erp-dl-tight">
+                    <dt>Credit limit</dt><dd>৳ 50,000.00</dd>
+                    <dt>Credit days</dt><dd>15 days</dd>
+                    <dt>Exposure</dt><dd>৳ 24,580.00</dd>
+                    <dt>Segment</dt><dd>Regular</dd>
+                    <dt>Loyalty points</dt><dd>1,240</dd>
+                </dl>
+
+                <form class="mt-3" onsubmit="return false">
+                    <div class="row g-2">
+                        <div class="col-6"><label class="form-label" for="limit">New limit (৳)</label><input class="form-control" id="limit" value="50000.00"></div>
+                        <div class="col-6"><label class="form-label" for="days">Credit days</label><input class="form-control" id="days" value="15"></div>
+                        <div class="col-12"><label class="form-label" for="reason">Reason</label><input class="form-control" id="reason" placeholder="e.g. 6 months of on-time settlement"></div>
+                    </div>
+                    <button class="btn btn-outline-secondary w-100 mt-2" type="submit">Record new limit</button>
+                </form>
+
+                <div class="erp-timeline mt-3">
+                    ${creditHistory.map(([change, reason, when]) => `
+                    <div class="erp-timeline-item">
+                        <span class="erp-timeline-marker" aria-hidden="true"></span>
+                        <div class="erp-timeline-body"><strong>${change}</strong><p class="mb-0 small">${reason} · ${when}</p></div>
+                    </div>`).join('')}
+                </div>
+            </section>
+
+            <section class="erp-card mb-3">
+                <h2 class="erp-card-title mb-3">Relationship health <span class="erp-chip erp-chip-ok">NPS 67</span></h2>
+                <div class="erp-timeline">
+                    <div class="erp-timeline-item"><span class="erp-timeline-marker erp-timeline-promoter" aria-hidden="true"></span>
+                        <div class="erp-timeline-body"><strong>9/10 · promoter</strong><p class="mb-0 small">Delivery on time, invoice printed correctly · 28 Sep 2026</p></div></div>
+                    <div class="erp-timeline-item"><span class="erp-timeline-marker erp-timeline-passive" aria-hidden="true"></span>
+                        <div class="erp-timeline-body"><strong>8/10 · passive</strong><p class="mb-0 small">Wants earlier dispatch on Fridays · 12 Sep 2026</p></div></div>
+                    <div class="erp-timeline-item"><span class="erp-timeline-marker erp-timeline-promoter" aria-hidden="true"></span>
+                        <div class="erp-timeline-body"><strong>10/10 · promoter</strong><p class="mb-0 small">Referred Agrabad Hardware · 05 Sep 2026</p></div></div>
+                </div>
+            </section>
+
+            <section class="erp-card">
+                <h2 class="erp-card-title mb-3">Blacklist</h2>
+                <p class="erp-td-muted small">A blacklist entry requires a reason and refuses new documents until it is lifted.</p>
+                <form onsubmit="return false">
+                    <label class="form-label" for="blacklist_reason">Reason (required)</label>
+                    <textarea class="form-control" id="blacklist_reason" rows="2" placeholder="Recorded against the audit trail"></textarea>
+                    <button class="btn btn-danger w-100 mt-2" type="submit">Blacklist customer</button>
+                </form>
+            </section>
+        </aside>
+    </div>
+</main>
+${footer()}
+</div>
+</div>
+<script>window.erpNavIndex = [];</script>`;
+}

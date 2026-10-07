@@ -531,6 +531,22 @@ Additional: password policy + history, optional email verification, recovery flo
 
 DB-driven tree (module → submenu → sub-submenu), collapsible groups, search/filter, favorites + recent, permission-filtered (unauthorized items absent), active trail, breadcrumbs, page title, contextual action bar. No wall-of-text sidebar; no disabled/locked unauthorized items.
 
+### 18.1.1 Palette rule (2026-10-08)
+
+The accent set is **closed** and token-driven (`resources/css/app.css`):
+
+| Token group | Values |
+|---|---|
+| Accents | `emerald #00a97f` (default), `azure #0a6ed1`, `tangerine #ea580c`, `graphite #1b2430` |
+| Data hues | `--c1…--c10` — emerald, azure, amber, tangerine, cyan, lime, red, slate, bronze, teal |
+| Semantics | ok emerald `#047857`, warn amber `#b45309`, danger red `#d92d20`, info sky `#0284c7` |
+
+Indigo, violet, magenta and pink are **not representable**: no preset, no data
+hue and no semantic token uses them, and the appearance selector offers only the
+four presets above. Sidebar sections carry a `hue` (1-10 → `--c1…--c10`) so the
+rail is scannable by domain without extra chrome — colour is used for identity
+and meaning, never decoration.
+
 ### 18.3.1 Navigation curation (implemented 2026-10-07)
 
 The §47 catalog is the **coverage authority**; it is not a sidebar layout. Curation

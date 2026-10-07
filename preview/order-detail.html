@@ -15,7 +15,7 @@
 <div class="erp-preview-bar">
     <i class="bi bi-easel2" aria-hidden="true"></i>
     <strong>UI redesign preview</strong>
-    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html" style="color:#fff;text-decoration:underline">Order workspace</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
+    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html" style="color:#fff;text-decoration:underline">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
     <span class="erp-preview-note">Static render of the new shell — same CSS + JS the Laravel app ships. Press ⌘K / Ctrl+K.</span>
 </div>
 <div class="erp-shell" data-rail="expanded">
@@ -43,7 +43,7 @@
     </div>
 
     <nav class="erp-sidebar-nav" aria-label="Sections">
-        <div class="erp-nav-section">
+        <div class="erp-nav-section" data-hue="0">
             <p class="erp-nav-section-label">
                 <i class="bi bi-star" aria-hidden="true"></i>
                 <span>Pinned</span>
@@ -70,7 +70,7 @@
         </div>
     </div>
         </div>
-        <div class="erp-nav-section">
+        <div class="erp-nav-section" data-hue="8">
             <p class="erp-nav-section-label">
                 <i class="bi bi-lightning-charge" aria-hidden="true"></i>
                 <span>My work</span>
@@ -100,20 +100,20 @@
         </div>
     </div>
         </div>
-        <div class="erp-nav-section">
+        <div class="erp-nav-section" data-hue="1">
             <p class="erp-nav-section-label">
                 <i class="bi bi-cart3" aria-hidden="true"></i>
-                <span>Sell</span>
+                <span>Sales &amp; CRM</span>
             </p>
             
     <div class="erp-nav-group">
         <button class="erp-nav-group-btn is-active has-active-trail" type="button"
-                data-bs-toggle="collapse" data-bs-target="#nav-sell-0" aria-expanded="true">
+                data-bs-toggle="collapse" data-bs-target="#nav-crm-0" aria-expanded="true">
             <i class="bi bi-cart3 erp-nav-icon" aria-hidden="true"></i>
             <span>Sales</span>
             <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
         </button>
-        <div class="collapse show" id="nav-sell-0">
+        <div class="collapse show" id="nav-crm-0">
             <div class="erp-nav-sub">
         <a class="erp-nav-link active" href="./orders.html" aria-current="page">
             <span>Orders</span>
@@ -146,12 +146,12 @@
     </div>
     <div class="erp-nav-group">
         <button class="erp-nav-group-btn" type="button"
-                data-bs-toggle="collapse" data-bs-target="#nav-sell-1" aria-expanded="false">
+                data-bs-toggle="collapse" data-bs-target="#nav-crm-1" aria-expanded="false">
             <i class="bi bi-upc-scan erp-nav-icon" aria-hidden="true"></i>
             <span>Counter (POS)</span>
             <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
         </button>
-        <div class="collapse" id="nav-sell-1">
+        <div class="collapse" id="nav-crm-1">
             <div class="erp-nav-sub">
         <a class="erp-nav-link" href="./pos.html">
             <span>Terminal</span>
@@ -179,20 +179,20 @@
             <span>Returns</span>
         </a>
         </div>
-        <div class="erp-nav-section">
+        <div class="erp-nav-section" data-hue="2">
             <p class="erp-nav-section-label">
                 <i class="bi bi-box-seam" aria-hidden="true"></i>
-                <span>Buy &amp; stock</span>
+                <span>Inventory &amp; warehouse</span>
             </p>
             
     <div class="erp-nav-group">
         <button class="erp-nav-group-btn" type="button"
-                data-bs-toggle="collapse" data-bs-target="#nav-operate-0" aria-expanded="false">
+                data-bs-toggle="collapse" data-bs-target="#nav-stock-0" aria-expanded="false">
             <i class="bi bi-box-seam erp-nav-icon" aria-hidden="true"></i>
             <span>Inventory</span>
             <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
         </button>
-        <div class="collapse" id="nav-operate-0">
+        <div class="collapse" id="nav-stock-0">
             <div class="erp-nav-sub">
         <a class="erp-nav-link" href="#">
             <span>Products</span>
@@ -227,20 +227,20 @@
             <span>Warehouses</span>
         </a>
         </div>
-        <div class="erp-nav-section">
+        <div class="erp-nav-section" data-hue="5">
             <p class="erp-nav-section-label">
                 <i class="bi bi-cash-stack" aria-hidden="true"></i>
-                <span>Money</span>
+                <span>Accounts &amp; finance</span>
             </p>
             
     <div class="erp-nav-group">
         <button class="erp-nav-group-btn" type="button"
-                data-bs-toggle="collapse" data-bs-target="#nav-money-0" aria-expanded="false">
+                data-bs-toggle="collapse" data-bs-target="#nav-finance-0" aria-expanded="false">
             <i class="bi bi-journal-text erp-nav-icon" aria-hidden="true"></i>
             <span>Accounting</span>
             <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
         </button>
-        <div class="collapse" id="nav-money-0">
+        <div class="collapse" id="nav-finance-0">
             <div class="erp-nav-sub">
         <a class="erp-nav-link" href="#">
             <span>Chart of accounts</span>
@@ -264,10 +264,10 @@
             <span>Cash &amp; bank</span>
         </a>
         </div>
-        <div class="erp-nav-section">
+        <div class="erp-nav-section" data-hue="6">
             <p class="erp-nav-section-label">
                 <i class="bi bi-people" aria-hidden="true"></i>
-                <span>People</span>
+                <span>People &amp; payroll</span>
             </p>
             
         <a class="erp-nav-link" href="#">
@@ -275,10 +275,10 @@
             <span>Employee</span>
         </a>
         </div>
-        <div class="erp-nav-section">
+        <div class="erp-nav-section" data-hue="3">
             <p class="erp-nav-section-label">
                 <i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
-                <span>Insight</span>
+                <span>Reports &amp; insight</span>
             </p>
             
     <div class="erp-nav-group">
@@ -314,7 +314,7 @@
         </div>
     </div>
         </div>
-        <div class="erp-nav-section">
+        <div class="erp-nav-section" data-hue="7">
             <p class="erp-nav-section-label">
                 <i class="bi bi-shield-check" aria-hidden="true"></i>
                 <span>Governance</span>
@@ -338,10 +338,10 @@
         </div>
     </div>
         </div>
-        <div class="erp-nav-section">
+        <div class="erp-nav-section" data-hue="8">
             <p class="erp-nav-section-label">
                 <i class="bi bi-sliders" aria-hidden="true"></i>
-                <span>Configuration</span>
+                <span>Settings &amp; masters</span>
             </p>
             
     <div class="erp-nav-group">
@@ -698,7 +698,7 @@
 
 <div class="erp-toast-stack" data-erp-toasts role="status" aria-live="polite"></div>
 
-<script>window.erpNavIndex = [{"label":"Dashboard","url":"./dashboard.html","icon":"bi-grid-1x2","section":"My work","group":"Dashboard"},{"label":"Approval inbox","url":"#","icon":"bi-inbox","section":"My work","group":"Workflow"},{"label":"Sales orders","url":"./orders.html","icon":"bi-receipt","section":"Sell","group":"Sales"},{"label":"Create order","url":"./orders.html","icon":"bi-plus-circle","section":"Sell","group":"Sales","hint":"action"},{"label":"Bulk confirm orders","url":"./orders.html","icon":"bi-check2-square","section":"Sell","group":"Sales","hint":"action"},{"label":"Bulk print invoice","url":"./orders.html","icon":"bi-printer","section":"Sell","group":"Sales","hint":"action"},{"label":"Invoices","url":"./order-detail.html","icon":"bi-file-earmark-text","section":"Sell","group":"Sales"},{"label":"Mushak 9.1 tax invoice","url":"#","icon":"bi-file-earmark-ruled","section":"Sell","group":"Sales"},{"label":"POS terminal","url":"./pos.html","icon":"bi-upc-scan","section":"Sell","group":"Counter (POS)"},{"label":"Cash in / cash out","url":"#","icon":"bi-cash-stack","section":"Sell","group":"Counter (POS)"},{"label":"Coupon analytics","url":"#","icon":"bi-ticket-perforated","section":"Sell","group":"Sales"},{"label":"Products","url":"#","icon":"bi-boxes","section":"Buy & stock","group":"Inventory"},{"label":"Stock overview","url":"#","icon":"bi-clipboard-check","section":"Buy & stock","group":"Inventory"},{"label":"Stock movement ledger","url":"#","icon":"bi-list-columns","section":"Buy & stock","group":"Inventory"},{"label":"Purchase orders","url":"#","icon":"bi-bag-check","section":"Buy & stock","group":"Purchase"},{"label":"Chart of accounts","url":"#","icon":"bi-diagram-3","section":"Money","group":"Accounting"},{"label":"Journal entries","url":"#","icon":"bi-journal-text","section":"Money","group":"Accounting"},{"label":"Trial balance","url":"#","icon":"bi-clipboard-data","section":"Money","group":"Accounting"},{"label":"General ledger","url":"#","icon":"bi-list-columns","section":"Money","group":"Accounting"},{"label":"Employees","url":"#","icon":"bi-person-badge","section":"People","group":"Employee"},{"label":"Sales summary report","url":"#","icon":"bi-bar-chart","section":"Insight","group":"Reports"},{"label":"Invoice aging report","url":"#","icon":"bi-calendar-check","section":"Insight","group":"Reports"},{"label":"Custom report builder","url":"#","icon":"bi-sliders2","section":"Insight","group":"Reports"},{"label":"Workflows","url":"#","icon":"bi-diagram-3","section":"Governance","group":"Business management"},{"label":"Users","url":"#","icon":"bi-person-badge","section":"Configuration","group":"Settings"},{"label":"Roles & permissions","url":"#","icon":"bi-shield-lock","section":"Configuration","group":"Settings"},{"label":"Appearance","url":"#","icon":"bi-palette","section":"Configuration","group":"Settings"},{"label":"System maintenance","url":"#","icon":"bi-tools","section":"Configuration","group":"Settings"}];</script>
+<script>window.erpNavIndex = [{"label":"Dashboard","url":"./dashboard.html","icon":"bi-grid-1x2","section":"My work","group":"Dashboard"},{"label":"Approval inbox","url":"#","icon":"bi-inbox","section":"My work","group":"Workflow"},{"label":"Sales orders","url":"./orders.html","icon":"bi-receipt","section":"Sales & CRM","group":"Sales"},{"label":"Create order","url":"./orders.html","icon":"bi-plus-circle","section":"Sales & CRM","group":"Sales","hint":"action"},{"label":"Bulk confirm orders","url":"./orders.html","icon":"bi-check2-square","section":"Sales & CRM","group":"Sales","hint":"action"},{"label":"Bulk print invoice","url":"./orders.html","icon":"bi-printer","section":"Sales & CRM","group":"Sales","hint":"action"},{"label":"Invoices","url":"./order-detail.html","icon":"bi-file-earmark-text","section":"Sales & CRM","group":"Sales"},{"label":"Mushak 9.1 tax invoice","url":"#","icon":"bi-file-earmark-ruled","section":"Sales & CRM","group":"Sales"},{"label":"POS terminal","url":"./pos.html","icon":"bi-upc-scan","section":"Sales & CRM","group":"Counter (POS)"},{"label":"Cash in / cash out","url":"#","icon":"bi-cash-stack","section":"Sales & CRM","group":"Counter (POS)"},{"label":"Coupon analytics","url":"#","icon":"bi-ticket-perforated","section":"Sales & CRM","group":"Sales"},{"label":"Products","url":"#","icon":"bi-boxes","section":"Inventory & warehouse","group":"Inventory"},{"label":"Stock overview","url":"#","icon":"bi-clipboard-check","section":"Inventory & warehouse","group":"Inventory"},{"label":"Stock movement ledger","url":"#","icon":"bi-list-columns","section":"Inventory & warehouse","group":"Inventory"},{"label":"Purchase orders","url":"#","icon":"bi-bag-check","section":"Inventory & warehouse","group":"Purchase"},{"label":"Chart of accounts","url":"#","icon":"bi-diagram-3","section":"Accounts & finance","group":"Accounting"},{"label":"Journal entries","url":"#","icon":"bi-journal-text","section":"Accounts & finance","group":"Accounting"},{"label":"Trial balance","url":"#","icon":"bi-clipboard-data","section":"Accounts & finance","group":"Accounting"},{"label":"General ledger","url":"#","icon":"bi-list-columns","section":"Accounts & finance","group":"Accounting"},{"label":"Employees","url":"#","icon":"bi-person-badge","section":"People & payroll","group":"Employee"},{"label":"Sales summary report","url":"#","icon":"bi-bar-chart","section":"Reports & insight","group":"Reports"},{"label":"Invoice aging report","url":"#","icon":"bi-calendar-check","section":"Reports & insight","group":"Reports"},{"label":"Custom report builder","url":"#","icon":"bi-sliders2","section":"Reports & insight","group":"Reports"},{"label":"Workflows","url":"#","icon":"bi-diagram-3","section":"Governance","group":"Business management"},{"label":"Users","url":"#","icon":"bi-person-badge","section":"Configuration","group":"Settings"},{"label":"Roles & permissions","url":"#","icon":"bi-shield-lock","section":"Configuration","group":"Settings"},{"label":"Appearance","url":"#","icon":"bi-palette","section":"Configuration","group":"Settings"},{"label":"System maintenance","url":"#","icon":"bi-tools","section":"Configuration","group":"Settings"}];</script>
 <script type="module" src="./assets/preview.js"></script>
 </body>
 </html>

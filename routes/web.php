@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BulkPriceUpdateController;
 use App\Http\Controllers\CodController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContextController;
 use App\Http\Controllers\CourierPartnerController;
@@ -303,6 +304,81 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::delete('/app/warehouses/{warehouse}', [WarehouseController::class, 'destroy'])
         ->middleware('permission:warehouses.delete')
         ->name('warehouses.destroy');
+
+    /* ---- Customers / CRM (§05) ----
+       The customer master existed so sales documents could reference a party;
+       this block adds the CRM itself: profile, ledger, ageing, credit control
+       and the relationship surfaces (addresses, contacts, feedback, referrals,
+       wishlist). Literal '/create' and '/export' are registered BEFORE the
+       {customer} wildcard so implicit binding cannot swallow them. */
+    Route::get('/app/customers/export', [CustomerController::class, 'export'])
+        ->middleware('permission:customers.export')
+        ->name('customers.export');
+    Route::get('/app/customers/create', [CustomerController::class, 'create'])
+        ->middleware('permission:customers.create')
+        ->name('customers.create');
+    Route::get('/app/customers/due', [CustomerController::class, 'due'])
+        ->middleware('permission:customers.due.view')
+        ->name('customers.due');
+    Route::get('/app/customers/groups', [CustomerController::class, 'groups'])
+        ->middleware('permission:customers.groups')
+        ->name('customers.groups');
+    Route::post('/app/customers/groups', [CustomerController::class, 'storeGroup'])
+        ->middleware('permission:customers.groups')
+        ->name('customers.groups.store');
+    Route::middleware('permission:customers.view')->group(function () {
+        Route::get('/app/customers', [CustomerController::class, 'index'])->name('customers.index');
+    });
+    Route::post('/app/customers', [CustomerController::class, 'store'])
+        ->middleware('permission:customers.create')
+        ->name('customers.store');
+    Route::middleware('permission:customers.view')->group(function () {
+        Route::get('/app/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
+        Route::get('/app/customers/{customer}/open-invoices', [CustomerController::class, 'openInvoices'])
+            ->name('customers.open-invoices');
+        Route::get('/app/customers/{customer}/ledger', [CustomerController::class, 'ledger'])
+            ->middleware('permission:accounting.ledger.view')
+            ->name('customers.ledger');
+        Route::get('/app/customers/{customer}/statement', [CustomerController::class, 'statement'])
+            ->middleware('permission:accounting.ledger.view')
+            ->name('customers.statement');
+    });
+    Route::get('/app/customers/{customer}/edit', [CustomerController::class, 'edit'])
+        ->middleware('permission:customers.edit')
+        ->name('customers.edit');
+    Route::put('/app/customers/{customer}', [CustomerController::class, 'update'])
+        ->middleware('permission:customers.edit')
+        ->name('customers.update');
+    Route::put('/app/customers/{customer}/credit-limit', [CustomerController::class, 'updateCreditLimit'])
+        ->middleware('permission:customers.credit_limit')
+        ->name('customers.credit-limit');
+    Route::post('/app/customers/{customer}/blacklist', [CustomerController::class, 'blacklist'])
+        ->middleware('permission:customers.blacklist')
+        ->name('customers.blacklist');
+    Route::post('/app/customers/{customer}/addresses', [CustomerController::class, 'storeAddress'])
+        ->middleware('permission:customers.edit')
+        ->name('customers.addresses.store');
+    Route::delete('/app/customers/{customer}/addresses/{address}', [CustomerController::class, 'destroyAddress'])
+        ->middleware('permission:customers.edit')
+        ->name('customers.addresses.destroy');
+    Route::post('/app/customers/{customer}/contacts', [CustomerController::class, 'storeContact'])
+        ->middleware('permission:customers.edit')
+        ->name('customers.contacts.store');
+    Route::delete('/app/customers/{customer}/contacts/{contact}', [CustomerController::class, 'destroyContact'])
+        ->middleware('permission:customers.edit')
+        ->name('customers.contacts.destroy');
+    Route::post('/app/customers/{customer}/feedback', [CustomerController::class, 'storeFeedback'])
+        ->middleware('permission:customers.feedback')
+        ->name('customers.feedback.store');
+    Route::post('/app/customers/{customer}/referrals', [CustomerController::class, 'storeReferral'])
+        ->middleware('permission:customers.referrals')
+        ->name('customers.referrals.store');
+    Route::post('/app/customers/{customer}/wishlist', [CustomerController::class, 'storeWishlist'])
+        ->middleware('permission:customers.edit')
+        ->name('customers.wishlist.store');
+    Route::delete('/app/customers/{customer}/wishlist/{wishlist}', [CustomerController::class, 'destroyWishlist'])
+        ->middleware('permission:customers.edit')
+        ->name('customers.wishlist.destroy');
 
     /* ---- Masters (§14) — permission keys come from MasterCatalog ---- */
     foreach (MasterCatalog::all() as $slug => $entry) {

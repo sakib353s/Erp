@@ -20,7 +20,7 @@ export const SECTIONS = [
         }],
     },
     {
-        code: 'work', label: 'My work', icon: 'bi-lightning-charge',
+        code: 'work', label: 'My work', icon: 'bi-lightning-charge', hue: 8,
         groups: [{
             label: 'Work queue', icon: 'bi-inbox', items: [
                 { label: 'Dashboard', url: './dashboard.html', icon: 'bi-grid-1x2', target: 'dashboard' },
@@ -31,7 +31,7 @@ export const SECTIONS = [
         }],
     },
     {
-        code: 'sell', label: 'Sell', icon: 'bi-cart3',
+        code: 'crm', label: 'Sales & CRM', icon: 'bi-cart3', hue: 1,
         groups: [
             {
                 label: 'Sales', icon: 'bi-cart3', items: [
@@ -60,7 +60,7 @@ export const SECTIONS = [
         ],
     },
     {
-        code: 'operate', label: 'Buy & stock', icon: 'bi-box-seam',
+        code: 'stock', label: 'Inventory & warehouse', icon: 'bi-box-seam', hue: 2,
         groups: [
             {
                 label: 'Inventory', icon: 'bi-box-seam', items: [
@@ -78,7 +78,7 @@ export const SECTIONS = [
         ],
     },
     {
-        code: 'money', label: 'Money', icon: 'bi-cash-stack',
+        code: 'finance', label: 'Accounts & finance', icon: 'bi-cash-stack', hue: 5,
         groups: [
             {
                 label: 'Accounting', icon: 'bi-journal-text', items: [
@@ -93,11 +93,11 @@ export const SECTIONS = [
         ],
     },
     {
-        code: 'people', label: 'People', icon: 'bi-people',
+        code: 'hr', label: 'People & payroll', icon: 'bi-people', hue: 6,
         groups: [{ label: 'Employee', icon: 'bi-person-badge', url: '#', items: [] }],
     },
     {
-        code: 'insight', label: 'Insight', icon: 'bi-graph-up-arrow',
+        code: 'insight', label: 'Reports & insight', icon: 'bi-graph-up-arrow', hue: 3,
         groups: [{
             label: 'Reports', icon: 'bi-graph-up-arrow', items: [
                 { label: 'Sales summary', url: '#', icon: 'bi-bar-chart' },
@@ -111,7 +111,7 @@ export const SECTIONS = [
         }],
     },
     {
-        code: 'govern', label: 'Governance', icon: 'bi-shield-check',
+        code: 'govern', label: 'Governance', icon: 'bi-shield-check', hue: 7,
         groups: [{
             label: 'Business management', icon: 'bi-building', items: [
                 { label: 'Workflows', url: '#', icon: 'bi-diagram-3' },
@@ -120,7 +120,7 @@ export const SECTIONS = [
         }],
     },
     {
-        code: 'configure', label: 'Configuration', icon: 'bi-sliders',
+        code: 'configure', label: 'Settings & masters', icon: 'bi-sliders', hue: 8,
         groups: [
             {
                 label: 'Settings', icon: 'bi-sliders', items: [
@@ -152,27 +152,27 @@ export const UTILITY = [
 export const PALETTE = [
     { label: 'Dashboard', url: './dashboard.html', icon: 'bi-grid-1x2', section: 'My work', group: 'Dashboard' },
     { label: 'Approval inbox', url: '#', icon: 'bi-inbox', section: 'My work', group: 'Workflow' },
-    { label: 'Sales orders', url: './orders.html', icon: 'bi-receipt', section: 'Sell', group: 'Sales' },
-    { label: 'Create order', url: './orders.html', icon: 'bi-plus-circle', section: 'Sell', group: 'Sales', hint: 'action' },
-    { label: 'Bulk confirm orders', url: './orders.html', icon: 'bi-check2-square', section: 'Sell', group: 'Sales', hint: 'action' },
-    { label: 'Bulk print invoice', url: './orders.html', icon: 'bi-printer', section: 'Sell', group: 'Sales', hint: 'action' },
-    { label: 'Invoices', url: './order-detail.html', icon: 'bi-file-earmark-text', section: 'Sell', group: 'Sales' },
-    { label: 'Mushak 9.1 tax invoice', url: '#', icon: 'bi-file-earmark-ruled', section: 'Sell', group: 'Sales' },
-    { label: 'POS terminal', url: './pos.html', icon: 'bi-upc-scan', section: 'Sell', group: 'Counter (POS)' },
-    { label: 'Cash in / cash out', url: '#', icon: 'bi-cash-stack', section: 'Sell', group: 'Counter (POS)' },
-    { label: 'Coupon analytics', url: '#', icon: 'bi-ticket-perforated', section: 'Sell', group: 'Sales' },
-    { label: 'Products', url: '#', icon: 'bi-boxes', section: 'Buy & stock', group: 'Inventory' },
-    { label: 'Stock overview', url: '#', icon: 'bi-clipboard-check', section: 'Buy & stock', group: 'Inventory' },
-    { label: 'Stock movement ledger', url: '#', icon: 'bi-list-columns', section: 'Buy & stock', group: 'Inventory' },
-    { label: 'Purchase orders', url: '#', icon: 'bi-bag-check', section: 'Buy & stock', group: 'Purchase' },
-    { label: 'Chart of accounts', url: '#', icon: 'bi-diagram-3', section: 'Money', group: 'Accounting' },
-    { label: 'Journal entries', url: '#', icon: 'bi-journal-text', section: 'Money', group: 'Accounting' },
-    { label: 'Trial balance', url: '#', icon: 'bi-clipboard-data', section: 'Money', group: 'Accounting' },
-    { label: 'General ledger', url: '#', icon: 'bi-list-columns', section: 'Money', group: 'Accounting' },
-    { label: 'Employees', url: '#', icon: 'bi-person-badge', section: 'People', group: 'Employee' },
-    { label: 'Sales summary report', url: '#', icon: 'bi-bar-chart', section: 'Insight', group: 'Reports' },
-    { label: 'Invoice aging report', url: '#', icon: 'bi-calendar-check', section: 'Insight', group: 'Reports' },
-    { label: 'Custom report builder', url: '#', icon: 'bi-sliders2', section: 'Insight', group: 'Reports' },
+    { label: 'Sales orders', url: './orders.html', icon: 'bi-receipt', section: 'Sales & CRM', group: 'Sales' },
+    { label: 'Create order', url: './orders.html', icon: 'bi-plus-circle', section: 'Sales & CRM', group: 'Sales', hint: 'action' },
+    { label: 'Bulk confirm orders', url: './orders.html', icon: 'bi-check2-square', section: 'Sales & CRM', group: 'Sales', hint: 'action' },
+    { label: 'Bulk print invoice', url: './orders.html', icon: 'bi-printer', section: 'Sales & CRM', group: 'Sales', hint: 'action' },
+    { label: 'Invoices', url: './order-detail.html', icon: 'bi-file-earmark-text', section: 'Sales & CRM', group: 'Sales' },
+    { label: 'Mushak 9.1 tax invoice', url: '#', icon: 'bi-file-earmark-ruled', section: 'Sales & CRM', group: 'Sales' },
+    { label: 'POS terminal', url: './pos.html', icon: 'bi-upc-scan', section: 'Sales & CRM', group: 'Counter (POS)' },
+    { label: 'Cash in / cash out', url: '#', icon: 'bi-cash-stack', section: 'Sales & CRM', group: 'Counter (POS)' },
+    { label: 'Coupon analytics', url: '#', icon: 'bi-ticket-perforated', section: 'Sales & CRM', group: 'Sales' },
+    { label: 'Products', url: '#', icon: 'bi-boxes', section: 'Inventory & warehouse', group: 'Inventory' },
+    { label: 'Stock overview', url: '#', icon: 'bi-clipboard-check', section: 'Inventory & warehouse', group: 'Inventory' },
+    { label: 'Stock movement ledger', url: '#', icon: 'bi-list-columns', section: 'Inventory & warehouse', group: 'Inventory' },
+    { label: 'Purchase orders', url: '#', icon: 'bi-bag-check', section: 'Inventory & warehouse', group: 'Purchase' },
+    { label: 'Chart of accounts', url: '#', icon: 'bi-diagram-3', section: 'Accounts & finance', group: 'Accounting' },
+    { label: 'Journal entries', url: '#', icon: 'bi-journal-text', section: 'Accounts & finance', group: 'Accounting' },
+    { label: 'Trial balance', url: '#', icon: 'bi-clipboard-data', section: 'Accounts & finance', group: 'Accounting' },
+    { label: 'General ledger', url: '#', icon: 'bi-list-columns', section: 'Accounts & finance', group: 'Accounting' },
+    { label: 'Employees', url: '#', icon: 'bi-person-badge', section: 'People & payroll', group: 'Employee' },
+    { label: 'Sales summary report', url: '#', icon: 'bi-bar-chart', section: 'Reports & insight', group: 'Reports' },
+    { label: 'Invoice aging report', url: '#', icon: 'bi-calendar-check', section: 'Reports & insight', group: 'Reports' },
+    { label: 'Custom report builder', url: '#', icon: 'bi-sliders2', section: 'Reports & insight', group: 'Reports' },
     { label: 'Workflows', url: '#', icon: 'bi-diagram-3', section: 'Governance', group: 'Business management' },
     { label: 'Users', url: '#', icon: 'bi-person-badge', section: 'Configuration', group: 'Settings' },
     { label: 'Roles & permissions', url: '#', icon: 'bi-shield-lock', section: 'Configuration', group: 'Settings' },
@@ -246,7 +246,7 @@ export function sidebar(activeTarget = 'dashboard') {
             .join('');
 
         return `
-        <div class="erp-nav-section">
+        <div class="erp-nav-section" data-hue="${section.hue ?? 0}">
             <p class="erp-nav-section-label">
                 <i class="bi ${section.icon}" aria-hidden="true"></i>
                 <span>${esc(section.label)}</span>
@@ -460,6 +460,8 @@ export function previewBar(current) {
         ['dashboard.html', 'Dashboard'],
         ['orders.html', 'Sales orders'],
         ['order-detail.html', 'Order workspace'],
+        ['customers.html', 'Customers (CRM)'],
+        ['customer-profile.html', 'Customer 360'],
         ['pos.html', 'POS terminal'],
         ['login.html', 'Sign in'],
     ];

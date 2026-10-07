@@ -1,13 +1,15 @@
 # BD ERP
 
-A single-company, multi-branch ERP for Bangladesh: sales & POS, purchase and
-stock, double-entry accounting, employees, courier/delivery settlement and the
-statutory document set (invoice / Mushak 9.1 / challan) — built on Laravel 13,
-Bootstrap 5.3 as a utility base, and an original design system.
+A single-company, multi-branch ERP for Bangladesh: **sales & CRM**, POS,
+purchase and stock, double-entry accounting, employees, courier/delivery
+settlement and the statutory document set (invoice / Mushak 9.1 / challan) —
+built on Laravel 13, Bootstrap 5.3 as a utility base, and an original design
+system.
 
 * Architecture decisions, data model and module contracts: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 * Module-by-module traceability to the specification: [`docs/TRACEABILITY/`](docs/TRACEABILITY)
 * Implementation status (machine-readable): [`docs/IMPLEMENTATION_STATUS.json`](docs/IMPLEMENTATION_STATUS.json)
+* What is still missing, module by module: [`docs/REMAINING_WORK.md`](docs/REMAINING_WORK.md)
 * UI audit + redesign record: [`docs/UI_AUDIT_AND_REDESIGN.md`](docs/UI_AUDIT_AND_REDESIGN.md)
 
 ## Non-negotiables baked into the code
@@ -44,13 +46,27 @@ php artisan erp:chain-verify     # verify the audit hash chain
 php artisan test                 # full suite
 ```
 
+## Modules
+
+| Domain | What is in the app today |
+|---|---|
+| Sales & CRM | Orders, invoices, quotations, delivery challans, shipments, coupons/promotions, sales team, POS counter, returns — plus the **customer CRM** (profile, ledger, ageing, credit control, feedback/NPS, referrals, wishlist, blacklist) |
+| Inventory & warehouse | Products, stock overview, movements, adjustments, transfers, warehouses |
+| Accounts & finance | Chart of accounts, journal entries, trial balance, opening balances (full ledger/report suite in progress) |
+| People & payroll | Employee records (full HRM in progress) |
+| Settings & masters | BD geo masters, tax rates, price lists, pricing rules, roles & permissions, appearance |
+
+Coverage is tracked honestly in [`docs/REMAINING_WORK.md`](docs/REMAINING_WORK.md).
+
 ## The UI: "Aperture" design system
 
 White-first, ink-on-paper enterprise UI as specified in
-[`docs/ARCHITECTURE.md` §18](docs/ARCHITECTURE.md): one configurable accent
-(deep teal by default — **no purple identity**), layered near-white surfaces,
-hairline borders, restrained elevation, tabular numerals for money, and one
-overlay system for modal / drawer / toast / confirm.
+[`docs/ARCHITECTURE.md` §18](docs/ARCHITECTURE.md): RGB-vibrant accents on a
+layered near-white canvas, hairline borders, restrained elevation, tabular
+numerals for money, and one overlay system for modal / drawer / toast / confirm.
+The accent is configurable — **vibrant emerald** (default), azure, tangerine or
+graphite. Indigo, violet and pink are not available anywhere: the preset list is
+closed and §18.1 forbids a purple identity.
 
 * **App shell** — `resources/views/layouts/app.blade.php` + `partials/`:
   sectioned navigation rail (collapsible, remembered), breadcrumbs, command
@@ -65,10 +81,14 @@ overlay system for modal / drawer / toast / confirm.
 * **Behaviour** — `resources/js/app.js`: shell, palette, toasts, tables/bulk
   selection, forms, permission matrix, repeaters, notification poller, scanner.
   No anonymous inline scripts in Blade.
-* **Appearance** — Settings › Appearance chooses the company accent (teal /
-  azure / forest / graphite), default theme and row density. Each user can
-  still switch light/dark and comfortable/compact rows; both are remembered
-  locally, the accent is token-driven.
+* **Appearance** — Settings › Appearance chooses the company accent (vibrant
+  emerald / azure / tangerine / graphite), default theme and row density. Each
+  user can still switch light/dark and comfortable/compact rows; both are
+  remembered locally, the accent is token-driven.
+* **Sections** — the rail is grouped by business domain (My work, Sales & CRM,
+  Inventory & warehouse, Accounts & finance, People & payroll, Marketing &
+  growth, Reports & insight, Governance, Settings & masters), each domain
+  carrying its own data-visualisation hue so the eye can navigate by colour.
 
 ### Design preview (no PHP required)
 

@@ -797,6 +797,7 @@ class NavigationBuilder
                 'code' => $sectionCode,
                 'label' => $sections[$sectionCode]['label'] ?? ucfirst($sectionCode),
                 'icon' => $sections[$sectionCode]['icon'] ?? null,
+                'hue' => $sections[$sectionCode]['hue'] ?? 0,
                 'items' => $bucket,
             ];
         }
@@ -858,6 +859,7 @@ class NavigationBuilder
             'code' => 'pinned',
             'label' => 'Pinned',
             'icon' => 'bi-star',
+            'hue' => 3,
             'items' => [[
                 'id' => null,
                 'code' => 'pinned.group',

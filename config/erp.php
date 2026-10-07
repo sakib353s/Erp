@@ -274,34 +274,55 @@ return [
         'show_favorites' => true,
         'show_recents' => true,
 
-        /* Job-to-be-done sections, in display order. */
+        /*
+         | Business-domain sections, in display order. Each section carries a
+         | vibrant hue (1-10 → --c1…--c10 in app.css) so the rail is scannable
+         | by domain: Sales & CRM, Inventory, Accounts, People, …
+         */
         'sections' => [
-            'work' => ['label' => 'My work', 'icon' => 'bi-lightning-charge'],
-            'sell' => ['label' => 'Sell', 'icon' => 'bi-cart3'],
-            'operate' => ['label' => 'Buy & stock', 'icon' => 'bi-box-seam'],
-            'money' => ['label' => 'Money', 'icon' => 'bi-cash-stack'],
-            'people' => ['label' => 'People', 'icon' => 'bi-people'],
-            'insight' => ['label' => 'Insight', 'icon' => 'bi-graph-up-arrow'],
-            'govern' => ['label' => 'Governance', 'icon' => 'bi-shield-check'],
-            'configure' => ['label' => 'Configuration', 'icon' => 'bi-sliders'],
+            'work' => ['label' => 'My work', 'icon' => 'bi-lightning-charge', 'hue' => 8],
+            'crm' => ['label' => 'Sales & CRM', 'icon' => 'bi-cart3', 'hue' => 1],
+            'stock' => ['label' => 'Inventory & warehouse', 'icon' => 'bi-box-seam', 'hue' => 2],
+            'finance' => ['label' => 'Accounts & finance', 'icon' => 'bi-cash-stack', 'hue' => 5],
+            'hr' => ['label' => 'People & payroll', 'icon' => 'bi-people', 'hue' => 6],
+            'growth' => ['label' => 'Marketing & growth', 'icon' => 'bi-megaphone', 'hue' => 4],
+            'insight' => ['label' => 'Reports & insight', 'icon' => 'bi-graph-up-arrow', 'hue' => 3],
+            'govern' => ['label' => 'Governance', 'icon' => 'bi-shield-check', 'hue' => 7],
+            'configure' => ['label' => 'Settings & masters', 'icon' => 'bi-sliders', 'hue' => 8],
         ],
 
         /* module code → section code (unknown modules fall back to 'govern'). */
         'module_sections' => [
             'dashboard' => 'work',
-            'sales' => 'sell',
-            'pos' => 'sell',
-            'customers' => 'sell',
-            'returns' => 'sell',
-            'purchase' => 'operate',
-            'inventory' => 'operate',
-            'suppliers' => 'operate',
-            'cash_bank' => 'money',
-            'accounting' => 'money',
-            'employee' => 'people',
+
+            // Sales & CRM — the commercial front office (02, 05, 07) + counter
+            'sales' => 'crm',
+            'pos' => 'crm',
+            'customers' => 'crm',
+            'returns' => 'crm',
+
+            // Inventory & warehouse — buying, stock, suppliers (03, 04, 06)
+            'purchase' => 'stock',
+            'inventory' => 'stock',
+            'suppliers' => 'stock',
+
+            // Accounts & finance — cash, bank, ledger, VAT (08, 09)
+            'cash_bank' => 'finance',
+            'accounting' => 'finance',
+
+            // People & payroll — HRM (10)
+            'employee' => 'hr',
+
+            // Marketing & growth (11)
+            'marketing' => 'growth',
+
+            // Reports & insight (13)
             'reports' => 'insight',
-            'marketing' => 'govern',
+
+            // Governance — approvals, audit, workflows, business management (12)
             'business_management' => 'govern',
+
+            // Settings & masters (14, 15)
             'masters' => 'configure',
             'settings' => 'configure',
         ],
@@ -547,13 +568,13 @@ return [
                         'label' => 'Accent colour',
                         'type' => 'select',
                         'options' => [
-                            'teal' => 'Deep teal (default)',
-                            'azure' => 'Azure',
-                            'forest' => 'Forest',
+                            'emerald' => 'Vibrant emerald (default)',
+                            'azure' => 'Vibrant azure',
+                            'tangerine' => 'Vibrant tangerine',
                             'graphite' => 'Graphite (neutral)',
                         ],
-                        'default' => 'teal',
-                        'help' => 'Used for primary actions and active states. Purple is not offered — §18.1 forbids a purple identity.',
+                        'default' => 'emerald',
+                        'help' => 'Used for primary actions, active states and the brand mark. Every preset is an RGB-vibrant hue; indigo, violet and pink are not offered — §18.1 forbids a purple identity.',
                     ],
                     'density' => [
                         'label' => 'Default row density',

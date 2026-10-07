@@ -43,6 +43,20 @@ class FoundationPermissionSeeder extends Seeder
 
             // Phase F — party / price-list masters
             ['masters', 'customers', 'manage', 'customers.manage', 'Manage customer masters'],
+
+            // Customers / CRM (§05) — the commercial relationship, not just a master row
+            ['customers', 'customers', 'view', 'customers.view', 'View customers & CRM'],
+            ['customers', 'customers', 'create', 'customers.create', 'Add customers'],
+            ['customers', 'customers', 'edit', 'customers.edit', 'Edit customers, addresses & contacts'],
+            ['customers', 'customers', 'delete', 'customers.delete', 'Delete customers'],
+            ['customers', 'customers', 'groups', 'customers.groups', 'Manage customer groups & discounts'],
+            ['customers', 'customers', 'credit_limit', 'customers.credit_limit', 'Set credit limits'],
+            ['customers', 'customers', 'blacklist', 'customers.blacklist', 'Blacklist / restore customers'],
+            ['customers', 'customers', 'due_view', 'customers.due.view', 'View customer dues & ageing'],
+            ['customers', 'customers', 'feedback', 'customers.feedback', 'Record customer feedback'],
+            ['customers', 'customers', 'referrals', 'customers.referrals', 'Record referrals'],
+            ['customers', 'customers', 'export', 'customers.export', 'Export customers'],
+            ['accounting', 'ledger', 'view', 'accounting.ledger.view', 'View customer / account ledgers'],
             ['masters', 'suppliers', 'manage', 'suppliers.manage', 'Manage supplier masters'],
             ['masters', 'price_lists', 'view', 'pricing.view', 'View price history'],
             ['masters', 'price_lists', 'manage', 'pricing.manage', 'Manage price lists'],

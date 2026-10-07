@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#ffffff">
-    <title>Sales orders · BD ERP — UI redesign preview</title>
+    <title>Customers (CRM) · BD ERP — UI redesign preview</title>
     <link rel="stylesheet" href="./assets/preview.css">
 </head>
 <body class="erp-body">
@@ -15,7 +15,7 @@
 <div class="erp-preview-bar">
     <i class="bi bi-easel2" aria-hidden="true"></i>
     <strong>UI redesign preview</strong>
-    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html" style="color:#fff;text-decoration:underline">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
+    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html" style="color:#fff;text-decoration:underline">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
     <span class="erp-preview-note">Static render of the new shell — same CSS + JS the Laravel app ships. Press ⌘K / Ctrl+K.</span>
 </div>
 <div class="erp-shell" data-rail="expanded">
@@ -107,15 +107,15 @@
             </p>
             
     <div class="erp-nav-group">
-        <button class="erp-nav-group-btn is-active has-active-trail" type="button"
-                data-bs-toggle="collapse" data-bs-target="#nav-crm-0" aria-expanded="true">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-crm-0" aria-expanded="false">
             <i class="bi bi-cart3 erp-nav-icon" aria-hidden="true"></i>
             <span>Sales</span>
             <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
         </button>
-        <div class="collapse show" id="nav-crm-0">
+        <div class="collapse" id="nav-crm-0">
             <div class="erp-nav-sub">
-        <a class="erp-nav-link active" href="./orders.html" aria-current="page">
+        <a class="erp-nav-link" href="./orders.html">
             <span>Orders</span>
         </a>
         <a class="erp-nav-link" href="./order-detail.html">
@@ -420,7 +420,7 @@
         <span class="erp-version">Build 2026.10 · v2</span>
     </div>
 </aside>
-    <div class="erp-main">
+<div class="erp-main">
 
 <header class="erp-topbar">
     <button class="erp-icon-btn d-lg-none" type="button" data-erp-sidebar-open aria-label="Open navigation">
@@ -430,16 +430,13 @@
     <div class="erp-topbar-crumbs">
         <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb">
         <li>
-            <span class="is-current" aria-current="page">Sell</span>
+            <span class="is-current" aria-current="page">undefined</span>
         </li>
         <li>
-            <span class="is-current" aria-current="page">Sales</span>
-        </li>
-        <li>
-            <span class="is-current" aria-current="page">Orders</span>
+            <span class="is-current" aria-current="page">undefined</span>
         </li></ol></nav>
         <div class="erp-topbar-title">
-            <strong class="d-none d-md-inline">Sales orders</strong>
+            <strong class="d-none d-md-inline">Customers</strong>
             <span class="erp-chip erp-chip-outline d-none d-xl-inline-flex" title="Current branch context">
                 <i class="bi bi-geo-alt" aria-hidden="true"></i>Dhaka HQ
             </span>
@@ -513,213 +510,193 @@
         </div>
     </div>
 </header>
-        <main class="erp-content" id="erpContent">
-            <header class="erp-page-head">
-                <div class="erp-page-head-main">
-                    <p class="erp-eyebrow">Sell · Sales</p>
-                    <h1 class="erp-h1">Sales orders</h1>
-                    <p class="erp-page-sub">Commitment documents. Stock is reserved on confirm, never on draft — the ledger only moves at invoice.</p>
-                </div>
-                <div class="erp-page-head-actions">
-                    <a class="btn btn-outline-secondary" href="#"><i class="bi bi-download" aria-hidden="true"></i> Export</a>
-                    <a class="btn btn-outline-secondary" href="#"><i class="bi bi-printer" aria-hidden="true"></i> Print</a>
-                    <a class="btn btn-primary" href="#"><i class="bi bi-plus-lg" aria-hidden="true"></i> New order</a>
-                    <button class="erp-icon-btn" type="button" title="Pin this page" aria-label="Pin Sales orders">
-                        <i class="bi bi-star-fill" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </header>
+<main class="erp-content" id="erpContent">
+    <header class="erp-page-head">
+        <div class="erp-page-head-main">
+            <p class="erp-eyebrow">Sales &amp; CRM</p>
+            <h1 class="erp-h1">Customers</h1>
+            <p class="erp-page-sub">Every party you sell to, with the money they owe derived from the ledgers — never from a hand-edited due column.</p>
+        </div>
+        <div class="erp-page-head-actions">
+            <a class="btn btn-outline-secondary" href="#"><i class="bi bi-download" aria-hidden="true"></i> Export CSV</a>
+            <a class="btn btn-outline-secondary" href="#"><i class="bi bi-alarm" aria-hidden="true"></i> Due &amp; ageing</a>
+            <a class="btn btn-outline-secondary" href="#"><i class="bi bi-collection" aria-hidden="true"></i> Groups</a>
+            <a class="btn btn-primary" href="#"><i class="bi bi-person-plus" aria-hidden="true"></i> New customer</a>
+        </div>
+    </header>
 
-            <div class="erp-segmented mb-3">
-                <button class="active" type="button">All orders</button><button class="" type="button">Pending</button><button class="" type="button">Confirmed</button><button class="" type="button">Processing</button><button class="" type="button">Ready to ship</button><button class="" type="button">In transit</button><button class="" type="button">Delivered</button><button class="" type="button">Return requested <span class="erp-chip erp-chip-warn" style="margin-left:4px">3</span></button><button class="" type="button">Suspicious</button>
+    <div class="erp-kpi-grid mb-3">
+        
+        <div class="erp-kpi" style="--hue: var(--c1)">
+            <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>Not yet due</p>
+            <p class="erp-kpi-value">৳ 7,42,180</p>
+            <p class="erp-kpi-foot">38 invoices</p>
+        </div>
+        <div class="erp-kpi" style="--hue: var(--c2)">
+            <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>Overdue 1-30 days</p>
+            <p class="erp-kpi-value">৳ 4,10,900</p>
+            <p class="erp-kpi-foot">19 invoices</p>
+        </div>
+        <div class="erp-kpi" style="--hue: var(--c3)">
+            <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>Overdue 31-60 days</p>
+            <p class="erp-kpi-value">৳ 2,18,450</p>
+            <p class="erp-kpi-foot">11 invoices</p>
+        </div>
+        <div class="erp-kpi" style="--hue: var(--c4)">
+            <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>Overdue 61-90 days</p>
+            <p class="erp-kpi-value">৳ 1,02,300</p>
+            <p class="erp-kpi-foot">6 invoices</p>
+        </div>
+        <div class="erp-kpi" style="--hue: var(--c7)">
+            <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>Overdue 90+ days</p>
+            <p class="erp-kpi-value">৳ 88,610</p>
+            <p class="erp-kpi-foot">4 invoices</p>
+        </div>
+    </div>
+
+    <form class="erp-filterbar" onsubmit="return false">
+        <div class="erp-filter erp-filter-wide">
+            <label class="form-label" for="q">Search</label>
+            <div class="erp-input-group">
+                <i class="bi bi-search" aria-hidden="true"></i>
+                <input class="form-control" type="search" id="q" placeholder="Name, code, phone or e-mail…">
             </div>
+        </div>
+        <div class="erp-filter">
+            <label class="form-label" for="group">Group</label>
+            <select class="form-select" id="group"><option>All groups</option><option>Retailer</option><option>Wholesaler</option><option>Corporate</option></select>
+        </div>
+        <div class="erp-filter">
+            <label class="form-label" for="district">District</label>
+            <select class="form-select" id="district"><option>All districts</option><option>Dhaka</option><option>Chattogram</option><option>Sylhet</option><option>Khulna</option></select>
+        </div>
+        <div class="erp-filter">
+            <label class="form-label" for="status">Status</label>
+            <select class="form-select" id="status"><option>Any</option><option>Blacklisted</option><option>Inactive</option><option>Over credit limit</option></select>
+        </div>
+        <div class="erp-filterbar-actions">
+            <a class="btn btn-link" href="./customers.html">Reset</a>
+            <button class="btn btn-primary" type="submit"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+        </div>
+    </form>
 
-            <form class="erp-filterbar" onsubmit="return false">
-                <div class="erp-filter erp-filter-wide">
-                    <label class="form-label" for="q">Search</label>
-                    <div class="erp-input-group">
-                        <i class="bi bi-search" aria-hidden="true"></i>
-                        <input class="form-control" id="q" placeholder="Order no, customer name or phone">
-                    </div>
-                </div>
-                <div class="erp-filter">
-                    <label class="form-label" for="courier">Courier</label>
-                    <select class="form-select" id="courier"><option>Any courier</option><option>Pathao</option><option>RedX</option><option>Steadfast</option></select>
-                </div>
-                <div class="erp-filter">
-                    <label class="form-label" for="branch">Branch</label>
-                    <select class="form-select" id="branch"><option>All my branches</option><option>Dhaka HQ</option><option>Chattogram branch</option></select>
-                </div>
-                <div class="erp-filter">
-                    <label class="form-label" for="from">Placed between</label>
-                    <input class="form-control" type="text" id="from" value="01 Oct – 07 Oct 2026">
-                </div>
-                <div class="erp-filterbar-actions">
-                    <button class="btn btn-outline-secondary" type="reset">Reset</button>
-                    <button class="btn btn-primary" type="submit">Apply</button>
-                </div>
-            </form>
+    <div class="erp-table-shell" data-erp-table>
+        <div class="erp-card-head px-3 pt-3">
+            <h2 class="erp-card-title">Customers <span class="erp-chip erp-chip-outline">5 customers</span></h2>
+        </div>
+        <div class="erp-table-scroll">
+            <table class="table erp-table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Contact</th>
+                        <th>Group</th>
+                        <th class="erp-th-num">Credit limit</th>
+                        <th class="erp-th-num">Due</th>
+                        <th class="erp-th-num">Overdue</th>
+                        <th>Status</th>
+                        <th class="erp-th-actions">Open</th>
+                    </tr>
+                </thead>
+                <tbody>
+        <tr>
+            <td data-label="Customer">
+                <a class="erp-row-link" href="./customer-profile.html">Rahman Traders</a>
+                <span class="erp-td-muted d-block small">CUST-00001 · business</span>
+            </td>
+            <td data-label="Contact" class="erp-td-muted">Dhaka · Mirpur</td>
+            <td data-label="Group"><span class="erp-chip erp-chip-soft">Retailer</span></td>
+            <td data-label="Credit limit" class="erp-td-num">৳ 50,000 / 15d</td>
+            <td data-label="Due" class="erp-td-num">৳ 24,580</td>
+            <td data-label="Overdue" class="erp-td-num"><span class="erp-amount erp-amount-danger">৳ 4,120</span></td>
+            <td data-label="Status"><span class="erp-status erp-status-active">active</span></td>
+            <td data-label="Open" class="erp-td-actions">
+                <a class="btn btn-sm btn-outline-secondary" href="./customer-profile.html">Profile</a>
+                <a class="btn btn-sm btn-light" href="./customer-profile.html#ledger">Ledger</a>
+            </td>
+        </tr>
+        <tr>
+            <td data-label="Customer">
+                <a class="erp-row-link" href="./customer-profile.html">Nusrat Jahan</a>
+                <span class="erp-td-muted d-block small">CUST-00002</span>
+            </td>
+            <td data-label="Contact" class="erp-td-muted">Dhaka · Dhanmondi</td>
+            <td data-label="Group"><span class="erp-td-muted">—</span></td>
+            <td data-label="Credit limit" class="erp-td-num">Cash only</td>
+            <td data-label="Due" class="erp-td-num">৳ 0</td>
+            <td data-label="Overdue" class="erp-td-num"><span class="erp-td-muted">—</span></td>
+            <td data-label="Status"><span class="erp-status erp-status-active">active</span></td>
+            <td data-label="Open" class="erp-td-actions">
+                <a class="btn btn-sm btn-outline-secondary" href="./customer-profile.html">Profile</a>
+                <a class="btn btn-sm btn-light" href="./customer-profile.html#ledger">Ledger</a>
+            </td>
+        </tr>
+        <tr>
+            <td data-label="Customer">
+                <a class="erp-row-link" href="./customer-profile.html">Sylhet Grocers</a>
+                <span class="erp-td-muted d-block small">CUST-00003 · business</span>
+            </td>
+            <td data-label="Contact" class="erp-td-muted">Sylhet · Zindabazar</td>
+            <td data-label="Group"><span class="erp-chip erp-chip-soft">Wholesaler</span></td>
+            <td data-label="Credit limit" class="erp-td-num">৳ 1,50,000 / 30d</td>
+            <td data-label="Due" class="erp-td-num">৳ 1,86,400</td>
+            <td data-label="Overdue" class="erp-td-num"><span class="erp-amount erp-amount-danger">৳ 96,400</span></td>
+            <td data-label="Status"><span class="erp-status erp-status-pending">over limit</span></td>
+            <td data-label="Open" class="erp-td-actions">
+                <a class="btn btn-sm btn-outline-secondary" href="./customer-profile.html">Profile</a>
+                <a class="btn btn-sm btn-light" href="./customer-profile.html#ledger">Ledger</a>
+            </td>
+        </tr>
+        <tr>
+            <td data-label="Customer">
+                <a class="erp-row-link" href="./customer-profile.html">Agrabad Hardware</a>
+                <span class="erp-td-muted d-block small">CUST-00004 · business</span>
+            </td>
+            <td data-label="Contact" class="erp-td-muted">Chattogram · Agrabad</td>
+            <td data-label="Group"><span class="erp-chip erp-chip-soft">Retailer</span></td>
+            <td data-label="Credit limit" class="erp-td-num">৳ 75,000 / 20d</td>
+            <td data-label="Due" class="erp-td-num">৳ 12,300</td>
+            <td data-label="Overdue" class="erp-td-num"><span class="erp-td-muted">—</span></td>
+            <td data-label="Status"><span class="erp-status erp-status-active">active</span></td>
+            <td data-label="Open" class="erp-td-actions">
+                <a class="btn btn-sm btn-outline-secondary" href="./customer-profile.html">Profile</a>
+                <a class="btn btn-sm btn-light" href="./customer-profile.html#ledger">Ledger</a>
+            </td>
+        </tr>
+        <tr>
+            <td data-label="Customer">
+                <a class="erp-row-link" href="./customer-profile.html">Karim Store</a>
+                <span class="erp-td-muted d-block small">CUST-00005</span>
+            </td>
+            <td data-label="Contact" class="erp-td-muted">Khulna · Sonadanga</td>
+            <td data-label="Group"><span class="erp-td-muted">—</span></td>
+            <td data-label="Credit limit" class="erp-td-num">Cash only</td>
+            <td data-label="Due" class="erp-td-num">৳ 0</td>
+            <td data-label="Overdue" class="erp-td-num"><span class="erp-td-muted">—</span></td>
+            <td data-label="Status"><span class="erp-status erp-status-blacklisted">blacklisted</span></td>
+            <td data-label="Open" class="erp-td-actions">
+                <a class="btn btn-sm btn-outline-secondary" href="./customer-profile.html">Profile</a>
+                <a class="btn btn-sm btn-light" href="./customer-profile.html#ledger">Ledger</a>
+            </td>
+        </tr></tbody>
+            </table>
+        </div>
+        <div class="erp-table-foot">
+            <span>5 customers</span>
+            <span class="erp-td-muted">Page 1 of 1</span>
+        </div>
+    </div>
 
-            <div class="erp-active-filters">
-                <span class="erp-chip erp-chip-soft">Branch: Dhaka HQ <button class="erp-chip-remove" aria-label="Remove filter">×</button></span>
-                <span class="erp-chip erp-chip-soft">Placed: this month <button class="erp-chip-remove" aria-label="Remove filter">×</button></span>
-            </div>
-
-            <div class="erp-table-shell" data-erp-table>
-                <div class="erp-bulkbar" data-erp-bulkbar>
-                    <i class="bi bi-check2-square" aria-hidden="true"></i>
-                    <strong><span data-erp-bulk-count>0</span></strong> selected
-                    <div class="erp-bulkbar-actions">
-                        <button class="btn btn-sm btn-outline-light" type="button"><i class="bi bi-check2" aria-hidden="true"></i> Confirm</button>
-                        <button class="btn btn-sm btn-outline-light" type="button"><i class="bi bi-truck" aria-hidden="true"></i> Assign courier</button>
-                        <button class="btn btn-sm btn-outline-light" type="button"><i class="bi bi-printer" aria-hidden="true"></i> Print invoices</button>
-                        <button class="btn btn-sm btn-outline-light" type="button"><i class="bi bi-chat-dots" aria-hidden="true"></i> Notify</button>
-                        <button class="btn btn-sm btn-outline-danger" type="button"><i class="bi bi-x-circle" aria-hidden="true"></i> Cancel</button>
-                    </div>
-                </div>
-
-                <div class="erp-table-scroll">
-                    <table class="table erp-table erp-table-stack">
-                        <thead>
-                            <tr>
-                                <th style="width:38px">
-                                    <input class="form-check-input" type="checkbox" data-erp-select-all aria-label="Select all rows">
-                                </th>
-                                <th>Order</th>
-                                <th>Customer</th>
-                                <th>Area</th>
-                                <th>Status</th>
-                                <th class="erp-th-num">Total</th>
-                                <th>Courier</th>
-                                <th>Payment</th>
-                                <th class="erp-th-actions">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                            <tr>
-                                <td data-label="Select"><input class="form-check-input" type="checkbox" data-erp-row-select aria-label="Select SO-2026-01845"></td>
-                                <td data-label="Order"><a class="erp-row-link" href="./order-detail.html">SO-2026-01845</a></td>
-                                <td data-label="Customer">Nusrat Jahan</td>
-                                <td data-label="Area" class="erp-td-muted">Dhaka · Mirpur</td>
-                                <td data-label="Status"><span class="erp-status erp-status-confirmed">confirmed</span></td>
-                                <td data-label="Total" class="erp-td-num"><span class="erp-amount">৳ 24,580</span></td>
-                                <td data-label="Courier" class="erp-td-muted">Pathao</td>
-                                <td data-label="Payment"><span class="erp-status erp-status-paid">paid</span></td>
-                                <td data-label="Actions" class="erp-td-actions">
-                                    <button class="erp-icon-btn" type="button" title="Open" aria-label="Open SO-2026-01845"><i class="bi bi-arrow-right" aria-hidden="true"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td data-label="Select"><input class="form-check-input" type="checkbox" data-erp-row-select aria-label="Select SO-2026-01844"></td>
-                                <td data-label="Order"><a class="erp-row-link" href="./order-detail.html">SO-2026-01844</a></td>
-                                <td data-label="Customer">Tanvir Ahmed</td>
-                                <td data-label="Area" class="erp-td-muted">Chattogram · Agrabad</td>
-                                <td data-label="Status"><span class="erp-status erp-status-processing">processing</span></td>
-                                <td data-label="Total" class="erp-td-num"><span class="erp-amount">৳ 13,750</span></td>
-                                <td data-label="Courier" class="erp-td-muted">RedX</td>
-                                <td data-label="Payment"><span class="erp-status erp-status-cod">cod</span></td>
-                                <td data-label="Actions" class="erp-td-actions">
-                                    <button class="erp-icon-btn" type="button" title="Open" aria-label="Open SO-2026-01844"><i class="bi bi-arrow-right" aria-hidden="true"></i></button>
-                                </td>
-                            </tr>
-                            <tr class="erp-row-attention">
-                                <td data-label="Select"><input class="form-check-input" type="checkbox" data-erp-row-select aria-label="Select SO-2026-01843"></td>
-                                <td data-label="Order"><a class="erp-row-link" href="./order-detail.html">SO-2026-01843</a></td>
-                                <td data-label="Customer">Rahima Begum</td>
-                                <td data-label="Area" class="erp-td-muted">Sylhet · Zindabazar</td>
-                                <td data-label="Status"><span class="erp-status erp-status-pending">pending</span></td>
-                                <td data-label="Total" class="erp-td-num"><span class="erp-amount">৳ 8,990</span></td>
-                                <td data-label="Courier" class="erp-td-muted">Steadfast</td>
-                                <td data-label="Payment"><span class="erp-status erp-status-unpaid">unpaid</span></td>
-                                <td data-label="Actions" class="erp-td-actions">
-                                    <button class="erp-icon-btn" type="button" title="Open" aria-label="Open SO-2026-01843"><i class="bi bi-arrow-right" aria-hidden="true"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td data-label="Select"><input class="form-check-input" type="checkbox" data-erp-row-select aria-label="Select SO-2026-01842"></td>
-                                <td data-label="Order"><a class="erp-row-link" href="./order-detail.html">SO-2026-01842</a></td>
-                                <td data-label="Customer">Imran Hossain</td>
-                                <td data-label="Area" class="erp-td-muted">Dhaka · Uttara</td>
-                                <td data-label="Status"><span class="erp-status erp-status-delivered">delivered</span></td>
-                                <td data-label="Total" class="erp-td-num"><span class="erp-amount">৳ 42,300</span></td>
-                                <td data-label="Courier" class="erp-td-muted">Own rider</td>
-                                <td data-label="Payment"><span class="erp-status erp-status-paid">paid</span></td>
-                                <td data-label="Actions" class="erp-td-actions">
-                                    <button class="erp-icon-btn" type="button" title="Open" aria-label="Open SO-2026-01842"><i class="bi bi-arrow-right" aria-hidden="true"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td data-label="Select"><input class="form-check-input" type="checkbox" data-erp-row-select aria-label="Select SO-2026-01841"></td>
-                                <td data-label="Order"><a class="erp-row-link" href="./order-detail.html">SO-2026-01841</a></td>
-                                <td data-label="Customer">Farhana Akter</td>
-                                <td data-label="Area" class="erp-td-muted">Khulna · Sonadanga</td>
-                                <td data-label="Status"><span class="erp-status erp-status-return_requested">return requested</span></td>
-                                <td data-label="Total" class="erp-td-num"><span class="erp-amount">৳ 6,250</span></td>
-                                <td data-label="Courier" class="erp-td-muted">Sundarban</td>
-                                <td data-label="Payment"><span class="erp-status erp-status-refund_due">refund due</span></td>
-                                <td data-label="Actions" class="erp-td-actions">
-                                    <button class="erp-icon-btn" type="button" title="Open" aria-label="Open SO-2026-01841"><i class="bi bi-arrow-right" aria-hidden="true"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td data-label="Select"><input class="form-check-input" type="checkbox" data-erp-row-select aria-label="Select SO-2026-01840"></td>
-                                <td data-label="Order"><a class="erp-row-link" href="./order-detail.html">SO-2026-01840</a></td>
-                                <td data-label="Customer">Jahangir Alam</td>
-                                <td data-label="Area" class="erp-td-muted">Rajshahi · Shaheb Bazar</td>
-                                <td data-label="Status"><span class="erp-status erp-status-cancelled">cancelled</span></td>
-                                <td data-label="Total" class="erp-td-num"><span class="erp-amount">৳ 3,900</span></td>
-                                <td data-label="Courier" class="erp-td-muted">—</td>
-                                <td data-label="Payment"><span class="erp-status erp-status-void">void</span></td>
-                                <td data-label="Actions" class="erp-td-actions">
-                                    <button class="erp-icon-btn" type="button" title="Open" aria-label="Open SO-2026-01840"><i class="bi bi-arrow-right" aria-hidden="true"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td data-label="Select"><input class="form-check-input" type="checkbox" data-erp-row-select aria-label="Select SO-2026-01839"></td>
-                                <td data-label="Order"><a class="erp-row-link" href="./order-detail.html">SO-2026-01839</a></td>
-                                <td data-label="Customer">Shirin Sultana</td>
-                                <td data-label="Area" class="erp-td-muted">Dhaka · Dhanmondi</td>
-                                <td data-label="Status"><span class="erp-status erp-status-completed">completed</span></td>
-                                <td data-label="Total" class="erp-td-num"><span class="erp-amount">৳ 18,400</span></td>
-                                <td data-label="Courier" class="erp-td-muted">Pathao</td>
-                                <td data-label="Payment"><span class="erp-status erp-status-paid">paid</span></td>
-                                <td data-label="Actions" class="erp-td-actions">
-                                    <button class="erp-icon-btn" type="button" title="Open" aria-label="Open SO-2026-01839"><i class="bi bi-arrow-right" aria-hidden="true"></i></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="erp-table-foot">
-                    <span>Showing <strong>1–7</strong> of <strong>1,842</strong> orders · totals shown in BDT</span>
-                    <nav aria-label="Pagination">
-                        <ul class="pagination">
-                            <li class="page-item disabled"><span class="page-link">‹</span></li>
-                            <li class="page-item active"><span class="page-link">1</span></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">›</a></li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-
-            <div class="mt-3">
-                <nav class="erp-card erp-card-tight" aria-label="More in this module">
-                    <p class="erp-field-label">More in Sales</p>
-                    <div class="d-flex flex-wrap gap-2">
-                        <a class="erp-chip erp-chip-outline" href="#"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Invoices</a>
-                        <a class="erp-chip erp-chip-outline" href="#"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Quotations</a>
-                        <a class="erp-chip erp-chip-outline" href="#"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Delivery challans</a>
-                        <a class="erp-chip erp-chip-outline" href="#"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Shipments</a>
-                        <a class="erp-chip erp-chip-outline" href="#"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Coupons & promotions</a>
-                        <a class="erp-chip erp-chip-outline" href="#"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Sales team</a>
-                    </div>
-                </nav>
-            </div>
-        </main>
+    <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
+        <p class="erp-field-label">More in this module</p>
+        <div class="d-flex flex-wrap gap-2">
+            <a class="erp-chip erp-chip-outline" href="./orders.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Sales orders</a>
+            <a class="erp-chip erp-chip-outline" href="#"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Sales invoices</a>
+            <a class="erp-chip erp-chip-outline" href="#"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Coupons &amp; promotions</a>
+            <a class="erp-chip erp-chip-outline" href="#"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Sales team</a>
+        </div>
+    </nav>
+</main>
 
 <footer class="erp-footer">
     <span>BD ERP · Rafshan Trading Ltd.</span>
@@ -728,8 +705,9 @@
         <span class="d-none d-md-inline">Press <kbd>⌘</kbd><kbd>K</kbd> to jump anywhere</span>
     </span>
 </footer>
-    </div>
 </div>
+</div>
+<script>window.erpNavIndex = [];</script>
 
 <div class="erp-backdrop" data-erp-backdrop hidden></div>
 

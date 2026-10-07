@@ -30,12 +30,15 @@
 
     <nav class="erp-sidebar-nav" aria-label="Sections">
         @forelse($sidebarSections as $section)
-            <div class="erp-nav-section">
+            <div class="erp-nav-section" data-hue="{{ $section['hue'] ?? 0 }}">
                 <p class="erp-nav-section-label">
                     @if($section['icon'] ?? null)
                         <i class="bi {{ $section['icon'] }}" aria-hidden="true"></i>
                     @endif
                     <span>{{ $tr('nav.section.'.$section['code'], $section['label']) }}</span>
+                    @if(! empty($section['hint']))
+                        <span class="erp-nav-section-count">{{ $section['hint'] }}</span>
+                    @endif
                 </p>
 
                 @include('partials.menu-nodes', ['nodes' => $section['items'], 'level' => 1])
