@@ -8,6 +8,7 @@ use App\Domain\Inventory\Actions\PostStockAdjustment;
 use App\Domain\Inventory\Actions\StockTransferService;
 use App\Domain\Inventory\Product;
 use App\Domain\Inventory\Services\StockLedgerService;
+use App\Domain\Inventory\Services\ReorderService;
 use App\Domain\Inventory\Services\StockQuery;
 use App\Domain\Inventory\StockAdjustment;
 use App\Domain\Inventory\StockMovement;
@@ -31,6 +32,7 @@ class InventoryController extends Controller
         protected CreateOpeningStock $openingStock,
         protected PostStockAdjustment $postAdjustment,
         protected StockTransferService $transfers,
+        protected ReorderService $reorder,
     ) {}
 
     public function overview(Request $request): View
@@ -236,5 +238,85 @@ class InventoryController extends Controller
             ->rebuildBalances((int) $request->user()->company_id);
 
         return back()->with('status', "Stock balances rebuilt from ledger for {$count} row(s).");
+    }
+
+    /* ---------------------- stock alerts & reorder levels (04-23, 04-24) ---- */
+
+    public function alerts(Request $request): View
+    {
+        $type = in_array($request->query('type'), ['low', 'out', 'over'], true)
+            ? (string) $request->query('type')
+            : 'low';
+
+        $warehouseId = $request->filled('warehouse') ? (int) $request->query('warehouse') : null;
+        $search = trim((string) $request->query('q'));
+
+        $result = $this->reorder->alertRows($type, $warehouseId, $search === '' ? null : $search);
+
+        return view('inventory.stock.alerts', [
+            'type' => $type,
+            'filters' => ['warehouse' => $warehouseId, 'q' => $search],
+            'rows' => $result['rows'],
+            'counts' => $result['counts'],
+            'warehouses' => Warehouse::query()->orderBy('name')->get(['id', 'name', 'code']),
+        ]);
+    }
+
+    public function reorderLevels(Request $request): View
+    {
+        $warehouseId = $request->filled('warehouse') ? (int) $request->query('warehouse') : null;
+        $search = trim((string) $request->query('q'));
+
+        return view('inventory.reorder-levels', [
+            'policies' => $this->reorder->policies($warehouseId, $search === '' ? null : $search),
+            'filters' => ['warehouse' => $warehouseId, 'q' => $search],
+            'warehouses' => Warehouse::query()->orderBy('name')->get(['id', 'name', 'code']),
+            'products' => Product::query()->active()->orderBy('name')->get(['id', 'sku', 'name']),
+        ]);
+    }
+
+    public function storeReorderLevel(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'product_id' => ['required', 'integer', 'exists:products,id'],
+            'warehouse_id' => ['nullable', 'integer', 'exists:warehouses,id'],
+            'min_level' => ['required', 'numeric', 'gte:0'],
+            'max_level' => ['required', 'numeric', 'gte:0'],
+            'reorder_point' => ['required', 'numeric', 'gte:0'],
+            'safety_stock' => ['required', 'numeric', 'gte:0'],
+            'reorder_qty' => ['required', 'numeric', 'gte:0'],
+            'lead_time_days' => ['required', 'integer', 'between:0,365'],
+        ]);
+
+        $product = Product::query()->findOrFail($data['product_id']);
+
+        try {
+            $policy = $this->reorder->savePolicy(
+                $product,
+                $data,
+                $data['warehouse_id'] ?? null,
+                $request->user()?->id,
+            );
+        } catch (\RuntimeException $e) {
+            return back()->withInput()->withErrors(['reorder' => $e->getMessage()]);
+        }
+
+        return redirect()->route('inventory.reorder.index')
+            ->with('status', sprintf(
+                'Reorder policy saved for %s %s.',
+                $product->sku,
+                $policy->warehouse_id === null ? 'across every warehouse' : 'in the chosen warehouse',
+            ));
+    }
+
+    public function destroyReorderLevel(Request $request, int $policy): RedirectResponse
+    {
+        $record = \App\Domain\Inventory\ReorderPolicy::query()
+            ->where('company_id', $request->user()->company_id)
+            ->findOrFail($policy);
+
+        $this->reorder->deletePolicy($record, $request->user()?->id);
+
+        return back()->with('status', 'The policy was removed — this product is no longer watched in that warehouse.');
     }
 }

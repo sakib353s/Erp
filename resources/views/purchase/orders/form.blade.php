@@ -118,7 +118,7 @@
                         </tr>
                     </thead>
                     <tbody data-erp-lines-body>
-                        @php($oldLines = old('lines', [['description' => '', 'qty_ordered' => 1, 'unit_price' => 0, 'discount' => 0, 'tax_rate' => 0]]))
+                        @php($oldLines = old('lines', ($suggestedLines ?? []) ?: [['description' => '', 'qty_ordered' => 1, 'unit_price' => 0, 'discount' => 0, 'tax_rate' => 0]]))
                         @foreach ($oldLines as $index => $line)
                             <tr data-erp-line>
                                 <td data-label="Product">

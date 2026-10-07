@@ -55,8 +55,9 @@
   "04_inventory": {
    "status": "IN PROGRESS",
    "rows_total": 63,
-   "rows_done": 11,
-   "trace": "docs/TRACEABILITY/04-inventory.md"
+   "rows_done": 14,
+   "trace": "docs/TRACEABILITY/04-inventory.md",
+   "notes": "Reading half of stock: alert lists and the reorder policies they are judged by. StockAlertService-equivalent logic lives in Inventory\\Services\\ReorderService: alertRows() decides each product's state from the ledger-derived balance and the policy that governs that product in that warehouse (a warehouse row beats the company-wide row): nothing on hand is out, at-or-below minimum is low, above maximum is over, everything else is quiet (04-23). A product with no active policy is deliberately never listed - an alert without a stated threshold is noise. Each row carries the policy, the shortage and a suggested order quantity, and the counts for all three lists come from the same pass. savePolicy() owns 04-24/04-57: one row per product + warehouse (company-wide rows have no warehouse), thresholds validated as a set (minimum <= reorder point <= maximum, safety <= reorder point, levels non-negative, lead time 0-365) with a refusal that names both figures, and AUD rows inventory.reorder_policy_created|updated|deleted. Refusals write nothing. Screens: GET /app/inventory/stock/alerts?type=low|out|over (inventory.reorder.view) and GET|POST /app/inventory/reorder-levels plus DELETE .../{policy} (view to read, inventory.reorder.configure to write). An alert's Order action opens the purchase-order form with the product and the suggested quantity already prepared. Deviation recorded: StockQuery::alerts() predates this slice and is no longer the screen source - it remains a balance-only summary; all screens and doc lines point at ReorderService. Still PLANNED in 04 from the spec's own reorder chapter: reserved/incoming/avg-demand inputs shown per suggestion (04-55), auto-reorder suggestions that never post a PO silently (04-56), reorder history/settings (04-58)."
   },
   "05_customers": {
    "status": "IN PROGRESS",

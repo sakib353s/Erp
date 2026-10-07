@@ -50,6 +50,10 @@ class PurchaseOrderController extends Controller
     public function create(Request $request): View
     {
         return view('purchase.orders.form', [
+            // A stock alert can hand over the product and the suggested quantity,
+            // so "Order" from the alert list lands in a prepared order rather
+            // than an empty form the buyer has to retype.
+            'suggestedLines' => $this->suggestedLines($request),
             'order' => new PurchaseOrder([
                 'order_date' => now()->toDateString(),
                 'status' => 'draft',
@@ -121,5 +125,34 @@ class PurchaseOrderController extends Controller
         $ids = $request->user()?->accessibleBranchIds();
 
         return $ids === null ? [] : array_map('intval', $ids);
+    }
+
+    /**
+     * One prepared line when the form is opened from a stock alert
+     * (`?product=&qty=`). Prices come from the product's standard cost; the
+     * buyer is expected to argue with them.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    protected function suggestedLines(Request $request): array
+    {
+        if (! $request->filled('product')) {
+            return [];
+        }
+
+        $product = Product::query()->active()->find((int) $request->query('product'));
+
+        if ($product === null) {
+            return [];
+        }
+
+        return [[
+            'product_id' => $product->id,
+            'description' => $product->name,
+            'qty_ordered' => max(1.0, (float) ($request->query('qty') ?? 1)),
+            'unit_price' => (float) $product->standard_cost,
+            'discount' => 0,
+            'tax_rate' => 0,
+        ]];
     }
 }

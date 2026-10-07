@@ -267,6 +267,17 @@ class CatalogImporter
         'inventory > stock > create transfer' => ['/app/inventory/transfers/create', 'inventory.transfers.create'],
         'inventory > stock > stock movement ledger' => ['/app/inventory/movements', 'inventory.ledger.view'],
         'inventory > stock > stock ledger' => ['/app/inventory/movements', 'inventory.ledger.view'],
+        // §04-23/04-24: alerts judged by a real policy, and the policies themselves
+        'inventory > stock > low stock alert' => ['/app/inventory/stock/alerts?type=low', 'inventory.reorder.view'],
+        'inventory > stock > out of stock' => ['/app/inventory/stock/alerts?type=out', 'inventory.reorder.view'],
+        'inventory > stock > overstock alert' => ['/app/inventory/stock/alerts?type=over', 'inventory.reorder.view'],
+        'inventory > stock > minimum stock level' => ['/app/inventory/reorder-levels', 'inventory.reorder.view'],
+        'inventory > stock > maximum stock level' => ['/app/inventory/reorder-levels', 'inventory.reorder.view'],
+        // Dashboard leaves that already have a real screen behind them
+        'dashboard > low stock alert' => ['/app/inventory/stock/alerts?type=low', 'inventory.reorder.view'],
+        'dashboard > out of stock alert' => ['/app/inventory/stock/alerts?type=out', 'inventory.reorder.view'],
+        'dashboard > payable aging (0-30 / 31-60 / 61-90 / 90+)' => ['/app/purchase/payables', 'purchase.bills.view'],
+        'dashboard > receivable aging (0-30 / 31-60 / 61-90 / 90+)' => ['/app/customers/due', 'customers.due.view'],
         'accounting > financial reports > general ledger' => ['/app/accounting/coa', 'accounting.coa.view'],
 
         // Phase G sales team (02-78…02-83)

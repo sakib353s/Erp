@@ -785,6 +785,20 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
         ->middleware('permission:inventory.stock.view')
         ->name('inventory.stock.rebuild');
 
+    Route::get('/app/inventory/stock/alerts', [InventoryController::class, 'alerts'])
+        ->middleware('permission:inventory.reorder.view')
+        ->name('inventory.stock.alerts');
+
+    Route::get('/app/inventory/reorder-levels', [InventoryController::class, 'reorderLevels'])
+        ->middleware('permission:inventory.reorder.view')
+        ->name('inventory.reorder.index');
+    Route::post('/app/inventory/reorder-levels', [InventoryController::class, 'storeReorderLevel'])
+        ->middleware('permission:inventory.reorder.configure')
+        ->name('inventory.reorder.store');
+    Route::delete('/app/inventory/reorder-levels/{policy}', [InventoryController::class, 'destroyReorderLevel'])
+        ->middleware('permission:inventory.reorder.configure')
+        ->name('inventory.reorder.destroy');
+
     Route::get('/app/inventory/stock/opening', [InventoryController::class, 'createOpening'])
         ->middleware('permission:inventory.adjustments.create')
         ->name('inventory.stock.opening.create');

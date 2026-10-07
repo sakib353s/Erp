@@ -6,7 +6,7 @@ a module is only "done" when persistence + validation + authorization + branch
 scope + business logic + workflow + effects + notifications + audit + UI + error
 handling and its tests are all connected (see `TRACEABILITY/README.md`).
 
-_Last updated: 2026-10-08, after the HRM (§10) and Purchase/Suppliers (§03/§06) slices._
+_Last updated: 2026-10-08, after the inventory alert/reorder slice (§04) and the HRM and Purchase/Suppliers slices._
 
 ## Where the product stands
 
@@ -15,7 +15,7 @@ _Last updated: 2026-10-08, after the HRM (§10) and Purchase/Suppliers (§03/§0
 | 01 Dashboard | 0 / 27 | widget frames + real-data contract in place; 25 widget queries pending |
 | 02 Sales | 104 / 120 | essentially complete: orders, bulk actions, invoices, delivery, team, POS, reports |
 | 03 Purchase | 19 / 73 | **the purchase cycle is closed both ways** — POs with approval, receipts posting real stock, bills posting the payable with a three-way match, payments settling it, returns taking goods back with their debit note; RFQ, LC and reports pending |
-| 04 Inventory | 11 / 63 | products, adjustments, transfers, stock movements; purchase receipts now feed stock; opening stock/valuation reports pending |
+| 04 Inventory | 14 / 63 | products, adjustments, transfers, movements and **now the reading half: low/out/over stock alerts judged against per-product reorder policies, with the levels screen behind them**; counts, reservations, ageing/dead stock and batch/serial pending |
 | 05 Customers (CRM) | 14 / 23 | profile, ledger, ageing, credit control, feedback, referrals, blacklist; collections workflow + import pending |
 | 06 Suppliers | 6 / 15 | **master + the whole account built** — duplicate refusal, blacklist with reason, profile from real documents, running ledger, company-wide ageing and a printable/CSV statement; contracts, scoring and documents pending |
 | 07 Returns | 4 / 18 | sales returns exist; purchase returns + credit notes pending |
@@ -29,26 +29,36 @@ _Last updated: 2026-10-08, after the HRM (§10) and Purchase/Suppliers (§03/§0
 | 15 Settings | 0 / 35 | **not started** — company/branch/invoice/Bengali/payment-gateway settings screens |
 | 16 Cross-cutting | 0 / 64 | search, notifications, backups, BI, i18n, API mgmt, public links |
 
-**Totals: 198 of 619 catalogued rows implemented.** (Sales 104, HRM 17, Masters 15, CRM 14, Purchase 19,
-Inventory 11, Accounting 8, Returns 4, Suppliers 6.)
+**Totals: 201 of 619 catalogued rows implemented.** (Sales 104, HRM 17, Masters 15, CRM 14, Purchase 19,
+Inventory 14, Accounting 8, Returns 4, Suppliers 6.)
 
 ## The next three builds, in the order they unlock the most
 
-1. **Inventory remainder (04)** — receipts and returns now write into the stock ledger, but
-   the screens around it are thin: opening stock, stock adjustments, transfers, the movement
-   ledger with filters and the valuation report. This is the next change; cash & bank (§08)
-   follows, where the supplier and customer payments already recorded have to appear as money
-   actually leaving and arriving. After those, the purchase module's remaining gaps are
-   supplier advances / BEFTN / schedule (03-53…03-55), RFQ (03-39…03-43), import/LC
-   (03-65…03-67) and report exports (03-51, 03-64).
-2. **Accounts close-out (08 + 09 remainder)** — cash book and bank reconciliation
-   first (they feed every collection screen), then customer/supplier ledgers, day book,
-   and the VAT/Mushak report family.
-3. **Inventory remainder (04)** — opening stock, valuation reports, reorder levels and
-   barcode/bin support on top of the ledger that purchases now write to.
+1. **Inventory remainder (04)** — the ledger is written to by purchases, sales and returns,
+   and the reading half now starts with alerts and reorder levels. Still to build in this
+   module: physical counts and cycle counts, reservations (the reserved/available split the
+   stock screens already show), stock ageing and dead-stock, valuation and movement reports,
+   batch/serial with expiry (FEFO), damage/write-off, barcode labels and warehouse bins.
+2. **Accounts close-out (08 + 09 remainder)** — cash book and bank reconciliation first
+   (they feed every collection screen), then the day book, the customer/supplier ledgers read
+   from the control accounts, and the VAT/Mushak report family.
+3. **The untouched domains** — cash & bank (§08) and accounting remainder above, then
+   dashboard widgets (§01) fed by the queries these modules now expose, reports (§13),
+   settings (§15) and the cross-cutting layer (§16: search, notifications, backups, i18n).
 
 ## Known deviations inside what *is* built (documented, not hidden)
 
+* **Two alert readers exist.** `StockQuery::alerts()` came with the inventory core and
+  reports a company-wide balance against thresholds; the alert screens read
+  `ReorderService::alertRows()`, which resolves the policy that actually governs a product
+  in a warehouse (a warehouse row beats the company-wide one) and adds the shortage and a
+  suggested order quantity. The screens are the single source of truth for what the user
+  sees; `StockQuery::alerts()` is left as a balance-only summary rather than deleted, so
+  nothing that calls it breaks. Products with no active policy are never alerted.
+* **Reorder suggestions** (04-56) are *not* auto-posting purchase orders, and there is no
+  standing "auto reorder" switch: the alert's Order action opens a prepared purchase order
+  for a human to approve, which is the honest behaviour until a schedule and a strict mode
+  are configured (04-58 still open).
 * **Purchase approval** runs on the direct permission `purchase.orders.approve` with a
   creator-cannot-approve rule in the service, not through the shared Workflow engine
   (`approval_requests`). Same seam as HRM leave approval; one call to re-point.
