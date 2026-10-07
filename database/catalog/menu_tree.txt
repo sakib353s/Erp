@@ -1,0 +1,1022 @@
+--- BEGIN SUPPLIED MENU TREE ---
+01. DASHBOARD
+    (Single page — 25 widgets shown inside, not as menus)
+    ├── Today's Sales
+    ├── Today's Purchase
+    ├── Today's Cash Position
+    ├── Today's Collection
+    ├── Today's Payments Due
+    ├── Today's Expense
+    ├── Today's Profit
+    ├── Receivable Aging (0-30 / 31-60 / 61-90 / 90+)
+    ├── Payable Aging (0-30 / 31-60 / 61-90 / 90+)
+    ├── Top 10 Customers
+    ├── Top 10 Products
+    ├── Top 10 Employees
+    ├── Pending Orders
+    ├── Pending Purchase Orders
+    ├── Pending Approvals
+    ├── Pending Returns
+    ├── Pending Refunds
+    ├── Low Stock Alert
+    ├── Out of Stock Alert
+    ├── Expiring Products Alert
+    ├── Payment Reminders
+    ├── Sales Chart (Daily / Weekly / Monthly)
+    ├── Purchase Chart
+    ├── Cash Flow Chart
+    ├── Branch Comparison
+    └── Recent Activity
+
+02. SALES
+    ├── Orders
+    │     ├── All Orders
+    │     │     ├── View / Edit
+    │     │     ├── Bulk Confirm
+    │     │     ├── Bulk Cancel
+    │     │     ├── Bulk Assign Courier
+    │     │     ├── Bulk Print Invoice
+    │     │     ├── Bulk Print Packing Slip
+    │     │     ├── Bulk Print Shipping Label
+    │     │     ├── Bulk SMS to Customer
+    │     │     ├── Bulk WhatsApp
+    │     │     ├── Bulk Email
+    │     │     └── Export Orders
+    │     ├── Pending Orders
+    │     ├── Confirmed Orders
+    │     ├── Processing Orders
+    │     ├── Ready to Ship
+    │     ├── Picked Up
+    │     ├── In Transit
+    │     ├── Out for Delivery
+    │     ├── Delivered Orders
+    │     ├── Completed Orders
+    │     ├── Cancelled Orders
+    │     ├── Return Requested
+    │     ├── Return Approved
+    │     ├── Returned
+    │     ├── Refunded
+    │     ├── Fake / Suspicious Orders
+    │     └── Create Manual Order
+    ├── POS / Counter Sales
+    │     ├── POS Terminal
+    │     ├── POS Sessions
+    │     ├── Session Opening
+    │     ├── Session Closing
+    │     ├── X-Report
+    │     ├── Z-Report
+    │     ├── Hold Orders
+    │     ├── Resume Order
+    │     ├── POS Return
+    │     ├── POS Exchange
+    │     ├── POS Quotation
+    │     ├── Layaway / Advance Deposit
+    │     ├── Price Check Mode
+    │     ├── Customer Display
+    │     ├── Cash Drawer
+    │     ├── Cash In / Cash Out
+    │     ├── Offline Mode
+    │     └── POS Settings
+    ├── Invoices
+    │     ├── All Invoices
+    │     ├── Create Invoice
+    │     ├── Tax Invoice (Mushak 9.1)
+    │     ├── Proforma Invoice
+    │     ├── Delivery Challan
+    │     ├── Retail Invoice (Mushak 11)
+    │     ├── Credit Notes
+    │     ├── Debit Notes
+    │     ├── Invoice Templates
+    │     ├── Invoice Numbering
+    │     ├── Invoice Print
+    │     ├── Invoice Email
+    │     ├── Invoice WhatsApp
+    │     ├── Invoice Payment Recording
+    │     ├── Partial Payment
+    │     ├── Overdue Invoices
+    │     └── Invoice Aging Report
+    ├── Quotations
+    │     ├── All Quotations
+    │     ├── Create Quotation
+    │     ├── Sent Quotations
+    │     ├── Viewed Quotations
+    │     ├── Accepted Quotations
+    │     ├── Declined Quotations
+    │     ├── Expired Quotations
+    │     ├── Quotation Revision
+    │     ├── Quotation to Order
+    │     ├── Quotation Print
+    │     ├── Quotation Email
+    │     ├── Quotation WhatsApp
+    │     └── Quotation Analytics
+    ├── Sales Team
+    │     ├── Sales Persons
+    │     ├── Add Sales Person
+    │     ├── Daily Sales Target
+    │     ├── Monthly Sales Target
+    │     ├── Yearly Sales Target
+    │     ├── Target Achievement
+    │     ├── Sales Commission
+    │     ├── Commission Rules
+    │     ├── Commission Payment
+    │     ├── Sales Leaderboard
+    │     ├── Sales Performance
+    │     ├── Sales Call Log
+    │     ├── Field Sales
+    │     ├── Field Visit Log
+    │     ├── GPS Track Replay
+    │     ├── Beat Plan
+    │     └── Territory Management
+    ├── Delivery
+    │     ├── Delivery Zones
+    │     ├── Add Delivery Zone
+    │     ├── Zone-Wise Charges
+    │     ├── Delivery Charges Setup
+    │     ├── Shipments
+    │     ├── Create Shipment
+    │     ├── Bulk Shipment
+    │     ├── Shipment Tracking
+    │     ├── Tracking Events
+    │     ├── Courier Partners
+    │     ├── Pathao Courier
+    │     ├── Redx Courier
+    │     ├── Steadfast Courier
+    │     ├── Paperfly Courier
+    │     ├── E-Courier BD
+    │     ├── Sundarban Courier
+    │     ├── SA Paribahan
+    │     ├── Own Delivery Riders
+    │     ├── Rider Management
+    │     ├── Rider GPS Tracking
+    │     ├── Rider Assignment
+    │     ├── Rider COD Collection
+    │     ├── Route Optimization
+    │     ├── Proof of Delivery
+    │     ├── Failed Delivery Management
+    │     ├── COD Collection Tracking
+    │     ├── COD Reconciliation
+    │     ├── Packaging Management
+    │     ├── Shipping Label Print
+    │     ├── Courier Manifest
+    │     └── Delivery Settings
+    ├── Coupons & Discounts
+    │     ├── All Coupons
+    │     ├── Create Coupon
+    │     ├── Percent Off Coupon
+    │     ├── Fixed Off Coupon
+    │     ├── Free Shipping Coupon
+    │     ├── Buy X Get Y Coupon
+    │     ├── Coupon Usage
+    │     ├── Coupon Analytics
+    │     ├── Bulk Coupon Generation
+    │     ├── Promotions
+    │     ├── Create Promotion
+    │     ├── Seasonal Promotions
+    │     ├── Flash Sales
+    │     ├── Create Flash Sale
+    │     ├── Flash Sale Countdown
+    │     └── Promotion Reports
+    ├── Price Management
+    │     ├── Price List
+    │     ├── Bulk Price Update
+    │     ├── Price History
+    │     ├── Special Pricing
+    │     ├── Customer Group Pricing
+    │     ├── Quantity Break Pricing
+    │     ├── Geographic Pricing
+    │     ├── Time-Based Pricing
+    │     ├── Price Comparison
+    │     └── Price Rules
+    └── Sales Reports
+          ├── Sales Summary
+          ├── Sales by Product
+          ├── Sales by Category
+          ├── Sales by Brand
+          ├── Sales by Customer
+          ├── Sales by Employee
+          ├── Sales by Branch
+          ├── Sales by Payment Method
+          ├── Sales by Area/Zone
+          ├── Peak Hours Analysis
+          ├── Sales Trend
+          └── Custom Sales Report
+
+03. PURCHASE
+    ├── Suppliers
+    │     ├── All Suppliers
+    │     ├── Add Supplier
+    │     ├── Import Suppliers
+    │     ├── Export Suppliers
+    │     ├── Supplier Profile
+    │     ├── Supplier Contacts
+    │     ├── Supplier Categories
+    │     ├── Supplier Bank Details
+    │     ├── Supplier TIN/BIN/Trade License
+    │     ├── Supplier Ledger
+    │     ├── Supplier Payments
+    │     ├── Record Supplier Payment
+    │     ├── Payment History
+    │     ├── Advance Payments
+    │     ├── BEFTN Payments
+    │     ├── Payment Schedule
+    │     ├── Supplier Performance
+    │     ├── Supplier Scoring
+    │     ├── Supplier Contracts
+    │     ├── Supplier Documents
+    │     ├── Supplier Portal
+    │     └── Supplier Settings
+    ├── Purchase Requests
+    │     ├── All Requests
+    │     ├── Create Request
+    │     ├── Pending Approval
+    │     ├── Approved Requests
+    │     ├── Rejected Requests
+    │     ├── PR to PO Conversion
+    │     ├── PR History
+    │     └── PR Analytics
+    ├── Purchase Orders
+    │     ├── All Purchase Orders
+    │     ├── Create PO
+    │     ├── Pending Approval
+    │     ├── Approved POs
+    │     ├── Sent to Supplier
+    │     ├── Partially Received
+    │     ├── Fully Received
+    │     ├── Overdue Delivery
+    │     ├── Cancelled POs
+    │     ├── PO Amendment
+    │     ├── PO Duplication
+    │     ├── PO Print
+    │     ├── PO Email
+    │     ├── PO WhatsApp
+    │     ├── PO to GRN Conversion
+    │     ├── PO to Bill Conversion
+    │     └── PO Analytics
+    ├── Goods Receipt (GRN)
+    │     ├── All GRNs
+    │     ├── Create GRN
+    │     ├── Per-Product Receiving
+    │     ├── Condition Recording
+    │     ├── Batch Number Entry
+    │     ├── Expiry Date Entry
+    │     ├── Bin Location Assignment
+    │     ├── Shortage Detection
+    │     ├── Excess Detection
+    │     ├── GRN Amendment
+    │     ├── GRN to Stock Update
+    │     ├── GRN to Bill Conversion
+    │     ├── GRN Print
+    │     └── GRN History
+    ├── Supplier Quotations (RFQ)
+    │     ├── All RFQs
+    │     ├── Create RFQ
+    │     ├── Send to Multiple Suppliers
+    │     ├── Quotation Comparison
+    │     ├── Select Winner
+    │     ├── Auto-Create PO
+    │     └── RFQ History
+    ├── Purchase Bills
+    │     ├── All Bills
+    │     ├── Create Bill
+    │     ├── Bill from GRN
+    │     ├── Pending Bills
+    │     ├── Paid Bills
+    │     ├── Overdue Bills
+    │     ├── Bill Payment Recording
+    │     ├── Bill Aging
+    │     ├── Bill Print
+    │     ├── 3-Way Match
+    │     └── Bill Reports
+    ├── Supplier Payments
+    │     ├── Record Payment
+    │     ├── Payment History
+    │     ├── Advance Payments
+    │     ├── Advance Adjustment
+    │     ├── BEFTN Payments
+    │     ├── Payment Schedule
+    │     ├── Payment Approval
+    │     ├── Supplier Payment Reminder
+    │     └── Payment Reports
+    ├── Supplier Returns
+    │     ├── All Returns
+    │     ├── Create Return
+    │     ├── Return Authorization
+    │     ├── Auto Debit Note
+    │     ├── Return Shipment Tracking
+    │     ├── Supplier Ledger Credit
+    │     ├── Return History
+    │     └── Return Reports
+    ├── Import Purchase (LC)
+    │     ├── All LC Records
+    │     ├── Create LC
+    │     ├── LC Number / Date
+    │     ├── HS Code
+    │     ├── Customs Duty
+    │     ├── Clearing Agent
+    │     └── Landing Cost Calculation
+    └── Purchase Reports
+          ├── Purchase Summary
+          ├── Purchase by Supplier
+          ├── Purchase by Product
+          ├── Price Variance
+          ├── On-Time Delivery Rate
+          ├── Quality Reject Rate
+          └── Purchase Trend
+
+04. INVENTORY
+    ├── Products
+    │     ├── All Products
+    │     ├── Add Product
+    │     ├── Edit Product
+    │     ├── Duplicate Product
+    │     ├── Product Categories
+    │     ├── Add Category
+    │     ├── Category Tree
+    │     ├── Product Brands
+    │     ├── Add Brand
+    │     ├── Product Attributes
+    │     ├── Add Attribute
+    │     ├── Attribute Values
+    │     ├── Product Variants
+    │     ├── Variant Matrix
+    │     ├── Product Units of Measure
+    │     ├── Product Conversion Unit
+    │     ├── Product Cost History
+    │     ├── Product Reviews
+    │     ├── Pending Reviews
+    │     ├── Approved Reviews
+    │     ├── Rejected Reviews
+    │     ├── Product Import
+    │     ├── Product Export
+    │     ├── Import History
+    │     ├── Product Barcode
+    │     ├── Product QR Code
+    │     ├── Product Price History
+    │     ├── Product Cross-Sell
+    │     ├── Product Upsell
+    │     ├── Product Warranty Config
+    │     ├── Product Shipping Config
+    │     ├── Product Digital Download
+    │     ├── Product SEO
+    │     └── Product Settings
+    ├── Stock
+    │     ├── Stock Overview
+    │     ├── Opening Stock Entry
+    │     ├── Stock List
+    │     ├── Stock per Branch
+    │     ├── Low Stock Alert
+    │     ├── Out of Stock
+    │     ├── Overstock Alert
+    │     ├── Minimum Stock Level
+    │     ├── Maximum Stock Level
+    │     ├── Stock Adjustment
+    │     ├── Create Adjustment
+    │     ├── Adjustment Approval
+    │     ├── Adjustment History
+    │     ├── Stock Transfer
+    │     ├── Create Transfer
+    │     ├── Transfer Approval
+    │     ├── Transfer Dispatch
+    │     ├── Transfer In Transit
+    │     ├── Transfer Received
+    │     ├── Transfer Discrepancy
+    │     ├── Stock Count
+    │     ├── Cycle Count
+    │     ├── Stock Valuation
+    │     ├── FIFO Valuation
+    │     ├── LIFO Valuation
+    │     ├── Weighted Average
+    │     ├── Stock Movement Ledger
+    │     ├── Stock Ledger (per Product)
+    │     ├── Stock Reservation
+    │     ├── Stock Aging
+    │     ├── Dead Stock Report
+    │     └── Stock Reports
+    ├── Batch & Serial
+    │     ├── Batch Tracking
+    │     ├── Serial Tracking
+    │     ├── Expiry Date Entry
+    │     ├── Expiring Products
+    │     ├── Expired Stock
+    │     ├── Expiry Alerts
+    │     ├── FEFO Settings
+    │     └── Expiry Write-Off
+    ├── Warehouse
+    │     ├── Warehouses
+    │     ├── Add Warehouse
+    │     ├── Warehouse Zones
+    │     ├── Bin Locations
+    │     ├── Product Bin Assignment
+    │     ├── Pick Lists
+    │     ├── Putaway Lists
+    │     └── Warehouse Map
+    ├── Damage & Loss
+    │     ├── Damage Records
+    │     ├── Create Damage Entry
+    │     ├── Loss Records
+    │     ├── Create Loss Entry
+    │     ├── Write-Off Approval
+    │     ├── Damage Valuation
+    │     ├── Insurance Claims
+    │     └── Damage Analytics
+    ├── Barcode & QR
+    │     ├── Generate Barcode
+    │     ├── Generate QR Code
+    │     ├── Print Labels
+    │     ├── Label Templates
+    │     ├── Barcode Scanner Setup
+    │     └── Barcode Settings
+    ├── Reorder
+    │     ├── Reorder Alerts
+    │     ├── Auto Reorder
+    │     ├── Reorder Level Setup
+    │     ├── Reorder Quantity Setup
+    │     ├── Auto PO Suggestion
+    │     ├── Reorder History
+    │     └── Reorder Settings
+    ├── Packaging
+    │     ├── Packaging Types
+    │     ├── Packaging Stock
+    │     ├── Packaging Cost
+    │     └── Packaging Reports
+    └── Inventory Reports
+          ├── Stock Report
+          ├── Movement Report
+          ├── Low Stock Report
+          ├── Dead Stock Report
+          ├── Expiry Report
+          ├── Valuation Report
+          └── Custom Inventory Report
+
+05. CUSTOMERS
+    ├── All Customers
+    ├── Add Customer
+    ├── Import Customers
+    ├── Export Customers
+    ├── Customer Groups
+    │     ├── All Groups
+    │     ├── Add Group
+    │     └── Group Discounts
+    ├── Customer Profile
+    ├── Customer Address Book
+    ├── Customer Ledger
+    ├── Customer Due
+    │     ├── All Due
+    │     ├── Overdue (0-30 Days)
+    │     ├── Overdue (31-60 Days)
+    │     ├── Overdue (61-90 Days)
+    │     └── Overdue (90+ Days)
+    ├── Due Collection
+    │     ├── Collection List
+    │     ├── Record Collection
+    │     ├── Collection Assignment
+    │     ├── Follow-Up Log
+    │     ├── Promise-to-Pay
+    │     └── Legal Notice
+    ├── Customer EMI Plans
+    │     ├── All EMI Plans
+    │     ├── Create EMI Plan
+    │     ├── EMI Collection Schedule
+    │     └── Overdue EMI
+    ├── Customer Credit Limit
+    ├── Customer Statements
+    ├── Customer Wishlist
+    ├── Customer Feedback
+    ├── Customer Referrals
+    ├── Blacklist Customers
+    └── Customer Reports
+
+06. SUPPLIERS
+    ├── All Suppliers
+    ├── Add Supplier
+    ├── Import Suppliers
+    ├── Export Suppliers
+    ├── Supplier Categories
+    ├── Supplier Profile
+    ├── Supplier Contacts
+    ├── Supplier Bank Details
+    ├── Supplier Ledger
+    ├── Supplier Due
+    │     ├── All Due
+    │     ├── Overdue (0-30 Days)
+    │     ├── Overdue (31-60 Days)
+    │     └── Overdue (60+ Days)
+    ├── Supplier Payments
+    │     ├── Record Payment
+    │     ├── Payment Schedule
+    │     └── Advance Adjustment
+    ├── Supplier Contracts
+    ├── Supplier Performance
+    ├── Supplier Quality Score
+    ├── Supplier Documents
+    ├── Supplier Statements
+    └── Supplier Reports
+
+07. RETURNS
+    ├── Return Reasons Master
+    ├── Return Window Setup
+    ├── Sales Returns
+    │     ├── Return Requests
+    │     ├── Create Return Request
+    │     ├── Approved Returns
+    │     ├── Return Received
+    │     ├── Partial Return
+    │     ├── Inspection Queue
+    │     ├── Return Stock Re-Entry
+    │     ├── Return Shipping Charge
+    │     ├── Refund Processing
+    │     ├── Refund Completed
+    │     └── Denied Returns
+    ├── Exchange
+    │     ├── Exchange Requests
+    │     ├── Exchange Processing
+    │     └── Exchange Completed
+    ├── Damage Returns
+    │     ├── Customer Damage Return
+    │     ├── Warehouse Damage
+    │     ├── Transit Damage
+    │     └── Damage Inspection
+    ├── Supplier Returns
+    │     ├── Return Authorization
+    │     └── Credit Notes
+    ├── Refunds
+    │     ├── All Refunds
+    │     ├── Pending Refunds
+    │     ├── Completed Refunds
+    │     └── Refund Methods
+    ├── Warranty Claims
+    │     ├── Warranty Returns
+    │     ├── Warranty Processing
+    │     └── Warranty Completed
+    └── Return Reports
+
+08. CASH & BANK
+    ├── Cash Management
+    │     ├── Cash in Hand
+    │     ├── Cash Receipts
+    │     ├── Cash Payments
+    │     ├── Cash Transfer
+    │     └── Cash Count
+    ├── Bank Accounts
+    │     ├── All Bank Accounts
+    │     ├── Add Bank Account
+    │     ├── Bank Transactions
+    │     ├── Bank Reconciliation
+    │     ├── Bank Statement Import
+    │     └── Bank Charge Auto-Posting
+    ├── Mobile Banking
+    │     ├── bKash Account
+    │     ├── Nagad Account
+    │     ├── Rocket Account
+    │     ├── Upay Account
+    │     └── Mobile Reconciliation
+    ├── Cheque Management
+    │     ├── Received Cheques
+    │     ├── Issued Cheques
+    │     ├── Cleared Cheques
+    │     ├── Bounced Cheques
+    │     ├── Post-Dated Cheques
+    │     └── Cheque Print
+    ├── Expenses
+    │     ├── All Expenses
+    │     ├── Add Expense
+    │     ├── Expense Categories
+    │     ├── Pending Approval
+    │     ├── Recurring Expenses
+    │     └── Expense Reports
+    ├── Petty Cash
+    │     ├── Petty Cash Overview
+    │     ├── Petty Cash Requests
+    │     ├── Petty Cash Expenses
+    │     └── Petty Cash Replenishment
+    └── Cash Reports
+
+09. ACCOUNTING
+    ├── Opening Balance Entry
+    ├── Opening Trial Balance
+    ├── Chart of Accounts
+    │     ├── COA Tree
+    │     ├── Add Account
+    │     ├── Edit Account
+    │     └── Account Groups
+    ├── Journal Entries
+    │     ├── All Entries
+    │     ├── Create Entry
+    │     ├── Manual Journal
+    │     ├── Auto Journal
+    │     ├── Recurring Journals
+    │     ├── Journal Reversal
+    │     └── Journal Approval
+    ├── Receipts
+    │     ├── All Receipts
+    │     ├── Record Receipt
+    │     └── Customer Payments
+    ├── Payments
+    │     ├── All Payments
+    │     ├── Record Payment
+    │     ├── Supplier Payments
+    │     └── Expense Payments
+    ├── Accounts Receivable
+    │     ├── All Receivables
+    │     ├── AR Aging
+    │     ├── Overdue Receivables
+    │     ├── Collection Follow-Up
+    │     └── Bad Debt Write-Off
+    ├── Accounts Payable
+    │     ├── All Payables
+    │     ├── AP Aging
+    │     ├── Due Payments
+    │     └── Payment Schedule
+    ├── VAT & Tax
+    │     ├── VAT Overview
+    │     ├── Mushak 6.1 (Purchase Register)
+    │     ├── Mushak 6.2 (Sales Register)
+    │     ├── Mushak 6.3 (Credit Note)
+    │     ├── Mushak 6.4 (Debit Note)
+    │     ├── Mushak 6.5 (Transfer)
+    │     ├── Mushak 6.6 (Monthly VAT Return)
+    │     ├── Mushak 9.1 (Tax Invoice)
+    │     ├── Mushak 11 (Retail Invoice)
+    │     ├── TDS Register
+    │     ├── TDS Certificate
+    │     ├── TDS Monthly Payment
+    │     ├── VDS (VAT Deducted at Source)
+    │     ├── AIT Register
+    │     ├── Tax Calendar
+    │     └── NBR E-Filing Preparation
+    ├── Financial Reports
+    │     ├── Profit & Loss
+    │     ├── Balance Sheet
+    │     ├── Cash Flow Statement
+    │     ├── Trial Balance
+    │     ├── General Ledger
+    │     ├── AR Aging
+    │     ├── AP Aging
+    │     ├── Cash Flow Forecast
+    │     └── Management Pack
+    ├── Fixed Assets
+    │     ├── Asset Register
+    │     ├── Add Asset
+    │     ├── Asset Depreciation
+    │     └── Asset Disposal
+    ├── Budgeting
+    │     ├── Budget Planning
+    │     └── Budget vs Actual
+    ├── Cost Center
+    │     ├── All Cost Centers
+    │     ├── Add Cost Center
+    │     └── Cost Center Reports
+    ├── Multi-Currency
+    │     ├── Currency Setup
+    │     ├── Exchange Rates
+    │     └── Currency Reports
+    ├── Loans & Advances
+    │     ├── Customer Advances
+    │     ├── Supplier Advances
+    │     ├── Employee Loans
+    │     └── Loan Reports
+    ├── Fiscal Year Closing
+    │     ├── Year-End Closing
+    │     └── Retained Earnings Transfer
+    ├── BEFTN File Generation
+    ├── bKash Bulk Disbursement
+    └── Accounting Reports
+
+10. EMPLOYEE
+    ├── Employees
+    │     ├── All Employees
+    │     ├── Add Employee
+    │     ├── Active Employees
+    │     ├── Inactive Employees
+    │     ├── Employee Profile
+    │     ├── Employee Documents
+    │     ├── Employee Bank Details
+    │     ├── Employee ID Cards
+    │     ├── Employee Transfer
+    │     ├── Employee Promotion
+    │     ├── Employee Salary Increment
+    │     ├── Employee Resignation
+    │     ├── Employee Exit
+    │     └── Experience Letter
+    ├── Service Book
+    ├── Departments
+    │     ├── All Departments
+    │     └── Add Department
+    ├── Designations
+    │     ├── All Designations
+    │     └── Add Designation
+    ├── Salary Grades
+    ├── Attendance
+    │     ├── Live Attendance
+    │     ├── Attendance List
+    │     ├── Manual Attendance Entry
+    │     ├── GPS Configuration
+    │     ├── Manual Override
+    │     ├── Regularization
+    │     ├── Late Arrivals
+    │     ├── Late Fine Rule
+    │     ├── Absent Report
+    │     ├── Holiday Work (Double OT)
+    │     └── Attendance Reports
+    ├── Leave Management
+    │     ├── Leave Requests
+    │     ├── Leave Approval
+    │     ├── Leave Calendar
+    │     ├── Leave Balances
+    │     ├── Leave Types
+    │     ├── Leave Encashment
+    │     └── Leave Reports
+    ├── Payroll
+    │     ├── Payroll Runs
+    │     ├── Generate Payroll
+    │     ├── Payroll Approval
+    │     ├── Salary Payment
+    │     ├── Payslips
+    │     ├── Salary Sheet Print
+    │     ├── Salary Register
+    │     ├── Salary TDS (Section 50)
+    │     ├── Employee Advance Recovery
+    │     └── Payroll History
+    ├── Overtime
+    │     ├── Overtime Requests
+    │     ├── Overtime Approval
+    │     └── Overtime Register
+    ├── Loans & Advances
+    │     ├── Loan Requests
+    │     ├── Loan Approval
+    │     ├── Salary Advances
+    │     └── EMI Schedule
+    ├── Incentives & Bonuses
+    │     ├── Festival Bonus
+    │     ├── Eid-ul-Fitr Bonus
+    │     ├── Eid-ul-Adha Bonus
+    │     ├── Performance Bonus
+    │     └── Sales Commission
+    ├── Performance
+    │     ├── KPI Management
+    │     ├── Performance Reviews
+    │     ├── Self Assessment
+    │     └── Manager Review
+    ├── Training
+    │     ├── Training Sessions
+    │     ├── Create Training
+    │     └── Training Certificates
+    ├── Recruitment
+    │     ├── Job Postings
+    │     ├── Applications
+    │     ├── Interviews
+    │     └── Offer Letters
+    ├── Disciplinary
+    │     ├── Warning Letters
+    │     ├── Show Cause
+    │     └── Suspensions
+    ├── HR Policies
+    ├── Work Shifts
+    ├── Holiday Calendar
+    ├── Gratuity & PF
+    │     ├── Gratuity Provisions
+    │     ├── Provident Fund
+    │     └── Exit Settlements
+    └── HR Reports
+
+11. MARKETING
+    ├── SMS Marketing
+    │     ├── All SMS Campaigns
+    │     ├── Create SMS Campaign
+    │     ├── Broadcast SMS
+    │     ├── Triggered SMS
+    │     ├── Scheduled SMS
+    │     ├── SMS Templates
+    │     ├── SMS Contacts
+    │     ├── SMS Delivery Reports
+    │     ├── SMS Cost Reports
+    │     ├── SMS Opt-Out Management
+    │     ├── SMS Balance
+    │     └── SMS Settings
+    ├── Email Marketing
+    │     ├── All Email Campaigns
+    │     ├── Create Email Campaign
+    │     ├── Email Templates
+    │     ├── Email Sequences
+    │     ├── Drip Campaigns
+    │     ├── Email A/B Testing
+    │     ├── Email Reports
+    │     ├── Email Open Tracking
+    │     ├── Email Click Tracking
+    │     ├── Email Bounce Management
+    │     ├── Unsubscribe Management
+    │     └── Email Settings
+    ├── WhatsApp Marketing
+    │     ├── All WA Campaigns
+    │     ├── Create WA Campaign
+    │     ├── WA Templates
+    │     ├── WA Contacts
+    │     ├── WA Broadcast
+    │     ├── WA Chat Inbox
+    │     ├── WA Read Receipts
+    │     ├── WA Opt-Out Management
+    │     └── WA Reports
+    ├── Push Notifications
+    │     ├── All Push Campaigns
+    │     ├── Create Push
+    │     ├── Segment-Based Push
+    │     ├── Triggered Push
+    │     ├── Push History
+    │     └── Push Reports
+    ├── Social Media
+    │     ├── Facebook Pixel
+    │     ├── Facebook CAPI
+    │     ├── Facebook Ads
+    │     ├── Facebook Product Catalog
+    │     ├── Instagram Shopping
+    │     ├── Google Ads
+    │     ├── Google Analytics 4
+    │     ├── TikTok Pixel
+    │     ├── Social Calendar
+    │     └── Social Reports
+    ├── Promotions
+    │     ├── All Promotions
+    │     ├── Create Promotion
+    │     ├── Seasonal Offers
+    │     ├── Eid Campaigns
+    │     ├── Pohela Boishakh Campaigns
+    │     ├── Durga Puja Campaigns
+    │     ├── Flash Sales
+    │     ├── Promotion Reports
+    │     └── Festival Calendar
+    ├── Coupons
+    │     ├── All Coupons
+    │     ├── Create Coupon
+    │     ├── Coupon Usage
+    │     ├── Coupon Analytics
+    │     └── Bulk Coupon Generation
+    ├── Customer Campaigns
+    │     ├── Abandoned Cart Recovery
+    │     ├── Win-Back Campaigns
+    │     ├── Birthday Campaigns
+    │     ├── Anniversary Campaigns
+    │     ├── Review Requests
+    │     ├── Google Review Request
+    │     ├── Customer Feedback / NPS
+    │     ├── Referral Campaigns
+    │     └── Campaign Analytics
+    ├── Leads
+    │     ├── All Leads
+    │     ├── Add Lead
+    │     ├── Lead Pipeline
+    │     ├── Lead Follow-Up
+    │     ├── Lead Activity Log
+    │     ├── Lead Response Time
+    │     ├── Lead Scoring
+    │     ├── Lead Conversion
+    │     ├── Missed Call / Callback Log
+    │     └── Lead Analytics
+    ├── Affiliates
+    │     ├── All Affiliates
+    │     ├── Add Affiliate
+    │     └── Affiliate Reports
+    ├── Influencers
+    │     ├── All Influencers
+    │     ├── Add Influencer
+    │     └── Influencer Campaigns
+    ├── Campaign Cost vs Revenue
+    └── Marketing Reports
+
+12. BUSINESS MANAGEMENT
+    ├── Company
+    │     ├── Company Profile
+    │     ├── Company Settings
+    │     ├── Trade License
+    │     ├── TIN & BIN
+    │     ├── Company Documents
+    │     ├── Company Logo & Seal
+    │     └── Company Certificates
+    ├── Branches
+    │     ├── All Branches
+    │     ├── Add Branch
+    │     ├── Branch Profile
+    │     ├── Branch Settings
+    │     ├── Branch Comparison
+    │     └── Branch Transfer
+    ├── Compliance
+    │     ├── Trade License Renewal
+    │     ├── TIN / BIN Tracking
+    │     ├── RJSC Filings
+    │     ├── Tax Compliance Calendar
+    │     ├── Labour Law Compliance
+    │     └── Insurance Register
+    ├── Documents
+    │     ├── Document Library
+    │     ├── Contracts
+    │     ├── Agreements
+    │     ├── Certificates Vault
+    │     └── Brand Assets
+    ├── Meetings
+    │     ├── All Meetings
+    │     ├── Schedule Meeting
+    │     ├── Meeting Minutes
+    │     └── Action Items
+    ├── Notice Board
+    │     ├── All Announcements
+    │     ├── Create Announcement
+    │     └── Acknowledgment Tracking
+    ├── Tasks & Projects
+    │     ├── My Tasks
+    │     ├── All Tasks
+    │     ├── Kanban Board
+    │     └── Projects
+    ├── Assets
+    │     ├── Asset Register
+    │     ├── Vehicle Management
+    │     ├── Vehicle Trip Log
+    │     └── Equipment
+    ├── Utility Bills
+    │     ├── Electricity (DESCO/DPDC)
+    │     ├── Water (WASA)
+    │     ├── Gas (TITAS)
+    │     ├── Internet & Mobile
+    │     ├── Rent Payments
+    │     └── Renewal Reminders
+    └── Visitors
+          ├── Visitor Log
+          ├── Pre-Registration
+          └── Visitor Reports
+
+13. REPORTS
+    ├── Sales Reports
+    ├── Purchase Reports
+    ├── Inventory Reports
+    ├── Customer Reports
+    ├── Supplier Reports
+    ├── Finance Reports
+    ├── VAT & Tax Reports
+    ├── Employee Reports
+    ├── Marketing Reports
+    ├── Delivery Reports
+    ├── Custom Reports
+    └── Scheduled Reports
+
+14. MASTERS
+    ├── Units of Measure
+    ├── Product Categories (Global)
+    ├── Brands (Global)
+    ├── Expense Categories
+    ├── Payment Methods
+    ├── Delivery Zones (All 64 Districts)
+    ├── District + Upazila List
+    ├── Bangladesh Holidays
+    ├── Bank List
+    ├── Courier List
+    ├── SMS Providers
+    ├── Leave Types
+    ├── Return Reasons
+    ├── Cancel Reasons
+    └── Tax Rates
+
+15. SETTINGS
+    ├── General Settings
+    ├── Company Settings
+    ├── Branch Settings
+    ├── User Management
+    ├── Roles & Permissions
+    ├── Invoice Settings
+    │     ├── Invoice Number Format
+    │     ├── Invoice Header
+    │     ├── Invoice Footer
+    │     ├── Company Seal Upload
+    │     ├── Digital Signature Upload
+    │     └── Watermark Settings
+    ├── Bengali Settings
+    │     ├── Bengali Language Toggle
+    │     ├── Bengali Numerals
+    │     ├── Amount in Words (Bengali)
+    │     └── Lakh / Crore Format
+    ├── Payment Gateway Settings
+    ├── Courier API Settings
+    ├── SMS API Settings
+    ├── Email SMTP Settings
+    ├── WhatsApp API Settings
+    ├── Firebase Push Settings
+    ├── VAT & Tax Settings
+    ├── Security Settings
+    ├── Notification Settings
+    ├── Audit Log Retention
+    ├── Data Export (Full Backup)
+    ├── Backup & Restore
+    ├── Print & PDF Templates
+    ├── API Management
+    ├── Integrations
+    └── System Maintenance
+          ├── Clear Cache
+          ├── Clear Sessions
+          ├── Clear Temp Files
+          ├── Optimize Database
+          ├── Repair Database
+          ├── Rebuild Search Index
+          ├── Regenerate Thumbnails
+          ├── System Information
+          ├── Error Log Viewer
+          ├── Self-Healing Status
+          ├── Reset Settings
+          └── Factory Reset
+--- END SUPPLIED MENU TREE ---

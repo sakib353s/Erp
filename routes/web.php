@@ -1,0 +1,1091 @@
+<?php
+
+use App\Domain\Masters\Support\MasterCatalog;
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\ApprovalController;
+use App\Http\Controllers\AuditController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BranchController;
+use App\Http\Controllers\BulkPriceUpdateController;
+use App\Http\Controllers\CodController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ContextController;
+use App\Http\Controllers\CourierPartnerController;
+use App\Http\Controllers\CourierProviderController;
+use App\Http\Controllers\CustomReportController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DeliveryZoneController;
+use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\FailedDeliveryController;
+use App\Http\Controllers\FinancialReportController;
+use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\JournalController;
+use App\Http\Controllers\MaintenanceController;
+use App\Http\Controllers\MasterDataController;
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PackagingController;
+use App\Http\Controllers\PosController;
+use App\Http\Controllers\PosCustomerDisplayController;
+use App\Http\Controllers\PosSettingsController;
+use App\Http\Controllers\PriceCompareController;
+use App\Http\Controllers\PriceHistoryController;
+use App\Http\Controllers\PriceListController;
+use App\Http\Controllers\PricingRuleController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProofOfDeliveryController;
+use App\Http\Controllers\PublicShareController;
+use App\Http\Controllers\RiderAssignmentController;
+use App\Http\Controllers\RiderCodController;
+use App\Http\Controllers\RiderController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\RouteOptimizerController;
+use App\Http\Controllers\SalesController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\SetupController;
+use App\Http\Controllers\ShipmentController;
+use App\Http\Controllers\TrackingEventController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\WarehouseController;
+use App\Http\Controllers\WorkflowController;
+use App\Http\Controllers\ZoneChargeController;
+use Illuminate\Support\Facades\Route;
+
+Route::redirect('/', '/app/dashboard');
+Route::redirect('/app', '/app/dashboard');
+
+/*
+ |--------------------------------------------------------------------------
+ | First boot (spec §49)
+ |--------------------------------------------------------------------------
+ | Reachable ONLY while the instance is unconfigured (GuardSetup aborts
+ | with 403 the moment a company exists — setup can never re-run).
+ */
+Route::middleware('setup.open')->group(function () {
+    Route::get('/setup', [SetupController::class, 'show'])->name('setup.show');
+    Route::post('/setup', [SetupController::class, 'store'])->middleware('throttle:5,1')->name('setup.store');
+});
+
+Route::middleware(['guest', 'setup.complete'])->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
+});
+
+/*
+ | Public share links (02-68) — no session identity by design: the token
+ | is the capability, every visit is logged to public_access_logs.
+ */
+Route::get('/share/quotation/{token}', [PublicShareController::class, 'quotation'])
+    ->middleware('throttle:30,1')
+    ->where('token', '[A-Za-z0-9]{32,64}')
+    ->name('share.quotation');
+
+/*
+ | Courier tracking webhook (02-90) — no session identity by design:
+ | the HMAC signature over the raw body is the capability. Unsigned or
+ | mis-signed pushes are rejected before any parsing happens, and a
+ | courier without a configured signing secret can never be verified.
+ */
+Route::post('/webhooks/couriers/{courier}', [TrackingEventController::class, 'webhook'])
+    ->middleware('throttle:60,1')
+    ->name('couriers.webhook');
+
+/*
+ |--------------------------------------------------------------------------
+ | Authenticated application shell
+ |--------------------------------------------------------------------------
+ | tenant  = server-side company/branch/warehouse context rebuild (D6)
+ | portal:erp = ERP portal isolation (correction E)
+ | permission:* = DB-driven permission matrix (Rules 6/7), checked per route
+ */
+Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    /* ---- Context switching (server-side re-validated — Rules 4/5) ---- */
+    Route::post('/app/context/branch', [ContextController::class, 'switchBranch'])->name('context.branch');
+    Route::post('/app/context/warehouse', [ContextController::class, 'switchWarehouse'])->name('context.warehouse');
+    Route::post('/app/context/locale', [ContextController::class, 'switchLocale'])->name('context.locale');
+
+    /* ---- Foundation pages ---- */
+    Route::get('/app/dashboard', [DashboardController::class, 'index'])
+        ->middleware(['permission:dashboard.view', 'feature:dashboard'])
+        ->name('dashboard');
+
+    /* ---- Global search (D17 / row 16-49): auth only, per-entity
+           permissions enforced inside SearchService ---- */
+    Route::get('/search', [SearchController::class, 'index'])
+        ->name('search.index');
+
+    /* ---- System maintenance (rows 15-28 …) ---- */
+    Route::get('/app/maintenance', [MaintenanceController::class, 'index'])
+        ->middleware('permission:maintenance.index')
+        ->name('maintenance.index');
+    Route::post('/maintenance/rebuild-index', [MaintenanceController::class, 'rebuildIndex'])
+        ->middleware('permission:maintenance.index')
+        ->name('maintenance.rebuild-index');
+
+    Route::get('/app/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::post('/app/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/app/profile/password', [ProfileController::class, 'changePassword'])->name('profile.password');
+
+    /* ---- Notification centre ---- */
+    Route::get('/app/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/app/notifications/poll', [NotificationController::class, 'poll'])->name('notifications.poll');
+    Route::post('/app/notifications/read-all', [NotificationController::class, 'markAllRead'])->name('notifications.read_all');
+    Route::post('/app/notifications/{id}/read', [NotificationController::class, 'markRead'])->name('notifications.read');
+
+    /* ---- Company profile (15-02) — registered BEFORE {group} wildcard ---- */
+    Route::get('/app/settings/company', [CompanyController::class, 'edit'])
+        ->middleware('permission:settings.company')
+        ->name('company.edit');
+    Route::put('/app/settings/company', [CompanyController::class, 'update'])
+        ->middleware('permission:settings.company')
+        ->name('company.update');
+
+    /* ---- Company profile (15-02 / 12-02) — MUST precede {group} ---- */
+    Route::get('/app/settings/company', [CompanyController::class, 'edit'])
+        ->middleware('permission:settings.company')
+        ->name('company.edit');
+    Route::put('/app/settings/company', [CompanyController::class, 'update'])
+        ->middleware('permission:settings.company')
+        ->name('company.update');
+
+    /* ---- Courier partners (02-91) — must precede the /settings/{group} catch-all ---- */
+    Route::get('/app/settings/couriers', [CourierPartnerController::class, 'index'])
+        ->middleware('permission:sales.delivery.configure')
+        ->name('couriers.index');
+    Route::post('/app/settings/couriers', [CourierPartnerController::class, 'store'])
+        ->middleware('permission:sales.delivery.configure')
+        ->name('couriers.store');
+
+    /* ---- Per-provider courier config (02-92) — same catch-all caveat ---- */
+    Route::get('/app/settings/couriers/{provider}', [CourierProviderController::class, 'show'])
+        ->middleware('permission:sales.delivery.configure')
+        ->name('couriers.provider.show');
+    Route::put('/app/settings/couriers/{provider}', [CourierProviderController::class, 'update'])
+        ->middleware('permission:sales.delivery.configure')
+        ->name('couriers.provider.update');
+
+    /* ---- POS settings (02-47) — literal URI, must precede the
+           /app/settings/{group} catch-all (same-URI routes would be
+           replaced by the later registration) ---- */
+    Route::get('/app/settings/pos', [PosSettingsController::class, 'show'])
+        ->middleware('permission:pos.settings.configure')
+        ->name('settings.pos.show');
+    Route::post('/app/settings/pos', [PosSettingsController::class, 'update'])
+        ->middleware('permission:pos.settings.configure')
+        ->name('settings.pos.update');
+
+    /* ---- Settings ---- */
+    Route::get('/app/settings/{group}', [SettingController::class, 'show'])
+        ->middleware('permission:settings.view')
+        ->name('settings.show');
+    Route::post('/app/settings/{group}', [SettingController::class, 'update'])
+        ->middleware('permission:settings.update')
+        ->name('settings.update');
+
+    /* ---- Users ---- */
+    Route::middleware('permission:users.view')->group(function () {
+        Route::get('/app/users', [UserController::class, 'index'])->name('users.index');
+        Route::get('/app/users/{user}', [UserController::class, 'show'])->name('users.show');
+        Route::get('/app/users/{user}/access', [UserController::class, 'access'])->name('users.access');
+    });
+    Route::get('/app/users-create/form', [UserController::class, 'create'])
+        ->middleware('permission:users.create')
+        ->name('users.create');
+    Route::post('/app/users', [UserController::class, 'store'])
+        ->middleware('permission:users.create')
+        ->name('users.store');
+    Route::get('/app/users/{user}/edit', [UserController::class, 'edit'])
+        ->middleware('permission:users.update')
+        ->name('users.edit');
+    Route::put('/app/users/{user}', [UserController::class, 'update'])
+        ->middleware('permission:users.update')
+        ->name('users.update');
+    Route::post('/app/users/{user}/suspend', [UserController::class, 'suspend'])
+        ->middleware('permission:users.update')
+        ->name('users.suspend');
+    Route::post('/app/users/{user}/activate', [UserController::class, 'activate'])
+        ->middleware('permission:users.update')
+        ->name('users.activate');
+    Route::delete('/app/users/{user}', [UserController::class, 'destroy'])
+        ->middleware('permission:users.delete')
+        ->name('users.destroy');
+
+    /* ---- Employees (10-01…10-03) ---- */
+    Route::middleware('permission:employees.view')->group(function () {
+        Route::get('/app/employees', [EmployeeController::class, 'index'])->name('employees.index');
+        Route::get('/app/employees/{employee}', [EmployeeController::class, 'show'])->name('employees.show');
+    });
+    Route::get('/app/employees-create/form', [EmployeeController::class, 'create'])
+        ->middleware('permission:employees.create')
+        ->name('employees.create');
+    Route::post('/app/employees', [EmployeeController::class, 'store'])
+        ->middleware('permission:employees.create')
+        ->name('employees.store');
+    Route::get('/app/employees/{employee}/edit', [EmployeeController::class, 'edit'])
+        ->middleware('permission:employees.edit')
+        ->name('employees.edit');
+    Route::put('/app/employees/{employee}', [EmployeeController::class, 'update'])
+        ->middleware('permission:employees.edit')
+        ->name('employees.update');
+    Route::delete('/app/employees/{employee}', [EmployeeController::class, 'destroy'])
+        ->middleware('permission:employees.delete')
+        ->name('employees.destroy');
+    Route::post('/app/users/{user}/suspend', [UserController::class, 'suspend'])
+        ->middleware('permission:users.update')
+        ->name('users.suspend');
+    Route::post('/app/users/{user}/activate', [UserController::class, 'activate'])
+        ->middleware('permission:users.update')
+        ->name('users.activate');
+    Route::get('/app/users/{user}/access', [UserController::class, 'access'])
+        ->middleware('permission:users.view')
+        ->name('users.access');
+
+    /* ---- Roles & permissions ---- */
+    Route::middleware('permission:roles.view')->group(function () {
+        Route::get('/app/roles', [RoleController::class, 'index'])->name('roles.index');
+        Route::get('/app/roles/{role}', [RoleController::class, 'show'])->name('roles.show');
+    });
+    Route::get('/app/roles-create/form', [RoleController::class, 'create'])
+        ->middleware('permission:roles.create')
+        ->name('roles.create');
+    Route::post('/app/roles', [RoleController::class, 'store'])
+        ->middleware('permission:roles.create')
+        ->name('roles.store');
+    Route::get('/app/roles/{role}/edit', [RoleController::class, 'edit'])
+        ->middleware('permission:roles.update')
+        ->name('roles.edit');
+    Route::put('/app/roles/{role}', [RoleController::class, 'update'])
+        ->middleware('permission:roles.update')
+        ->name('roles.update');
+    Route::delete('/app/roles/{role}', [RoleController::class, 'destroy'])
+        ->middleware('permission:roles.delete')
+        ->name('roles.destroy');
+
+    /* ---- Branches ---- */
+    Route::middleware('permission:branches.view')->group(function () {
+        Route::get('/app/branches', [BranchController::class, 'index'])->name('branches.index');
+        Route::get('/app/branches/{branch}', [BranchController::class, 'show'])->name('branches.show');
+    });
+    Route::get('/app/branches-create/form', [BranchController::class, 'create'])
+        ->middleware('permission:branches.create')
+        ->name('branches.create');
+    Route::post('/app/branches', [BranchController::class, 'store'])
+        ->middleware('permission:branches.create')
+        ->name('branches.store');
+    Route::get('/app/branches/{branch}/edit', [BranchController::class, 'edit'])
+        ->middleware('permission:branches.update')
+        ->name('branches.edit');
+    Route::put('/app/branches/{branch}', [BranchController::class, 'update'])
+        ->middleware('permission:branches.update')
+        ->name('branches.update');
+    Route::delete('/app/branches/{branch}', [BranchController::class, 'destroy'])
+        ->middleware('permission:branches.delete')
+        ->name('branches.destroy');
+
+    /* ---- Warehouses ---- */
+    Route::middleware('permission:warehouses.view')->group(function () {
+        Route::get('/app/warehouses', [WarehouseController::class, 'index'])->name('warehouses.index');
+    });
+    Route::get('/app/warehouses-create/form', [WarehouseController::class, 'create'])
+        ->middleware('permission:warehouses.create')
+        ->name('warehouses.create');
+    Route::post('/app/warehouses', [WarehouseController::class, 'store'])
+        ->middleware('permission:warehouses.create')
+        ->name('warehouses.store');
+    Route::get('/app/warehouses/{warehouse}/edit', [WarehouseController::class, 'edit'])
+        ->middleware('permission:warehouses.update')
+        ->name('warehouses.edit');
+    Route::put('/app/warehouses/{warehouse}', [WarehouseController::class, 'update'])
+        ->middleware('permission:warehouses.update')
+        ->name('warehouses.update');
+    Route::delete('/app/warehouses/{warehouse}', [WarehouseController::class, 'destroy'])
+        ->middleware('permission:warehouses.delete')
+        ->name('warehouses.destroy');
+
+    /* ---- Employees (10-01 … 10-03) ---- */
+    Route::middleware('permission:employees.view')->group(function () {
+        Route::get('/app/employees', [EmployeeController::class, 'index'])->name('employees.index');
+        Route::get('/app/employees/{employee}', [EmployeeController::class, 'show'])->name('employees.show');
+    });
+    Route::get('/app/employees-create/form', [EmployeeController::class, 'create'])
+        ->middleware('permission:employees.create')
+        ->name('employees.create');
+    Route::post('/app/employees', [EmployeeController::class, 'store'])
+        ->middleware('permission:employees.create')
+        ->name('employees.store');
+    Route::get('/app/employees/{employee}/edit', [EmployeeController::class, 'edit'])
+        ->middleware('permission:employees.edit')
+        ->name('employees.edit');
+    Route::put('/app/employees/{employee}', [EmployeeController::class, 'update'])
+        ->middleware('permission:employees.edit')
+        ->name('employees.update');
+    Route::delete('/app/employees/{employee}', [EmployeeController::class, 'destroy'])
+        ->middleware('permission:employees.edit')
+        ->name('employees.destroy');
+
+    /* ---- Masters (§14) — permission keys come from MasterCatalog ---- */
+    foreach (MasterCatalog::all() as $slug => $entry) {
+        $viewPermission = $entry['permission'];
+        $mutatePermission = $entry['mutation_permission'] ?? $viewPermission;
+
+        Route::get('/app/masters/'.$slug, [MasterDataController::class, 'index'])
+            ->defaults('type', $slug)
+            ->middleware('permission:'.$viewPermission)
+            ->name('masters.'.$slug.'.index');
+        Route::get('/app/masters/'.$slug.'/create', [MasterDataController::class, 'create'])
+            ->defaults('type', $slug)
+            ->middleware('permission:'.$mutatePermission)
+            ->name('masters.'.$slug.'.create');
+        Route::post('/app/masters/'.$slug, [MasterDataController::class, 'store'])
+            ->defaults('type', $slug)
+            ->middleware('permission:'.$mutatePermission)
+            ->name('masters.'.$slug.'.store');
+        Route::get('/app/masters/'.$slug.'/{record}/edit', [MasterDataController::class, 'edit'])
+            ->defaults('type', $slug)
+            ->middleware('permission:'.$mutatePermission)
+            ->name('masters.'.$slug.'.edit');
+        Route::put('/app/masters/'.$slug.'/{record}', [MasterDataController::class, 'update'])
+            ->defaults('type', $slug)
+            ->middleware('permission:'.$mutatePermission)
+            ->name('masters.'.$slug.'.update');
+        Route::delete('/app/masters/'.$slug.'/{record}', [MasterDataController::class, 'destroy'])
+            ->defaults('type', $slug)
+            ->middleware('permission:'.$mutatePermission)
+            ->name('masters.'.$slug.'.destroy');
+    }
+    Route::redirect('/app/masters', '/app/masters/units')->name('masters.index');
+
+    /* ---- Price management (02-108) ---- */
+    Route::get('/app/pricing/price-lists', [PriceListController::class, 'index'])
+        ->middleware('permission:pricing.manage')
+        ->name('pricing.price-lists.index');
+    Route::get('/app/pricing/price-lists/create', [PriceListController::class, 'create'])
+        ->middleware('permission:pricing.manage')
+        ->name('pricing.price-lists.create');
+    Route::post('/app/pricing/price-lists', [PriceListController::class, 'store'])
+        ->middleware('permission:pricing.manage')
+        ->name('pricing.price-lists.store');
+    Route::get('/app/pricing/price-lists/{priceList}/edit', [PriceListController::class, 'edit'])
+        ->middleware('permission:pricing.manage')
+        ->name('pricing.price-lists.edit');
+    Route::put('/app/pricing/price-lists/{priceList}', [PriceListController::class, 'update'])
+        ->middleware('permission:pricing.manage')
+        ->name('pricing.price-lists.update');
+    Route::delete('/app/pricing/price-lists/{priceList}', [PriceListController::class, 'destroy'])
+        ->middleware('permission:pricing.manage')
+        ->name('pricing.price-lists.destroy');
+
+    Route::get('/app/pricing/bulk-update', [BulkPriceUpdateController::class, 'index'])
+        ->middleware('permission:pricing.bulk_update')
+        ->name('pricing.bulk-update');
+    Route::post('/app/pricing/bulk-update', [BulkPriceUpdateController::class, 'store'])
+        ->middleware('permission:pricing.bulk_update')
+        ->name('pricing.bulk-update.store');
+
+    Route::get('/app/pricing/history', [PriceHistoryController::class, 'index'])
+        ->middleware('permission:pricing.view')
+        ->name('pricing.history');
+
+    Route::get('/app/pricing/compare', [PriceCompareController::class, 'index'])
+        ->middleware('permission:pricing.view')
+        ->name('pricing.compare');
+
+    Route::get('/app/pricing/rules', [PricingRuleController::class, 'index'])
+        ->middleware('permission:pricing.rules')
+        ->name('pricing.rules.index');
+    Route::get('/app/pricing/rules/create', [PricingRuleController::class, 'create'])
+        ->middleware('permission:pricing.rules')
+        ->name('pricing.rules.create');
+    Route::post('/app/pricing/rules', [PricingRuleController::class, 'store'])
+        ->middleware('permission:pricing.rules')
+        ->name('pricing.rules.store');
+    Route::get('/app/pricing/rules/{rule}/edit', [PricingRuleController::class, 'edit'])
+        ->middleware('permission:pricing.rules')
+        ->name('pricing.rules.edit');
+    Route::put('/app/pricing/rules/{rule}', [PricingRuleController::class, 'update'])
+        ->middleware('permission:pricing.rules')
+        ->name('pricing.rules.update');
+    Route::delete('/app/pricing/rules/{rule}', [PricingRuleController::class, 'destroy'])
+        ->middleware('permission:pricing.rules')
+        ->name('pricing.rules.destroy');
+    Route::patch('/app/pricing/rules/{rule}/status', [PricingRuleController::class, 'toggleStatus'])
+        ->middleware('permission:pricing.rules')
+        ->name('pricing.rules.status');
+    Route::patch('/app/pricing/rules/{rule}/priority', [PricingRuleController::class, 'updatePriority'])
+        ->middleware('permission:pricing.rules')
+        ->name('pricing.rules.priority');
+    Route::post('/app/pricing/customer-groups', [PricingRuleController::class, 'storeGroup'])
+        ->middleware('permission:pricing.rules')
+        ->name('pricing.customer-groups.store');
+    Route::delete('/app/pricing/customer-groups/{group}', [PricingRuleController::class, 'destroyGroup'])
+        ->middleware('permission:pricing.rules')
+        ->name('pricing.customer-groups.destroy');
+
+    /* ---- Generic approvals (engine-backed) ---- */
+    Route::middleware('permission:approvals.view')->group(function () {
+        Route::get('/app/approvals', [ApprovalController::class, 'index'])->name('approvals.index');
+        Route::get('/app/approvals/{approval}', [ApprovalController::class, 'show'])->name('approvals.show');
+    });
+    Route::post('/app/approvals/{approval}/approve', [ApprovalController::class, 'approve'])
+        ->middleware('permission:approvals.decide')
+        ->name('approvals.approve');
+    Route::post('/app/approvals/{approval}/reject', [ApprovalController::class, 'reject'])
+        ->middleware('permission:approvals.decide')
+        ->name('approvals.reject');
+    Route::post('/app/approvals/{approval}/return', [ApprovalController::class, 'returnForCorrection'])
+        ->middleware('permission:approvals.decide')
+        ->name('approvals.return');
+    Route::post('/app/approvals/{approval}/cancel', [ApprovalController::class, 'cancel'])
+        ->middleware('permission:approvals.cancel')
+        ->name('approvals.cancel');
+    Route::post('/app/approvals/{approval}/comment', [ApprovalController::class, 'comment'])
+        ->middleware('permission:approvals.comment')
+        ->name('approvals.comment');
+
+    /* ---- Workflow definitions (generic engine admin) ---- */
+    Route::middleware('permission:workflows.view')->group(function () {
+        Route::get('/app/workflows', [WorkflowController::class, 'index'])->name('workflows.index');
+        Route::get('/app/workflows/{definition}', [WorkflowController::class, 'show'])->name('workflows.show');
+    });
+    Route::get('/app/workflows-create/form', [WorkflowController::class, 'create'])
+        ->middleware('permission:workflows.manage')
+        ->name('workflows.create');
+    Route::post('/app/workflows', [WorkflowController::class, 'store'])
+        ->middleware('permission:workflows.manage')
+        ->name('workflows.store');
+    Route::get('/app/workflows/{definition}/edit', [WorkflowController::class, 'edit'])
+        ->middleware('permission:workflows.manage')
+        ->name('workflows.edit');
+    Route::put('/app/workflows/{definition}', [WorkflowController::class, 'update'])
+        ->middleware('permission:workflows.manage')
+        ->name('workflows.update');
+    Route::post('/app/workflows/{definition}/toggle', [WorkflowController::class, 'toggle'])
+        ->middleware('permission:workflows.manage')
+        ->name('workflows.toggle');
+
+    /* ---- Accounting core (Phase D — rows 09-03…09-10, 09-32) ---- */
+    Route::get('/app/accounting/coa', [AccountController::class, 'tree'])
+        ->middleware('permission:accounting.coa.view')
+        ->name('accounting.coa');
+    Route::get('/app/accounting/account-groups', [AccountController::class, 'groups'])
+        ->middleware('permission:accounting.coa.view')
+        ->name('accounting.account-groups');
+    Route::get('/app/accounting/accounts/create', [AccountController::class, 'create'])
+        ->middleware('permission:accounting.coa.manage')
+        ->name('accounting.accounts.create');
+    Route::post('/app/accounting/accounts', [AccountController::class, 'store'])
+        ->middleware('permission:accounting.coa.manage')
+        ->name('accounting.accounts.store');
+    Route::get('/app/accounting/accounts/{account}/edit', [AccountController::class, 'edit'])
+        ->middleware('permission:accounting.coa.manage')
+        ->name('accounting.accounts.edit');
+    Route::put('/app/accounting/accounts/{account}', [AccountController::class, 'update'])
+        ->middleware('permission:accounting.coa.manage')
+        ->name('accounting.accounts.update');
+    Route::delete('/app/accounting/accounts/{account}', [AccountController::class, 'destroy'])
+        ->middleware('permission:accounting.coa.manage')
+        ->name('accounting.accounts.destroy');
+
+    Route::get('/app/accounting/journals', [JournalController::class, 'index'])
+        ->middleware('permission:accounting.journals.view')
+        ->name('accounting.journals.index');
+    Route::get('/app/accounting/journals/create', [JournalController::class, 'create'])
+        ->middleware('permission:accounting.journals.create')
+        ->name('accounting.journals.create');
+    Route::post('/app/accounting/journals', [JournalController::class, 'store'])
+        ->middleware('permission:accounting.journals.create')
+        ->name('accounting.journals.store');
+    Route::get('/app/accounting/journals/{journal}', [JournalController::class, 'show'])
+        ->middleware('permission:accounting.journals.view')
+        ->name('accounting.journals.show');
+    Route::post('/app/accounting/journals/{journal}/reverse', [JournalController::class, 'reverse'])
+        ->middleware('permission:accounting.journals.reverse')
+        ->name('accounting.journals.reverse');
+    Route::get('/app/accounting/ledger/{account}', [JournalController::class, 'ledger'])
+        ->middleware('permission:accounting.journals.view')
+        ->name('accounting.ledger');
+
+    Route::get('/app/accounting/opening-trial-balance', [FinancialReportController::class, 'openingTrialBalance'])
+        ->middleware('permission:accounting.reports.view')
+        ->name('accounting.reports.opening-trial-balance');
+    Route::get('/app/accounting/trial-balance', [FinancialReportController::class, 'trialBalance'])
+        ->middleware('permission:accounting.reports.view')
+        ->name('accounting.reports.trial-balance');
+    Route::get('/app/accounting/reconcile', [FinancialReportController::class, 'reconcile'])
+        ->middleware('permission:accounting.reports.view')
+        ->name('accounting.reports.reconcile');
+    Route::post('/app/accounting/rebuild-balances', [FinancialReportController::class, 'rebuildBalances'])
+        ->middleware('permission:accounting.reports.view')
+        ->name('accounting.reports.rebuild');
+
+    /* ---- Inventory core (Phase E — rows 04-01…04-33) ---- */
+    Route::get('/app/inventory/products', [ProductController::class, 'index'])
+        ->middleware('permission:inventory.products.view')
+        ->name('inventory.products.index');
+    Route::get('/app/inventory/products/create', [ProductController::class, 'create'])
+        ->middleware('permission:inventory.products.create')
+        ->name('inventory.products.create');
+    Route::post('/app/inventory/products', [ProductController::class, 'store'])
+        ->middleware('permission:inventory.products.create')
+        ->name('inventory.products.store');
+    Route::get('/app/inventory/products/{product}/edit', [ProductController::class, 'edit'])
+        ->middleware('permission:inventory.products.edit')
+        ->name('inventory.products.edit');
+    Route::put('/app/inventory/products/{product}', [ProductController::class, 'update'])
+        ->middleware('permission:inventory.products.edit')
+        ->name('inventory.products.update');
+    Route::delete('/app/inventory/products/{product}', [ProductController::class, 'destroy'])
+        ->middleware('permission:inventory.products.edit')
+        ->name('inventory.products.destroy');
+
+    Route::get('/app/inventory/stock', [InventoryController::class, 'overview'])
+        ->middleware('permission:inventory.stock.view')
+        ->name('inventory.stock');
+    Route::get('/app/inventory/movements', [InventoryController::class, 'movements'])
+        ->middleware('permission:inventory.ledger.view')
+        ->name('inventory.movements');
+    Route::get('/app/inventory/products/{product}/ledger', [InventoryController::class, 'productLedger'])
+        ->middleware('permission:inventory.ledger.view')
+        ->name('inventory.products.ledger');
+    Route::post('/app/inventory/rebuild-balances', [InventoryController::class, 'rebuildBalances'])
+        ->middleware('permission:inventory.stock.view')
+        ->name('inventory.stock.rebuild');
+
+    Route::get('/app/inventory/stock/opening', [InventoryController::class, 'createOpening'])
+        ->middleware('permission:inventory.adjustments.create')
+        ->name('inventory.stock.opening.create');
+    Route::post('/app/inventory/stock/opening', [InventoryController::class, 'storeOpening'])
+        ->middleware('permission:inventory.adjustments.create')
+        ->name('inventory.stock.opening.store');
+
+    Route::get('/app/inventory/adjustments', [InventoryController::class, 'adjustments'])
+        ->middleware('permission:inventory.adjustments.view')
+        ->name('inventory.adjustments.index');
+    Route::get('/app/inventory/adjustments/create', [InventoryController::class, 'createAdjustment'])
+        ->middleware('permission:inventory.adjustments.create')
+        ->name('inventory.adjustments.create');
+    Route::post('/app/inventory/adjustments', [InventoryController::class, 'storeAdjustment'])
+        ->middleware('permission:inventory.adjustments.create')
+        ->name('inventory.adjustments.store');
+
+    Route::get('/app/inventory/transfers', [InventoryController::class, 'transfers'])
+        ->middleware('permission:inventory.transfers.create')
+        ->name('inventory.transfers.index');
+    Route::get('/app/inventory/transfers/create', [InventoryController::class, 'createTransfer'])
+        ->middleware('permission:inventory.transfers.create')
+        ->name('inventory.transfers.create');
+    Route::post('/app/inventory/transfers', [InventoryController::class, 'storeTransfer'])
+        ->middleware('permission:inventory.transfers.create')
+        ->name('inventory.transfers.store');
+    Route::post('/app/inventory/transfers/{transfer}/dispatch', [InventoryController::class, 'dispatchTransfer'])
+        ->middleware('permission:inventory.transfers.dispatch')
+        ->name('inventory.transfers.dispatch');
+    Route::post('/app/inventory/transfers/{transfer}/receive', [InventoryController::class, 'receiveTransfer'])
+        ->middleware('permission:inventory.transfers.receive')
+        ->name('inventory.transfers.receive');
+
+    /* ---- Sales core (Phase G — 02-01…02-70) ---- */
+    Route::get('/app/sales/quotations', [SalesController::class, 'quotations'])
+        ->middleware('permission:sales.quotations.view')
+        ->name('sales.quotations.index');
+    Route::post('/app/sales/quotations', [SalesController::class, 'storeQuotation'])
+        ->middleware('permission:sales.quotations.create')
+        ->name('sales.quotations.store');
+
+    // 02-24…02-27: no permission middleware — SalesController::orders runs
+    // a status-aware gate (sales.orders.view, or returns.view /
+    // returns.refunds.view for the return-status filters) with the same
+    // permission.denied audit as CheckPermission.
+    Route::get('/app/sales/orders', [SalesController::class, 'orders'])
+        ->name('sales.orders.index');
+    Route::get('/app/sales/orders/export', [SalesController::class, 'exportOrders'])
+        ->middleware('permission:sales.orders.export')
+        ->name('sales.orders.export');
+    Route::get('/app/sales/orders/{order}', [SalesController::class, 'showOrder'])
+        ->middleware('permission:sales.orders.view')
+        ->name('sales.orders.show');
+    Route::post('/app/sales/orders', [SalesController::class, 'storeOrder'])
+        ->middleware('permission:sales.orders.create')
+        ->name('sales.orders.store');
+    // Bulk actions must be registered before /orders/{order}/{action} or
+    // "bulk" is captured as an order id by route-model binding.
+    Route::post('/app/sales/orders/bulk/confirm', [SalesController::class, 'bulkConfirm'])
+        ->middleware('permission:sales.orders.confirm')
+        ->name('sales.orders.bulk.confirm');
+    Route::post('/app/sales/orders/bulk/cancel', [SalesController::class, 'bulkCancel'])
+        ->middleware('permission:sales.orders.cancel')
+        ->name('sales.orders.bulk.cancel');
+    Route::post('/app/sales/orders/bulk/assign-courier', [SalesController::class, 'bulkAssignCourier'])
+        ->middleware('permission:sales.delivery.assign')
+        ->name('sales.orders.bulk.assign-courier');
+    Route::post('/app/sales/orders/bulk/print-invoice', [SalesController::class, 'bulkPrintInvoice'])
+        ->middleware('permission:sales.invoices.print')
+        ->name('sales.orders.bulk.print-invoice');
+    Route::post('/app/sales/orders/bulk/print-packing-slip', [SalesController::class, 'bulkPrintPackingSlip'])
+        ->middleware('permission:sales.orders.print')
+        ->name('sales.orders.bulk.print-packing-slip');
+    Route::post('/app/sales/orders/bulk/print-shipping-label', [SalesController::class, 'bulkPrintShippingLabel'])
+        ->middleware('permission:sales.delivery.print')
+        ->name('sales.orders.bulk.print-shipping-label');
+    Route::post('/app/sales/orders/bulk/sms', [SalesController::class, 'bulkSms'])
+        ->middleware('permission:sales.orders.notify')
+        ->name('sales.orders.bulk.sms');
+    Route::post('/app/sales/orders/bulk/whatsapp', [SalesController::class, 'bulkWhatsapp'])
+        ->middleware('permission:sales.orders.notify')
+        ->name('sales.orders.bulk.whatsapp');
+    Route::post('/app/sales/orders/bulk/email', [SalesController::class, 'bulkEmail'])
+        ->middleware('permission:sales.orders.notify')
+        ->name('sales.orders.bulk.email');
+    Route::get('/app/sales/orders/{order}/edit', [SalesController::class, 'editOrder'])
+        ->middleware('permission:sales.orders.edit')
+        ->name('sales.orders.edit');
+    Route::put('/app/sales/orders/{order}', [SalesController::class, 'updateOrder'])
+        ->middleware('permission:sales.orders.edit')
+        ->name('sales.orders.update');
+    Route::post('/app/sales/orders/{order}/confirm', [SalesController::class, 'confirmOrder'])
+        ->middleware('permission:sales.orders.confirm')
+        ->name('sales.orders.confirm');
+    Route::post('/app/sales/orders/{order}/cancel', [SalesController::class, 'cancelOrder'])
+        ->middleware('permission:sales.orders.cancel')
+        ->name('sales.orders.cancel');
+    Route::post('/app/sales/orders/{order}/suspicious-review', [SalesController::class, 'reviewSuspiciousOrder'])
+        ->middleware('permission:sales.orders.view,sales.orders.review')
+        ->name('sales.orders.suspicious-review');
+    Route::post('/app/sales/orders/{order}/invoice', [SalesController::class, 'invoiceOrder'])
+        ->middleware('permission:sales.invoices.create')
+        ->name('sales.orders.invoice');
+
+    Route::get('/app/sales/invoices', [SalesController::class, 'invoices'])
+        ->middleware('permission:sales.invoices.view')
+        ->name('sales.invoices.index');
+    Route::get('/app/sales/invoices/{invoice}', [SalesController::class, 'showInvoice'])
+        ->middleware('permission:sales.invoices.view')
+        ->name('sales.invoices.show');
+    Route::post('/app/sales/invoices/{invoice}/issue', [SalesController::class, 'issueInvoice'])
+        ->middleware('permission:sales.invoices.issue')
+        ->name('sales.invoices.issue');
+    Route::get('/app/sales/invoices/{invoice}/mushak-9.1', [SalesController::class, 'mushak91'])
+        ->middleware('permission:sales.invoices.statutory_print')
+        ->name('sales.invoices.mushak-91');
+    Route::post('/app/sales/payments', [SalesController::class, 'storePayment'])
+        ->middleware('permission:sales.payments.create')
+        ->name('sales.payments.store');
+
+    Route::get('/app/sales/coupons', [SalesController::class, 'coupons'])
+        ->middleware('permission:sales.coupons.view')
+        ->name('sales.coupons.index');
+    Route::post('/app/sales/coupons', [SalesController::class, 'storeCoupon'])
+        ->middleware('permission:sales.coupons.create')
+        ->name('sales.coupons.store');
+    Route::get('/app/sales/coupons/usage', [SalesController::class, 'couponUsage'])
+        ->middleware('permission:sales.coupons.view')
+        ->name('sales.coupons.usage');
+    Route::post('/app/sales/coupons/bulk-generate', [SalesController::class, 'bulkGenerateCoupons'])
+        ->middleware('permission:sales.coupons.bulk')
+        ->name('sales.coupons.bulk-generate');
+
+    Route::get('/app/sales/promotions', [SalesController::class, 'promotions'])
+        ->middleware('permission:sales.promotions.view')
+        ->name('sales.promotions.index');
+    Route::post('/app/sales/promotions', [SalesController::class, 'storePromotion'])
+        ->middleware('permission:sales.promotions.create')
+        ->name('sales.promotions.store');
+    Route::get('/app/sales/promotions/flash', [SalesController::class, 'flashSales'])
+        ->middleware('permission:sales.promotions.view')
+        ->name('sales.promotions.flash');
+    Route::get('/app/reports/sales/promotions', [SalesController::class, 'promotionReport'])
+        ->middleware('permission:sales.reports.view')
+        ->name('sales.reports.promotions');
+    Route::get('/app/reports/sales/invoice-aging', [SalesController::class, 'invoiceAgingReport'])
+        ->middleware('permission:sales.reports.view')
+        ->name('sales.reports.invoice-aging');
+    Route::get('/app/reports/sales/summary', [SalesController::class, 'salesSummaryReport'])
+        ->middleware('permission:sales.reports.view')
+        ->name('sales.reports.summary');
+    Route::get('/app/reports/sales/peak-hours', [SalesController::class, 'peakHours'])
+        ->middleware('permission:sales.reports.view')
+        ->name('sales.reports.peak-hours');
+    Route::get('/app/reports/sales/trend', [SalesController::class, 'salesTrend'])
+        ->middleware('permission:sales.reports.view')
+        ->name('sales.reports.trend');
+    Route::get('/app/reports/sales/custom', [CustomReportController::class, 'index'])
+        ->middleware('permission:sales.reports.view')
+        ->name('sales.reports.custom');
+    Route::post('/app/reports/sales/custom/run', [CustomReportController::class, 'run'])
+        ->middleware('permission:sales.reports.view')
+        ->name('sales.reports.custom.run');
+    Route::post('/app/reports/sales/custom/definitions', [CustomReportController::class, 'storeDefinition'])
+        ->middleware('permission:sales.reports.view')
+        ->name('sales.reports.custom.definitions');
+    Route::post('/app/reports/sales/custom/saved-filters', [CustomReportController::class, 'storeSavedFilter'])
+        ->middleware('permission:sales.reports.view')
+        ->name('sales.reports.custom.saved-filters');
+    Route::post('/app/reports/sales/custom/schedules', [CustomReportController::class, 'storeSchedule'])
+        ->middleware('permission:sales.reports.view')
+        ->name('sales.reports.custom.schedules');
+    Route::post('/app/reports/sales/custom/runs', [CustomReportController::class, 'triggerRun'])
+        ->middleware('permission:sales.reports.view')
+        ->name('sales.reports.custom.runs');
+    foreach (['product', 'category', 'brand', 'customer', 'employee', 'branch', 'zone', 'method'] as $breakdownDim) {
+        // 02-116: branch comparison additionally requires branches.compare.
+        $breakdownPermission = $breakdownDim === 'branch'
+            ? 'sales.reports.view,branches.compare'
+            : 'sales.reports.view';
+
+        Route::get('/app/reports/sales/by-'.$breakdownDim, [SalesController::class, 'salesBreakdown'])
+            ->middleware('permission:'.$breakdownPermission)
+            ->defaults('dim', $breakdownDim)
+            ->name('sales.reports.by-'.$breakdownDim);
+    }
+
+    /* ---- Sales team (02-78…02-80) ---- */
+    Route::get('/app/sales/team', [SalesController::class, 'team'])
+        ->middleware('permission:sales.team.view')
+        ->name('sales.team.index');
+    Route::post('/app/sales/team', [SalesController::class, 'flagSalesPerson'])
+        ->middleware('permission:sales.team.create')
+        ->name('sales.team.store');
+    Route::get('/app/sales/team/targets', [SalesController::class, 'teamTargets'])
+        ->middleware('permission:sales.team.view')
+        ->name('sales.team.targets.index');
+    Route::post('/app/sales/team/targets', [SalesController::class, 'storeTarget'])
+        ->middleware('permission:sales.team.targets')
+        ->name('sales.team.targets.store');
+    Route::get('/app/sales/team/achievement', [SalesController::class, 'teamAchievement'])
+        ->middleware('permission:sales.team.view')
+        ->name('sales.team.achievement');
+    Route::get('/app/sales/team/leaderboard', [SalesController::class, 'teamLeaderboard'])
+        ->middleware('permission:sales.team.view')
+        ->name('sales.team.leaderboard');
+    Route::get('/app/sales/team/performance', [SalesController::class, 'teamPerformance'])
+        ->middleware('permission:sales.team.view')
+        ->name('sales.team.performance');
+    Route::get('/app/sales/team/commissions', [SalesController::class, 'teamCommissions'])
+        ->middleware('permission:sales.team.commissions')
+        ->name('sales.team.commissions.index');
+    Route::post('/app/sales/team/commissions/calculate', [SalesController::class, 'calculateCommission'])
+        ->middleware('permission:sales.team.commissions')
+        ->name('sales.team.commissions.calculate');
+    Route::post('/app/sales/team/commissions/{calculation}/pay', [SalesController::class, 'payCommission'])
+        ->middleware('permission:sales.team.commission_pay')
+        ->name('sales.team.commissions.pay');
+    Route::get('/app/sales/team/commission-rules', [SalesController::class, 'commissionRules'])
+        ->middleware('permission:sales.team.commissions')
+        ->name('sales.team.commission-rules.index');
+    Route::post('/app/sales/team/commission-rules', [SalesController::class, 'storeCommissionRule'])
+        ->middleware('permission:sales.team.commissions')
+        ->name('sales.team.commission-rules.store');
+
+    /* ---- Sales field slice (02-84…02-87) ---- */
+    Route::get('/app/sales/team/calls', [SalesController::class, 'teamCalls'])
+        ->middleware('permission:sales.team.calls')
+        ->name('sales.team.calls.index');
+    Route::post('/app/sales/team/calls', [SalesController::class, 'storeCall'])
+        ->middleware('permission:sales.team.calls')
+        ->name('sales.team.calls.store');
+    Route::get('/app/sales/team/field-sales', [SalesController::class, 'fieldSales'])
+        ->middleware('permission:sales.team.view')
+        ->name('sales.team.field-sales');
+    Route::get('/app/sales/team/field-visits', [SalesController::class, 'fieldVisits'])
+        ->middleware('permission:sales.team.field_tracking')
+        ->name('sales.team.field-visits.index');
+    Route::post('/app/sales/team/field-visits', [SalesController::class, 'storeFieldVisit'])
+        ->middleware('permission:sales.team.field_tracking')
+        ->name('sales.team.field-visits.store');
+    Route::post('/app/sales/team/field-visits/{visit}/transition', [SalesController::class, 'transitionFieldVisit'])
+        ->middleware('permission:sales.team.field_tracking')
+        ->name('sales.team.field-visits.transition');
+    Route::get('/app/sales/team/beat-plans', [SalesController::class, 'beatPlans'])
+        ->middleware('permission:sales.team.field_tracking')
+        ->name('sales.team.beat-plans.index');
+    Route::post('/app/sales/team/beat-plans', [SalesController::class, 'storeBeatPlan'])
+        ->middleware('permission:sales.team.field_tracking')
+        ->name('sales.team.beat-plans.store');
+    Route::get('/app/sales/team/territories', [SalesController::class, 'territories'])
+        ->middleware('permission:sales.team.territories')
+        ->name('sales.team.territories.index');
+    Route::post('/app/sales/team/territories', [SalesController::class, 'storeTerritory'])
+        ->middleware('permission:sales.team.territories')
+        ->name('sales.team.territories.store');
+
+    /* ---- Phase G remainders: revise/convert, delivery, returns ---- */
+    Route::post('/app/sales/quotations/{quotation}/revise', [SalesController::class, 'reviseQuotation'])
+        ->middleware('permission:sales.quotations.revise')
+        ->name('sales.quotations.revise');
+    Route::post('/app/sales/quotations/{quotation}/convert', [SalesController::class, 'convertQuotation'])
+        ->middleware('permission:sales.quotations.convert')
+        ->name('sales.quotations.convert');
+    Route::post('/app/sales/quotations/{quotation}/accept', [SalesController::class, 'acceptQuotation'])
+        ->middleware('permission:sales.quotations.process')
+        ->name('sales.quotations.accept');
+    Route::post('/app/sales/quotations/{quotation}/decline', [SalesController::class, 'declineQuotation'])
+        ->middleware('permission:sales.quotations.process')
+        ->name('sales.quotations.decline');
+    Route::post('/app/sales/quotations/{quotation}/send', [SalesController::class, 'sendQuotation'])
+        ->middleware('permission:sales.quotations.send')
+        ->name('sales.quotations.send');
+    Route::post('/app/sales/orders/{order}/challan', [SalesController::class, 'createChallan'])
+        ->middleware('permission:sales.delivery.create')
+        ->name('sales.orders.challan');
+    Route::get('/app/sales/delivery-challans', [SalesController::class, 'deliveryChallans'])
+        ->middleware('permission:sales.delivery.view')
+        ->name('sales.delivery-challans.index');
+    Route::get('/app/sales/delivery-challans/{challan}', [SalesController::class, 'showChallan'])
+        ->middleware('permission:sales.delivery.view')
+        ->name('sales.delivery-challans.show');
+    Route::post('/app/sales/delivery-challans/{challan}/dispatch', [SalesController::class, 'dispatchChallan'])
+        ->middleware('permission:sales.delivery.dispatch')
+        ->name('sales.delivery-challans.dispatch');
+    Route::post('/app/sales/delivery-challans/{challan}/deliver', [SalesController::class, 'deliverChallan'])
+        ->middleware('permission:sales.delivery.dispatch')
+        ->name('sales.delivery-challans.deliver');
+
+    /* ---- Delivery zones & zone-wise charges (02-88) ---- */
+    Route::get('/app/sales/delivery/zones', [DeliveryZoneController::class, 'index'])
+        ->middleware('permission:sales.delivery.zones')
+        ->name('sales.delivery.zones.index');
+    Route::post('/app/sales/delivery/zones', [DeliveryZoneController::class, 'store'])
+        ->middleware('permission:sales.delivery.zones')
+        ->name('sales.delivery.zones.store');
+    Route::post('/app/sales/delivery/zones/{zone}/charges', [ZoneChargeController::class, 'store'])
+        ->middleware('permission:sales.delivery.zones')
+        ->name('sales.delivery.zones.charges.store');
+    Route::delete('/app/sales/delivery/zones/charges/{charge}', [ZoneChargeController::class, 'destroy'])
+        ->middleware('permission:sales.delivery.zones')
+        ->name('sales.delivery.zones.charges.destroy');
+
+    /* ---- Shipments (02-89) ---- */
+    Route::get('/app/sales/shipments', [ShipmentController::class, 'index'])
+        ->middleware('permission:sales.delivery.shipments')
+        ->name('sales.shipments.index');
+    Route::post('/app/sales/shipments', [ShipmentController::class, 'store'])
+        ->middleware('permission:sales.delivery.shipments.create')
+        ->name('sales.shipments.store');
+    Route::post('/app/sales/shipments/bulk', [ShipmentController::class, 'bulkStore'])
+        ->middleware('permission:sales.delivery.shipments.create')
+        ->name('sales.shipments.bulk');
+    Route::post('/app/sales/shipments/{shipment}/dispatch', [ShipmentController::class, 'dispatch'])
+        ->middleware('permission:sales.delivery.shipments.create')
+        ->name('sales.shipments.dispatch');
+
+    /* ---- Shipment tracking (02-90) ---- */
+    Route::get('/app/sales/shipments/{shipment}/tracking', [TrackingEventController::class, 'show'])
+        ->middleware('permission:sales.delivery.view')
+        ->name('sales.shipments.tracking');
+    Route::post('/app/sales/shipments/{shipment}/tracking', [TrackingEventController::class, 'store'])
+        ->middleware('permission:sales.delivery.shipments.create')
+        ->name('sales.shipments.tracking.store');
+
+    /* ---- Proof of delivery (02-95) ---- */
+    Route::get('/app/sales/delivery/pod', [ProofOfDeliveryController::class, 'index'])
+        ->middleware('permission:sales.delivery.pod')
+        ->name('sales.delivery.pod.index');
+    Route::post('/app/sales/shipments/{shipment}/pod', [ProofOfDeliveryController::class, 'store'])
+        ->middleware('permission:sales.delivery.pod')
+        ->name('sales.delivery.pod.store');
+
+    /* ---- Failed delivery management (02-96) ---- */
+    Route::get('/app/sales/delivery/failed', [FailedDeliveryController::class, 'index'])
+        ->middleware('permission:sales.delivery.view')
+        ->name('sales.delivery.failed.index');
+    Route::post('/app/sales/delivery/failed/{failedDelivery}/retry', [FailedDeliveryController::class, 'retry'])
+        ->middleware('permission:sales.delivery.shipments.create')
+        ->name('sales.delivery.failed.retry');
+    Route::post('/app/sales/delivery/failed/{failedDelivery}/return', [FailedDeliveryController::class, 'returnGoods'])
+        ->middleware('permission:sales.delivery.shipments.create')
+        ->name('sales.delivery.failed.return');
+    Route::post('/app/sales/delivery/failed/{failedDelivery}/reship', [FailedDeliveryController::class, 'reship'])
+        ->middleware('permission:sales.delivery.shipments.create')
+        ->name('sales.delivery.failed.reship');
+
+    /* ---- Own delivery riders (02-93) ---- */
+    Route::get('/app/sales/delivery/riders', [RiderController::class, 'index'])
+        ->middleware('permission:sales.delivery.riders')
+        ->name('sales.delivery.riders.index');
+    Route::post('/app/sales/delivery/riders', [RiderController::class, 'store'])
+        ->middleware('permission:sales.delivery.riders')
+        ->name('sales.delivery.riders.store');
+    Route::put('/app/sales/delivery/riders/{rider}', [RiderController::class, 'update'])
+        ->middleware('permission:sales.delivery.riders')
+        ->name('sales.delivery.riders.update');
+    Route::get('/app/sales/delivery/riders/gps', [RiderController::class, 'gps'])
+        ->middleware('permission:sales.delivery.riders')
+        ->name('sales.delivery.riders.gps');
+    // Rider-self or sales.delivery.riders holders; consent enforced server-side.
+    Route::post('/app/sales/delivery/riders/{rider}/location', [RiderController::class, 'storeLocation'])
+        ->name('sales.delivery.riders.location');
+
+    Route::get('/app/sales/delivery/rider-assignments', [RiderAssignmentController::class, 'index'])
+        ->middleware('permission:sales.delivery.riders')
+        ->name('sales.delivery.rider-assignments.index');
+    Route::post('/app/sales/delivery/rider-assignments', [RiderAssignmentController::class, 'store'])
+        ->middleware('permission:sales.delivery.riders')
+        ->name('sales.delivery.rider-assignments.store');
+    Route::post('/app/sales/delivery/rider-assignments/{assignment}/accept', [RiderAssignmentController::class, 'accept'])
+        ->name('sales.delivery.rider-assignments.accept');
+    Route::post('/app/sales/delivery/rider-assignments/{assignment}/decline', [RiderAssignmentController::class, 'decline'])
+        ->name('sales.delivery.rider-assignments.decline');
+
+    Route::get('/app/sales/delivery/rider-cod', [RiderCodController::class, 'index'])
+        ->middleware('permission:sales.delivery.riders')
+        ->name('sales.delivery.rider-cod.index');
+    Route::post('/app/sales/delivery/rider-cod', [RiderCodController::class, 'store'])
+        ->middleware('permission:sales.delivery.riders')
+        ->name('sales.delivery.rider-cod.store');
+
+    /* ---- COD collection tracking & reconciliation (02-97) ---- */
+    Route::get('/app/sales/delivery/cod', [CodController::class, 'index'])
+        ->middleware('permission:sales.delivery.cod')
+        ->name('sales.delivery.cod.index');
+    Route::post('/app/sales/delivery/cod/reconcile', [CodController::class, 'reconcile'])
+        ->middleware('permission:sales.delivery.cod.reconcile')
+        ->name('sales.delivery.cod.reconcile');
+
+    /* ---- Route optimization (02-94) ---- */
+    Route::get('/app/sales/delivery/routes', [RouteOptimizerController::class, 'index'])
+        ->middleware('permission:sales.delivery.routes')
+        ->name('sales.delivery.routes.index');
+
+    /* ---- Packaging management (02-98) ---- */
+    Route::get('/app/sales/delivery/packaging', [PackagingController::class, 'index'])
+        ->middleware('permission:sales.delivery.packaging')
+        ->name('sales.delivery.packaging.index');
+    Route::post('/app/sales/delivery/packaging', [PackagingController::class, 'store'])
+        ->middleware('permission:sales.delivery.packaging')
+        ->name('sales.delivery.packaging.store');
+    Route::post('/app/sales/delivery/packaging/types', [PackagingController::class, 'storeType'])
+        ->middleware('permission:sales.delivery.packaging')
+        ->name('sales.delivery.packaging.types.store');
+
+    Route::get('/app/sales/returns', [SalesController::class, 'returns'])
+        ->middleware('permission:returns.view')
+        ->name('sales.returns.index');
+    Route::post('/app/sales/returns', [SalesController::class, 'storeReturn'])
+        ->middleware('permission:returns.create')
+        ->name('sales.returns.store');
+    Route::post('/app/sales/returns/{salesReturn}/receive', [SalesController::class, 'receiveReturn'])
+        ->middleware('permission:returns.receive')
+        ->name('sales.returns.receive');
+    Route::post('/app/sales/returns/{salesReturn}/credit', [SalesController::class, 'creditReturn'])
+        ->middleware('permission:returns.credit')
+        ->name('sales.returns.credit');
+    Route::post('/app/sales/returns/{salesReturn}/refund', [SalesController::class, 'refundReturn'])
+        ->middleware('permission:returns.refunds.create')
+        ->name('sales.returns.refund');
+
+    /* ---- POS (Phase G — 02-30…02-42) ---- */
+    Route::get('/pos', [PosController::class, 'terminal'])
+        ->middleware('permission:pos.sell')
+        ->name('pos.terminal');
+    Route::get('/pos/products', [PosController::class, 'products'])
+        ->middleware('permission:pos.sell')
+        ->name('pos.products');
+    Route::get('/pos/price-check', [PosController::class, 'priceCheck'])
+        ->middleware('permission:pos.price_check')
+        ->name('pos.price-check');
+    Route::post('/pos/sales', [PosController::class, 'commitSale'])
+        ->middleware('permission:pos.sell')
+        ->name('pos.sales.store');
+    Route::get('/pos/receipt/{posTransaction}', [PosController::class, 'receipt'])
+        ->middleware('permission:pos.sell')
+        ->name('pos.receipt');
+    Route::post('/pos/sync', [PosController::class, 'offlineSync'])
+        ->middleware('permission:pos.offline')
+        ->name('pos.sync');
+    Route::post('/pos/hold', [PosController::class, 'storeHold'])
+        ->middleware('permission:pos.hold')
+        ->name('pos.hold.store');
+    Route::get('/pos/holds', [PosController::class, 'holds'])
+        ->middleware('permission:pos.hold')
+        ->name('pos.holds.index');
+    Route::post('/pos/holds/{hold}/resume', [PosController::class, 'resumeHold'])
+        ->middleware('permission:pos.hold')
+        ->name('pos.holds.resume');
+    Route::get('/pos/sessions/{session}/x-report', [PosController::class, 'xReport'])
+        ->middleware('permission:pos.reports.x')
+        ->name('pos.sessions.x-report');
+    Route::get('/pos/sessions/{session}/z-report', [PosController::class, 'zReport'])
+        ->middleware('permission:pos.reports.z')
+        ->name('pos.sessions.z-report');
+    Route::get('/pos/sessions', [PosController::class, 'sessions'])
+        ->middleware('permission:pos.sessions.view')
+        ->name('pos.sessions.index');
+    Route::post('/pos/sessions/open', [PosController::class, 'openSession'])
+        ->middleware('permission:pos.sessions.open')
+        ->name('pos.sessions.open');
+    Route::post('/pos/sessions/{session}/close', [PosController::class, 'closeSession'])
+        ->middleware('permission:pos.sessions.close')
+        ->name('pos.sessions.close');
+    Route::get('/pos/returns', [PosController::class, 'returns'])
+        ->middleware('permission:pos.returns.create')
+        ->name('pos.returns.index');
+    Route::post('/pos/return', [PosController::class, 'returnSale'])
+        ->middleware('permission:pos.returns.create')
+        ->name('pos.return');
+    Route::get('/pos/exchange', [PosController::class, 'exchange'])
+        ->middleware('permission:pos.returns.exchange')
+        ->name('pos.exchange.index');
+    Route::post('/pos/exchange', [PosController::class, 'exchangeSale'])
+        ->middleware('permission:pos.returns.exchange')
+        ->name('pos.exchange');
+    Route::get('/pos/drawer', [PosController::class, 'drawer'])
+        ->middleware('permission:pos.cash_drawer')
+        ->name('pos.drawer');
+    Route::get('/pos/cash-in-out', [PosController::class, 'cashInOut'])
+        ->middleware('permission:pos.cash_io')
+        ->name('pos.cash-io.index');
+    Route::post('/pos/cash-in-out', [PosController::class, 'storeCashInOut'])
+        ->middleware('permission:pos.cash_io')
+        ->name('pos.cash-io.store');
+    Route::post('/pos/quotation', [PosController::class, 'quotationSale'])
+        ->middleware('permission:sales.quotations.create')
+        ->name('pos.quotation.store');
+    Route::post('/pos/layaway', [PosController::class, 'layawaySale'])
+        ->middleware('permission:pos.layaway')
+        ->name('pos.layaway.store');
+    Route::get('/pos/customer-display', [PosCustomerDisplayController::class, 'index'])
+        ->middleware('permission:pos.customer_display')
+        ->name('pos.customer-display.index');
+    Route::get('/pos/customer-display/state', [PosCustomerDisplayController::class, 'state'])
+        ->middleware('permission:pos.customer_display')
+        ->name('pos.customer-display.state');
+    Route::post('/pos/customer-display/push', [PosCustomerDisplayController::class, 'push'])
+        ->middleware('permission:pos.customer_display')
+        ->name('pos.customer-display.push');
+
+    /* ---- Audit trail ---- */
+    Route::middleware('permission:audit.view')->group(function () {
+        Route::get('/app/audit', [AuditController::class, 'index'])->name('audit.index');
+        Route::get('/app/audit/{event}', [AuditController::class, 'show'])->name('audit.show');
+    });
+    Route::get('/app/audit-export/audit.csv', [AuditController::class, 'export'])
+        ->middleware('permission:audit.export')
+        ->name('audit.export');
+
+    /* ---- Documents ---- */
+    Route::middleware('permission:documents.view')->group(function () {
+        Route::get('/app/documents', [DocumentController::class, 'index'])->name('documents.index');
+    });
+    Route::post('/app/documents', [DocumentController::class, 'store'])
+        ->middleware('permission:documents.upload')
+        ->name('documents.store');
+    Route::get('/app/documents/{document}/download', [DocumentController::class, 'download'])
+        ->middleware('permission:documents.download')
+        ->name('documents.download');
+    Route::delete('/app/documents/{document}', [DocumentController::class, 'destroy'])
+        ->middleware('permission:documents.manage')
+        ->name('documents.destroy');
+
+    /* ---- Navigation registry admin ---- */
+    Route::get('/app/navigation', [MenuController::class, 'index'])
+        ->middleware('permission:menus.view')
+        ->name('menus.index');
+    Route::post('/app/navigation/{item}/status', [MenuController::class, 'toggleStatus'])
+        ->middleware('permission:menus.manage')
+        ->name('menus.toggle');
+});

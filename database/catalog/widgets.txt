@@ -1,0 +1,26 @@
+    ├── Today's Sales
+    ├── Today's Purchase
+    ├── Today's Cash Position
+    ├── Today's Collection
+    ├── Today's Payments Due
+    ├── Today's Expense
+    ├── Today's Profit
+    ├── Receivable Aging (0-30 / 31-60 / 61-90 / 90+)
+    ├── Payable Aging (0-30 / 31-60 / 61-90 / 90+)
+    ├── Top 10 Customers
+    ├── Top 10 Products
+    ├── Top 10 Employees
+    ├── Pending Orders
+    ├── Pending Purchase Orders
+    ├── Pending Approvals
+    ├── Pending Returns
+    ├── Pending Refunds
+    ├── Low Stock Alert
+    ├── Out of Stock Alert
+    ├── Expiring Products Alert
+    ├── Payment Reminders
+    ├── Sales Chart (Daily / Weekly / Monthly)
+    ├── Purchase Chart
+    ├── Cash Flow Chart
+    ├── Branch Comparison
+    └── Recent Activity

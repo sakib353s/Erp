@@ -1,0 +1,88 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Domain\Foundation\Services\PermissionCatalog;
+use App\Domain\Masters\PriceList;
+use App\Domain\Masters\ProductPriceHistory;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+/**
+ * Append-only price history reader (02-110): every change written by the
+ * bulk updater (and manual edits) shows up here newest-first, scoped to
+ * the running user's company, with product/list/source/date filters that
+ * never widen scope.
+ */
+class PriceHistoryController extends Controller
+{
+    public function __construct(protected PermissionCatalog $catalog) {}
+
+    public function index(Request $request): View
+    {
+        $user = $request->user();
+
+        $data = $request->validate([
+            'q' => ['nullable', 'string', 'max:120'],
+            'price_list_id' => ['nullable', 'integer'],
+            'source' => ['nullable', 'in:manual,bulk_update'],
+            'from' => ['nullable', 'date'],
+            'to' => ['nullable', 'date'],
+        ]);
+
+        $search = trim((string) ($data['q'] ?? ''));
+
+        $query = ProductPriceHistory::query()
+            ->where('company_id', $user->company_id)
+            ->with([
+                'product:id,code,name',
+                'priceList:id,code,name',
+                'changedBy:id,name',
+                'bulkUpdate:id,status',
+            ])
+            ->orderByDesc('created_at')
+            ->orderByDesc('id');
+
+        if ($search !== '') {
+            $needle = '%'.$search.'%';
+            $query->whereHas('product', function ($q) use ($user, $needle) {
+                $q->where('company_id', $user->company_id)
+                    ->where(fn ($w) => $w->where('code', 'like', $needle)
+                        ->orWhere('name', 'like', $needle));
+            });
+        }
+
+        if (! empty($data['price_list_id'])) {
+            $query->where('price_list_id', (int) $data['price_list_id']);
+        }
+
+        if (! empty($data['source'])) {
+            $query->where('source', $data['source']);
+        }
+
+        if (! empty($data['from'])) {
+            $query->whereDate('created_at', '>=', $data['from']);
+        }
+
+        if (! empty($data['to'])) {
+            $query->whereDate('created_at', '<=', $data['to']);
+        }
+
+        return view('pricing.history', [
+            'rows' => $query->paginate(25)->withQueryString(),
+            'lists' => PriceList::query()
+                ->where('company_id', $user->company_id)
+                ->orderBy('name')
+                ->get(['id', 'code', 'name']),
+            'filters' => [
+                'q' => $search,
+                'price_list_id' => isset($data['price_list_id']) ? (int) $data['price_list_id'] : null,
+                'source' => $data['source'] ?? null,
+                'from' => $data['from'] ?? null,
+                'to' => $data['to'] ?? null,
+            ],
+            'canBulk' => $this->catalog->allows($user, 'pricing.bulk_update'),
+            'canAudit' => $this->catalog->allows($user, 'audit.view'),
+        ]);
+    }
+}

@@ -1,0 +1,23 @@
+# 06. SUPPLIERS — Traceability
+
+Baseline (`BL`) applies. This module menu is the **second entry point** to the supplier domain also reachable via Purchase › Suppliers (03-01…03-15). Rule: same underlying services and tables — no duplicate logic; rows below map the Suppliers-module menu entries to the shared backend and note Suppliers-module-specific items.
+
+Shared services: same as `03-purchase.md` header (`SupplierController`, `CreateSupplier`, `LedgerService@supplierLedger`, `RecordSupplierPayment`, `SupplierPerformanceCalculator`, secure upload pipeline).
+
+| Ref | Menu path | Route | Permission | Backend | DB entities | WF / Effects | Tests | Status |
+|---|---|---|---|---|---|---|---|---|
+| 06-01 | Suppliers › All Suppliers | `GET /suppliers` (alias route to supplier index) | `suppliers.view` | `SupplierController@index`, `SupplierQuery` | `suppliers`, `supplier_categories` | AUD | `SuppliersModuleListTest`, `SupplierScopeTest` | PLANNED |
+| 06-02 | Suppliers › Add Supplier | `GET|POST /suppliers/create` | `suppliers.create` | `CreateSupplier` (shared) | `suppliers` | AUD | `SuppliersModuleCreateTest` | PLANNED |
+| 06-03 | Suppliers › Import Suppliers / Export Suppliers | `POST /suppliers/import`, `GET /suppliers/export` | `suppliers.import/export` | `SupplierImporter`/`SupplierExporter` (shared) | `import_batches` | AUD | `SuppliersModuleImportExportTest` | PLANNED |
+| 06-04 | Suppliers › Supplier Categories | `GET|POST /suppliers/categories` | `suppliers.categories` | `SupplierCategoryController` (shared) | `supplier_categories` | AUD | `SuppliersModuleCategoryTest` | PLANNED |
+| 06-05 | Suppliers › Supplier Profile | `GET /suppliers/{id}` | `suppliers.view` | `SupplierController@show` (shared) | `suppliers` + related | AUD sensitive view | `SuppliersModuleProfileTest`, `SuppliersModuleIdorTest` | PLANNED |
+| 06-06 | Suppliers › Supplier Contacts | `GET|POST /suppliers/{id}/contacts` | `suppliers.edit` | contact CRUD (shared) | `supplier_contacts` | AUD | `SuppliersModuleContactsTest` | PLANNED |
+| 06-07 | Suppliers › Supplier Bank Details | `GET|PUT /suppliers/{id}/bank` | `suppliers.edit` | encrypted bank fields (shared) | `supplier_bank_details` | AUD diff; encrypted cast | `SuppliersModuleBankEncryptedTest` | PLANNED |
+| 06-08 | Suppliers › Supplier Ledger | `GET /suppliers/{id}/ledger` | `accounting.ledger.view` | `LedgerService@supplierLedger` (shared) | `journal_lines`, `running_balances` | ACCT-derived; DOC statement | `SuppliersModuleLedgerTest` | PLANNED |
+| 06-09 | Suppliers › Supplier Due › All Due / 0-30 / 31-60 / 60+ | `GET /suppliers/due?bucket=` | `suppliers.due.view` | `SupplierDueQuery` (buckets from open bills + AP GL) | `purchase_bills`, `journal_lines` | drill → payments | `SupplierDueBucketsTest` (all four) | PLANNED |
+| 06-10 | Suppliers › Supplier Payments › Record Payment / Payment Schedule / Advance Adjustment | `GET|POST /suppliers/{id}/payments` | `suppliers.payments.create` | `RecordSupplierPayment`, `AdjustAdvance` (shared) | `payments`, `payment_allocations`, `journal_entries` | ACCT; WF threshold; AUD | `SuppliersModulePaymentTest`, `SuppliersModuleAdvanceAdjustmentTest` | PLANNED |
+| 06-11 | Suppliers › Supplier Contracts | `GET|POST /suppliers/{id}/contracts` | `suppliers.contracts` | contract CRUD + documents (shared) | `supplier_contracts`, `documents` | AUD | `SuppliersModuleContractsTest` | PLANNED |
+| 06-12 | Suppliers › Supplier Performance / Supplier Quality Score | `GET /suppliers/performance` | `suppliers.performance` | `SupplierPerformanceCalculator` + quality score from GRN condition captures (formula exposed) | `supplier_performance_scores`, `grns`, `purchase_returns` | BI explainability | `SupplierPerformanceTest`, `SupplierQualityScoreTest` (formula+sample) | PLANNED |
+| 06-13 | Suppliers › Supplier Documents | `GET|POST /suppliers/{id}/documents` | `suppliers.documents` | secure upload pipeline (validate, checksum, private storage, controlled serving) | `supplier_documents`, `documents` | AUD upload/download | `SupplierDocumentUploadTest`, `SupplierDocumentServeControlledTest` | PLANNED |
+| 06-14 | Suppliers › Supplier Statements | `GET /suppliers/{id}/statement` | `accounting.ledger.print` | statement DOC generator (shared ledger service) | `journal_lines`, `documents` | DOC PDF; AUD print | `SupplierStatementTest` (totals=GL) | PLANNED |
+| 06-15 | Suppliers › Supplier Reports | `GET /reports/suppliers/*` (spend, dues, performance, delivery) | `suppliers.reports` | `Reporting\SupplierReports` | `suppliers`, `purchase_bills`, `grns` | DOC export; AUD | `SupplierReportsTest` (4 families) | PLANNED |
