@@ -277,6 +277,15 @@ class CatalogImporter
         'inventory > stock > overstock alert' => ['/app/inventory/stock/alerts?type=over', 'inventory.reorder.view'],
         'inventory > stock > minimum stock level' => ['/app/inventory/reorder-levels', 'inventory.reorder.view'],
         'inventory > stock > maximum stock level' => ['/app/inventory/reorder-levels', 'inventory.reorder.view'],
+        // §04-46…04-51: damage and loss are their own register, and the write-off
+        // is the document that needs a second person — so it gets its own queue.
+        'inventory > damage & loss > damage records' => ['/app/inventory/damage', 'inventory.stock.view'],
+        'inventory > damage & loss > create damage entry' => ['/app/inventory/damage/create', 'inventory.damage.create'],
+        'inventory > damage & loss > loss records' => ['/app/inventory/loss', 'inventory.stock.view'],
+        'inventory > damage & loss > create loss entry' => ['/app/inventory/loss/create', 'inventory.loss.create'],
+        'inventory > damage & loss > write-off approval' => ['/app/inventory/writeoffs?status=pending_approval', 'inventory.writeoffs.approve'],
+        'inventory > damage & loss > damage valuation' => ['/app/reports/inventory/damage', 'inventory.reports.view'],
+        'inventory > damage & loss > damage analytics' => ['/app/reports/inventory/damage', 'inventory.reports.view'],
         // Dashboard leaves that already have a real screen behind them
         'dashboard > low stock alert' => ['/app/inventory/stock/alerts?type=low', 'inventory.reorder.view'],
         'dashboard > out of stock alert' => ['/app/inventory/stock/alerts?type=out', 'inventory.reorder.view'],

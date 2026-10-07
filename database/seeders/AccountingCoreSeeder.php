@@ -73,6 +73,7 @@ class AccountingCoreSeeder extends Seeder
         // COD remittance variance (02-97): office received less/more cash
         // than riders recorded as collected.
         ['5250', 'Cash Over & Short', 'expense', 'EXPENSE', ['parent' => '5200', 'is_system' => true]],
+        ['5260', 'Inventory Loss & Damage', 'expense', 'EXPENSE', ['parent' => '5200', 'is_system' => true]],
         ['5300', 'Bad Debt Expense', 'expense', 'EXPENSE', ['parent' => '5000', 'is_system' => true]],
     ];
 

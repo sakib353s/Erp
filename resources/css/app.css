@@ -1335,7 +1335,9 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-status-leave,
 .erp-status-holiday,
 .erp-status-partially_received,
-.erp-status-partially-received {
+.erp-status-partially-received,
+/* §04-46/47: the entry is on file and needs no decision */
+.erp-status-recorded {
     background: var(--info-soft);
     color: var(--info);
 }
@@ -1364,7 +1366,9 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-status-half_day,
 .erp-status-half-day,
 .erp-status-price_mismatch,
-.erp-status-price-mismatch {
+.erp-status-price-mismatch,
+/* §04-46: stock is held damaged — not gone, but not sellable either */
+.erp-status-damage {
     background: var(--warn-soft);
     color: var(--warn);
 }
@@ -1387,7 +1391,9 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-status-absent,
 .erp-status-qty_mismatch,
 .erp-status-qty-mismatch,
-.erp-status-unmatched {
+.erp-status-unmatched,
+/* §04-47: stock and its value have left the company */
+.erp-status-loss {
     background: var(--danger-soft);
     color: var(--danger);
 }

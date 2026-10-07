@@ -27,8 +27,16 @@ class StockMovement extends Model
 
     public const TYPE_TRANSIT_CLEAR = 'TRANSIT_CLEAR';
 
+    /** Goods leave sellable stock and are held in the damaged compartment. */
+    public const TYPE_DAMAGE_IN = 'DAMAGE_IN';
+
+    /** Goods leave the damaged compartment and are sellable again. */
+    public const TYPE_DAMAGE_RELEASE = 'DAMAGE_RELEASE';
+
+    /** Damaged goods leave the company (disposal) — consumes valuation layers. */
     public const TYPE_DAMAGE_OUT = 'DAMAGE_OUT';
 
+    /** Stock leaves the company (loss, direct write-off) — consumes layers. */
     public const TYPE_WRITE_OFF = 'WRITE_OFF';
 
     public const TYPE_PURCHASE_RECEIPT = 'PURCHASE_RECEIPT';
@@ -57,6 +65,18 @@ class StockMovement extends Model
         self::TYPE_TRANSIT_IN,
         self::TYPE_SALES_RETURN,
         self::TYPE_PURCHASE_RECEIPT,
+        self::TYPE_DAMAGE_RELEASE,
+    ];
+
+    /**
+     * Movements that only change WHICH COMPARTMENT goods sit in — no value
+     * enters or leaves the company, so no valuation layer is created or
+     * consumed. `on_hand` here means sellable stock: damaged and quarantined
+     * goods are held outside it and are valued all the same.
+     */
+    public const COMPARTMENT_MOVE_TYPES = [
+        self::TYPE_DAMAGE_IN,
+        self::TYPE_DAMAGE_RELEASE,
     ];
 
     protected $fillable = [
@@ -106,5 +126,96 @@ class StockMovement extends Model
     public function scopeForCompany($query, int $companyId)
     {
         return $query->where('company_id', $companyId);
+    }
+
+    /**
+     * How one movement changes the derived balance row. THE single state
+     * machine: the live post path, the balance rebuild and the ledger's
+     * running on-hand column all call this, so a movement can never mean one
+     * thing in the ledger and another on a screen.
+     *
+     * on_hand is SELLABLE stock. `damaged` and `quarantined` are separate
+     * compartments held outside it, so goods flagged as damaged leave on_hand
+     * and their disposal never touches it a second time.
+     *
+     * @param  array<string, float>  $row
+     */
+    public static function applyDelta(array &$row, string $type, string $state, float $qty, bool $isInbound): void
+    {
+        if ($type === self::TYPE_DAMAGE_IN) {
+            $row['on_hand'] -= $qty;
+            $row['damaged'] += $qty;
+
+            return;
+        }
+
+        if ($type === self::TYPE_DAMAGE_RELEASE) {
+            $row['damaged'] -= $qty;
+            $row['on_hand'] += $qty;
+
+            return;
+        }
+
+        if ($state === self::STATE_ON_HAND) {
+            $row['on_hand'] += $isInbound ? $qty : -$qty;
+
+            return;
+        }
+
+        if ($state === self::STATE_IN_TRANSIT) {
+            if ($type === self::TYPE_TRANSIT_OUT) {
+                $row['on_hand'] -= $qty;
+                $row['in_transit'] += $qty;
+            } elseif ($type === self::TYPE_TRANSIT_IN) {
+                $row['on_hand'] += $qty;
+                $row['in_transit'] -= $qty;
+            } elseif ($type === self::TYPE_TRANSIT_CLEAR) {
+                $row['in_transit'] -= $qty;
+            } else {
+                $row['in_transit'] += $isInbound ? $qty : -$qty;
+            }
+
+            return;
+        }
+
+        if ($state === self::STATE_DAMAGED) {
+            $row['damaged'] += $isInbound ? $qty : -$qty;
+
+            return;
+        }
+
+        if ($state === self::STATE_QUARANTINED) {
+            $row['quarantined'] += $isInbound ? $qty : -$qty;
+
+            return;
+        }
+
+        if ($state === self::STATE_RESERVED) {
+            $row['reserved'] += $isInbound ? $qty : -$qty;
+        }
+    }
+
+    /** A zeroed balance row, in the shape applyDelta() expects. */
+    public static function emptyRow(): array
+    {
+        return [
+            'on_hand' => 0.0,
+            'reserved' => 0.0,
+            'in_transit' => 0.0,
+            'damaged' => 0.0,
+            'quarantined' => 0.0,
+        ];
+    }
+
+    /**
+     * The net change a movement makes to on-hand stock, from the same state
+     * machine the ledger uses — never a second interpretation.
+     */
+    public static function onHandDelta(string $type, string $state, float $qty, bool $isInbound): float
+    {
+        $row = self::emptyRow();
+        self::applyDelta($row, $type, $state, $qty, $isInbound);
+
+        return $row['on_hand'];
     }
 }

@@ -38,6 +38,7 @@ final class DocumentTypeRegistry
         // ---- Inventory
         ['code' => 'stock_adjustment', 'type_group' => 'inventory', 'name' => 'Stock Adjustment', 'printed_title' => 'STOCK ADJUSTMENT'],
         ['code' => 'stock_transfer', 'type_group' => 'inventory', 'name' => 'Stock Transfer', 'printed_title' => 'STOCK TRANSFER'],
+        ['code' => 'stock_damage_entry', 'type_group' => 'inventory', 'name' => 'Damage / Loss Entry', 'printed_title' => 'DAMAGE / LOSS REPORT'],
         ['code' => 'stock_write_off', 'type_group' => 'inventory', 'name' => 'Stock Write-Off', 'printed_title' => 'WRITE-OFF'],
 
         // ---- Accounting
@@ -71,6 +72,8 @@ final class DocumentTypeRegistry
         'expense_voucher' => 'EX',
         'stock_adjustment' => 'ADJ',
         'stock_transfer' => 'TRF',
+        'stock_damage_entry' => 'DL',
+        'stock_write_off' => 'WO',
         'payroll' => 'PAY',
     ];
 

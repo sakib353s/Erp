@@ -30,6 +30,7 @@ use App\Http\Controllers\FailedDeliveryController;
 use App\Http\Controllers\FinancialReportController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\InventoryReportController;
+use App\Http\Controllers\InventoryDamageController;
 use App\Http\Controllers\InventoryReservationController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\MaintenanceController;
@@ -804,6 +805,46 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
         ->middleware('permission:inventory.reorder.configure')
         ->name('inventory.reorder.destroy');
 
+    /* ---- Damage & loss (§04-46…04-49) ---- */
+    Route::get('/app/inventory/damage', [InventoryDamageController::class, 'damage'])
+        ->middleware('permission:inventory.stock.view')
+        ->name('inventory.damage.index');
+    Route::get('/app/inventory/damage/create', [InventoryDamageController::class, 'createDamage'])
+        ->middleware('permission:inventory.damage.create')
+        ->name('inventory.damage.create');
+    Route::post('/app/inventory/damage', [InventoryDamageController::class, 'storeDamage'])
+        ->middleware('permission:inventory.damage.create')
+        ->name('inventory.damage.store');
+    Route::post('/app/inventory/damage/{entry}/release', [InventoryDamageController::class, 'release'])
+        ->middleware('permission:inventory.damage.create')
+        ->name('inventory.damage.release');
+
+    Route::get('/app/inventory/loss', [InventoryDamageController::class, 'losses'])
+        ->middleware('permission:inventory.stock.view')
+        ->name('inventory.loss.index');
+    Route::get('/app/inventory/loss/create', [InventoryDamageController::class, 'createLoss'])
+        ->middleware('permission:inventory.loss.create')
+        ->name('inventory.loss.create');
+    Route::post('/app/inventory/loss', [InventoryDamageController::class, 'storeLoss'])
+        ->middleware('permission:inventory.loss.create')
+        ->name('inventory.loss.store');
+
+    Route::get('/app/inventory/writeoffs', [InventoryDamageController::class, 'writeoffs'])
+        ->middleware('permission:inventory.stock.view')
+        ->name('inventory.writeoffs.index');
+    Route::get('/app/inventory/writeoffs/create', [InventoryDamageController::class, 'createWriteoff'])
+        ->middleware('permission:inventory.writeoffs.create')
+        ->name('inventory.writeoffs.create');
+    Route::post('/app/inventory/writeoffs', [InventoryDamageController::class, 'storeWriteoff'])
+        ->middleware('permission:inventory.writeoffs.create')
+        ->name('inventory.writeoffs.store');
+    Route::post('/app/inventory/writeoffs/{writeoff}/approve', [InventoryDamageController::class, 'approveWriteoff'])
+        ->middleware('permission:inventory.writeoffs.approve')
+        ->name('inventory.writeoffs.approve');
+    Route::post('/app/inventory/writeoffs/{writeoff}/reject', [InventoryDamageController::class, 'rejectWriteoff'])
+        ->middleware('permission:inventory.writeoffs.approve')
+        ->name('inventory.writeoffs.reject');
+
     Route::get('/app/inventory/reservations', [InventoryReservationController::class, 'index'])
         ->middleware('permission:inventory.reservations.view')
         ->name('inventory.reservations.index');
@@ -824,6 +865,9 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::get('/app/reports/inventory/stock', [InventoryReportController::class, 'stock'])
         ->middleware('permission:inventory.reports.view')
         ->name('inventory.reports.stock');
+    Route::get('/app/reports/inventory/damage', [InventoryReportController::class, 'damage'])
+        ->middleware('permission:inventory.reports.view')
+        ->name('inventory.reports.damage');
 
     Route::get('/app/inventory/stock/opening', [InventoryController::class, 'createOpening'])
         ->middleware('permission:inventory.adjustments.create')

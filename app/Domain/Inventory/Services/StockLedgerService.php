@@ -139,9 +139,15 @@ class StockLedgerService
             $unitCost = '0.0000';
             $layerId = null;
             $valuationMethod = $product->cost_method;
+            $movesValue = ! in_array($type, StockMovement::COMPARTMENT_MOVE_TYPES, true);
 
             if ($type === StockMovement::TYPE_TRANSIT_CLEAR) {
                 // Layers already consumed on TRANSIT_OUT; only close origin in_transit.
+                $unitCost = number_format((float) ($command['unit_cost'] ?? 0), 4, '.', '');
+            } elseif (! $movesValue) {
+                // on_hand ⇄ damaged: the goods stay ours at the same cost, so no
+                // layer is created or consumed. The value is reported from the
+                // layers all the same, which is why stock value does not move.
                 $unitCost = number_format((float) ($command['unit_cost'] ?? 0), 4, '.', '');
             } elseif ($isInbound) {
                 [$unitCost, $layer] = $this->valuation->receive(
@@ -176,6 +182,35 @@ class StockLedgerService
                         $qty,
                     ));
                 }
+            }
+
+            // Compartment moves get the same loud refusal as sellable stock: a
+            // silent floor would hide a real inconsistency in the balance row.
+            if ($type === StockMovement::TYPE_DAMAGE_IN && (float) $balance->on_hand - $qty < -1e-9) {
+                throw new RuntimeException(sprintf(
+                    'Not enough sellable stock to flag as damaged for %s: on hand %s, flagging %s.',
+                    $product->sku,
+                    $balance->on_hand,
+                    $qty,
+                ));
+            }
+
+            if ($type === StockMovement::TYPE_DAMAGE_RELEASE && (float) $balance->damaged - $qty < -1e-9) {
+                throw new RuntimeException(sprintf(
+                    'Damaged-stock underflow for %s: held %s, releasing %s.',
+                    $product->sku,
+                    $balance->damaged,
+                    $qty,
+                ));
+            }
+
+            if ($type === StockMovement::TYPE_DAMAGE_OUT && (float) $balance->damaged - $qty < -1e-9) {
+                throw new RuntimeException(sprintf(
+                    'Damaged-stock underflow for %s: held %s, writing off %s.',
+                    $product->sku,
+                    $balance->damaged,
+                    $qty,
+                ));
             }
 
             $signedQty = $isInbound ? $qty : -$qty;
@@ -281,7 +316,7 @@ class StockLedgerService
             'quarantined' => (float) $balance->quarantined,
         ];
 
-        $this->applyBalanceDeltaFromArray($arr, $type, $state, $qty, $isInbound);
+        StockMovement::applyDelta($arr, $type, $state, $qty, $isInbound);
 
         $balance->on_hand = number_format($arr['on_hand'], 4, '.', '');
         $balance->reserved = number_format($arr['reserved'], 4, '.', '');
@@ -291,9 +326,9 @@ class StockLedgerService
     }
 
     /**
-     * Shared state machine for live post and ledger rebuild.
+     * Shared state machine for live post and ledger rebuild — the definition
+     * lives on the movement model so the ledger view cannot drift from it.
      *
-     * @param  array<string, float>  $row
      * @param  array<string, float>  $row
      */
     protected function applyBalanceDeltaFromArray(
@@ -303,48 +338,7 @@ class StockLedgerService
         float $qty,
         bool $isInbound,
     ): void {
-        if ($state === StockMovement::STATE_ON_HAND) {
-            $row['on_hand'] += $isInbound ? $qty : -$qty;
-
-            return;
-        }
-
-        if ($state === StockMovement::STATE_IN_TRANSIT) {
-            if ($type === StockMovement::TYPE_TRANSIT_OUT) {
-                $row['on_hand'] -= $qty;
-                $row['in_transit'] += $qty;
-            } elseif ($type === StockMovement::TYPE_TRANSIT_IN) {
-                $row['on_hand'] += $qty;
-                $row['in_transit'] = max(0, $row['in_transit'] - $qty);
-            } elseif ($type === StockMovement::TYPE_TRANSIT_CLEAR) {
-                $row['in_transit'] = max(0, $row['in_transit'] - $qty);
-            } else {
-                $row['in_transit'] += $isInbound ? $qty : -$qty;
-            }
-
-            return;
-        }
-
-        if ($state === StockMovement::STATE_DAMAGED) {
-            if ($isInbound) {
-                $row['damaged'] += $qty;
-            } else {
-                $row['damaged'] = max(0, $row['damaged'] - $qty);
-                $row['on_hand'] -= $qty;
-            }
-
-            return;
-        }
-
-        if ($state === StockMovement::STATE_QUARANTINED) {
-            $row['quarantined'] += $isInbound ? $qty : -$qty;
-
-            return;
-        }
-
-        if ($state === StockMovement::STATE_RESERVED) {
-            $row['reserved'] += $isInbound ? $qty : -$qty;
-        }
+        StockMovement::applyDelta($row, $type, $state, $qty, $isInbound);
     }
 
     protected function isInbound(string $type): bool

@@ -6,7 +6,7 @@ a module is only "done" when persistence + validation + authorization + branch
 scope + business logic + workflow + effects + notifications + audit + UI + error
 handling and its tests are all connected (see `TRACEABILITY/README.md`).
 
-_Last updated: 2026-10-08, after the dashboard slice (§01) and the inventory alert/reorder, reservations and report-family slices (§04)._
+_Last updated: 2026-10-08, after the damage & loss slice (§04-46…04-51), the dashboard slice (§01) and the inventory alert/reorder, reservations and report-family slices (§04)._
 
 ## Where the product stands
 
@@ -15,7 +15,7 @@ _Last updated: 2026-10-08, after the dashboard slice (§01) and the inventory al
 | 01 Dashboard | 26 / 27 | **all 25 containers answer from real documents** — ok / empty / unavailable, one read service, visibility by the module's own view permission; only the widget admin CRUD in 12 Settings is pending |
 | 02 Sales | 104 / 120 | essentially complete: orders, bulk actions, invoices, delivery, team, POS, reports |
 | 03 Purchase | 19 / 73 | **the purchase cycle is closed both ways** — POs with approval, receipts posting real stock, bills posting the payable with a three-way match, payments settling it, returns taking goods back with their debit note; RFQ, LC and reports pending |
-| 04 Inventory | 17 / 63 | products, adjustments, transfers, movements, **alerts against reorder policies, the reservations desk, and the stock report family** (ageing, dead stock, stock report — all derived from the ledger, all exportable); counts and batch/serial pending |
+| 04 Inventory | 22 / 63 | products, adjustments, transfers, movements, **alerts against reorder policies, the reservations desk, and the stock report family** (ageing, dead stock, stock report — all derived from the ledger, all exportable) **and the damage & loss family** (damage/loss entries valued from the layers, a maker-checker write-off that posts the cost, and the damage analytics report); counts and batch/serial pending |
 | 05 Customers (CRM) | 14 / 23 | profile, ledger, ageing, credit control, feedback, referrals, blacklist; collections workflow + import pending |
 | 06 Suppliers | 6 / 15 | **master + the whole account built** — duplicate refusal, blacklist with reason, profile from real documents, running ledger, company-wide ageing and a printable/CSV statement; contracts, scoring and documents pending |
 | 07 Returns | 4 / 18 | sales returns exist; purchase returns + credit notes pending |
@@ -29,17 +29,18 @@ _Last updated: 2026-10-08, after the dashboard slice (§01) and the inventory al
 | 15 Settings | 0 / 35 | **not started** — company/branch/invoice/Bengali/payment-gateway settings screens |
 | 16 Cross-cutting | 0 / 64 | search, notifications, backups, BI, i18n, API mgmt, public links |
 
-**Totals: 230 of 619 catalogued rows implemented.** (Sales 104, Dashboard 26, Purchase 19, Inventory 17,
+**Totals: 235 of 619 catalogued rows implemented.** (Sales 104, Dashboard 26, Purchase 19, Inventory 22,
 HRM 17, Masters 15, CRM 14, Accounting 8, Suppliers 6, Returns 4.)
 
 ## The next three builds, in the order they unlock the most
 
-1. **Inventory remainder (04)** — the ledger is written to by purchases, sales and returns,
-   and the reading half now covers alerts, reorder levels, the reservations desk and the
-   report family (ageing, dead stock, stock report). Still to build in this module: physical
-   counts and cycle counts, batch/serial with expiry (FEFO — note there is no batches table
-   yet, only a batch number on receipt lines), damage/write-off, barcode labels and warehouse
-   bins.
+1. **Inventory remainder (04)** — the ledger is written to by purchases, sales, returns,
+   damage and loss, and the reading half now covers alerts, reorder levels, the reservations
+   desk, the report family (ageing, dead stock, stock report) and damage analytics. Still to
+   build in this module: physical counts and cycle counts, batch/serial with expiry (FEFO —
+   note there is no batches table yet, only a batch number on receipt lines), warehouse
+   zones/bins with pick and putaway lists, packaging stock, barcode labels and the insurance
+   register behind 04-50.
 2. **Accounts close-out (08 + 09 remainder)** — cash book and bank reconciliation first
    (they feed every collection screen), then the day book, the customer/supplier ledgers read
    from the control accounts, and the VAT/Mushak report family.
@@ -59,6 +60,14 @@ HRM 17, Masters 15, CRM 14, Accounting 8, Suppliers 6, Returns 4.)
   side in `docs/TRACEABILITY/01-dashboard.md`. While wiring it, a real defect was fixed: `WidgetSeeder` produced
   mixed-case container codes (`Todays_Sales`) while the translations table, the label keys and the dashboard all
   key off lowercase slugs — codes are lowercase now and the seeder prunes containers outside the catalogue.
+* **Damage, loss and write-off** are two documents, not one (see `docs/TRACEABILITY/04-inventory.md`):
+  entries state facts (damage moves goods into the `damaged` compartment with no valuation effect;
+  a loss consumes the layers and posts Dr 5260 / Cr 1140), while the write-off is the decision that
+  removes value and needs a second person. `damaged` and `quarantined` are compartments held outside
+  sellable stock and are valued all the same — and the ledger's state machine (now on
+  `StockMovement::applyDelta()`) was corrected here: an outbound movement from the damaged compartment
+  used to decrement `on_hand` a second time. Nothing posts to insurance: 04-50 has no register to
+  link a claim to.
 * **Two alert readers exist.** `StockQuery::alerts()` came with the inventory core and
   reports a company-wide balance against thresholds; the alert screens read
   `ReorderService::alertRows()`, which resolves the policy that actually governs a product
@@ -123,7 +132,7 @@ HRM 17, Masters 15, CRM 14, Accounting 8, Suppliers 6, Returns 4.)
 * **Attendance capture** is manual/import only — the `device` source is reserved and
   nothing writes it; GPS configuration (10-13) does not exist.
 * **Tests** in this repository are written but not executed in the build sandbox
-  (no PHP runtime): `DashboardWidgetTest`, `StockAlertTest`, `StockReservationTest`,
+  (no PHP runtime): `DashboardWidgetTest`, `InventoryDamageTest`, `StockAlertTest`, `StockReservationTest`,
   `StockReportTest`, `SupplierLedgerTest`, `CustomerCrmTest`, `HrAttendanceTest`,
   `HrLeaveTest`, `PurchaseFlowTest` and the rest of the suite must be run where PHP +
   MySQL are available. Everything else here was verified statically (routes ↔

@@ -66,9 +66,13 @@ class SystemRoleSeeder extends Seeder
                 'purchase.payments.view', 'purchase.payments.create',
                 'purchase.returns.view', 'purchase.returns.approve', 'purchase.returns.cancel',
                 'suppliers.view', 'inventory.stock.view',
-                // Stock the desk promised away is a manager's business too.
+                // Stock the desk promised away is a manager's business too,
+                // and so is the decision to destroy value (§04-48): a manager
+                // approves write-offs, and the maker-checker rule still applies.
                 'inventory.reservations.view', 'inventory.reservations.manage',
                 'inventory.reports.view',
+                'inventory.damage.create', 'inventory.loss.create',
+                'inventory.writeoffs.create', 'inventory.writeoffs.approve',
             ]],
             ['slug' => 'employee', 'name' => 'Employee', 'description' => 'Staff account: own portal access only — own leave, own payslips.', 'keys' => [
                 'dashboard.view', 'employees.view', 'documents.view', 'search.view',
@@ -89,7 +93,7 @@ class SystemRoleSeeder extends Seeder
                 'purchase.returns.view', 'purchase.returns.create',
                 'inventory.products.view', 'inventory.stock.view',
             ]],
-            ['slug' => 'storekeeper', 'name' => 'Store keeper', 'description' => 'Receiving desk: books goods in against approved orders and posts them to stock.', 'keys' => [
+            ['slug' => 'storekeeper', 'name' => 'Store keeper', 'description' => 'Receiving desk: books goods in against approved orders, posts them to stock and records what breaks.', 'keys' => [
                 'dashboard.view', 'search.view',
                 'suppliers.view',
                 'purchase.orders.view', 'purchase.receipts.view',
@@ -98,6 +102,11 @@ class SystemRoleSeeder extends Seeder
                 'inventory.stock.view', 'inventory.ledger.view', 'inventory.transfers.receive',
                 'inventory.reservations.view', 'inventory.reservations.manage',
                 'inventory.reports.view', 'inventory.valuation.view',
+                // §04-46/04-47: seeing the damage is the storekeeper's job, so
+                // recording it is too. Destroying the value is not: disposal and
+                // write-off approval stay with a manager (§04-48).
+                'inventory.damage.create', 'inventory.loss.create',
+                'inventory.writeoffs.create',
             ]],
         ];
 

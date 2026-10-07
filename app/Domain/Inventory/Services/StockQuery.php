@@ -82,25 +82,16 @@ class StockQuery
         $rows = [];
 
         foreach ($query->get() as $movement) {
-            // Reconstruct on-hand from on_hand-affecting movements only for display
-            $affectsOnHand = $movement->state === StockMovement::STATE_ON_HAND
-                || in_array($movement->movement_type, [
-                    StockMovement::TYPE_TRANSIT_OUT,
-                    StockMovement::TYPE_TRANSIT_IN,
-                ], true)
-                || ($movement->state === StockMovement::STATE_DAMAGED && ! $movement->isInbound());
-
-            if ($affectsOnHand) {
-                if ($movement->movement_type === StockMovement::TYPE_TRANSIT_OUT) {
-                    $running -= abs((float) $movement->qty_signed);
-                } elseif ($movement->movement_type === StockMovement::TYPE_TRANSIT_IN) {
-                    $running += abs((float) $movement->qty_signed);
-                } elseif ($movement->state === StockMovement::STATE_ON_HAND) {
-                    $running += (float) $movement->qty_signed;
-                } elseif ($movement->state === StockMovement::STATE_DAMAGED) {
-                    $running -= abs((float) $movement->qty_signed);
-                }
-            }
+            // Running sellable stock comes from the ledger's own state machine,
+            // so this column can never disagree with the balance it explains.
+            // Compartment changes (damaged ⇄ sellable) move goods without
+            // changing their value, and they show here as an on-hand change.
+            $running += StockMovement::onHandDelta(
+                $movement->movement_type,
+                $movement->state,
+                abs((float) $movement->qty_signed),
+                $movement->isInbound(),
+            );
 
             $rows[] = [
                 'movement' => $movement,

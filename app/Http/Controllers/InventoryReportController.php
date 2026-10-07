@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Domain\Inventory\Services\DamageService;
+use App\Domain\Inventory\StockDamageEntry;
+use App\Domain\Inventory\StockMovement;
 use App\Domain\Inventory\Services\StockReportService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -16,7 +19,10 @@ use Illuminate\View\View;
  */
 class InventoryReportController extends Controller
 {
-    public function __construct(protected StockReportService $reports) {}
+    public function __construct(
+        protected StockReportService $reports,
+        protected DamageService $damage,
+    ) {}
 
     public function aging(Request $request): View|StreamedResponse
     {
@@ -110,6 +116,68 @@ class InventoryReportController extends Controller
             'filters' => $filters,
             'rows' => $result['rows'],
             'totals' => $result['totals'],
+            'warehouses' => $this->reports->warehouses(),
+        ]);
+    }
+
+    /**
+     * Damage & loss analytics (§04-51). Every figure is a sum of documents that
+     * exist in the period; the holdings block shows what is still sitting in the
+     * damaged compartment, valued from the layers.
+     */
+    public function damage(Request $request): View|StreamedResponse
+    {
+        $from = $request->filled('from') ? (string) $request->query('from') : null;
+        $to = $request->filled('to') ? (string) $request->query('to') : null;
+        $warehouseId = $request->filled('warehouse') ? (int) $request->query('warehouse') : null;
+        $kind = in_array($request->query('kind'), ['damage', 'loss'], true) ? (string) $request->query('kind') : null;
+        $reason = $request->filled('reason') ? (string) $request->query('reason') : null;
+
+        $analytics = $this->damage->analytics($from, $to, $warehouseId);
+        $entries = $this->damage->entries([
+            'kind' => $kind,
+            'warehouse' => $warehouseId,
+            'reason_code' => $reason,
+            'from' => $analytics['from'],
+            'to' => $analytics['to'],
+        ], 25);
+
+        if ($this->wantsCsv($request)) {
+            return $this->csv('damage-loss', $entries->getCollection(), [
+                'Code', 'Kind', 'Date', 'Warehouse', 'Cause', 'Reason', 'Status', 'Lines', 'Value',
+            ], fn ($entry) => [
+                $entry->code,
+                $entry->kind,
+                $entry->entry_date?->format('Y-m-d'),
+                $entry->warehouse?->name,
+                $entry->reasonLabel(),
+                $entry->reason,
+                $entry->status,
+                $entry->lines->count(),
+                (float) $entry->total_value,
+            ], [
+                'Entries' => $analytics['totals']['entries'],
+                'Damage value' => $analytics['by_kind']['damage']['value'],
+                'Loss value' => $analytics['by_kind']['loss']['value'],
+                'Written off (approved)' => $analytics['totals']['written_off_value'],
+                'Held as damaged' => $analytics['held']['damaged'],
+                'Held as damaged, value' => $analytics['held']['damaged_value'],
+                'Held as quarantined' => $analytics['held']['quarantined'],
+            ]);
+        }
+
+        return view('inventory.reports.damage', [
+            'analytics' => $analytics,
+            'entries' => $entries,
+            'filters' => [
+                'from' => $analytics['from'],
+                'to' => $analytics['to'],
+                'warehouse' => $warehouseId,
+                'kind' => $kind,
+                'reason' => $reason,
+            ],
+            'reasons' => StockDamageEntry::DAMAGE_REASONS + StockDamageEntry::LOSS_REASONS,
+            'holdings' => $this->damage->compartmentHoldings(StockMovement::STATE_DAMAGED, $warehouseId),
             'warehouses' => $this->reports->warehouses(),
         ]);
     }
