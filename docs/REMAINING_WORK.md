@@ -14,10 +14,10 @@ _Last updated: 2026-10-08, after the HRM (§10) and Purchase/Suppliers (§03/§0
 |---|---|---|
 | 01 Dashboard | 0 / 27 | widget frames + real-data contract in place; 25 widget queries pending |
 | 02 Sales | 104 / 120 | essentially complete: orders, bulk actions, invoices, delivery, team, POS, reports |
-| 03 Purchase | 18 / 73 | **the purchase cycle is closed both ways** — POs with approval, receipts posting real stock, bills posting the payable with a three-way match, payments settling it, returns taking goods back with their debit note; RFQ, LC and reports pending |
+| 03 Purchase | 19 / 73 | **the purchase cycle is closed both ways** — POs with approval, receipts posting real stock, bills posting the payable with a three-way match, payments settling it, returns taking goods back with their debit note; RFQ, LC and reports pending |
 | 04 Inventory | 11 / 63 | products, adjustments, transfers, stock movements; purchase receipts now feed stock; opening stock/valuation reports pending |
 | 05 Customers (CRM) | 14 / 23 | profile, ledger, ageing, credit control, feedback, referrals, blacklist; collections workflow + import pending |
-| 06 Suppliers | 3 / 15 | **master + transactional controls built** — duplicate refusal, blacklist with reason, profile from real documents incl. payables ageing; GL ledger, statements and payments pending |
+| 06 Suppliers | 6 / 15 | **master + the whole account built** — duplicate refusal, blacklist with reason, profile from real documents, running ledger, company-wide ageing and a printable/CSV statement; contracts, scoring and documents pending |
 | 07 Returns | 4 / 18 | sales returns exist; purchase returns + credit notes pending |
 | 08 Cash & Bank | 0 / 22 | **not started** — cash book, bank reconciliation, transfers, cheque management |
 | 09 Accounting | 8 / 46 | journals, COA, trial balance, opening entries; ledgers/statements/reports pending |
@@ -29,18 +29,18 @@ _Last updated: 2026-10-08, after the HRM (§10) and Purchase/Suppliers (§03/§0
 | 15 Settings | 0 / 35 | **not started** — company/branch/invoice/Bengali/payment-gateway settings screens |
 | 16 Cross-cutting | 0 / 64 | search, notifications, backups, BI, i18n, API mgmt, public links |
 
-**Totals: 194 of 619 catalogued rows implemented.** (Sales 104, HRM 17, Masters 15, CRM 14, Purchase 18,
-Inventory 11, Accounting 8, Returns 4, Suppliers 3.)
+**Totals: 198 of 619 catalogued rows implemented.** (Sales 104, HRM 17, Masters 15, CRM 14, Purchase 19,
+Inventory 11, Accounting 8, Returns 4, Suppliers 6.)
 
 ## The next three builds, in the order they unlock the most
 
-1. **Supplier ledger and statement (06-08, 06-14, 03-63)** — the purchase cycle is now
-   complete in both directions: order → receipt → bill → payment, and returns with their
-   debit notes. Everything needed to answer "what does this supplier's account look like"
-   exists as real documents and journal lines; what is missing is reading them back as one
-   running account with a printable statement, plus the ageing screen company-wide
-   (06-09) and report exports (03-51, 03-64). After that, supplier advances / BEFTN /
-   payment schedule (03-53…03-55) are the remaining gaps in the money-out half.
+1. **Inventory remainder (04)** — receipts and returns now write into the stock ledger, but
+   the screens around it are thin: opening stock, stock adjustments, transfers, the movement
+   ledger with filters and the valuation report. This is the next change; cash & bank (§08)
+   follows, where the supplier and customer payments already recorded have to appear as money
+   actually leaving and arriving. After those, the purchase module's remaining gaps are
+   supplier advances / BEFTN / schedule (03-53…03-55), RFQ (03-39…03-43), import/LC
+   (03-65…03-67) and report exports (03-51, 03-64).
 2. **Accounts close-out (08 + 09 remainder)** — cash book and bank reconciliation
    first (they feed every collection screen), then customer/supplier ledgers, day book,
    and the VAT/Mushak report family.

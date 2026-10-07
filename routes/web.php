@@ -378,10 +378,8 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
         Route::get('/app/customers/{customer}/open-invoices', [CustomerController::class, 'openInvoices'])
             ->name('customers.open-invoices');
         Route::get('/app/customers/{customer}/ledger', [CustomerController::class, 'ledger'])
-            ->middleware('permission:accounting.ledger.view')
             ->name('customers.ledger');
         Route::get('/app/customers/{customer}/statement', [CustomerController::class, 'statement'])
-            ->middleware('permission:accounting.ledger.view')
             ->name('customers.statement');
     });
     Route::get('/app/customers/{customer}/edit', [CustomerController::class, 'edit'])
@@ -424,6 +422,9 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     /* ---- Suppliers (§06) ---- */
     Route::middleware('permission:suppliers.view')->group(function () {
         Route::get('/app/suppliers', [SupplierController::class, 'index'])->name('suppliers.index');
+        // The account list is registered before the {supplier} binding so the
+        // literal path is never mistaken for a supplier id.
+        Route::get('/app/suppliers/ledger', [SupplierController::class, 'ledgerIndex'])->name('suppliers.ledger.index');
     });
     Route::get('/app/suppliers/create', [SupplierController::class, 'create'])
         ->middleware('permission:suppliers.create')
@@ -433,6 +434,8 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
         ->name('suppliers.edit');
     Route::middleware('permission:suppliers.view')->group(function () {
         Route::get('/app/suppliers/{supplier}', [SupplierController::class, 'show'])->name('suppliers.show');
+        Route::get('/app/suppliers/{supplier}/ledger', [SupplierController::class, 'ledger'])->name('suppliers.ledger');
+        Route::get('/app/suppliers/{supplier}/statement', [SupplierController::class, 'statement'])->name('suppliers.statement');
     });
     Route::post('/app/suppliers', [SupplierController::class, 'store'])
         ->middleware('permission:suppliers.create')
@@ -494,6 +497,9 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::middleware('permission:purchase.bills.view')->group(function () {
         Route::get('/app/purchase/bills', [PurchaseBillController::class, 'index'])->name('purchase.bills.index');
     });
+    Route::get('/app/purchase/payables', [PurchaseBillController::class, 'payables'])
+        ->middleware('permission:purchase.bills.view')
+        ->name('purchase.payables');
     Route::get('/app/purchase/bills/create', [PurchaseBillController::class, 'create'])
         ->middleware('permission:purchase.bills.create')
         ->name('purchase.bills.create');

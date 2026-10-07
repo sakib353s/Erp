@@ -27,6 +27,12 @@
             <a class="btn btn-outline-secondary" href="{{ route('suppliers.index') }}">
                 <i class="bi bi-arrow-left" aria-hidden="true"></i> All suppliers
             </a>
+            <a class="btn btn-outline-secondary" href="{{ route('suppliers.ledger', $supplier) }}">
+                <i class="bi bi-journal-text" aria-hidden="true"></i> Ledger
+            </a>
+            <a class="btn btn-outline-secondary" href="{{ route('suppliers.statement', $supplier) }}" target="_blank" rel="noopener">
+                <i class="bi bi-printer" aria-hidden="true"></i> Statement
+            </a>
         </x-slot:actions>
     </x-ui.page-header>
 

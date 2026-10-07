@@ -14,10 +14,15 @@ unsettled balance of documents rather than an estimate.
 owed (`PurchaseQuery::supplierPayables`), the ageing buckets those bills fall into, and the list of open bills — all
 derived from posted `purchase_bills` rows, never from a cached balance.
 
-**Deliberately out of these slices** (no screens claim otherwise): CSV/queued import & export (06-03), a GL-derived
-supplier ledger and printable statement (06-08, 06-14 — the profile shows documents, not journal lines), payments
-and advance adjustment (06-10), contracts (06-11), performance scoring (06-12), documents (06-13) and the report
-family (06-15).
+**Since the account slice (06-08, 06-09, 06-14) the supplier has a real account:** the ledger index lists every
+supplier the company has done money with and the balance those documents leave, each supplier opens into a running
+account (bills increase what we owe, payments and returns take it back — one row per document with the balance after
+it), the company-wide ageing screen folds every open bill into the bucket its own due date puts it in, and the
+statement is printable and downloadable as CSV from the same data the screen shows.
+
+**Deliberately out of these slices** (no screens claim otherwise): CSV import of suppliers as a queued job (06-03),
+payments *ahead* of a bill and advance adjustment (06-10 — money out is always allocated to a posted bill),
+contracts (06-11), performance scoring (06-12), documents (06-13) and the report family as a set of exports (06-15).
 
 **Known deviations in the implemented slice (honest, not silent):**
 - Contacts and bank details live **on the supplier record** (`contact_person`, `phone`, `phone_alt`, `email`;
@@ -27,6 +32,13 @@ family (06-15).
   category CRUD screen. Adding a category is a code change, and the UI says so rather than offering a dead button.
 - Blacklisting is a permission of its own (`suppliers.blacklist`) distinct from edit; the reason, actor and time are
   recorded and displayed on the profile. Reinstating is audited on the same trail.
+- **The ledger is derived from documents, not from the general ledger.** Rows are posted bills, recorded payments
+  and approved returns, so the closing balance equals the sum of the open bills' outstanding amounts. A GL-side
+  account (posting by the AP control account and its party tag) would also show adjustments made directly in
+  journals, which this view cannot see yet — stated here rather than papered over.
+- **A supplier has no opening-balance field.** The account therefore starts with the first document recorded in the
+  system; a company migrating mid-year has to record a bill for what was already owed. (The customer side has an
+  opening balance, so the asymmetry is deliberate and visible, not accidental.)
 - "Supplier performance" is spend derived from real posted receipts; there is no score, rating or grade field
   anywhere, because the formula (03-12) is not implemented.
 
@@ -42,19 +54,19 @@ Baseline (`BL`) applies. Shared with `03-purchase.md`: the same `SupplierService
 | 06-05 | Suppliers › Supplier Profile | `GET /app/suppliers/{supplier}` | `suppliers.view` | `SupplierController@show` — party/tax/bank/terms block, outstanding delivery lines (`PurchaseQuery::openLines`), recent POs, recent receipts, monthly spend | `suppliers`, `purchase_orders`, `purchase_order_lines`, `goods_receipts` | AUD | `PurchaseFlowTest` | DONE |
 | 06-06 | Suppliers › Supplier Contacts | (fields on the party) | `suppliers.edit` | `contact_person`, `phone`, `phone_alt`, `email` | `suppliers` | AUD diff | — | PARTIAL — one contact per supplier; no multi-contact table |
 | 06-07 | Suppliers › Supplier Bank Details | (fields on the party) | `suppliers.edit` | `bank_name`, `bank_account_no`, `mobile_wallet` shown to whoever may edit the party | `suppliers` | AUD diff | — | PARTIAL — plain attributes, no encryption-at-rest sub-record, no verification trail |
-| 06-08 | Suppliers › Supplier Ledger | — | — | a GL-side ledger (`LedgerService` by the AP control account) is still pending; the profile lists the documents that make up the balance instead of pretending to be a journal | — | — | — | NOT STARTED |
-| 06-09 | Suppliers › Supplier Due › All / 0-30 / 31-60 / 60+ | ageing shown on `GET /app/suppliers/{supplier}` | `suppliers.view` | `PurchaseQuery::supplierPayables` — due / overdue plus current, 1–30, 31–60, 61–90 and 90+ buckets from each bill's due date | `purchase_bills` | — | `PurchaseBillTest::test_payables_reach_the_supplier_profile_and_the_bill_summary` | PARTIAL — buckets + open-bill table on the profile; no company-wide due screen |
-| 06-10 | Suppliers › Supplier Payments | — | — | — | — | — | — | NOT STARTED |
+| 06-08 | Suppliers › Supplier Ledger | `GET /app/suppliers/ledger`, `GET /app/suppliers/{supplier}/ledger` | `suppliers.view` | `PurchaseQuery::supplierBalances` (three grouped aggregates — billed / paid / credited, one row per supplier) and `supplierLedger` (running account from posted bills, recorded payments and approved returns, with the balance before the range as the opening figure) | `purchase_bills`, `payments`, `purchase_returns` | — | `SupplierLedgerTest` (7 cases) | DONE — document-derived, not GL-derived (deviation above) |
+| 06-09 | Suppliers › Supplier Due › All / 0-30 / 31-60 / 60+ | `GET /app/purchase/payables?bucket=` , plus buckets on the profile and the ledger | `purchase.bills.view` / `suppliers.view` | `PurchaseQuery::payablesAgeing` — one row per supplier with current / 1–30 / 31–60 / 61–90 / 90+ columns and totals, filtered by bucket; `supplierPayables` gives the same buckets for a single supplier | `purchase_bills` | — | `SupplierLedgerTest::test_the_ageing_screen_buckets_every_open_bill_by_its_own_due_date`, `PurchaseBillTest::…payables…` | DONE |
+| 06-10 | Suppliers › Supplier Payments | `GET /app/purchase/payments?supplier=` and `create?bill=` | `purchase.payments.view` / `create` | recording a payment against a posted bill, with the bill's balance and ageing beside it (03-47 / 03-52 own the mechanics) | `payments`, `payment_allocations` | ACCT + AUD | `SupplierPaymentTest` (7 cases) | PARTIAL — real payments, a filtered history and the account they land in exist; paying *ahead* of a bill and advance adjustment do not |
 | 06-11 | Suppliers › Supplier Contracts | — | — | — | — | — | — | NOT STARTED |
 | 06-12 | Suppliers › Supplier Performance / Quality Score | (spend panel on the profile) | `suppliers.view` | `PurchaseQuery::supplierSpend` | `goods_receipts` | — | — | PARTIAL — spend only; no score, formula or rating |
 | 06-13 | Suppliers › Supplier Documents | — | — | — | — | — | — | NOT STARTED |
-| 06-14 | Suppliers › Supplier Statements | — | — | needs bills/ledger | — | — | — | NOT STARTED |
+| 06-14 | Suppliers › Supplier Statements | `GET /app/suppliers/{supplier}/statement` (`?format=csv`) | `suppliers.view` | printable document (its own print frame, toolbar hidden when printing) with opening/closing balance, every document in the period and the ageing of what is still outstanding; CSV streams the same rows | `purchase_bills`, `payments`, `purchase_returns` | — | `SupplierLedgerTest::test_the_statement_is_printable_and_exportable` | DONE |
 | 06-15 | Suppliers › Supplier Reports | (profile spend + payables) | `suppliers.view` | spend by month and open payables on the profile | `goods_receipts`, `purchase_bills` | — | — | PARTIAL — no report routes |
 
 ## Slice scorecard
 
 | | Count |
 |---|---|
-| DONE | 3 (06-01, 06-02, 06-05) |
-| PARTIAL | 6 (06-04, 06-06, 06-07, 06-09, 06-10, 06-15) |
-| NOT STARTED | 6 |
+| DONE | 6 (06-01, 06-02, 06-05, 06-08, 06-09, 06-14) |
+| PARTIAL | 6 (06-04, 06-06, 06-07, 06-10, 06-12, 06-15) |
+| NOT STARTED | 3 (06-03, 06-11, 06-13) |

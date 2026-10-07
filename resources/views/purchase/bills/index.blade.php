@@ -17,6 +17,9 @@
                     <i class="bi bi-clipboard-check" aria-hidden="true"></i> Orders
                 </a>
             @endif
+            <a class="btn btn-outline-secondary" href="{{ route('purchase.payables') }}">
+                <i class="bi bi-alarm" aria-hidden="true"></i> Ageing
+            </a>
             @if ($perm('purchase.returns.view'))
                 <a class="btn btn-outline-secondary" href="{{ route('purchase.returns.index') }}">
                     <i class="bi bi-arrow-return-left" aria-hidden="true"></i> Returns

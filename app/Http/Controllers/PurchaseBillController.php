@@ -132,4 +132,29 @@ class PurchaseBillController extends Controller
 
         return $ids === null ? [] : array_map('intval', $ids);
     }
+
+    /**
+     * Bill ageing (03-48) — every open bill folded into the bucket its own due
+     * date puts it in, grouped by supplier. The company-wide answer to "who do
+     * we owe, and how late are we".
+     */
+    public function payables(Request $request): View
+    {
+        $bucket = (string) $request->query('bucket', 'all');
+        $ageing = $this->query->payablesAgeing($this->branchIds($request));
+        $labels = [
+            'current' => 'Not yet due',
+            'd1_30' => '1–30 days late',
+            'd31_60' => '31–60 days late',
+            'd61_90' => '61–90 days late',
+            'd90_plus' => 'More than 90 days late',
+        ];
+
+        return view('purchase.payables', [
+            'ageing' => $ageing,
+            'bucket' => $bucket,
+            'labels' => $labels,
+            'focus' => array_key_exists($bucket, $labels) ? $labels[$bucket] : null,
+        ]);
+    }
 }

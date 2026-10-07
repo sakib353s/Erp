@@ -10,6 +10,7 @@ use App\Domain\Purchase\Models\PurchaseReturn;
 use App\Domain\Sales\Payment;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Read models for the buy side. All queries are company-scoped by the global
@@ -453,5 +454,237 @@ class PurchaseQuery
             'awaiting' => $rows->where('status', 'pending_approval')->count(),
             'draft' => round((float) $rows->where('status', 'draft')->sum(fn ($row) => (float) $row->total), 4),
         ];
+    }
+
+    /* --------------------------- supplier ledger & statement (06-08, 06-14) */
+
+    /**
+     * The supplier's account, read back from the documents that moved it:
+     * a posted bill increases what we owe (credit), a payment settles it
+     * (debit) and an approved return takes the claim back (debit). Orders and
+     * receipts are deliberately absent — they are not money, and a ledger that
+     * rows them would double every purchase.
+     *
+     * @param  array{from?:?string,to?:?string}  $range
+     * @return array{opening:float,lines:array<int, array<string, mixed>>,closing:float,
+     *               totals:array{debit:float,credit:float}}
+     */
+    public function supplierLedger(Supplier $supplier, array $range = []): array
+    {
+        $from = $range['from'] ?? null;
+        $to = $range['to'] ?? null;
+
+        $billBase = DB::table('purchase_bills')
+            ->where('company_id', $supplier->company_id)
+            ->where('supplier_id', $supplier->id)
+            ->where('posting_state', 'posted')
+            ->where('status', '!=', 'cancelled');
+
+        $paymentBase = DB::table('payments')
+            ->where('company_id', $supplier->company_id)
+            ->where('supplier_id', $supplier->id)
+            ->where('direction', 'out')
+            ->where('status', 'posted');
+
+        $returnBase = DB::table('purchase_returns')
+            ->where('company_id', $supplier->company_id)
+            ->where('supplier_id', $supplier->id)
+            ->where('status', 'approved');
+
+        $opening = 0.0;
+
+        if ($from !== null) {
+            $opening += (float) (clone $billBase)->where('bill_date', '<', $from)->sum('total');
+            $opening -= (float) (clone $paymentBase)->where('paid_at', '<', $from)->sum('amount');
+            $opening -= (float) (clone $returnBase)->where('return_date', '<', $from)->sum('total');
+        }
+
+        $billed = (clone $billBase)
+            ->when($from !== null, fn ($q) => $q->where('bill_date', '>=', $from))
+            ->when($to !== null, fn ($q) => $q->where('bill_date', '<=', $to))
+            ->get(['code', 'bill_date', 'total', 'due_amount', 'status', 'supplier_bill_no'])
+            ->map(fn ($row) => [
+                'date' => $row->bill_date,
+                'reference' => $row->code,
+                'description' => 'Purchase bill'.($row->supplier_bill_no ? ' (their ref '.$row->supplier_bill_no.')' : ''),
+                'href' => null,
+                'debit' => 0.0,
+                'credit' => round((float) $row->total, 2),
+                'outstanding' => round((float) $row->due_amount, 2),
+                'sort' => $row->bill_date.' 08:00:00',
+            ]);
+
+        $paid = (clone $paymentBase)
+            ->when($from !== null, fn ($q) => $q->where('paid_at', '>=', $from))
+            ->when($to !== null, fn ($q) => $q->where('paid_at', '<=', $to))
+            ->get(['receipt_no', 'paid_at', 'method', 'amount', 'reference'])
+            ->map(fn ($row) => [
+                'date' => substr((string) $row->paid_at, 0, 10),
+                'reference' => $row->receipt_no,
+                'description' => 'Payment ('.ucfirst((string) $row->method).($row->reference ? ' · '.$row->reference : '').')',
+                'href' => null,
+                'debit' => round((float) $row->amount, 2),
+                'credit' => 0.0,
+                'outstanding' => 0.0,
+                'sort' => $row->paid_at.' 12:00:00',
+            ]);
+
+        $credited = (clone $returnBase)
+            ->when($from !== null, fn ($q) => $q->where('return_date', '>=', $from))
+            ->when($to !== null, fn ($q) => $q->where('return_date', '<=', $to))
+            ->get(['code', 'return_date', 'total', 'reason_code'])
+            ->map(fn ($row) => [
+                'date' => $row->return_date,
+                'reference' => $row->code,
+                'description' => 'Purchase return · '.(PurchaseReturn::REASONS[$row->reason_code] ?? 'Other'),
+                'href' => null,
+                'debit' => round((float) $row->total, 2),
+                'credit' => 0.0,
+                'outstanding' => 0.0,
+                'sort' => $row->return_date.' 16:00:00',
+            ]);
+
+        $lines = $billed->concat($paid)->concat($credited)->sortBy('sort')->values()->all();
+
+        $running = $opening;
+        $totalDebit = 0.0;
+        $totalCredit = 0.0;
+
+        foreach ($lines as $index => $line) {
+            $running += $line['credit'] - $line['debit'];
+            $lines[$index]['balance'] = round($running, 2);
+            $totalDebit += $line['debit'];
+            $totalCredit += $line['credit'];
+        }
+
+        return [
+            'opening' => round($opening, 2),
+            'lines' => $lines,
+            'closing' => round($running, 2),
+            'totals' => ['debit' => round($totalDebit, 2), 'credit' => round($totalCredit, 2)],
+        ];
+    }
+
+    /**
+     * Company-wide ageing: what is owed per supplier, bucketed by each bill's
+     * own due date. Suppliers with nothing outstanding are left out — a row of
+     * zeroes on an ageing report is noise, not information.
+     *
+     * @return array{rows: array<int, array<string, mixed>>, totals: array<string, float>, grand: float}
+     */
+    public function payablesAgeing(array $accessibleBranchIds = []): array
+    {
+        $bills = PurchaseBill::query()
+            ->open()
+            ->with('supplier:id,name,code')
+            ->when($accessibleBranchIds !== [], fn ($q) => $q->whereIn('branch_id', $accessibleBranchIds))
+            ->orderBy('due_date')
+            ->get();
+
+        $keys = ['current', 'd1_30', 'd31_60', 'd61_90', 'd90_plus'];
+        $rows = [];
+        $totals = array_fill_keys($keys, 0.0);
+        $grand = 0.0;
+
+        foreach ($bills as $bill) {
+            $id = (int) $bill->supplier_id;
+
+            if (! isset($rows[$id])) {
+                $rows[$id] = [
+                    'supplier' => $bill->supplier,
+                    'bills' => 0,
+                    'oldest_due' => null,
+                    'total' => 0.0,
+                    'buckets' => array_fill_keys($keys, 0.0),
+                ];
+            }
+
+            $amount = (float) $bill->due_amount;
+            $bucket = $bill->ageingBucket();
+
+            $rows[$id]['bills']++;
+            $rows[$id]['total'] += $amount;
+            $rows[$id]['buckets'][$bucket] += $amount;
+            $rows[$id]['oldest_due'] = $rows[$id]['oldest_due'] ?? $bill->due_date;
+
+            $totals[$bucket] += $amount;
+            $grand += $amount;
+        }
+
+        usort($rows, fn ($a, $b) => $b['total'] <=> $a['total']);
+
+        return [
+            'rows' => array_values($rows),
+            'totals' => array_map(fn ($value) => round($value, 2), $totals),
+            'grand' => round($grand, 2),
+        ];
+    }
+
+    /**
+     * One row per supplier with an account: billed, settled and returned in
+     * total, and the balance those three leave. Three grouped queries instead
+     * of a per-supplier loop, so a list of 300 suppliers is still three queries.
+     *
+     * @return Collection<int, array<string, mixed>>
+     */
+    public function supplierBalances(array $accessibleBranchIds = []): Collection
+    {
+        $scoped = fn ($query) => $query->when($accessibleBranchIds !== [], fn ($q) => $q->whereIn('branch_id', $accessibleBranchIds));
+
+        $billed = $scoped(DB::table('purchase_bills')
+            ->where('posting_state', 'posted')
+            ->where('status', '!=', 'cancelled'))
+            ->groupBy('supplier_id')
+            ->selectRaw('supplier_id, SUM(total) as billed, SUM(due_amount) as outstanding, COUNT(*) as bills')
+            ->get()
+            ->keyBy('supplier_id');
+
+        $paid = $scoped(DB::table('payments')
+            ->where('direction', 'out')
+            ->where('status', 'posted')
+            ->whereNotNull('supplier_id'))
+            ->groupBy('supplier_id')
+            ->selectRaw('supplier_id, SUM(amount) as paid, COUNT(*) as payments')
+            ->get()
+            ->keyBy('supplier_id');
+
+        $credited = $scoped(DB::table('purchase_returns')
+            ->where('status', 'approved'))
+            ->groupBy('supplier_id')
+            ->selectRaw('supplier_id, SUM(total) as credited, COUNT(*) as returns')
+            ->get()
+            ->keyBy('supplier_id');
+
+        $ids = $billed->keys()->merge($paid->keys())->merge($credited->keys())->unique()->filter()->values();
+
+        if ($ids->isEmpty()) {
+            return collect();
+        }
+
+        return Supplier::query()
+            ->whereIn('id', $ids)
+            ->orderBy('name')
+            ->get(['id', 'name', 'code', 'is_blacklisted', 'payment_terms_days', 'phone'])
+            ->map(function (Supplier $supplier) use ($billed, $paid, $credited) {
+                $billedRow = $billed[$supplier->id] ?? null;
+                $paidRow = $paid[$supplier->id] ?? null;
+                $creditedRow = $credited[$supplier->id] ?? null;
+
+                $billedTotal = round((float) ($billedRow->billed ?? 0), 2);
+                $paidTotal = round((float) ($paidRow->paid ?? 0), 2);
+                $creditedTotal = round((float) ($creditedRow->credited ?? 0), 2);
+
+                return [
+                    'supplier' => $supplier,
+                    'billed' => $billedTotal,
+                    'paid' => $paidTotal,
+                    'credited' => $creditedTotal,
+                    'outstanding' => round((float) ($billedRow->outstanding ?? 0), 2),
+                    'balance' => round($billedTotal - $paidTotal - $creditedTotal, 2),
+                    'bills' => (int) ($billedRow->bills ?? 0),
+                    'payments' => (int) ($paidRow->payments ?? 0),
+                    'returns' => (int) ($creditedRow->returns ?? 0),
+                ];
+            });
     }
 }
