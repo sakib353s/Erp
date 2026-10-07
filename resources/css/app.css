@@ -1394,6 +1394,8 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 
 /* Terminal / void / archived — deliberately quiet */
 .erp-status-cancelled,
+.erp-status-released,
+.erp-status-consumed,
 .erp-status-skipped,
 .erp-status-discarded,
 .erp-status-void,

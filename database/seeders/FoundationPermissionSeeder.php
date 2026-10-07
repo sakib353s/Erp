@@ -208,6 +208,7 @@ class FoundationPermissionSeeder extends Seeder
             ['inventory', 'batch', 'view', 'inventory.batch.view', 'View batches'],
             ['inventory', 'serial', 'view', 'inventory.serial.view', 'View serials'],
             ['inventory', 'reservations', 'view', 'inventory.reservations.view', 'View stock reservations'],
+            ['inventory', 'reservations', 'manage', 'inventory.reservations.manage', 'Release or expire stock holds'],
             ['inventory', 'labels', 'manage', 'inventory.labels', 'Generate and print labels'],
             ['inventory', 'configure', 'manage', 'inventory.configure', 'Configure inventory settings'],
 

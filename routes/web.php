@@ -29,6 +29,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\FailedDeliveryController;
 use App\Http\Controllers\FinancialReportController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\InventoryReservationController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\MasterDataController;
@@ -798,6 +799,16 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::delete('/app/inventory/reorder-levels/{policy}', [InventoryController::class, 'destroyReorderLevel'])
         ->middleware('permission:inventory.reorder.configure')
         ->name('inventory.reorder.destroy');
+
+    Route::get('/app/inventory/reservations', [InventoryReservationController::class, 'index'])
+        ->middleware('permission:inventory.reservations.view')
+        ->name('inventory.reservations.index');
+    Route::post('/app/inventory/reservations/expire', [InventoryReservationController::class, 'expire'])
+        ->middleware('permission:inventory.reservations.manage')
+        ->name('inventory.reservations.expire');
+    Route::post('/app/inventory/reservations/{reservation}/release', [InventoryReservationController::class, 'release'])
+        ->middleware('permission:inventory.reservations.manage')
+        ->name('inventory.reservations.release');
 
     Route::get('/app/inventory/stock/opening', [InventoryController::class, 'createOpening'])
         ->middleware('permission:inventory.adjustments.create')
