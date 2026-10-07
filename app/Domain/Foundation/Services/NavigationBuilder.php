@@ -190,6 +190,10 @@ class NavigationBuilder
             return [];
         }
 
+        if (! config('erp.navigation.collapse_query_variants', true)) {
+            return [];
+        }
+
         $path = '/'.ltrim(explode('?', $path)[0], '/');
 
         return $this->visibleItems($user, $portal, includeActions: true)
@@ -294,7 +298,7 @@ class NavigationBuilder
             $trail[] = [
                 'label' => $isLast
                     ? $this->normalizeLabel($node->label, $this->parentLabel($items, $node))
-                    : ($node->module_id === $node->id ? $node->label : $this->normalizeLabel($node->label)),
+                    : ($node->route === null ? $node->label : $this->normalizeLabel($node->label)),
                 'url' => $isLast ? null : $this->url($node->route),
             ];
         }
@@ -538,6 +542,13 @@ class NavigationBuilder
             }
 
             if ($leaves !== []) {
+                // Rail length is capped for readability (§18.3): the first
+                // `max_children` destinations stay visible, the active page is
+                // guaranteed a slot, and everything beyond the cap is announced
+                // as "n more — search" (⌘K indexes all of them).
+                $total = count($leaves);
+                $visibleLeaves = $this->capChildren($leaves, $maxChildren);
+
                 $modules[] = [
                     'id' => $root->id,
                     'code' => $root->code,
@@ -546,12 +557,12 @@ class NavigationBuilder
                     'route' => null,
                     'url' => null,
                     'icon' => $root->icon ?? $root->module?->icon ?? 'bi-folder',
-                    'children' => $leaves,
+                    'children' => $visibleLeaves,
                     'current' => false,
                     'module_id' => $root->module_id,
                     'sort' => $root->sort,
                     'section_key' => $moduleKey,
-                    'overflow_count' => max(0, $this->descendantCount($grouped, $root) - count($leaves)),
+                    'overflow_count' => max(0, $total - count($visibleLeaves)),
                 ];
             }
 
@@ -601,8 +612,13 @@ class NavigationBuilder
     protected function leafNode(MenuItem $item, MenuItem $parent, ?string $currentPath, array &$seen): ?array
     {
         $basePath = $item->route !== null ? $this->basePath($item->route) : null;
+        $dedupe = (bool) config('erp.navigation.dedupe_by_path', true);
 
-        if ($basePath === null || ($basePath !== null && isset($seen[$basePath]))) {
+        if ($basePath === null) {
+            return null;
+        }
+
+        if ($dedupe && isset($seen[$basePath])) {
             return null;
         }
 
@@ -647,20 +663,33 @@ class NavigationBuilder
             }
         }
 
-        if (count($children) > $maxChildren) {
-            $head = array_slice($children, 0, $maxChildren);
-            $active = array_filter($children, fn (array $child) => ! empty($child['current']));
+        return $this->capChildren($children, $maxChildren);
+    }
 
-            foreach ($active as $node) {
-                if (! in_array($node['id'], array_column($head, 'id'), true)) {
-                    $head[count($head) - 1] = $node;
-                }
-            }
-
-            $children = array_values($head);
+    /**
+     * Keep at most `$max` destinations, always preserving the page the user is
+     * currently on (an active page must never be hidden by a quota).
+     *
+     * @param  array<int, array<string, mixed>>  $nodes
+     * @return array<int, array<string, mixed>>
+     */
+    protected function capChildren(array $nodes, int $max): array
+    {
+        if ($max <= 0 || count($nodes) <= $max) {
+            return $nodes;
         }
 
-        return $children;
+        $head = array_slice($nodes, 0, $max);
+
+        foreach ($nodes as $node) {
+            if (empty($node['current']) || in_array($node['id'], array_column($head, 'id'), true)) {
+                continue;
+            }
+
+            $head[count($head) - 1] = $node;
+        }
+
+        return array_values($head);
     }
 
     /**

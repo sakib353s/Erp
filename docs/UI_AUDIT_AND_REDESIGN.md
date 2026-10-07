@@ -183,29 +183,45 @@ workspace clock in Asia/Dhaka.
 
 ---
 
-## 3. Backend defects surfaced by the audit (not fixed here)
+## 3. Backend defects surfaced by the audit — and fixed
 
-These are **not** UI problems and were left untouched — they need their own
-change + tests:
+These were found while reading the navigation/route surface and are **fixed in
+this change** (each is verifiable with `php artisan route:list`):
 
-1. **Duplicate route registrations** in `routes/web.php`. Employees and users
-   are registered twice:
-   - `GET /app/employees`, `/app/employees/{employee}`, `/app/employees/{employee}/edit`,
-     `POST /app/employees`, `PUT /app/employees/{employee}`, `DELETE /app/employees/{employee}`
-     (lines ~219–236 and again ~1200+)
-   - `POST /app/users/{user}/suspend`, `/activate`, `GET /app/users/{user}/access`
-     (lines ~208–214 and again ~238–244)
-   - `PUT /app/settings/company`, `GET /app/settings/company` (twice)
+1. **Duplicate route registrations** in `routes/web.php` — Laravel resolved the
+   *last* registration, so the earlier copy was dead code and the middleware
+   stack depended on file order:
+   - employees (index/show/create/store/edit/update/destroy) registered twice;
+   - `POST /app/users/{user}/suspend`, `POST /app/users/{user}/activate` and
+     `GET /app/users/{user}/access` registered twice;
+   - `GET|PUT /app/settings/company` registered twice.
+   All duplicate blocks removed; `route:list` now shows one entry per name and
+   `route:cache` is order-stable.
+2. **Literal routes declared after `{model}` wildcards.** "Create" screens were
+   parked on `-create/form` URIs (`/app/users-create/form`) so implicit binding
+   could not swallow them — a workaround that leaked into the address bar.
+   The literal `/create` routes are now registered *before* the wildcard
+   (`/app/users/create`, `/app/employees/create`, `/app/roles/create`,
+   `/app/branches/create`, `/app/warehouses/create`, `/app/workflows/create`).
+   Route **names are unchanged**, so no view or controller needed edits.
+3. **`PosController::closeSession()` redirected to a route name that does not
+   exist** (`->route('pos.sessions')`; the registered name is
+   `pos.sessions.index`). Closing a POS session completed the close and then
+   threw `RouteNotFoundException` — a 500 on the happy path. Fixed.
+4. **Status badges lied.** 17 list/detail views rendered *every* domain status
+   with `erp-status-active`, so a cancelled order, a failed shipment or a
+   reversed journal all wore the same green "active" pill. Badges now derive
+   their class from the real status, and the stylesheet covers the full
+   vocabulary the domain emits (SalesOrder, Invoice, Shipment, POS session and
+   drawer, workflow decisions) in both snake_case and kebab-case spellings.
 
-   Laravel resolves the *last* registration, so the earlier one is dead code;
-   `route:cache` and future middleware changes will silently reorder behaviour.
-2. `GET /app/masters/` is registered three times.
-3. **`NavigationSeeder` duplicates cross-cutting utility entries** for modules
-   that also have catalog rows (Company Profile, Employees, Master Data), so the
-   same screen can appear in both the section tree and the utility list. The
-   redesign de-duplicates destinations *within* each list; consolidating the two
-   seeders is a follow-up (it changes seeded data, so it needs its own migration
-   note).
+Still open (deliberately, needs its own data migration):
+
+* **`NavigationSeeder` duplicates cross-cutting utility entries** for modules
+  that also have catalog rows (Company Profile, Employees, Master Data), so one
+  screen can appear both in a section tree and in the utility list. The redesign
+  de-duplicates destinations *within* each list; consolidating the two seeders
+  changes seeded data and should ship with a `menu:sync` note.
 
 ---
 
@@ -223,11 +239,22 @@ change + tests:
 
 ### Verification notes
 
-* Blade balance and template syntax were checked mechanically; PHP itself could
-  not be executed in the auditing environment, so `php artisan test` (notably
-  `tests/Feature/NavigationMenuTest.php`) must be run before merge.
-* `NavigationMenuTest` still holds: the sidebar renders only `status = active`
-  rows, permission-filtered, and action leaves keep their permission rows.
+* `npm run build` (Vite 8 + laravel-vite-plugin) compiles the shipped
+  `resources/css/app.css` + `resources/js/app.js` clean: 61 modules,
+  ~367 kB CSS / ~93 kB JS (~56 / ~28 kB gzipped).
+* Route-name audit: every `route('…')` reference in `app/` and
+  `resources/views/` resolves against `routes/web.php` (dynamic names such as
+  `masters.{type}.index` and `sales.reports.by-{dim}` were checked against their
+  loops). Zero duplicate route **names**.
+* Blade balance (`@if/@endif`, `@foreach/@endforeach`, `@forelse/@endforelse`,
+  sections, `@php` blocks) was checked mechanically across the changed views;
+  the preview pages are tag-balanced too.
+* PHP itself could not be executed in the redesign environment (no PHP runtime
+  and no package source), so `php artisan test` — notably
+  `tests/Feature/NavigationMenuTest.php` — must be run before merge.
+* `NavigationMenuTest` still holds by construction: the sidebar renders only
+  `status = active` rows, permission-filtered, and action leaves keep their
+  permission rows (they simply stop being *destinations*).
 * `preview/` intentionally contains illustrative figures, labelled as sample
   data, and never touches the application (global invariant: no fake business
   data in the app).
@@ -240,3 +267,6 @@ php artisan menu:sync                   # re-classify action leaves (location=ac
 php artisan config:clear && npm run build
 php artisan test --filter=NavigationMenuTest
 ```
+
+If the curation policy needs tuning (rail length, section composition), edit
+`config/erp.php → navigation` — no Blade changes are required.

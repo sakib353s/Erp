@@ -223,7 +223,7 @@ class PosController extends Controller
         }
 
         return redirect()
-            ->route('pos.sessions')
+            ->route('pos.sessions.index')
             ->with('status', "POS session {$session->session_no} closed.");
     }
 

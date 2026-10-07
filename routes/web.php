@@ -150,14 +150,6 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
         ->middleware('permission:settings.company')
         ->name('company.update');
 
-    /* ---- Company profile (15-02 / 12-02) — MUST precede {group} ---- */
-    Route::get('/app/settings/company', [CompanyController::class, 'edit'])
-        ->middleware('permission:settings.company')
-        ->name('company.edit');
-    Route::put('/app/settings/company', [CompanyController::class, 'update'])
-        ->middleware('permission:settings.company')
-        ->name('company.update');
-
     /* ---- Courier partners (02-91) — must precede the /settings/{group} catch-all ---- */
     Route::get('/app/settings/couriers', [CourierPartnerController::class, 'index'])
         ->middleware('permission:sales.delivery.configure')
@@ -195,15 +187,19 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     /* ---- Users ---- */
     Route::middleware('permission:users.view')->group(function () {
         Route::get('/app/users', [UserController::class, 'index'])->name('users.index');
-        Route::get('/app/users/{user}', [UserController::class, 'show'])->name('users.show');
-        Route::get('/app/users/{user}/access', [UserController::class, 'access'])->name('users.access');
     });
-    Route::get('/app/users-create/form', [UserController::class, 'create'])
+    // Literal '/create' is registered BEFORE the '{user}' wildcard so the URI
+    // resolves to the form instead of being swallowed by implicit binding.
+    Route::get('/app/users/create', [UserController::class, 'create'])
         ->middleware('permission:users.create')
         ->name('users.create');
     Route::post('/app/users', [UserController::class, 'store'])
         ->middleware('permission:users.create')
         ->name('users.store');
+    Route::middleware('permission:users.view')->group(function () {
+        Route::get('/app/users/{user}', [UserController::class, 'show'])->name('users.show');
+        Route::get('/app/users/{user}/access', [UserController::class, 'access'])->name('users.access');
+    });
     Route::get('/app/users/{user}/edit', [UserController::class, 'edit'])
         ->middleware('permission:users.update')
         ->name('users.edit');
@@ -220,17 +216,19 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
         ->middleware('permission:users.delete')
         ->name('users.destroy');
 
-    /* ---- Employees (10-01…10-03) ---- */
+    /* ---- Employees (10-01 … 10-03) ---- */
     Route::middleware('permission:employees.view')->group(function () {
         Route::get('/app/employees', [EmployeeController::class, 'index'])->name('employees.index');
-        Route::get('/app/employees/{employee}', [EmployeeController::class, 'show'])->name('employees.show');
     });
-    Route::get('/app/employees-create/form', [EmployeeController::class, 'create'])
+    Route::get('/app/employees/create', [EmployeeController::class, 'create'])
         ->middleware('permission:employees.create')
         ->name('employees.create');
     Route::post('/app/employees', [EmployeeController::class, 'store'])
         ->middleware('permission:employees.create')
         ->name('employees.store');
+    Route::middleware('permission:employees.view')->group(function () {
+        Route::get('/app/employees/{employee}', [EmployeeController::class, 'show'])->name('employees.show');
+    });
     Route::get('/app/employees/{employee}/edit', [EmployeeController::class, 'edit'])
         ->middleware('permission:employees.edit')
         ->name('employees.edit');
@@ -238,29 +236,21 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
         ->middleware('permission:employees.edit')
         ->name('employees.update');
     Route::delete('/app/employees/{employee}', [EmployeeController::class, 'destroy'])
-        ->middleware('permission:employees.delete')
+        ->middleware('permission:employees.edit')
         ->name('employees.destroy');
-    Route::post('/app/users/{user}/suspend', [UserController::class, 'suspend'])
-        ->middleware('permission:users.update')
-        ->name('users.suspend');
-    Route::post('/app/users/{user}/activate', [UserController::class, 'activate'])
-        ->middleware('permission:users.update')
-        ->name('users.activate');
-    Route::get('/app/users/{user}/access', [UserController::class, 'access'])
-        ->middleware('permission:users.view')
-        ->name('users.access');
-
     /* ---- Roles & permissions ---- */
     Route::middleware('permission:roles.view')->group(function () {
         Route::get('/app/roles', [RoleController::class, 'index'])->name('roles.index');
-        Route::get('/app/roles/{role}', [RoleController::class, 'show'])->name('roles.show');
     });
-    Route::get('/app/roles-create/form', [RoleController::class, 'create'])
+    Route::get('/app/roles/create', [RoleController::class, 'create'])
         ->middleware('permission:roles.create')
         ->name('roles.create');
     Route::post('/app/roles', [RoleController::class, 'store'])
         ->middleware('permission:roles.create')
         ->name('roles.store');
+    Route::middleware('permission:roles.view')->group(function () {
+        Route::get('/app/roles/{role}', [RoleController::class, 'show'])->name('roles.show');
+    });
     Route::get('/app/roles/{role}/edit', [RoleController::class, 'edit'])
         ->middleware('permission:roles.update')
         ->name('roles.edit');
@@ -274,14 +264,16 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     /* ---- Branches ---- */
     Route::middleware('permission:branches.view')->group(function () {
         Route::get('/app/branches', [BranchController::class, 'index'])->name('branches.index');
-        Route::get('/app/branches/{branch}', [BranchController::class, 'show'])->name('branches.show');
     });
-    Route::get('/app/branches-create/form', [BranchController::class, 'create'])
+    Route::get('/app/branches/create', [BranchController::class, 'create'])
         ->middleware('permission:branches.create')
         ->name('branches.create');
     Route::post('/app/branches', [BranchController::class, 'store'])
         ->middleware('permission:branches.create')
         ->name('branches.store');
+    Route::middleware('permission:branches.view')->group(function () {
+        Route::get('/app/branches/{branch}', [BranchController::class, 'show'])->name('branches.show');
+    });
     Route::get('/app/branches/{branch}/edit', [BranchController::class, 'edit'])
         ->middleware('permission:branches.update')
         ->name('branches.edit');
@@ -296,7 +288,7 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::middleware('permission:warehouses.view')->group(function () {
         Route::get('/app/warehouses', [WarehouseController::class, 'index'])->name('warehouses.index');
     });
-    Route::get('/app/warehouses-create/form', [WarehouseController::class, 'create'])
+    Route::get('/app/warehouses/create', [WarehouseController::class, 'create'])
         ->middleware('permission:warehouses.create')
         ->name('warehouses.create');
     Route::post('/app/warehouses', [WarehouseController::class, 'store'])
@@ -311,27 +303,6 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::delete('/app/warehouses/{warehouse}', [WarehouseController::class, 'destroy'])
         ->middleware('permission:warehouses.delete')
         ->name('warehouses.destroy');
-
-    /* ---- Employees (10-01 … 10-03) ---- */
-    Route::middleware('permission:employees.view')->group(function () {
-        Route::get('/app/employees', [EmployeeController::class, 'index'])->name('employees.index');
-        Route::get('/app/employees/{employee}', [EmployeeController::class, 'show'])->name('employees.show');
-    });
-    Route::get('/app/employees-create/form', [EmployeeController::class, 'create'])
-        ->middleware('permission:employees.create')
-        ->name('employees.create');
-    Route::post('/app/employees', [EmployeeController::class, 'store'])
-        ->middleware('permission:employees.create')
-        ->name('employees.store');
-    Route::get('/app/employees/{employee}/edit', [EmployeeController::class, 'edit'])
-        ->middleware('permission:employees.edit')
-        ->name('employees.edit');
-    Route::put('/app/employees/{employee}', [EmployeeController::class, 'update'])
-        ->middleware('permission:employees.edit')
-        ->name('employees.update');
-    Route::delete('/app/employees/{employee}', [EmployeeController::class, 'destroy'])
-        ->middleware('permission:employees.edit')
-        ->name('employees.destroy');
 
     /* ---- Masters (§14) — permission keys come from MasterCatalog ---- */
     foreach (MasterCatalog::all() as $slug => $entry) {
@@ -453,16 +424,18 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
         ->name('approvals.comment');
 
     /* ---- Workflow definitions (generic engine admin) ---- */
-    Route::middleware('permission:workflows.view')->group(function () {
-        Route::get('/app/workflows', [WorkflowController::class, 'index'])->name('workflows.index');
-        Route::get('/app/workflows/{definition}', [WorkflowController::class, 'show'])->name('workflows.show');
-    });
-    Route::get('/app/workflows-create/form', [WorkflowController::class, 'create'])
+    Route::get('/app/workflows/create', [WorkflowController::class, 'create'])
         ->middleware('permission:workflows.manage')
         ->name('workflows.create');
+    Route::middleware('permission:workflows.view')->group(function () {
+        Route::get('/app/workflows', [WorkflowController::class, 'index'])->name('workflows.index');
+    });
     Route::post('/app/workflows', [WorkflowController::class, 'store'])
         ->middleware('permission:workflows.manage')
         ->name('workflows.store');
+    Route::middleware('permission:workflows.view')->group(function () {
+        Route::get('/app/workflows/{definition}', [WorkflowController::class, 'show'])->name('workflows.show');
+    });
     Route::get('/app/workflows/{definition}/edit', [WorkflowController::class, 'edit'])
         ->middleware('permission:workflows.manage')
         ->name('workflows.edit');
