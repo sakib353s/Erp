@@ -6,6 +6,7 @@ use App\Domain\Audit\Services\AuditRecorder;
 use App\Domain\Documents\DocumentType;
 use App\Domain\Foundation\Services\NumberingService;
 use App\Domain\Foundation\Services\TenantContext;
+use App\Domain\Foundation\User;
 use App\Domain\Inventory\Services\StockLedgerService;
 use App\Domain\Inventory\StockAdjustment;
 use App\Domain\Inventory\StockAdjustmentLine;
@@ -37,6 +38,16 @@ class PostStockAdjustment
      */
     public function handle(array $payload, Request $request): StockAdjustment
     {
+        return $this->post($payload, $request->user());
+    }
+
+    /**
+     * The same write, addressed to an actor instead of an HTTP request — so a
+     * document that is itself the source of the adjustments (a posted count,
+     * §04-31) reaches the ledger through one path, not a second copy of it.
+     */
+    public function post(array $payload, User $actor): StockAdjustment
+    {
         $companyId = $this->context->companyId() ?? abort(500, 'No company context.');
         $lines = $payload['lines'] ?? [];
 
@@ -48,24 +59,24 @@ class PostStockAdjustment
             throw new RuntimeException('An adjustment reason is required.');
         }
 
-        return DB::transaction(function () use ($payload, $lines, $companyId, $request) {
+        return DB::transaction(function () use ($payload, $lines, $companyId, $actor) {
             $docType = DocumentType::query()->where('code', 'stock_adjustment')->first()
                 ?? abort(500, 'stock_adjustment document type is not seeded.');
 
             $adjustmentNo = $this->numbering->allocate(
                 $docType->id,
-                $request->user()->default_branch_id,
+                $actor->default_branch_id,
             );
 
             $adjustment = StockAdjustment::create([
                 'company_id' => $companyId,
-                'branch_id' => $request->user()->default_branch_id,
+                'branch_id' => $actor->default_branch_id,
                 'warehouse_id' => (int) $payload['warehouse_id'],
                 'adjustment_no' => $adjustmentNo,
                 'adjustment_date' => $payload['adjustment_date'] ?? now()->toDateString(),
                 'reason' => $payload['reason'],
                 'status' => StockAdjustment::STATUS_POSTED,
-                'created_by' => $request->user()->id,
+                'created_by' => $actor->id,
                 'posted_at' => now(),
             ]);
 
@@ -102,14 +113,14 @@ class PostStockAdjustment
                     'source_event' => 'adjustment_posted',
                     'idempotency_key' => sprintf('adj:%d:%d:%d', $adjustment->id, $lineNo, (int) $line['product_id']),
                     'narration' => $payload['reason'],
-                ], $request->user());
+                ], $actor);
             }
 
             $this->audit->record([
                 'action' => 'inventory.adjustment_posted',
                 'entity_type' => 'stock_adjustment',
                 'entity_id' => $adjustment->id,
-                'actor_id' => $request->user()->id,
+                'actor_id' => $actor->id,
                 'after' => [
                     'adjustment_no' => $adjustmentNo,
                     'reason' => $adjustment->reason,

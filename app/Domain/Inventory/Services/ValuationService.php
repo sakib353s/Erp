@@ -5,6 +5,7 @@ namespace App\Domain\Inventory\Services;
 use App\Domain\Foundation\Warehouse;
 use App\Domain\Inventory\Product;
 use App\Domain\Inventory\StockLayer;
+use Illuminate\Support\Facades\DB;
 use RuntimeException;
 
 /**
@@ -134,6 +135,34 @@ class ValuationService
     }
 
     /** Value of remaining open layers for a warehouse/product. */
+    /**
+     * What one unit of this product is worth in this warehouse right now: the
+     * weighted cost of the open layers, or the standard cost for a product that
+     * carries no layers (or is valued at standard by policy). One definition,
+     * used by the ledger's costings, the damage register and the count sheet.
+     */
+    public function unitCost(Product $product, Warehouse $warehouse): float
+    {
+        if ($product->cost_method === 'standard') {
+            return round((float) $product->standard_cost, 4);
+        }
+
+        $row = DB::table('stock_layers')
+            ->where('warehouse_id', $warehouse->id)
+            ->where('product_id', $product->id)
+            ->where('qty_remaining', '>', 0)
+            ->selectRaw('COALESCE(SUM(qty_remaining), 0) as qty, COALESCE(SUM(qty_remaining * unit_cost), 0) as value')
+            ->first();
+
+        $qty = (float) ($row->qty ?? 0);
+
+        if ($qty > 1e-9) {
+            return round((float) $row->value / $qty, 4);
+        }
+
+        return round((float) $product->standard_cost, 4);
+    }
+
     public function stockValue(Product $product, Warehouse $warehouse): float
     {
         return (float) StockLayer::query()

@@ -1367,6 +1367,8 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-status-half-day,
 .erp-status-price_mismatch,
 .erp-status-price-mismatch,
+/* §04-31: a count sheet is open — the warehouse is mid-answer */
+.erp-status-counting,
 /* §04-46: stock is held damaged — not gone, but not sellable either */
 .erp-status-damage {
     background: var(--warn-soft);

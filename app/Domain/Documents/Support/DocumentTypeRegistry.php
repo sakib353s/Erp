@@ -40,6 +40,7 @@ final class DocumentTypeRegistry
         ['code' => 'stock_transfer', 'type_group' => 'inventory', 'name' => 'Stock Transfer', 'printed_title' => 'STOCK TRANSFER'],
         ['code' => 'stock_damage_entry', 'type_group' => 'inventory', 'name' => 'Damage / Loss Entry', 'printed_title' => 'DAMAGE / LOSS REPORT'],
         ['code' => 'stock_write_off', 'type_group' => 'inventory', 'name' => 'Stock Write-Off', 'printed_title' => 'WRITE-OFF'],
+        ['code' => 'stock_count', 'type_group' => 'inventory', 'name' => 'Stock Count Sheet', 'printed_title' => 'STOCK COUNT'],
 
         // ---- Accounting
         ['code' => 'journal_voucher', 'type_group' => 'accounting', 'name' => 'Journal Voucher', 'printed_title' => 'JOURNAL VOUCHER'],
@@ -74,6 +75,7 @@ final class DocumentTypeRegistry
         'stock_transfer' => 'TRF',
         'stock_damage_entry' => 'DL',
         'stock_write_off' => 'WO',
+        'stock_count' => 'SC',
         'payroll' => 'PAY',
     ];
 

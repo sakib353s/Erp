@@ -30,6 +30,7 @@ use App\Http\Controllers\FailedDeliveryController;
 use App\Http\Controllers\FinancialReportController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\InventoryReportController;
+use App\Http\Controllers\InventoryCountController;
 use App\Http\Controllers\InventoryDamageController;
 use App\Http\Controllers\InventoryReservationController;
 use App\Http\Controllers\JournalController;
@@ -806,6 +807,35 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
         ->name('inventory.reorder.destroy');
 
     /* ---- Damage & loss (§04-46…04-49) ---- */
+    /*
+     | §04-31 Stock count / cycle count. Opening a sheet freezes the numbers it
+     | will ask about; writing counts down is the storekeeper's job; posting the
+     | difference into stock needs `inventory.counts.post`, because that is the
+     | moment the books change. A sheet that is still counting is the only one
+     | that can be edited.
+     */
+    Route::get('/app/inventory/counts', [InventoryCountController::class, 'index'])
+        ->middleware('permission:inventory.counts.view')
+        ->name('inventory.counts.index');
+    Route::get('/app/inventory/counts/create', [InventoryCountController::class, 'create'])
+        ->middleware('permission:inventory.counts.create')
+        ->name('inventory.counts.create');
+    Route::post('/app/inventory/counts', [InventoryCountController::class, 'store'])
+        ->middleware('permission:inventory.counts.create')
+        ->name('inventory.counts.store');
+    Route::get('/app/inventory/counts/{count}', [InventoryCountController::class, 'show'])
+        ->middleware('permission:inventory.counts.view')
+        ->name('inventory.counts.show');
+    Route::post('/app/inventory/counts/{count}/counted', [InventoryCountController::class, 'saveCounts'])
+        ->middleware('permission:inventory.counts.create')
+        ->name('inventory.counts.save');
+    Route::post('/app/inventory/counts/{count}/post', [InventoryCountController::class, 'postCount'])
+        ->middleware('permission:inventory.counts.post')
+        ->name('inventory.counts.post');
+    Route::post('/app/inventory/counts/{count}/cancel', [InventoryCountController::class, 'cancel'])
+        ->middleware('permission:inventory.counts.create')
+        ->name('inventory.counts.cancel');
+
     Route::get('/app/inventory/damage', [InventoryDamageController::class, 'damage'])
         ->middleware('permission:inventory.stock.view')
         ->name('inventory.damage.index');

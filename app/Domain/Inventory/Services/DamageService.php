@@ -751,26 +751,10 @@ class DamageService
      * cost — the same rule ValuationService::consume applies when the goods
      * actually leave, so a recorded value is never a guess.
      */
+    /** Delegates: one definition of a unit's worth, in ValuationService. */
     public function unitCost(Product $product, Warehouse $warehouse): float
     {
-        if ($product->cost_method === 'standard') {
-            return round((float) $product->standard_cost, 4);
-        }
-
-        $row = DB::table('stock_layers')
-            ->where('warehouse_id', $warehouse->id)
-            ->where('product_id', $product->id)
-            ->where('qty_remaining', '>', 0)
-            ->selectRaw('COALESCE(SUM(qty_remaining), 0) as qty, COALESCE(SUM(qty_remaining * unit_cost), 0) as value')
-            ->first();
-
-        $qty = (float) ($row->qty ?? 0);
-
-        if ($qty > 1e-9) {
-            return round((float) $row->value / $qty, 4);
-        }
-
-        return round((float) $product->standard_cost, 4);
+        return $this->valuation->unitCost($product, $warehouse);
     }
 
     /** The loss journal: Dr Inventory Loss & Damage, Cr Inventory. */

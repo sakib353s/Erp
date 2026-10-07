@@ -73,6 +73,7 @@ class SystemRoleSeeder extends Seeder
                 'inventory.reports.view',
                 'inventory.damage.create', 'inventory.loss.create',
                 'inventory.writeoffs.create', 'inventory.writeoffs.approve',
+                'inventory.counts.view', 'inventory.counts.create', 'inventory.counts.post',
             ]],
             ['slug' => 'employee', 'name' => 'Employee', 'description' => 'Staff account: own portal access only — own leave, own payslips.', 'keys' => [
                 'dashboard.view', 'employees.view', 'documents.view', 'search.view',
@@ -107,6 +108,9 @@ class SystemRoleSeeder extends Seeder
                 // write-off approval stay with a manager (§04-48).
                 'inventory.damage.create', 'inventory.loss.create',
                 'inventory.writeoffs.create',
+                // §04-31: the storekeeper counts the shelves; posting the
+                // difference into stock is the manager's signature.
+                'inventory.counts.view', 'inventory.counts.create',
             ]],
         ];
 

@@ -276,6 +276,9 @@ class CatalogImporter
         'inventory > stock > out of stock' => ['/app/inventory/stock/alerts?type=out', 'inventory.reorder.view'],
         'inventory > stock > overstock alert' => ['/app/inventory/stock/alerts?type=over', 'inventory.reorder.view'],
         'inventory > stock > minimum stock level' => ['/app/inventory/reorder-levels', 'inventory.reorder.view'],
+        // §04-31: a count sheet is opened here; "Cycle Count" starts a subset sheet.
+        'inventory > stock > stock count' => ['/app/inventory/counts', 'inventory.counts.view'],
+        'inventory > stock > cycle count' => ['/app/inventory/counts/create?scope=cycle', 'inventory.counts.create'],
         'inventory > stock > maximum stock level' => ['/app/inventory/reorder-levels', 'inventory.reorder.view'],
         // §04-46…04-51: damage and loss are their own register, and the write-off
         // is the document that needs a second person — so it gets its own queue.
