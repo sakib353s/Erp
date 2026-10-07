@@ -67,11 +67,7 @@ class PickListController extends Controller
             'warehouses' => $this->warehouses(),
             'orders' => $orders,
             'selectedOrder' => $selected,
-            'products' => Product::query()
-                ->where('is_active', true)
-                ->orderBy('name')
-                ->limit(400)
-                ->get(['id', 'sku', 'name']),
+            'products' => $this->products(),
             'blankRows' => 5,
         ]);
     }
@@ -202,6 +198,22 @@ class PickListController extends Controller
     }
 
     /** @return \Illuminate\Database\Eloquent\Collection<int, Warehouse> */
+    /**
+     * The manual rows of a walk are typed from the catalogue, and the catalogue
+     * stops at the company line: another tenant's products are never offered.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection<int, Product>
+     */
+    protected function products()
+    {
+        return Product::query()
+            ->where('company_id', auth()->user()->company_id)
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->limit(400)
+            ->get(['id', 'sku', 'name']);
+    }
+
     protected function warehouses()
     {
         return Warehouse::query()->orderBy('name')->get(['id', 'name', 'code']);

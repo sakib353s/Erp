@@ -470,4 +470,39 @@ class PickListTest extends TestCase
             ->get(route('inventory.pick-lists.show', $list))
             ->assertNotFound();
     }
+
+    /**
+     * A walk typed by hand is typed from *this* company's catalogue. The product
+     * picker is filtered to the tenant, so a neighbouring company's product
+     * cannot be walked into a list here even by a hand-typed code.
+     */
+    public function test_the_manual_rows_only_offer_this_companys_products(): void
+    {
+        $mine = $this->product('PICK-MINE');
+
+        $otherCompany = (int) DB::table('companies')->insertGetId([
+            'singleton' => 0,
+            'name' => 'Shadow Co Ltd',
+            'is_active' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $theirs = Product::create([
+            'company_id' => $otherCompany,
+            'code' => 'PICK-THEIRS',
+            'sku' => 'PICK-THEIRS',
+            'name' => 'Not our product',
+            'cost_method' => 'fifo',
+            'standard_cost' => 10,
+            'is_stocked' => true,
+            'is_active' => true,
+        ]);
+
+        $this->actingAs($this->admin)
+            ->get(route('inventory.pick-lists.create'))
+            ->assertOk()
+            ->assertSee($mine->sku)
+            ->assertDontSee($theirs->sku);
+    }
 }
