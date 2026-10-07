@@ -84,7 +84,7 @@
                             <td><code>{{ $salesReturn->return_no }}</code></td>
                             <td>{{ optional($salesReturn->return_date)->toDateString() }}</td>
                             <td>{{ $salesReturn->invoice?->invoice_no ?? '—' }}</td>
-                            <td><span class="erp-status erp-status-active">{{ $salesReturn->status }}</span></td>
+                            <td><span class="erp-status erp-status-{{ str_replace('_', '-', strtolower((string) ($salesReturn->status))) }}">{{ $salesReturn->status }}</span></td>
                             <td class="text-end">{{ number_format((float) $salesReturn->grand_total, 2) }}</td>
                             <td class="text-end">
                                 @if ($perm('returns.receive') && in_array($salesReturn->status, ['requested', 'approved'], true))

@@ -8,7 +8,7 @@
             <h1 class="erp-h1">POS {{ $kind }} Report</h1>
             <p class="erp-page-sub">
                 Session <code>{{ $session->session_no }}</code>
-                · <span class="erp-status erp-status-active">{{ $session->status }}</span>
+                · <span class="erp-status erp-status-{{ str_replace('_', '-', strtolower((string) ($session->status))) }}">{{ $session->status }}</span>
                 @if ($kind === 'Z' && $session->status !== 'closed')
                     · preview while open
                 @endif

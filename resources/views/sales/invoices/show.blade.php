@@ -7,7 +7,7 @@
         <div>
             <h1 class="erp-h1">{{ $invoice->printed_title ?? 'INVOICE' }} {{ $invoice->invoice_no }}</h1>
             <p class="erp-page-sub">
-                Status: <span class="erp-status erp-status-active">{{ $invoice->status }}</span>
+                Status: <span class="erp-status erp-status-{{ str_replace('_', '-', strtolower((string) ($invoice->status))) }}">{{ $invoice->status }}</span>
                 · {{ optional($invoice->invoice_date)->toDateString() }}
             </p>
         </div>

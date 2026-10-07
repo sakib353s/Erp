@@ -36,7 +36,7 @@
                             <td>{{ $adjustment->warehouse?->name }}</td>
                             <td>{{ \Illuminate\Support\Str::limit($adjustment->reason, 60) }}</td>
                             <td>
-                                <span class="erp-status erp-status-active">{{ $adjustment->status }}</span>
+                                <span class="erp-status erp-status-{{ str_replace('_', '-', strtolower((string) ($adjustment->status))) }}">{{ $adjustment->status }}</span>
                             </td>
                             <td class="text-end">{{ $adjustment->lines->count() }}</td>
                         </tr>

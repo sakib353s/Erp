@@ -51,7 +51,7 @@
                             <td>{{ optional($challan->challan_date)->toDateString() }}</td>
                             <td>{{ $challan->order?->order_no ?? '—' }}</td>
                             <td>{{ $challan->courier_name ?? '—' }}</td>
-                            <td><span class="erp-status erp-status-active">{{ $challan->status }}</span></td>
+                            <td><span class="erp-status erp-status-{{ str_replace('_', '-', strtolower((string) ($challan->status))) }}">{{ $challan->status }}</span></td>
                         </tr>
                     @empty
                         <tr>

@@ -7,7 +7,7 @@
         <div>
             <h1 class="erp-h1">{{ $challan->printed_title ?? 'DELIVERY CHALLAN' }} {{ $challan->challan_no }}</h1>
             <p class="erp-page-sub">
-                Status: <span class="erp-status erp-status-active">{{ $challan->status }}</span>
+                Status: <span class="erp-status erp-status-{{ str_replace('_', '-', strtolower((string) ($challan->status))) }}">{{ $challan->status }}</span>
                 · {{ optional($challan->challan_date)->toDateString() }}
                 @if ($challan->order)
                     · Order {{ $challan->order->order_no }}

@@ -48,7 +48,7 @@
                             <td>{{ optional($hold->held_at)->format('Y-m-d H:i') }}</td>
                             <td>{{ count($hold->lines ?? []) }}</td>
                             <td class="text-end">{{ number_format((float) $hold->total, 2) }}</td>
-                            <td><span class="erp-status erp-status-active">{{ $hold->status }}</span></td>
+                            <td><span class="erp-status erp-status-{{ str_replace('_', '-', strtolower((string) ($hold->status))) }}">{{ $hold->status }}</span></td>
                             <td class="text-end">
                                 @if ($hold->status === 'held')
                                     <form method="POST" action="{{ route('pos.holds.resume', $hold) }}">

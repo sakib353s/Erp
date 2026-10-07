@@ -7,7 +7,7 @@
         <div>
             <h1 class="erp-h1">Order {{ $order->order_no }}</h1>
             <p class="erp-page-sub">
-                Status: <span class="erp-status erp-status-active">{{ $order->status }}</span>
+                Status: <span class="erp-status erp-status-{{ str_replace('_', '-', strtolower((string) ($order->status))) }}">{{ $order->status }}</span>
                 · {{ optional($order->order_date)->toDateString() }}
             </p>
         </div>

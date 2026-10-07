@@ -85,7 +85,7 @@
                                 @endif
                             </td>
                             <td>{{ $invoice->customer?->name ?? '—' }}</td>
-                            <td><span class="erp-status erp-status-active">{{ $invoice->status }}</span></td>
+                            <td><span class="erp-status erp-status-{{ str_replace('_', '-', strtolower((string) ($invoice->status))) }}">{{ $invoice->status }}</span></td>
                             <td class="text-end">{{ number_format((float) $invoice->grand_total, 2) }}</td>
                             <td class="text-end">{{ number_format((float) $invoice->due_amount, 2) }}</td>
                         </tr>

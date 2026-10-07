@@ -38,7 +38,7 @@
                         @endif
                     </p>
                 </div>
-                <span class="erp-status erp-status-active">{{ $session->status }}</span>
+                <span class="erp-status erp-status-{{ str_replace('_', '-', strtolower((string) ($session->status))) }}">{{ $session->status }}</span>
             </div>
 
             <div class="table-responsive">

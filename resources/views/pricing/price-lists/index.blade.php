@@ -58,7 +58,7 @@
                             <td class="text-end">{{ $list->items_count }}</td>
                             <td>
                                 @if ($list->is_default)
-                                    <span class="erp-status erp-status-active">default</span>
+                                    <span class="erp-status erp-status-planned">default</span>
                                 @else
                                     <span class="text-muted">—</span>
                                 @endif

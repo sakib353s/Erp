@@ -1213,6 +1213,18 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
     opacity: .85;
 }
 
+/*
+ * Status vocabulary — every status string the domain actually emits maps to
+ * ONE semantic family (no rainbow). Both `snake_case` and `kebab-case` spellings
+ * resolve, because models emit `return_requested` while Blade class names are
+ * often normalised to `return-requested`.
+ *
+ * Statuses present in the domain: SalesOrder::STATUSES, Invoice::STATUSES,
+ * Shipment::STATUS_*, POS session/drawer states, workflow/approval decisions,
+ * notification and outbox delivery states.
+ */
+
+/* Positive / settled / closed-loop */
 .erp-status-active,
 .erp-status-approved,
 .erp-status-success,
@@ -1221,36 +1233,90 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-status-delivered,
 .erp-status-completed,
 .erp-status-paid,
-.erp-status-open { background: var(--ok-soft); color: var(--ok); }
+.erp-status-settled,
+.erp-status-reconciled,
+.erp-status-posted,
+.erp-status-issued,
+.erp-status-allocated {
+    background: var(--ok-soft);
+    color: var(--ok);
+}
 
+/* In flight / informational — work is moving, nothing is wrong yet */
+.erp-status-submitted,
+.erp-status-comment,
+.erp-status-processing,
+.erp-status-pending_approval,
+.erp-status-pending-approval,
+.erp-status-in_transit,
+.erp-status-in-transit,
+.erp-status-shipped,
+.erp-status-dispatched,
+.erp-status-out_for_delivery,
+.erp-status-out-for-delivery,
+.erp-status-picked_up,
+.erp-status-picked-up,
+.erp-status-ready_to_ship,
+.erp-status-ready-to-ship,
+.erp-status-assigned,
+.erp-status-confirmed,
+.erp-status-open {
+    background: var(--info-soft);
+    color: var(--info);
+}
+
+/* Waiting on someone / partially done */
 .erp-status-pending,
+.erp-status-pending_dispatch,
+.erp-status-pending-dispatch,
 .erp-status-locked,
+.erp-status-return_requested,
+.erp-status-return-requested,
+.erp-status-return_approved,
+.erp-status-return-approved,
 .erp-status-returned,
 .erp-status-planned,
 .erp-status-degraded,
 .erp-status-awaiting,
-.erp-status-partial { background: var(--warn-soft); color: var(--warn); }
+.erp-status-partial,
+.erp-status-unpaid,
+.erp-status-cod,
+.erp-status-refund_due,
+.erp-status-refund-due,
+.erp-status-held,
+.erp-status-draft {
+    background: var(--warn-soft);
+    color: var(--warn);
+}
 
+/* Failed / blocked / money owed back */
 .erp-status-rejected,
 .erp-status-disabled,
 .erp-status-denied,
 .erp-status-error,
 .erp-status-failed,
+.erp-status-delivery_failed,
+.erp-status-delivery-failed,
 .erp-status-broken,
-.erp-status-overdue { background: var(--danger-soft); color: var(--danger); }
+.erp-status-overdue,
+.erp-status-suspended,
+.erp-status-expired {
+    background: var(--danger-soft);
+    color: var(--danger);
+}
 
+/* Terminal / void / archived — deliberately quiet */
 .erp-status-cancelled,
 .erp-status-skipped,
 .erp-status-discarded,
 .erp-status-void,
-.erp-status-closed { background: var(--neutral-soft); color: var(--neutral-ink); }
-
-.erp-status-submitted,
-.erp-status-comment,
-.erp-status-processing,
-.erp-status-pending_approval,
-.erp-status-in_transit,
-.erp-status-shipped { background: var(--info-soft); color: var(--info); }
+.erp-status-closed,
+.erp-status-refunded,
+.erp-status-reversed,
+.erp-status-archived {
+    background: var(--neutral-soft);
+    color: var(--neutral-ink);
+}
 
 .erp-status-lg { font-size: 12.5px; padding: 4px 12px; }
 

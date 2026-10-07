@@ -443,7 +443,6 @@ export function shellHeader(title) {
 export function shellFooter(activeTarget) {
     return `
 <div class="erp-backdrop" data-erp-backdrop hidden></div>
-</div>
 
 ${palette()}
 

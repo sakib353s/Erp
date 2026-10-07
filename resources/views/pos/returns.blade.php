@@ -39,7 +39,7 @@
                     <h2 class="erp-h2 mb-1">Invoice {{ $invoice->invoice_no }}</h2>
                     <p class="mb-0 text-muted">
                         {{ $invoice->invoice_date }} ·
-                        <span class="erp-status erp-status-active">{{ $invoice->status }}</span> ·
+                        <span class="erp-status erp-status-{{ str_replace('_', '-', strtolower((string) ($invoice->status))) }}">{{ $invoice->status }}</span> ·
                         total {{ number_format((float) $invoice->grand_total, 2) }}
                     </p>
                 </div>

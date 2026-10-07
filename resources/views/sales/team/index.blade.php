@@ -51,7 +51,7 @@
                             <td><code>{{ $employee->code }}</code></td>
                             <td>{{ $employee->full_name }}</td>
                             <td>{{ $employee->designation ?? '—' }}</td>
-                            <td><span class="erp-status erp-status-active">{{ $employee->employment_status }}</span></td>
+                            <td><span class="erp-status erp-status-{{ str_replace('_', '-', strtolower((string) ($employee->employment_status))) }}">{{ $employee->employment_status }}</span></td>
                             <td>
                                 <span class="erp-status {{ $employee->is_salesperson ? 'erp-status-active' : 'erp-status-inactive' }}">
                                     {{ $employee->is_salesperson ? 'yes' : 'no' }}

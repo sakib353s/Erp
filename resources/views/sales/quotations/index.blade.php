@@ -50,7 +50,7 @@
                             <td><code>{{ $quote->quote_no }}</code></td>
                             <td>{{ optional($quote->quote_date)->toDateString() }}</td>
                             <td>{{ $quote->customer?->name ?? '—' }}</td>
-                            <td><span class="erp-status erp-status-active">{{ $quote->status }}</span>
+                            <td><span class="erp-status erp-status-{{ str_replace('_', '-', strtolower((string) ($quote->status))) }}">{{ $quote->status }}</span>
                             @if ($quote->revision > 1)
                                 <span class="erp-chip erp-chip-soft">r{{ $quote->revision }}</span>
                             @endif
