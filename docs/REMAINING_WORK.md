@@ -6,13 +6,13 @@ a module is only "done" when persistence + validation + authorization + branch
 scope + business logic + workflow + effects + notifications + audit + UI + error
 handling and its tests are all connected (see `TRACEABILITY/README.md`).
 
-_Last updated: 2026-10-08, after the inventory alert/reorder slice (§04) and the HRM and Purchase/Suppliers slices._
+_Last updated: 2026-10-08, after the dashboard slice (§01) and the inventory alert/reorder, reservations and report-family slices (§04)._
 
 ## Where the product stands
 
 | Module | Rows done / total | State |
 |---|---|---|
-| 01 Dashboard | 0 / 27 | widget frames + real-data contract in place; 25 widget queries pending |
+| 01 Dashboard | 26 / 27 | **all 25 containers answer from real documents** — ok / empty / unavailable, one read service, visibility by the module's own view permission; only the widget admin CRUD in 12 Settings is pending |
 | 02 Sales | 104 / 120 | essentially complete: orders, bulk actions, invoices, delivery, team, POS, reports |
 | 03 Purchase | 19 / 73 | **the purchase cycle is closed both ways** — POs with approval, receipts posting real stock, bills posting the payable with a three-way match, payments settling it, returns taking goods back with their debit note; RFQ, LC and reports pending |
 | 04 Inventory | 17 / 63 | products, adjustments, transfers, movements, **alerts against reorder policies, the reservations desk, and the stock report family** (ageing, dead stock, stock report — all derived from the ledger, all exportable); counts and batch/serial pending |
@@ -29,8 +29,8 @@ _Last updated: 2026-10-08, after the inventory alert/reorder slice (§04) and th
 | 15 Settings | 0 / 35 | **not started** — company/branch/invoice/Bengali/payment-gateway settings screens |
 | 16 Cross-cutting | 0 / 64 | search, notifications, backups, BI, i18n, API mgmt, public links |
 
-**Totals: 204 of 619 catalogued rows implemented.** (Sales 104, HRM 17, Masters 15, CRM 14, Purchase 19,
-Inventory 17, Accounting 8, Returns 4, Suppliers 6.)
+**Totals: 230 of 619 catalogued rows implemented.** (Sales 104, Dashboard 26, Purchase 19, Inventory 17,
+HRM 17, Masters 15, CRM 14, Accounting 8, Suppliers 6, Returns 4.)
 
 ## The next three builds, in the order they unlock the most
 
@@ -43,12 +43,22 @@ Inventory 17, Accounting 8, Returns 4, Suppliers 6.)
 2. **Accounts close-out (08 + 09 remainder)** — cash book and bank reconciliation first
    (they feed every collection screen), then the day book, the customer/supplier ledgers read
    from the control accounts, and the VAT/Mushak report family.
-3. **The untouched domains** — cash & bank (§08) and accounting remainder above, then
-   dashboard widgets (§01) fed by the queries these modules now expose, reports (§13),
-   settings (§15) and the cross-cutting layer (§16: search, notifications, backups, i18n).
+3. **The untouched domains** — cash & bank (§08) and the accounting remainder above, then
+   reports (§13), settings (§15 — it also owns the widget admin screen 01-27 waits on)
+   and the cross-cutting layer (§16: search, notifications, backups, i18n). The dashboard
+   (§01) is already built on the queries the modules expose, so new modules light their
+   panels up without touching the dashboard.
 
 ## Known deviations inside what *is* built (documented, not hidden)
 
+* **Dashboard containers** are answered by one read service (`App\Domain\Dashboard\Services\DashboardMetrics`)
+  rather than the planned per-widget classes and per-widget `dashboard.widget.*` keys: a container is visible
+  exactly when the caller holds the view permission of the module whose documents it reads, and each container
+  reports `ok`, `empty` or `unavailable` — the last one naming the module that will fill it (01-21 expiry has no
+  source yet, so it says so instead of inventing dates). The plan, the shipped shape and the reasons are side by
+  side in `docs/TRACEABILITY/01-dashboard.md`. While wiring it, a real defect was fixed: `WidgetSeeder` produced
+  mixed-case container codes (`Todays_Sales`) while the translations table, the label keys and the dashboard all
+  key off lowercase slugs — codes are lowercase now and the seeder prunes containers outside the catalogue.
 * **Two alert readers exist.** `StockQuery::alerts()` came with the inventory core and
   reports a company-wide balance against thresholds; the alert screens read
   `ReorderService::alertRows()`, which resolves the policy that actually governs a product
@@ -113,7 +123,8 @@ Inventory 17, Accounting 8, Returns 4, Suppliers 6.)
 * **Attendance capture** is manual/import only — the `device` source is reserved and
   nothing writes it; GPS configuration (10-13) does not exist.
 * **Tests** in this repository are written but not executed in the build sandbox
-  (no PHP runtime): `CustomerCrmTest`, `HrAttendanceTest`, `HrLeaveTest`,
-  `PurchaseFlowTest` and the rest of the suite must be run where PHP + MySQL are
-  available. Everything else here was verified statically (routes ↔ permissions ↔
-  views ↔ CSS/JS contracts).
+  (no PHP runtime): `DashboardWidgetTest`, `StockAlertTest`, `StockReservationTest`,
+  `StockReportTest`, `SupplierLedgerTest`, `CustomerCrmTest`, `HrAttendanceTest`,
+  `HrLeaveTest`, `PurchaseFlowTest` and the rest of the suite must be run where PHP +
+  MySQL are available. Everything else here was verified statically (routes ↔
+  permissions ↔ views ↔ CSS/JS contracts).

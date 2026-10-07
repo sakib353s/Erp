@@ -8,10 +8,9 @@
         $total = max(1, count($checklist));
         $progress = (int) round($done / $total * 100);
 
-        // Widgets arrive permission-filtered from DashboardController. The grid
-        // renders every container the user may see (D22: 25 containers); the
-        // command strip below surfaces the ones with real data today.
-        $realWidgets = collect($widgets)->filter(fn ($w) => in_array($w->code, ['pending_approvals', 'branch_activity'], true));
+        // Widgets arrive permission-filtered from DashboardController; each one
+        // carries its own metric payload (figure, empty state, or a statement
+        // that its module has no source yet). Nothing is estimated.
     @endphp
 
     <x-ui.page-header
@@ -32,17 +31,37 @@
         </x-slot:actions>
     </x-ui.page-header>
 
-    {{-- KPI strip: only containers whose data source is wired render a number.
-         Unwired modules say so instead of showing an invented figure. --}}
+    @php
+        // The strip is built from the same payloads the panels use, so a figure
+        // can never disagree with the panel it came from.
+        $salesMetric = $metrics['todays_sales'] ?? null;
+        $cashMetric = $metrics['todays_cash_position'] ?? null;
+        $receivableMetric = $metrics['receivable_aging'] ?? null;
+        $payableMetric = $metrics['payable_aging'] ?? null;
+        $lowMetric = $metrics['low_stock_alert'] ?? null;
+        $approvalsMetric = $metrics['pending_approvals'] ?? null;
+    @endphp
+
+    {{-- KPI strip: real figures, each one linking to the screen that explains it. --}}
     <section class="erp-kpi-grid" aria-label="Key figures">
-        <a class="erp-kpi text-decoration-none" href="{{ route('approvals.index') }}">
-            <p class="erp-kpi-label"><i class="bi bi-inbox" aria-hidden="true"></i>Open approvals</p>
-            <p class="erp-kpi-value">{{ $realData['pending_approvals'] }}</p>
-            <span class="erp-kpi-delta {{ $realData['pending_approvals'] > 0 ? 'down' : 'up' }}">
-                <i class="bi bi-{{ $realData['pending_approvals'] > 0 ? 'hourglass' : 'check2' }}" aria-hidden="true"></i>
-                {{ $realData['pending_approvals'] > 0 ? 'Awaiting a decision' : 'Queue is clear' }}
-            </span>
-        </a>
+        <x-ui.kpi :href="$salesMetric['href'] ?? route('sales.invoices.index')" label="Today's sales" icon="bi-receipt"
+                  :value="$salesMetric['primary'] ?? '—'" :hint="$salesMetric['caption'] ?? null" />
+
+        <x-ui.kpi :href="$cashMetric['href'] ?? route('accounting.coa')" label="Cash & bank" icon="bi-cash-stack"
+                  :value="$cashMetric['primary'] ?? '—'" :hint="$cashMetric['caption'] ?? null" />
+
+        <x-ui.kpi :href="$receivableMetric['href'] ?? route('customers.due')" label="Receivable outstanding" icon="bi-arrow-down-circle"
+                  :value="$receivableMetric['primary'] ?? '—'" hint="Bucketed by each invoice's due date" />
+
+        <x-ui.kpi :href="$payableMetric['href'] ?? route('purchase.payables')" label="Payable outstanding" icon="bi-arrow-up-circle"
+                  :value="$payableMetric['primary'] ?? '—'" hint="Bucketed by each bill's due date" />
+
+        <x-ui.kpi :href="route('approvals.index')" label="Open approvals" icon="bi-inbox"
+                  :value="$approvalsMetric['primary'] ?? '0'"
+                  :hint="$approvalsMetric['caption'] ?? null" />
+
+        <x-ui.kpi :href="$lowMetric['href'] ?? route('inventory.stock')" label="Low stock" icon="bi-graph-down-arrow"
+                  :value="$lowMetric['primary'] ?? '—'" :hint="$lowMetric['caption'] ?? null" />
 
         <div class="erp-kpi">
             <p class="erp-kpi-label"><i class="bi bi-list-check" aria-hidden="true"></i>Setup progress</p>
@@ -51,24 +70,6 @@
                 <span style="width: {{ $progress }}%"></span>
             </div>
             <p class="erp-kpi-foot">{{ $done }} of {{ $total }} first-run steps complete</p>
-        </div>
-
-        <div class="erp-kpi">
-            <p class="erp-kpi-label"><i class="bi bi-activity" aria-hidden="true"></i>Recorded activity</p>
-            <p class="erp-kpi-value">{{ $realData['recent_activity']->count() }}</p>
-            <span class="erp-kpi-delta">
-                <i class="bi bi-shield-check" aria-hidden="true"></i> latest audit entries
-            </span>
-            <p class="erp-kpi-foot">Append-only trail — created_at alone is never the audit record.</p>
-        </div>
-
-        <div class="erp-kpi">
-            <p class="erp-kpi-label"><i class="bi bi-grid-1x2" aria-hidden="true"></i>Available panels</p>
-            <p class="erp-kpi-value">{{ $widgets->count() }}</p>
-            <span class="erp-kpi-delta">
-                <i class="bi bi-lock" aria-hidden="true"></i> filtered by your permissions
-            </span>
-            <p class="erp-kpi-foot">A panel appears once its module records real transactions.</p>
         </div>
     </section>
 
@@ -181,55 +182,69 @@
             <article class="erp-widget" data-widget="{{ $widget->code }}">
                 <header class="erp-widget-head">
                     <h3 class="erp-widget-title">{{ $label }}</h3>
-                    @if ($widget->feature_key)
-                        <span class="erp-chip erp-chip-outline">{{ $widget->feature_key }}</span>
-                    @endif
+                    @php($state = $metrics[$widget->code]['state'] ?? null)
+                    <span class="erp-chip {{ match ($state) {
+                        'ok' => 'erp-chip-ok',
+                        'empty' => 'erp-chip-outline',
+                        'unavailable' => 'erp-chip-warn',
+                        default => 'erp-chip-outline',
+                    } }}">{{ match ($state) {
+                        'ok' => 'Live',
+                        'empty' => 'No data yet',
+                        'unavailable' => 'No source yet',
+                        default => 'Not wired',
+                    } }}</span>
                 </header>
 
                 <div class="erp-widget-body">
-                    @switch($widget->code)
-                        @case('pending_approvals')
-                            <p class="erp-widget-metric">{{ $realData['pending_approvals'] }}</p>
-                            <p class="erp-widget-note">Requests awaiting a decision across your accessible branches.</p>
-                            <a class="erp-widget-link" href="{{ route('approvals.index') }}">
-                                Open approval inbox <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                            </a>
-                        @break
+                    @php($metric = $metrics[$widget->code] ?? null)
 
-                        @case('branch_activity')
-                            <div class="erp-widget-split">
-                                <div>
-                                    <p class="erp-widget-label">Recent activity</p>
-                                    <ul class="erp-activity">
-                                        @forelse ($realData['recent_activity']->take(5) as $activity)
-                                            <li>
-                                                <code>{{ $activity['action'] }}</code>
-                                                <span class="small">
-                                                    {{ $activity['entity_type'] }}@if($activity['entity_id'])#{{ $activity['entity_id'] }}@endif
-                                                    · <time>{{ $activity['created_at']?->diffForHumans() }}</time>
-                                                </span>
-                                            </li>
-                                        @empty
-                                            <li class="small">No audit activity recorded yet.</li>
-                                        @endforelse
-                                    </ul>
-                                </div>
-                                <div class="erp-widget-split-side">
-                                    <p class="erp-widget-label">Branch comparison</p>
-                                    <p class="erp-widget-note">
-                                        Fills with real per-branch figures once transactional modules record data —
-                                        this container never estimates.
-                                    </p>
-                                </div>
+                    @if ($metric === null)
+                        <x-ui.empty icon="bi-bar-chart" title="No figure for this panel yet"
+                                    text="This container has no metric yet — it will not be filled with an estimate." />
+                    @elseif ($metric['state'] === 'ok')
+                        @if ($metric['primary'] !== null)
+                            <p class="erp-widget-metric">{{ $metric['primary'] }}</p>
+                        @endif
+                        @if ($metric['caption'])
+                            <p class="erp-widget-label">{{ $metric['caption'] }}</p>
+                        @endif
+
+                        @if (! empty($metric['rows']))
+                            <ul class="erp-activity">
+                                @foreach ($metric['rows'] as $row)
+                                    <li>
+                                        <span class="{{ ! empty($row['muted']) ? 'erp-td-muted' : '' }}">{{ $row['label'] }}</span>
+                                        <strong class="erp-widget-split-value">{{ $row['value'] }}</strong>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
+
+                        @if (! empty($metric['series']))
+                            <div class="erp-widget-series">
+                                @foreach ($metric['series'] as $point)
+                                    <div class="erp-widget-bar" title="{{ $point['label'] }}: {{ $point['detail'] ?? $point['value'] }}">
+                                        <span style="width: {{ $point['width'] }}%"></span>
+                                        <em>{{ $point['short'] ?? $point['label'] }}</em>
+                                    </div>
+                                @endforeach
                             </div>
-                        @break
+                        @endif
 
-                        @default
-                            <x-ui.empty
-                                icon="bi-bar-chart"
-                                title="No {{ $label }} data yet"
-                                text="This panel reports live figures only. It activates as soon as its module records real transactions." />
-                    @endswitch
+                        @if ($metric['note'])
+                            <p class="erp-widget-note">{{ $metric['note'] }}</p>
+                        @endif
+                    @else
+                        <p class="erp-widget-label">{{ $metric['caption'] }}</p>
+                        <p class="erp-widget-note">{{ $metric['note'] }}</p>
+                    @endif
+
+                    @if (! empty($metric['href']) && ! empty($metric['href_label']))
+                        <a class="erp-widget-link" href="{{ $metric['href'] }}">
+                            {{ $metric['href_label'] }} <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                        </a>
+                    @endif
                 </div>
             </article>
         @endforeach

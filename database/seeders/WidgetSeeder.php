@@ -15,7 +15,9 @@ use RuntimeException;
  * the §48-A composite "Branch Comparison & Recent Activity".
  *
  * The seeder REFUSES to run if the resulting count deviates — the
- * dashboard contract is asserted, not assumed.
+ * dashboard contract is asserted, not assumed. Container codes are
+ * lowercase slugs (`todays_sales`, `branch_activity`) because the
+ * translation keys and the dashboard's metric map both key off them.
  */
 class WidgetSeeder extends Seeder
 {
@@ -58,8 +60,11 @@ class WidgetSeeder extends Seeder
         $dashboardModule = Module::query()->where('code', 'dashboard')->first();
         $permission = Permission::query()->where('key', 'dashboard.view')->first();
 
+        $codes = [];
+
         foreach ($labels as $index => $label) {
             $code = $this->codeFor($label);
+            $codes[] = $code;
 
             Widget::updateOrCreate(
                 ['code' => $code],
@@ -75,6 +80,15 @@ class WidgetSeeder extends Seeder
                 ],
             );
         }
+
+        // Container codes are lowercase slugs: the translations table, the
+        // permission matrix and the dashboard all resolve a panel by its code.
+        // An instance seeded before that rule is repaired here rather than
+        // left with two of every container, one of which nothing can find.
+        Widget::query()
+            ->where('container', 'dashboard')
+            ->whereNotIn('code', $codes)
+            ->delete();
     }
 
     protected function codeFor(string $label): string
@@ -97,6 +111,6 @@ class WidgetSeeder extends Seeder
         $slug = str_replace(["'", '’'], '', $label);
         $slug = preg_replace('/[^a-zA-Z0-9]+/', '_', $slug);
 
-        return trim((string) $slug, '_');
+        return strtolower(trim((string) $slug, '_'));
     }
 }

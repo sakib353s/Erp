@@ -124,6 +124,9 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::get('/app/dashboard', [DashboardController::class, 'index'])
         ->middleware(['permission:dashboard.view', 'feature:dashboard'])
         ->name('dashboard');
+    Route::get('/app/dashboard/widgets/{widget}', [DashboardController::class, 'widget'])
+        ->middleware(['permission:dashboard.view', 'feature:dashboard'])
+        ->name('dashboard.widget');
 
     /* ---- Personal navigation: pin/unpin a destination (§18.3) ---- */
     Route::post('/app/navigation/pin', [NavigationController::class, 'pin'])
