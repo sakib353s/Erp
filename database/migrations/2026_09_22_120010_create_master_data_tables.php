@@ -186,7 +186,7 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained()->restrictOnDelete();
             $table->string('code', 32);
             $table->string('name', 64);
-            $table->unsignedSmallInteger('default_days')->default(0);
+            $table->decimal('default_days', 5, 2)->default(0); // half days are real (§10.2)
             $table->boolean('is_paid')->default(true);
             $table->boolean('is_active')->default(true);
             $table->timestamps();

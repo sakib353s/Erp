@@ -130,6 +130,17 @@ class FoundationPermissionSeeder extends Seeder
             ['hr', 'employees', 'create', 'employees.create', 'Create employees'],
             ['hr', 'employees', 'edit', 'employees.edit', 'Edit employees'],
 
+            // Phase H — HRM (§10): attendance, leave, structure
+            ['hr', 'attendance', 'view', 'attendance.view', 'View attendance'],
+            ['hr', 'attendance', 'manage', 'attendance.manage', 'Mark and correct attendance'],
+            ['hr', 'attendance', 'report', 'attendance.report', 'View attendance reports'],
+            ['hr', 'leave', 'view', 'leave.view', 'View leave requests'],
+            ['hr', 'leave', 'request', 'leave.request', 'Request leave'],
+            ['hr', 'leave', 'approve', 'leave.approve', 'Approve or reject leave'],
+            ['hr', 'leave', 'balance', 'leave.balance', 'View and adjust leave balances'],
+            ['hr', 'structure', 'manage', 'hr.structure.manage', 'Manage departments and designations'],
+            ['hr', 'leave_types', 'manage', 'hr.leave_types.manage', 'Manage leave types'],
+
             ['accounting', 'fiscal_years', 'manage', 'fiscal.manage', 'Manage fiscal years'],
 
             // Phase D — accounting core (09-03…09-10, 09-32)

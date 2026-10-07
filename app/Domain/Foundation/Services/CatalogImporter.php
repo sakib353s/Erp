@@ -97,6 +97,18 @@ class CatalogImporter
         'settings > bengali settings > lakh / crore format' => ['/app/settings/localization#lakh-crore', 'settings.view'],
         'inventory > warehouse > warehouses' => ['/app/warehouses', 'warehouses.view'],
         'employee > employees > all employees' => ['/app/employees', 'employees.view'],
+
+        // §10 HRM — attendance, leave, structure (pages that really exist)
+        'employee > attendance > attendance list' => ['/app/hr/attendance', 'attendance.view'],
+        'employee > attendance > live attendance' => ['/app/hr/attendance', 'attendance.view'],
+        'employee > attendance > manual attendance entry' => ['/app/hr/attendance', 'attendance.manage'],
+        'employee > attendance > attendance reports' => ['/app/hr/attendance/summary', 'attendance.report'],
+        'employee > attendance > monthly attendance' => ['/app/hr/attendance/summary', 'attendance.report'],
+        'employee > leave management > leave requests' => ['/app/hr/leave', 'leave.view'],
+        'employee > leave management > leave approval' => ['/app/hr/leave', 'leave.approve'],
+        'employee > leave management > leave calendar' => ['/app/hr/leave/calendar', 'leave.view'],
+        'employee > leave management > leave balances' => ['/app/hr/leave', 'leave.balance'],
+        'employee > leave management > leave types' => ['/app/hr/leave-types', 'hr.leave_types.manage'],
         'masters > units of measure' => ['/app/masters/units', 'masters.manage'],
         'masters > brands' => ['/app/masters/brands', 'masters.manage'],
         'masters > bangladesh holidays' => ['/app/masters/holidays', 'masters.manage'],

@@ -19,6 +19,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeliveryZoneController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\HrController;
 use App\Http\Controllers\FailedDeliveryController;
 use App\Http\Controllers\FinancialReportController;
 use App\Http\Controllers\InventoryController;
@@ -239,6 +240,40 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::delete('/app/employees/{employee}', [EmployeeController::class, 'destroy'])
         ->middleware('permission:employees.edit')
         ->name('employees.destroy');
+
+    /* ---- HRM (§10.1…§10.2) — attendance, leave, structure ---- */
+    Route::middleware('permission:attendance.view')->group(function () {
+        Route::get('/app/hr/attendance', [HrController::class, 'attendance'])->name('hr.attendance');
+        Route::get('/app/hr/attendance/summary', [HrController::class, 'attendanceSummary'])->name('hr.attendance.summary');
+        Route::get('/app/hr/attendance/report/{employee}', [HrController::class, 'attendanceReport'])
+            ->middleware('permission:attendance.report')->name('hr.attendance.report');
+    });
+    Route::post('/app/hr/attendance', [HrController::class, 'markAttendance'])
+        ->middleware('permission:attendance.manage')->name('hr.attendance.mark');
+    Route::post('/app/hr/attendance/non-working', [HrController::class, 'markNonWorking'])
+        ->middleware('permission:attendance.manage')->name('hr.attendance.non-working');
+
+    Route::middleware('permission:leave.view')->group(function () {
+        Route::get('/app/hr/leave', [HrController::class, 'leave'])->name('hr.leave');
+        Route::get('/app/hr/leave/calendar', [HrController::class, 'leaveCalendar'])->name('hr.leave.calendar');
+    });
+    Route::post('/app/hr/leave', [HrController::class, 'storeLeave'])
+        ->middleware('permission:leave.request')->name('hr.leave.store');
+    Route::post('/app/hr/leave/{leave}/decide', [HrController::class, 'decideLeave'])
+        ->middleware('permission:leave.approve')->name('hr.leave.decide');
+
+    Route::middleware('permission:hr.structure.manage')->group(function () {
+        Route::get('/app/hr/departments', [HrController::class, 'departments'])->name('hr.departments');
+        Route::post('/app/hr/departments', [HrController::class, 'storeDepartment'])->name('hr.departments.store');
+        Route::get('/app/hr/designations', [HrController::class, 'designations'])->name('hr.designations');
+        Route::post('/app/hr/designations', [HrController::class, 'storeDesignation'])->name('hr.designations.store');
+        Route::get('/app/hr/leave-types', [HrController::class, 'leaveTypes'])->name('hr.leave-types');
+        Route::post('/app/hr/leave-types', [HrController::class, 'storeLeaveType'])->name('hr.leave-types.store');
+    });
+
+    Route::middleware('permission:hr.structure.manage')->group(function () {
+        Route::get('/app/hr/service-book/{employee}', [HrController::class, 'serviceBook'])->name('hr.service-book');
+    });
     /* ---- Roles & permissions ---- */
     Route::middleware('permission:roles.view')->group(function () {
         Route::get('/app/roles', [RoleController::class, 'index'])->name('roles.index');

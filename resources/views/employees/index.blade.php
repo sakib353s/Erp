@@ -3,44 +3,71 @@
 @section('page_title', 'Employees')
 
 @section('content')
-    <div class="erp-page-head">
-        <div>
-            <h1 class="erp-h1">Employees</h1>
-            <p class="erp-page-sub">Employee type is never a hardcoded role — roles live on the linked user account.</p>
-        </div>
-        @if ($perm('employees.create'))
-            <a class="btn btn-primary" href="{{ route('employees.create') }}">
-                <i class="bi bi-person-plus" aria-hidden="true"></i> New employee
-            </a>
-        @endif
-    </div>
+    <x-ui.page-header
+        eyebrow="People & payroll"
+        title="Employees"
+        subtitle="Employee type is never a hardcoded role — roles live on the linked user account. Attendance and leave hang off each employee record."
+        :pin="true">
+        <x-slot:actions>
+            @if ($perm('attendance.view'))
+                <a class="btn btn-outline-secondary" href="{{ route('hr.attendance') }}">
+                    <i class="bi bi-calendar-check" aria-hidden="true"></i> Attendance
+                </a>
+            @endif
+            @if ($perm('hr.structure.manage'))
+                <a class="btn btn-outline-secondary" href="{{ route('hr.departments') }}">
+                    <i class="bi bi-diagram-3" aria-hidden="true"></i> Departments
+                </a>
+            @endif
+            @if ($perm('employees.create'))
+                <a class="btn btn-primary" href="{{ route('employees.create') }}">
+                    <i class="bi bi-person-plus" aria-hidden="true"></i> New employee
+                </a>
+            @endif
+        </x-slot:actions>
+    </x-ui.page-header>
 
-    <form class="row g-2 mb-3" method="GET" action="{{ route('employees.index') }}">
-        <div class="col-sm-5">
-            <input class="form-control" type="search" name="q" value="{{ $q }}" placeholder="Search name, code, e-mail…" aria-label="Search employees">
+    <form class="erp-filterbar" method="GET" action="{{ route('employees.index') }}" role="search">
+        <div class="erp-filter erp-filter-wide">
+            <label class="form-label" for="q">Search</label>
+            <div class="erp-input-group">
+                <i class="bi bi-search" aria-hidden="true"></i>
+                <input class="form-control" type="search" id="q" name="q" value="{{ $q }}" placeholder="Name, code, e-mail or phone…" autocomplete="off">
+            </div>
         </div>
-        <div class="col-sm-3">
-            <select class="form-select" name="status" aria-label="Filter by status">
+        <div class="erp-filter">
+            <label class="form-label" for="status">Status</label>
+            <select class="form-select" id="status" name="status">
                 <option value="">Any status</option>
                 @foreach (['active', 'inactive'] as $s)
                     <option value="{{ $s }}" @selected($status === $s)>{{ ucfirst($s) }}</option>
                 @endforeach
             </select>
         </div>
-        <div class="col-sm-3">
-            <select class="form-select" name="employment_status" aria-label="Filter by employment status">
+        <div class="erp-filter">
+            <label class="form-label" for="employment_status">Employment</label>
+            <select class="form-select" id="employment_status" name="employment_status">
                 <option value="">Any employment</option>
-                @foreach (['active', 'probation', 'inactive', 'exited'] as $s)
+                @foreach (\App\Domain\People\Employee::EMPLOYMENT_STATUSES as $s)
                     <option value="{{ $s }}" @selected($employmentStatus === $s)>{{ ucfirst($s) }}</option>
                 @endforeach
             </select>
         </div>
-        <div class="col-auto">
-            <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search" aria-hidden="true"></i> Filter</button>
+        <div class="erp-filter">
+            <label class="form-label" for="department">Department</label>
+            <select class="form-select" id="department" name="department">
+                <option value="">All departments</option>
+                @foreach ($departments as $department)
+                    <option value="{{ $department->id }}" @selected($departmentId === $department->id)>{{ $department->name }}</option>
+                @endforeach
+            </select>
         </div>
-        @if($q || $status || $employmentStatus)
-            <div class="col-auto"><a class="btn btn-link" href="{{ route('employees.index') }}">Reset</a></div>
-        @endif
+        <div class="erp-filterbar-actions">
+            @if($q || $status || $employmentStatus || $departmentId)
+                <a class="btn btn-link" href="{{ route('employees.index') }}">Reset</a>
+            @endif
+            <button class="btn btn-primary" type="submit"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+        </div>
     </form>
 
     <div class="erp-card">
@@ -68,7 +95,12 @@
                                 @if($employee->is_technician)<span class="erp-chip erp-chip-soft">technician</span>@endif
                             </td>
                             <td class="text-body-secondary">{{ $employee->branch?->name }}</td>
-                            <td class="text-body-secondary">{{ $employee->designation ?: '—' }}</td>
+                            <td class="text-body-secondary">
+                                {{ $employee->displayDesignation() ?: '—' }}
+                                @if ($employee->displayDepartment())
+                                    <span class="d-block small">{{ $employee->displayDepartment() }}</span>
+                                @endif
+                            </td>
                             <td class="text-body-secondary">{{ $employee->employment_status }}</td>
                             <td>
                                 <span class="erp-status {{ $employee->status === 'active' ? 'erp-status-active' : 'erp-status-disabled' }}">
@@ -77,13 +109,21 @@
                             </td>
                             <td class="text-end">
                                 <a class="btn btn-sm btn-light" href="{{ route('employees.show', $employee) }}">View</a>
+                                @if ($perm('attendance.report'))
+                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('hr.attendance.report', $employee) }}">Attendance</a>
+                                @endif
                                 @if ($perm('employees.edit'))
                                     <a class="btn btn-sm btn-outline-secondary" href="{{ route('employees.edit', $employee) }}">Edit</a>
                                 @endif
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="7" class="text-center py-4 text-body-secondary">No employees match this filter.</td></tr>
+                        <tr>
+                            <td colspan="7">
+                                <x-ui.empty icon="bi-people" title="No employees match this filter"
+                                            text="Clear a filter, or create the first employee record." />
+                            </td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>

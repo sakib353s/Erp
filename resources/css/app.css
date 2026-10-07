@@ -2667,6 +2667,22 @@ hr { border-color: var(--line); opacity: 1; }
 /* Error summary that belongs to ONE form, so it renders inside the card */
 .erp-field-error { display: block; margin-top: 5px; font-size: 12.5px; color: var(--danger); }
 
+/* ------------------------------------------------- 30b. HRM screens (§10) */
+
+/*
+ * Form field inside `.erp-form-grid`: the grid decides the columns, the field
+ * only supplies rhythm. `-wide` spans the whole row for textareas and reasons.
+ */
+.erp-form-field { min-width: 0; }
+.erp-form-field-wide { grid-column: 1 / -1; }
+
+/* Name-first cell in a dense table: one weight step up, never a colour. */
+.erp-cell-strong { color: var(--ink); font-weight: 620; }
+
+/* Attendance day sheet: the mark form sits inside a table cell, so the time
+   inputs stay narrow and the reason gets the leftover width. */
+.erp-input-time { max-width: 108px; }
+
 /* ------------------------------------------------- 31. detail layout & docs */
 /*
  * Master-detail two-pane layout (§18.2 DetailPanel, §18.4 768-1199):

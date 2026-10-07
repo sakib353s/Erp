@@ -51,15 +51,52 @@
                             @error('branch_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label" for="designation">Designation</label>
+                            <label class="form-label" for="department_id">Department</label>
+                            <select class="form-select @error('department_id') is-invalid @enderror" id="department_id" name="department_id">
+                                <option value="">— not assigned —</option>
+                                @foreach ($departments as $department)
+                                    <option value="{{ $department->id }}" @selected((int) old('department_id', $employee->department_id) === $department->id)>
+                                        {{ $department->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('department_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            @if ($departments->isEmpty())
+                                <div class="erp-help">
+                                    No departments exist yet —
+                                    @if ($perm('hr.structure.manage'))
+                                        <a href="{{ route('hr.departments') }}">create the first one</a>.
+                                    @else
+                                        ask an administrator to create one.
+                                    @endif
+                                    Until then you can type a free-text designation below.
+                                </div>
+                            @endif
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="designation_id">Designation</label>
+                            <select class="form-select @error('designation_id') is-invalid @enderror" id="designation_id" name="designation_id">
+                                <option value="">— not assigned —</option>
+                                @foreach ($designations as $designation)
+                                    <option value="{{ $designation->id }}" @selected((int) old('designation_id', $employee->designation_id) === $designation->id)>
+                                        {{ $designation->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('designation_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="designation">Job title as printed</label>
                             <input class="form-control @error('designation') is-invalid @enderror" id="designation"
-                                   name="designation" value="{{ old('designation', $employee->designation) }}">
+                                   name="designation" value="{{ old('designation', $employee->designation) }}"
+                                   placeholder="Free text fallback for ID cards">
                             @error('designation')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label" for="department">Department</label>
+                            <label class="form-label" for="department">Department as printed</label>
                             <input class="form-control @error('department') is-invalid @enderror" id="department"
-                                   name="department" value="{{ old('department', $employee->department) }}">
+                                   name="department" value="{{ old('department', $employee->department) }}"
+                                   placeholder="Free text fallback">
                             @error('department')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6">
@@ -106,6 +143,126 @@
                         </div>
                     </div>
                 </section>
+
+                <section class="erp-card mt-3">
+                    <header class="erp-card-head"><h2 class="erp-card-title">HR profile</h2></header>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label" for="employment_type">Employment type</label>
+                            <select class="form-select" id="employment_type" name="employment_type">
+                                @foreach (\App\Domain\People\Employee::EMPLOYMENT_TYPES as $type)
+                                    <option value="{{ $type }}" @selected(old('employment_type', $employee->employment_type) === $type)>
+                                        {{ ucfirst(str_replace('_', ' ', $type)) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="confirmation_date">Confirmation date</label>
+                            <input class="form-control" type="date" id="confirmation_date" name="confirmation_date"
+                                   value="{{ old('confirmation_date', $employee->confirmation_date?->toDateString()) }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="national_id">National ID</label>
+                            <input class="form-control" id="national_id" name="national_id" maxlength="32"
+                                   value="{{ old('national_id', $employee->national_id) }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="date_of_birth">Date of birth</label>
+                            <input class="form-control" type="date" id="date_of_birth" name="date_of_birth"
+                                   value="{{ old('date_of_birth', $employee->date_of_birth?->toDateString()) }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="gender">Gender</label>
+                            <input class="form-control" id="gender" name="gender" maxlength="16"
+                                   value="{{ old('gender', $employee->gender) }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="blood_group">Blood group</label>
+                            <input class="form-control" id="blood_group" name="blood_group" maxlength="8"
+                                   value="{{ old('blood_group', $employee->blood_group) }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="present_address">Present address</label>
+                            <textarea class="form-control" id="present_address" name="present_address" rows="2" maxlength="500">{{ old('present_address', $employee->present_address) }}</textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="permanent_address">Permanent address</label>
+                            <textarea class="form-control" id="permanent_address" name="permanent_address" rows="2" maxlength="500">{{ old('permanent_address', $employee->permanent_address) }}</textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="emergency_contact_name">Emergency contact</label>
+                            <input class="form-control" id="emergency_contact_name" name="emergency_contact_name" maxlength="128"
+                                   placeholder="Name" value="{{ old('emergency_contact_name', $employee->emergency_contact_name) }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="emergency_contact_phone">Emergency phone</label>
+                            <input class="form-control" id="emergency_contact_phone" name="emergency_contact_phone" maxlength="32"
+                                   value="{{ old('emergency_contact_phone', $employee->emergency_contact_phone) }}">
+                        </div>
+                    </div>
+
+                    <p class="erp-field-label mt-4">Shift &amp; leave</p>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label" for="shift_start">Shift start</label>
+                            <input class="form-control" type="time" id="shift_start" name="shift_start"
+                                   value="{{ old('shift_start', $employee->shift_start ?? '09:00') }}">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" for="shift_end">Shift end</label>
+                            <input class="form-control" type="time" id="shift_end" name="shift_end"
+                                   value="{{ old('shift_end', $employee->shift_end ?? '18:00') }}">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" for="late_grace_minutes">Grace (minutes)</label>
+                            <input class="form-control" type="number" min="0" max="120" id="late_grace_minutes" name="late_grace_minutes"
+                                   value="{{ old('late_grace_minutes', $employee->late_grace_minutes ?? 10) }}">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" for="weekly_off">Weekly off</label>
+                            <select class="form-select" id="weekly_off" name="weekly_off">
+                                @foreach (['friday', 'saturday', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday'] as $day)
+                                    <option value="{{ $day }}" @selected(old('weekly_off', $employee->weekly_off ?? 'friday') === $day)>
+                                        {{ ucfirst($day) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" for="annual_leave_days">Annual leave days</label>
+                            <input class="form-control" type="number" min="0" max="365" id="annual_leave_days" name="annual_leave_days"
+                                   value="{{ old('annual_leave_days', $employee->annual_leave_days ?? 0) }}">
+                        </div>
+                    </div>
+                    <div class="erp-help mt-2">
+                        These three settings drive attendance: lateness is measured against shift start plus grace, leave day
+                        counting skips the weekly off, and the annual allowance seeds the paid-leave balance.
+                    </div>
+
+                    <p class="erp-field-label mt-4">Payroll destination</p>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label" for="bank_name">Bank</label>
+                            <input class="form-control" id="bank_name" name="bank_name" maxlength="96"
+                                   value="{{ old('bank_name', $employee->bank_name) }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="bank_account_no">Account number</label>
+                            <input class="form-control" id="bank_account_no" name="bank_account_no" maxlength="48"
+                                   value="{{ old('bank_account_no', $employee->bank_account_no) }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="mobile_wallet">Mobile wallet</label>
+                            <input class="form-control" id="mobile_wallet" name="mobile_wallet" maxlength="32"
+                                   value="{{ old('mobile_wallet', $employee->mobile_wallet) }}">
+                        </div>
+                    </div>
+                    <div class="erp-help mt-2">
+                        Salary itself is not captured here — payroll owns the money and reads these destination fields when it
+                        runs. Nothing on this page posts to the ledger.
+                    </div>
+                </section>
             </div>
 
             <div class="col-lg-4">
@@ -114,7 +271,7 @@
                     <div class="mb-3">
                         <label class="form-label" for="employment_status">Employment status</label>
                         <select class="form-select" id="employment_status" name="employment_status">
-                            @foreach (['active', 'probation', 'inactive', 'exited'] as $s)
+                            @foreach (\App\Domain\People\Employee::EMPLOYMENT_STATUSES as $s)
                                 <option value="{{ $s }}" @selected(old('employment_status', $employee->employment_status) === $s)>
                                     {{ ucfirst($s) }}
                                 </option>

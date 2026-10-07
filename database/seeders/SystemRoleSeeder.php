@@ -52,13 +52,19 @@ class SystemRoleSeeder extends Seeder
         $all = Permission::query()->pluck('id', 'key');
 
         $bundles = [
-            ['slug' => 'manager', 'name' => 'Manager', 'description' => 'Department manager: approvals, masters view, reports.', 'keys' => [
+            ['slug' => 'manager', 'name' => 'Manager', 'description' => 'Department manager: approvals, HR oversight, masters view, reports.', 'keys' => [
                 'dashboard.view', 'approvals.view', 'approvals.decide', 'approvals.comment',
                 'settings.view', 'employees.view', 'audit.view', 'documents.view',
                 'masters.view', 'branches.view', 'roles.view', 'users.view', 'search.view',
+                // HRM (§10): a manager runs their team's attendance and approves leave
+                'attendance.view', 'attendance.manage', 'attendance.report',
+                'leave.view', 'leave.approve', 'leave.balance',
             ]],
-            ['slug' => 'employee', 'name' => 'Employee', 'description' => 'Staff account: own portal access only.', 'keys' => [
+            ['slug' => 'employee', 'name' => 'Employee', 'description' => 'Staff account: own portal access only — own leave, own payslips.', 'keys' => [
                 'dashboard.view', 'employees.view', 'documents.view', 'search.view',
+                // Own leave only: the leave screen self-scopes when the user
+                // cannot approve, so leave.view here never exposes the company.
+                'leave.view', 'leave.request',
             ]],
             ['slug' => 'technician', 'name' => 'Technician', 'description' => 'Service technician (portal-capable).', 'keys' => [
                 'dashboard.view', 'documents.view', 'documents.upload', 'search.view',

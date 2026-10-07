@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Domain\Audit\Services\AuditRecorder;
 use App\Domain\Foundation\Branch;
 use App\Domain\Foundation\User;
+use App\Domain\Hr\Models\Department;
+use App\Domain\Hr\Models\Designation;
 use App\Domain\People\Employee;
 use App\Http\Requests\StoreEmployeeRequest;
 use Illuminate\Database\Eloquent\Collection;
@@ -40,6 +42,10 @@ class EmployeeController extends Controller
             $query->where('employment_status', $employment);
         }
 
+        if ($departmentId = (int) $request->query('department')) {
+            $query->where('department_id', $departmentId);
+        }
+
         if ($search = trim((string) $request->query('q'))) {
             $query->where(function ($q) use ($search) {
                 $q->where('full_name', 'like', "%{$search}%")
@@ -50,10 +56,12 @@ class EmployeeController extends Controller
         }
 
         return view('employees.index', [
-            'employees' => $query->paginate(15)->withQueryString(),
+            'employees' => $query->with(['departmentRecord:id,name', 'designationRecord:id,name'])->paginate(15)->withQueryString(),
             'q' => $search,
             'status' => $status,
             'employmentStatus' => $employment,
+            'departmentId' => $departmentId,
+            'departments' => Department::query()->active()->orderBy('name')->get(['id', 'name']),
         ]);
     }
 
@@ -69,6 +77,8 @@ class EmployeeController extends Controller
             'branches' => $this->branches($request),
             'managers' => Employee::query()->orderBy('full_name')->get(),
             'users' => User::query()->orderBy('name')->get(),
+            'departments' => Department::query()->active()->orderBy('name')->get(['id', 'name']),
+            'designations' => Designation::query()->active()->orderBy('name')->get(['id', 'name', 'department_id']),
             'mode' => 'create',
         ]);
     }
@@ -118,6 +128,8 @@ class EmployeeController extends Controller
             'branches' => $this->branches($request),
             'managers' => Employee::query()->whereKeyNot($employee->id)->orderBy('full_name')->get(),
             'users' => User::query()->orderBy('name')->get(),
+            'departments' => Department::query()->active()->orderBy('name')->get(['id', 'name']),
+            'designations' => Designation::query()->active()->orderBy('name')->get(['id', 'name', 'department_id']),
             'mode' => 'edit',
         ]);
     }

@@ -36,9 +36,9 @@
                     <dt>Branch</dt>
                     <dd>{{ $employee->branch?->name ?: '—' }}</dd>
                     <dt>Designation</dt>
-                    <dd>{{ $employee->designation ?: '—' }}</dd>
+                    <dd>{{ $employee->displayDesignation() ?: '—' }}</dd>
                     <dt>Department</dt>
-                    <dd>{{ $employee->department ?: '—' }}</dd>
+                    <dd>{{ $employee->displayDepartment() ?: '—' }}</dd>
                     <dt>Joining date</dt>
                     <dd>{{ optional($employee->joining_date)->format('d M Y') ?: '—' }}</dd>
                     <dt>E-mail</dt>
@@ -55,6 +55,10 @@
                             <span class="text-body-secondary">No login account</span>
                         @endif
                     </dd>
+                    <dt>Type</dt>
+                    <dd>{{ ucfirst(str_replace('_', ' ', (string) $employee->employment_type)) }}</dd>
+                    <dt>Shift</dt>
+                    <dd>{{ $employee->shift_start }} – {{ $employee->shift_end }} · {{ $employee->late_grace_minutes }} min grace · {{ ucfirst((string) $employee->weekly_off) }} off</dd>
                     <dt>Employment</dt>
                     <dd>{{ $employee->employment_status }}
                         @if($employee->is_technician)<span class="erp-chip erp-chip-soft ms-1">technician</span>@endif
@@ -71,6 +75,25 @@
 
         <div class="col-lg-6">
             <section class="erp-card">
+                <header class="erp-card-head"><h2 class="erp-card-title">HR actions</h2></header>
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    @if ($perm('attendance.report'))
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ route('hr.attendance.report', $employee) }}">
+                            <i class="bi bi-calendar3" aria-hidden="true"></i> Attendance report
+                        </a>
+                    @endif
+                    @if ($perm('hr.structure.manage'))
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ route('hr.service-book', $employee) }}">
+                            <i class="bi bi-journal-text" aria-hidden="true"></i> Service book
+                        </a>
+                    @endif
+                    @if ($perm('leave.request'))
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ route('hr.leave', ['status' => 'pending']) }}">
+                            <i class="bi bi-airplane" aria-hidden="true"></i> Leave
+                        </a>
+                    @endif
+                </div>
+
                 <header class="erp-card-head"><h2 class="erp-card-title">Notes</h2></header>
                 <p class="text-body-secondary mb-0">
                     Role assignment is intentionally separate from the employee record — open the linked user
