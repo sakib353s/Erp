@@ -1119,3 +1119,178 @@ ${footer()}
 </div>
 <script>window.erpNavIndex = [];</script>`;
 }
+
+/* ------------------------------------------- 10. packaging: types, stock, cost */
+export function packaging() {
+    const types = [
+        ['BOX-12', 'Corrugated box, 12 inch', 'BOX-SKU-1 · Corrugated Box', '1,248.0000', '15,600.00', '12.5000', '420.0000', '08 Oct 2026', 'active', 'Usable', null],
+        ['BAG-KR', 'Kraft paper bag, large', 'BAG-SKU-1 · Kraft bag', '86.0000', '2,408.00', '28.0000', '120.0000', '07 Oct 2026', 'active', 'Usable', null],
+        ['TAPE-2', 'Packing tape, 2 inch', 'TAPE-SKU-1 · Tape roll', '14.0000', '322.00', '23.0000', '36.0000', '08 Oct 2026', 'active', 'Usable', 'Lasts about 12 d at the last 30 days\u2019 rate'],
+        ['FOIL-500', 'Aluminium foil roll, 500 m', 'FOIL-SKU-1 · Foil roll', '0.0000', '0.00', null, '0.0000', 'never', 'suspended', 'Cannot be used', 'Its product is no longer stock-managed or active, so it cannot be consumed.'],
+        ['CRATE-W', 'Wooden crate, wholesale', 'CRATE-SKU-1 · Crate', '64.0000', '19,200.00', '300.0000', '0.0000', '22 Sep 2026', 'inactive', 'Retired', 'Retired — history kept, consumption refused'],
+    ];
+
+    const rows = types.map(([code, name, product, onHand, value, avg, used, last, state, label, note]) => `
+                    <tr>
+                        <td data-label="Code" class="erp-cell-strong">${code}</td>
+                        <td data-label="Packaging">${name}</td>
+                        <td data-label="Stock product"><span class="erp-cell-strong">${product.split(' · ')[1]}</span><span class="d-block erp-td-muted">${product.split(' · ')[0]}</span></td>
+                        <td data-label="On the shelf" class="erp-td-num">${onHand}</td>
+                        <td data-label="Value now" class="erp-td-num">৳ ${value}</td>
+                        <td data-label="Avg unit cost" class="erp-td-num erp-td-muted">${avg ?? '—'}</td>
+                        <td data-label="Used, 30 d" class="erp-td-num erp-td-muted">${used}</td>
+                        <td data-label="Last used" class="erp-td-muted">${last}</td>
+                        <td data-label="State">${statusChip(state, label)}${note ? `<span class="d-block erp-td-muted">${note}</span>` : ''}</td>
+                        <td data-label="Manage" class="erp-td-actions">
+                            <div class="d-flex gap-1 justify-content-end">
+                                <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-pencil" aria-hidden="true"></i> Edit</button>
+                                <button class="btn btn-sm btn-outline-secondary" type="button">${state === 'inactive' ? 'Bring back' : 'Retire'}</button>
+                            </div>
+                        </td>
+                    </tr>`).join('');
+
+    return `
+${previewBar('packaging.html')}
+<div class="erp-shell" data-rail="expanded">
+${sidebar('inventory')}
+    <div class="erp-main">
+${topbar({ title: 'Packaging types', trail: [{ label: 'Inventory & warehouse' }, { label: 'Packaging' }, { label: 'Packaging types' }] })}
+        <main class="erp-content" id="erpContent">
+            <header class="erp-page-head">
+                <div class="erp-page-head-main">
+                    <p class="erp-eyebrow">Inventory &middot; Packaging</p>
+                    <h1 class="erp-h1">What the goods travel in</h1>
+                    <p class="erp-page-sub">A packaging type is not a price list — it is a promise that stock can be taken out of the warehouse under that name. So every type points at a real stock-managed product, its shelf comes from the ledger, and the money comes from the valuation layers that priced it.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./packaging.html"><i class="bi bi-boxes" aria-hidden="true"></i> Packaging stock</a>
+                    <a class="btn btn-outline-secondary" href="./packaging.html"><i class="bi bi-cash-stack" aria-hidden="true"></i> Packaging cost</a>
+                    <a class="btn btn-outline-secondary" href="./packaging.html"><i class="bi bi-clipboard-data" aria-hidden="true"></i> Monthly report</a>
+                    <button class="erp-icon-btn" type="button" title="Pin this page" aria-label="Pin this page"><i class="bi bi-star" aria-hidden="true"></i></button>
+                </div>
+            </header>
+
+            <section class="erp-kpi-grid mb-3">
+                <div class="erp-kpi" style="--hue: var(--c2)">
+                    <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>Types declared</p>
+                    <p class="erp-kpi-value">5</p>
+                    <p class="erp-kpi-foot">Products this company packs with</p>
+                </div>
+                <div class="erp-kpi" style="--hue: var(--c1)">
+                    <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>Usable</p>
+                    <p class="erp-kpi-value">3</p>
+                    <p class="erp-kpi-foot">Not retired, and their product still stocked</p>
+                </div>
+                <div class="erp-kpi" style="--hue: var(--c3)">
+                    <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>On the shelf</p>
+                    <p class="erp-kpi-value">1,412.0000</p>
+                    <p class="erp-kpi-foot">Summed across warehouses, from the ledger</p>
+                </div>
+                <div class="erp-kpi" style="--hue: var(--c4)">
+                    <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>Consumed, 30 days</p>
+                    <p class="erp-kpi-value">৳ 18,420.00</p>
+                    <p class="erp-kpi-foot">Layer-valued cost of what went out</p>
+                </div>
+            </section>
+
+            <div class="erp-note erp-note-info mb-3">
+                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                <div>
+                    A used type is <strong>retired, never deleted</strong> — the movements that priced it would otherwise point at
+                    nothing — and once a type has consumed anything its code and product are <strong>frozen</strong>: the
+                    consumption already priced what it took.
+                </div>
+            </div>
+
+            <form class="erp-filterbar" onsubmit="return false">
+                <div class="erp-filter erp-filter-wide">
+                    <label class="form-label" for="q">Search</label>
+                    <div class="erp-input-group">
+                        <i class="bi bi-search" aria-hidden="true"></i>
+                        <input class="form-control" type="search" id="q" placeholder="Code, name or the product behind it…">
+                    </div>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="state">State</label>
+                    <select class="form-select" id="state"><option>Any state</option><option>Usable</option><option>Retired</option><option>Cannot be used</option></select>
+                </div>
+                <div class="erp-filterbar-actions">
+                    <button class="btn btn-primary" type="submit"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                </div>
+            </form>
+
+            <div class="erp-table-shell" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">Declared types <span class="erp-chip erp-chip-outline">5 types</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack mb-0">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Packaging</th>
+                                <th>Stock product</th>
+                                <th class="erp-th-num">On the shelf</th>
+                                <th class="erp-th-num">Value now</th>
+                                <th class="erp-th-num">Avg unit cost</th>
+                                <th class="erp-th-num">Used, 30 d</th>
+                                <th>Last used</th>
+                                <th>State</th>
+                                <th class="erp-th-actions">Manage</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                </div>
+                <div class="erp-table-foot">
+                    <span class="erp-td-muted">Consumption is priced by the valuation layers at the moment it happens — never by a figure typed on the type.</span>
+                    <span class="erp-td-muted">Page 1 of 1</span>
+                </div>
+            </div>
+
+            <section class="erp-card mt-3">
+                <header class="erp-card-head">
+                    <h2 class="erp-card-title">Declare a packaging type</h2>
+                    <span class="erp-chip erp-chip-soft">stock-managed products only</span>
+                </header>
+                <form onsubmit="return false">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label" for="new_code">Code</label>
+                            <input class="form-control" type="text" id="new_code" placeholder="BOX-12">
+                            <div class="form-text">What the floor calls it. Letters, digits, dot, dash and underscore.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="new_name">Name</label>
+                            <input class="form-control" type="text" id="new_name" placeholder="Corrugated box, 12 inch">
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label" for="new_product">Stock product</label>
+                            <select class="form-select" id="new_product">
+                                <option>Choose the product this packaging is…</option>
+                                <option>BOX-SKU-1 — Corrugated Box</option>
+                                <option>BAG-SKU-1 — Kraft bag</option>
+                                <option>TAPE-SKU-1 — Tape roll</option>
+                            </select>
+                            <div class="form-text">A product cannot be consumed as packaging unless it is stock-managed and active — the ledger refuses anything else.</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary mt-3" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i> Declare type</button>
+                </form>
+            </section>
+
+            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
+                <p class="erp-field-label">More in this module</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="erp-chip erp-chip-outline" href="./packaging.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Packaging stock</a>
+                    <a class="erp-chip erp-chip-outline" href="./packaging.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Packaging cost</a>
+                    <a class="erp-chip erp-chip-outline" href="./packaging.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Packaging report</a>
+                    <a class="erp-chip erp-chip-outline" href="./dashboard.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Stock overview</a>
+                </div>
+            </nav>
+        </main>
+${footer()}
+    </div>
+</div>
+<script>window.erpNavIndex = [];</script>`;
+}

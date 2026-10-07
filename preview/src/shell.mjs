@@ -164,6 +164,7 @@ export const PALETTE = [
     { label: 'Products', url: '#', icon: 'bi-boxes', section: 'Inventory & warehouse', group: 'Inventory' },
     { label: 'Stock overview', url: '#', icon: 'bi-clipboard-check', section: 'Inventory & warehouse', group: 'Inventory' },
     { label: 'Stock movement ledger', url: '#', icon: 'bi-list-columns', section: 'Inventory & warehouse', group: 'Inventory' },
+    { label: 'Packaging types', url: './packaging.html', icon: 'bi-box-seam', section: 'Inventory & warehouse', group: 'Packaging' },
     { label: 'Purchase orders', url: '#', icon: 'bi-bag-check', section: 'Inventory & warehouse', group: 'Purchase' },
     { label: 'Chart of accounts', url: '#', icon: 'bi-diagram-3', section: 'Accounts & finance', group: 'Accounting' },
     { label: 'Journal entries', url: '#', icon: 'bi-journal-text', section: 'Accounts & finance', group: 'Accounting' },
@@ -463,6 +464,7 @@ export function previewBar(current) {
         ['customers.html', 'Customers (CRM)'],
         ['customer-profile.html', 'Customer 360'],
         ['pos.html', 'POS terminal'],
+        ['packaging.html', 'Packaging'],
         ['login.html', 'Sign in'],
     ];
 

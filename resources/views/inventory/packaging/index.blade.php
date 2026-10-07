@@ -99,7 +99,7 @@
                         @if (! $type->is_active)
                             <x-ui.status value="inactive" label="Retired" />
                         @elseif (! $row['usable'])
-                            <x-ui.status value="broken" label="Cannot be used" />
+                            <x-ui.status value="suspended" label="Cannot be used" />
                         @else
                             <x-ui.status value="active" label="Usable" />
                         @endif

@@ -1392,6 +1392,7 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-status-delivery-failed,
 .erp-status-broken,
 .erp-status-overdue,
+/* §04-59: a live packaging type whose product can no longer be consumed */
 .erp-status-suspended,
 .erp-status-expired,
 .erp-status-absent,
