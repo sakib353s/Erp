@@ -59,4 +59,18 @@ class ErrorPagesRenderTest extends TestCase
         $this->assertStringNotContainsString('SQLSTATE', $html);
         $this->assertStringNotContainsString('Illuminate\\', $html);
     }
+
+    public function test_an_ajax_error_returns_structured_json_without_a_stack_trace(): void
+    {
+        // §16-32: a JSON caller gets a structured error, never the raw framework
+        // output or a stack trace.
+        $response = $this->withHeaders(['Accept' => 'application/json'])
+            ->get('/app/this-route-does-not-exist-'.uniqid());
+
+        $response->assertNotFound();
+        $response->assertJson(['ok' => false]);
+        $response->assertJsonStructure(['ok', 'error' => ['code', 'message']]);
+        $this->assertStringNotContainsString('Stack trace', $response->getContent());
+        $this->assertStringNotContainsString('/home/user', $response->getContent());
+    }
 }
