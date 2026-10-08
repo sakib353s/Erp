@@ -9,6 +9,7 @@ use App\Domain\Inventory\Actions\CreateProduct;
 use App\Domain\Inventory\Product;
 use App\Domain\Inventory\Services\BatchService;
 use App\Domain\Inventory\Services\StockLedgerService;
+use App\Domain\Foundation\Company;
 use App\Domain\Inventory\StockBatch;
 use App\Domain\Inventory\StockBatchExpiryChange;
 use App\Domain\Inventory\StockLayer;
@@ -409,8 +410,17 @@ class BatchExpiryTest extends TestCase
     {
         $product = $this->product('BAT-14', trackBatch: true);
 
+        // A real second company, not an invented id: `stock_batches.company_id`
+        // is a foreign key, so an id nothing owns cannot even be inserted — and
+        // a fixture that cannot be written cannot prove that isolation works.
+        // `singleton` is not mass-assignable on purpose (the column is what
+        // holds the one-company-at-a-time rule), so it is set by hand.
+        $elsewhere = new Company(['name' => 'Other Traders Ltd', 'is_active' => true]);
+        $elsewhere->singleton = false;
+        $elsewhere->save();
+
         $foreign = StockBatch::query()->create([
-            'company_id' => (int) $this->admin->company_id + 500,
+            'company_id' => $elsewhere->id,
             'warehouse_id' => $this->warehouse->id,
             'product_id' => $product->id,
             'batch_no' => 'FOREIGN-1',

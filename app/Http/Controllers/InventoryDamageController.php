@@ -173,6 +173,9 @@ class InventoryDamageController extends Controller
             'products' => Product::query()->active()->stocked()->orderBy('sku')->get(['id', 'sku', 'name']),
             'sources' => StockWriteoff::SOURCE_STATES,
             'holdings' => $this->damage->compartmentHoldings(StockMovement::STATE_DAMAGED, $warehouseId),
+            // The form reads back the warehouse the desk handed over, so the
+            // dropdown opens on the shelf the operator was already looking at.
+            'warehouseId' => $warehouseId,
             'prefill' => $prefill,
         ]);
     }
