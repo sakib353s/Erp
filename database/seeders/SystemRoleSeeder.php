@@ -188,6 +188,9 @@ class SystemRoleSeeder extends Seeder
                 // at a manager's level — including the second signature when the
                 // amount crosses the company's own approval limit.
                 'business.utilities.view', 'business.utilities.manage',
+                // §12-16: the manager runs the gate — booking people in,
+                // admitting them and keeping the register honest.
+                'business.visitors.view', 'business.visitors.manage',
             ]],
             ['slug' => 'employee', 'name' => 'Employee', 'description' => 'Staff account: own portal access only — own leave, own payslips.', 'keys' => [
                 'dashboard.view', 'employees.view', 'documents.view', 'search.view',
@@ -208,6 +211,10 @@ class SystemRoleSeeder extends Seeder
                 // §12-15: everybody may see what the premises cost — the
                 // reading half — but nobody pays a bill without the manage key.
                 'business.utilities.view',
+                // §12-16: anybody may look up who is expected and who is in —
+                // that is what a front desk is for — but the gate's decisions
+                // are not everybody's to make.
+                'business.visitors.view',
             ]],
             ['slug' => 'technician', 'name' => 'Technician', 'description' => 'Service technician (portal-capable).', 'keys' => [
                 'dashboard.view', 'documents.view', 'documents.upload', 'search.view',

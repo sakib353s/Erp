@@ -6,6 +6,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\UtilityBillController;
+use App\Http\Controllers\VisitorController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BankChargeController;
 use App\Http\Controllers\BankReconciliationController;
@@ -2419,6 +2420,69 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
         Route::put('/app/utility-bills/providers/{provider}', [UtilityBillController::class, 'updateProvider'])
             ->whereNumber('provider')
             ->name('business.utilities.providers.update');
+    });
+
+    /* ---- §12 Business Management: the gate (12-16) ----
+     *
+     * Three menu leaves, one register. The visitor log, the pre-registration
+     * diary and the reports lens are three questions asked of the same rows —
+     * who came in, who is expected, and what the gate did over a window — so they
+     * are one controller with four views rather than four screens that would
+     * disagree about what a visit is.
+     *
+     * Reading is `business.visitors.view`: a front desk, a receptionist or a
+     * manager may all see who is in the building. Admitting, checking out,
+     * booking ahead and keeping the blacklist are `business.visitors.manage`,
+     * because those decide who gets in.
+     *
+     * The literal segments come first and `{visit}` is constrained to digits, so
+     * `/app/visitors/expected` is the diary and `/app/visitors/12` is a visit.
+     */
+    Route::middleware('permission:business.visitors.view')->group(function () {
+        Route::get('/app/visitors', [VisitorController::class, 'index'])
+            ->name('business.visitors.index');
+        Route::get('/app/visitors/expected', [VisitorController::class, 'expected'])
+            ->name('business.visitors.expected');
+        Route::get('/app/visitors/reports', [VisitorController::class, 'reports'])
+            ->name('business.visitors.reports');
+        Route::get('/app/visitors/people', [VisitorController::class, 'people'])
+            ->name('business.visitors.people');
+        Route::get('/app/visitors/check-in', [VisitorController::class, 'walkIn'])
+            ->name('business.visitors.walkin');
+        Route::get('/app/visitors/{visit}', [VisitorController::class, 'show'])
+            ->whereNumber('visit')
+            ->name('business.visitors.show');
+    });
+
+    Route::middleware('permission:business.visitors.manage')->group(function () {
+        Route::get('/app/visitors/book', [VisitorController::class, 'create'])
+            ->name('business.visitors.create');
+        Route::post('/app/visitors/book', [VisitorController::class, 'store'])
+            ->name('business.visitors.store');
+        Route::post('/app/visitors/check-in', [VisitorController::class, 'storeWalkIn'])
+            ->name('business.visitors.walkin.store');
+        Route::get('/app/visitors/people/new', [VisitorController::class, 'createPerson'])
+            ->name('business.visitors.people.create');
+        Route::post('/app/visitors/people', [VisitorController::class, 'storePerson'])
+            ->name('business.visitors.people.store');
+        Route::post('/app/visitors/people/{visitor}/blacklist', [VisitorController::class, 'blacklist'])
+            ->whereNumber('visitor')
+            ->name('business.visitors.people.blacklist');
+        Route::post('/app/visitors/people/{visitor}/restore', [VisitorController::class, 'restore'])
+            ->whereNumber('visitor')
+            ->name('business.visitors.people.restore');
+        Route::post('/app/visitors/{visit}/check-in', [VisitorController::class, 'checkIn'])
+            ->whereNumber('visit')
+            ->name('business.visitors.check-in');
+        Route::post('/app/visitors/{visit}/check-out', [VisitorController::class, 'checkOut'])
+            ->whereNumber('visit')
+            ->name('business.visitors.check-out');
+        Route::post('/app/visitors/{visit}/cancel', [VisitorController::class, 'cancel'])
+            ->whereNumber('visit')
+            ->name('business.visitors.cancel');
+        Route::post('/app/visitors/{visit}/no-show', [VisitorController::class, 'noShow'])
+            ->whereNumber('visit')
+            ->name('business.visitors.no-show');
     });
 
     /* ---- Audit trail ---- */

@@ -594,6 +594,12 @@ class CatalogImporter
         'business management > utility bills > rent payments' => ['/app/utility-bills?family=rent', 'business.utilities.view'],
         'business management > utility bills > renewal reminders' => ['/app/utility-bills/renewals', 'business.utilities.view'],
 
+        // §12-16: the gate. The log, the pre-registration diary and the reports
+        // lens are three questions asked of one register.
+        'business management > visitors > visitor log' => ['/app/visitors', 'business.visitors.view'],
+        'business management > visitors > pre-registration' => ['/app/visitors/expected', 'business.visitors.view'],
+        'business management > visitors > visitor reports' => ['/app/visitors/reports', 'business.visitors.view'],
+
         // §12-03/04: the company's own papers, and the two screens that already
         // existed for its identity and its preferences.
         'business management > company > company profile' => ['/app/settings/company', 'settings.company'],

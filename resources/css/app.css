@@ -1519,6 +1519,31 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
     color: var(--danger);
 }
 
+/* §12-16: the visitor desk. “Inside” is the state the gate exists for — somebody
+   is in the building right now — so it reads as live information rather than as
+   a warning, and a visit that has been checked out goes quiet the way a closed
+   document does. A no-show is the one that costs somebody a morning. */
+.erp-status-inside {
+    background: var(--info-soft);
+    color: var(--info);
+}
+
+.erp-status-expected {
+    background: var(--surface-3);
+    color: var(--ink-2);
+}
+
+.erp-status-out {
+    background: var(--surface-3);
+    color: var(--ink-3);
+}
+
+.erp-status-no_show,
+.erp-status-no-show {
+    background: var(--warn-soft);
+    color: var(--warn);
+}
+
 /* Terminal / void / archived — deliberately quiet */
 .erp-status-cancelled,
 .erp-status-released,

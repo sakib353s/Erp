@@ -44,6 +44,10 @@ Schedule::command('erp:business:compliance-alerts')->dailyAt('06:50');
 // working day so somebody can pay a bill that is about to be late.
 Schedule::command('erp:business:utility-reminders')->dailyAt('07:00');
 
+// §12-16 — the gate, once a morning, as the desk opens: who is expected today
+// and whether any row was left open yesterday.
+Schedule::command('erp:business:visitor-watch')->dailyAt('08:00');
+
 /*
  | The bell before the meeting (§12-11). Every quarter of an hour, because a
  | reminder that arrives an hour late is not a reminder — and once per meeting per

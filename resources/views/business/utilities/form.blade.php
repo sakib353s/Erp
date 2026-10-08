@@ -113,7 +113,7 @@
             </div>
         </div>
 
-        <div class="erp-actions">
+        <div class="erp-form-actions">
             <button class="btn btn-primary" type="submit">
                 <i class="bi bi-check2" aria-hidden="true"></i> {{ $editing ? 'Save the correction' : 'File the bill' }}
             </button>

@@ -199,6 +199,12 @@ class FoundationPermissionSeeder extends Seeder
             ['business', 'utilities', 'view', 'business.utilities.view', 'Read the utility bills, the provider registry and the renewal reminders'],
             ['business', 'utilities', 'manage', 'business.utilities.manage', 'File, correct, pay, approve and void utility bills, and keep the provider registry'],
 
+            // §12-16: the gate. Reading is open — the desk, the diary and the
+            // register answer “who is in the building?” — while admitting,
+            // checking out, booking and refusing belong to the gate's own key.
+            ['business', 'visitors', 'view', 'business.visitors.view', 'Read the visitor log, the gate diary and the register of people'],
+            ['business', 'visitors', 'manage', 'business.visitors.manage', 'Admit and check out visitors, book visits ahead of time, and keep the register and the blacklist'],
+
             ['settings', 'company', 'manage', 'settings.company', 'Edit company profile'],
 
             // Phase H — HRM (§10): attendance, leave, structure
