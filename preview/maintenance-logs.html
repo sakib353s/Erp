@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#ffffff">
-    <title>Petty cash · BD ERP — UI redesign preview</title>
+    <title>Error log · BD ERP — UI redesign preview</title>
     <link rel="stylesheet" href="./assets/preview.css">
 </head>
 <body class="erp-body">
@@ -15,7 +15,7 @@
 <div class="erp-preview-bar">
     <i class="bi bi-easel2" aria-hidden="true"></i>
     <strong>UI redesign preview</strong>
-    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html">Labels</a><span style="opacity:.4">·</span><a href="./cash-bank.html">Cash & bank</a><span style="opacity:.4">·</span><a href="./bank-recon.html">Reconciliation</a><span style="opacity:.4">·</span><a href="./cash-counts.html">Cash count</a><span style="opacity:.4">·</span><a href="./bank-charges.html">Bank charges</a><span style="opacity:.4">·</span><a href="./expense-report.html">Expense report</a><span style="opacity:.4">·</span><a href="./cash-reports.html">Cash reports</a><span style="opacity:.4">·</span><a href="./cheques.html">Cheques</a><span style="opacity:.4">·</span><a href="./expenses.html">Expenses</a><span style="opacity:.4">·</span><a href="./expense-recurring.html">Recurring</a><span style="opacity:.4">·</span><a href="./petty-cash.html" style="color:#fff;text-decoration:underline">Petty cash</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
+    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html">Labels</a><span style="opacity:.4">·</span><a href="./cash-bank.html">Cash & bank</a><span style="opacity:.4">·</span><a href="./bank-recon.html">Reconciliation</a><span style="opacity:.4">·</span><a href="./cash-counts.html">Cash count</a><span style="opacity:.4">·</span><a href="./bank-charges.html">Bank charges</a><span style="opacity:.4">·</span><a href="./expense-report.html">Expense report</a><span style="opacity:.4">·</span><a href="./cash-reports.html">Cash reports</a><span style="opacity:.4">·</span><a href="./cheques.html">Cheques</a><span style="opacity:.4">·</span><a href="./expenses.html">Expenses</a><span style="opacity:.4">·</span><a href="./expense-recurring.html">Recurring</a><span style="opacity:.4">·</span><a href="./petty-cash.html">Petty cash</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
     <span class="erp-preview-note">Static render of the new shell — same CSS + JS the Laravel app ships. Press ⌘K / Ctrl+K.</span>
 </div>
 <div class="erp-shell">
@@ -551,15 +551,15 @@
             </p>
             
     <div class="erp-nav-group">
-        <button class="erp-nav-group-btn" type="button"
-                data-bs-toggle="collapse" data-bs-target="#nav-configure-0" aria-expanded="false">
+        <button class="erp-nav-group-btn is-active has-active-trail" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-configure-0" aria-expanded="true">
             <i class="bi bi-sliders erp-nav-icon" aria-hidden="true"></i>
             <span>Settings</span>
             <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
         </button>
-        <div class="collapse" id="nav-configure-0">
+        <div class="collapse show" id="nav-configure-0">
             <div class="erp-nav-sub">
-        <a class="erp-nav-link" href="./settings.html">
+        <a class="erp-nav-link active" href="./settings.html" aria-current="page">
             <span>Settings Desk</span>
         </a>
         <a class="erp-nav-link" href="./settings.html">
@@ -643,9 +643,15 @@
     </button>
 
     <div class="erp-topbar-crumbs">
-        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb"></ol></nav>
+        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb">
+        <li>
+            <span class="is-current" aria-current="page">Settings &amp; masters</span>
+        </li>
+        <li>
+            <span class="is-current" aria-current="page">System maintenance</span>
+        </li></ol></nav>
         <div class="erp-topbar-title">
-            <strong class="d-none d-md-inline">Petty cash</strong>
+            <strong class="d-none d-md-inline">Error log</strong>
             <span class="erp-chip erp-chip-outline d-none d-xl-inline-flex" title="Current branch context">
                 <i class="bi bi-geo-alt" aria-hidden="true"></i>Dhaka HQ
             </span>
@@ -723,363 +729,298 @@
 
             <header class="erp-page-head">
                 <div>
-                    <p class="erp-eyebrow"><i class="bi bi-cash-coin" aria-hidden="true"></i> Cash &amp; bank · Petty cash</p>
-                    <h1 class="erp-h1">The float in the drawer</h1>
-                    <p class="erp-page-sub">A float is real money in a real place, held by a named person. It is its own account in the chart of accounts, so the balance below is the ledger's own figure rather than a number this desk keeps. Above the company's limit a voucher is asked for before it is paid, and whoever asked cannot be the person who approves it.</p>
+                    <p class="erp-eyebrow"><i class="bi bi-journal-code" aria-hidden="true"></i> Settings · System maintenance</p>
+                    <h1 class="erp-h1">Error log</h1>
+                    <p class="erp-page-sub">What the application said when nobody was watching. This page reads the log files — it never writes to them and never deletes them — and every password, token and key in the text is replaced <em>before</em> the line is rendered, so the search box cannot be used to confirm a secret either.</p>
                 </div>
                 <div class="erp-page-head-actions">
-                    <a class="btn btn-outline-secondary" href="./petty-cash-expenses.html"><i class="bi bi-receipt" aria-hidden="true"></i> Vouchers</a>
-                    <a class="btn btn-outline-secondary" href="./petty-cash-requests.html"><i class="bi bi-question-circle" aria-hidden="true"></i> Requests <span class="erp-chip erp-chip-warn ms-1">1 waiting</span></a>
-                    <a class="btn btn-primary" href="./petty-cash-replenishment.html"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Replenish</a>
+                    <a class="btn btn-outline-secondary" href="./maintenance.html"><i class="bi bi-tools" aria-hidden="true"></i> Maintenance desk</a>
+                    <button class="btn btn-outline-secondary" type="button"><i class="bi bi-clipboard-check" aria-hidden="true"></i> Copy masked line</button>
                 </div>
             </header>
 
             <div class="erp-kpi-grid mb-3">
-                <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-cash-stack" aria-hidden="true"></i> In the tins</p>
-                    <p class="erp-kpi-value">৳ 18,450.00</p>
-                    <p class="erp-kpi-foot">3 open float(s) of 4 declared</p>
+                
+                <div class="erp-kpi" style="--hue: var(--c1)">
+                    <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>Entries in this file</p>
+                    <p class="erp-kpi-value">1,284</p>
+                    <p class="erp-kpi-foot">laravel.log as it stands on disk — read, never rewritten by this page</p>
                 </div>
-                <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-bullseye" aria-hidden="true"></i> Meant to be there</p>
-                    <p class="erp-kpi-value">৳ 25,000.00</p>
-                    <p class="erp-kpi-foot">The level the open floats are replenished back to</p>
+                <div class="erp-kpi" style="--hue: var(--c4)">
+                    <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>Errors</p>
+                    <p class="erp-kpi-value">2</p>
+                    <p class="erp-kpi-foot">Both handled: one refused a run and said why, one retried and then stopped</p>
                 </div>
-                <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Waiting to be put back</p>
-                    <p class="erp-kpi-value">৳ 6,550.00</p>
-                    <p class="erp-kpi-foot">What it would take to restore every float to its level</p>
+                <div class="erp-kpi" style="--hue: var(--c3)">
+                    <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>Warnings</p>
+                    <p class="erp-kpi-value">2</p>
+                    <p class="erp-kpi-foot">Nothing was thrown, but something needs a person</p>
                 </div>
-                <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Asked for, not yet paid</p>
-                    <p class="erp-kpi-value">৳ 2,000.00</p>
-                    <p class="erp-kpi-foot">1 request — nothing here has reached the ledger</p>
+                <div class="erp-kpi" style="--hue: var(--c5)">
+                    <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>Secrets masked</p>
+                    <p class="erp-kpi-value">3</p>
+                    <p class="erp-kpi-foot">Replaced as the line was read, before anything was sent to the browser</p>
                 </div>
             </div>
 
-            <div class="erp-note erp-note-info mb-3">
-                <i class="bi bi-info-circle" aria-hidden="true"></i>
-                <div>At or above <strong>৳ 1,000.00</strong> a voucher is asked for rather than paid, and the answer has to come from somebody other than the person who asked. Below it the custodian pays and records it in one step.</div>
+            <div class="row g-3 mb-3">
+                <div class="col-lg-6">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Files on disk</h2>
+                                <p class="erp-card-sub">Rotation keeps fourteen days. Older files are removed by the scheduled run — this page is not a delete button.</p>
+                            </div>
+                        </header>
+                        <div class="px-3 pb-2">
+                            
+                            <div class="erp-list-row">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-cell-strong font-monospace">laravel.log</span>
+                                    <div class="erp-td-muted">08 Oct 2026 09:12 · keeps 14 days</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="erp-chip erp-chip-outline">1,284 entries</span>
+                                    <span class="erp-chip erp-chip-outline">4.2 MB</span>
+                                </div>
+                            </div>
+                            <div class="erp-list-row">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-cell-strong font-monospace">laravel-2026-10-07.log</span>
+                                    <div class="erp-td-muted">07 Oct 2026 23:59 · keeps 14 days</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="erp-chip erp-chip-outline">3,918 entries</span>
+                                    <span class="erp-chip erp-chip-outline">11.8 MB</span>
+                                </div>
+                            </div>
+                            <div class="erp-list-row">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-cell-strong font-monospace">queue.log</span>
+                                    <div class="erp-td-muted">08 Oct 2026 09:04 · keeps 14 days</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="erp-chip erp-chip-outline">204 entries</span>
+                                    <span class="erp-chip erp-chip-outline">612 KB</span>
+                                </div>
+                            </div>
+                            <div class="erp-list-row">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-cell-strong font-monospace">maintenance.log</span>
+                                    <div class="erp-td-muted">07 Oct 2026 09:12 · keeps 14 days</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="erp-chip erp-chip-outline">19 entries</span>
+                                    <span class="erp-chip erp-chip-outline">88 KB</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="col-lg-6">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">What masking does</h2>
+                                <p class="erp-card-sub">Three rules — and they are the reason a support person may read a production log.</p>
+                            </div>
+                        </header>
+                        <div class="p-3 pt-1">
+                            <div class="erp-note erp-note-info">
+                                <i class="bi bi-shield-lock" aria-hidden="true"></i>
+                                <div>
+                                    <strong>Redacted before rendering.</strong> A password, an API token, a card number or a
+                                    connection string is replaced with <span class="font-monospace">[masked]</span> as the line is
+                                    read, so the unmasked text never reaches the browser.
+                                </div>
+                            </div>
+                            <div class="erp-note erp-note-info mt-2">
+                                <i class="bi bi-search" aria-hidden="true"></i>
+                                <div>
+                                    <strong>The search runs after redaction.</strong> So an empty result is not proof that a leaked
+                                    key is absent — it is proof that no line contains your text once secrets were removed. Said out
+                                    loud on purpose.
+                                </div>
+                            </div>
+                            <div class="erp-note erp-note-info mt-2 mb-0">
+                                <i class="bi bi-file-earmark-lock" aria-hidden="true"></i>
+                                <div>
+                                    <strong>Read-only.</strong> Opening a log is not maintenance: nothing is written, nothing is
+                                    cleared, and this page cannot delete the evidence its own maintenance runs left behind.
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </div>
+
+            <form class="erp-filterbar" method="GET" action="./maintenance-logs.html">
+                <div class="erp-filter">
+                    <label class="form-label" for="file">File</label>
+                    <select class="form-select" name="file" id="file" data-erp-autosubmit>
+                        <option value="laravel.log" selected>laravel.log</option>
+                        <option value="laravel-2026-10-07.log">laravel-2026-10-07.log</option>
+                        <option value="queue.log">queue.log</option>
+                        <option value="maintenance.log">maintenance.log</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="level">Level</label>
+                    <select class="form-select" name="level" id="level" data-erp-autosubmit>
+                        <option value="">Every level</option>
+                        <option value="error" selected>Error and above</option>
+                        <option value="warning">Warning and above</option>
+                        <option value="info">Info and above</option>
+                        <option value="debug">Everything, including debug</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="limit">Lines</label>
+                    <select class="form-select" name="limit" id="limit" data-erp-autosubmit>
+                        <option value="50">Last 50</option>
+                        <option value="100" selected>Last 100</option>
+                        <option value="500">Last 500</option>
+                    </select>
+                </div>
+                <div class="erp-filter erp-filter-wide">
+                    <label class="form-label" for="q">Search (after masking)</label>
+                    <input class="form-control" type="search" name="q" id="q" placeholder="A message, a class, a document number">
+                </div>
+                <div class="erp-filterbar-actions">
+                    <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                    <a class="btn btn-link" href="./maintenance-logs.html">Reset</a>
+                </div>
+            </form>
 
             <div class="erp-table-shell" data-erp-table>
                 <div class="erp-card-head px-3 pt-3">
-                    <h2 class="erp-card-title">The floats<span class="erp-chip erp-chip-outline">4 float(s)</span></h2>
+                    <h2 class="erp-card-title">Entries <span class="erp-chip erp-chip-outline">8 of 1,284 · newest first</span></h2>
+                    <div class="erp-card-actions">
+                        <span class="erp-chip erp-chip-outline"><i class="bi bi-shield-check" aria-hidden="true"></i> 3 value(s) masked on this page</span>
+                    </div>
                 </div>
                 <div class="erp-table-scroll">
                     <table class="table erp-table erp-table-stack">
                         <thead>
                             <tr>
-                                <th>Float</th>
-                                <th>Custodian</th>
-                                <th>Where it is kept</th>
-                                <th class="erp-th-num">Holds</th>
-                                <th class="erp-th-num">Level</th>
-                                <th class="erp-th-num">To put back</th>
-                                <th>State</th>
-                                <th></th>
+                                <th>When</th>
+                                <th>Level</th>
+                                <th>What was said</th>
+                                <th>Where</th>
+                                <th class="text-end">Masked</th>
                             </tr>
                         </thead>
                         <tbody>
                             
                             <tr>
-                                <td>
-                                    <span class="erp-cell-strong">PC-HEAD</span>
-                                    <span class="d-block erp-td-muted">Head office tin</span>
+                                <td data-label="When" class="erp-td-muted">08 Oct 2026 09:12:44</td>
+                                <td data-label="Level"><span class="erp-chip erp-chip-danger">error</span></td>
+                                <td data-label="What was said">
+                                    <span class="erp-cell-strong">Depreciation run failed: the chart of accounts has no active account 5270, so the monthly charge cannot be posted.</span>
+                                    <div class="erp-td-muted font-monospace">RuntimeException → AssetDepreciationCommand::handle</div>
                                 </td>
-                                <td>
-                                    Rakib Hasan
-                                    <span class="d-block erp-td-muted">answerable for the cash</span>
-                                </td>
-                                <td>
-                                    <a href="./cash-bank.html">1115-PC-HEAD — Head office tin (petty cash)</a>
-                                    <span class="d-block erp-td-muted">Head office</span>
-                                </td>
-                                <td class="erp-td-num">৳ 6,250.00</td>
-                                <td class="erp-td-num">৳ 10,000.00</td>
-                                <td class="erp-td-num">
-                                    ৳ 3,750.00
-                                    <span class="d-block erp-td-muted"><a href="./petty-cash-replenishment.html">Put it back</a></span>
-                                </td>
-                                <td>
-                                    <span class="erp-status erp-status-active">Open</span>
-                                    <span class="d-block erp-td-muted">1 request waiting</span>
-                                </td>
-                                <td class="erp-td-actions">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Vouchers</button>
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Re-describe</button>
-                                </td>
+                                <td data-label="Where" class="erp-td-muted font-monospace">AssetService.php:952</td>
+                                <td data-label="Masked" class="erp-td-num text-end">—</td>
                             </tr>
                             <tr>
-                                <td>
-                                    <span class="erp-cell-strong">PC-DEPOT</span>
-                                    <span class="d-block erp-td-muted">Depot tin</span>
-                                </td>
-                                <td>
-                                    Sumaiya Akter
-                                    <span class="d-block erp-td-muted">answerable for the cash</span>
-                                </td>
-                                <td>
-                                    <a href="./cash-bank.html">1115-PC-DEPOT — Depot tin (petty cash)</a>
-                                    <span class="d-block erp-td-muted">Uttara depot</span>
-                                </td>
-                                <td class="erp-td-num">৳ 4,200.00</td>
-                                <td class="erp-td-num">৳ 8,000.00</td>
-                                <td class="erp-td-num">
-                                    ৳ 3,800.00
-                                    <span class="d-block erp-td-muted"><a href="./petty-cash-replenishment.html">Put it back</a></span>
-                                </td>
-                                <td>
-                                    <span class="erp-status erp-status-active">Open</span>
+                                <td data-label="When" class="erp-td-muted">08 Oct 2026 08:41:02</td>
+                                <td data-label="Level"><span class="erp-chip erp-chip-warn">warning</span></td>
+                                <td data-label="What was said">
+                                    <span class="erp-cell-strong">Compliance watch skipped the digest: nobody holds business.records.manage. The registers themselves were read — only the announcement was dropped.</span>
                                     
                                 </td>
-                                <td class="erp-td-actions">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Vouchers</button>
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Re-describe</button>
-                                </td>
+                                <td data-label="Where" class="erp-td-muted font-monospace">ComplianceAlertCommand.php:74</td>
+                                <td data-label="Masked" class="erp-td-num text-end">—</td>
                             </tr>
                             <tr>
-                                <td>
-                                    <span class="erp-cell-strong">PC-CNTR</span>
-                                    <span class="d-block erp-td-muted">Counter till</span>
-                                </td>
-                                <td>
-                                    Jamal Uddin
-                                    <span class="d-block erp-td-muted">answerable for the cash</span>
-                                </td>
-                                <td>
-                                    <a href="./cash-bank.html">1115-PC-CNTR — Counter till (petty cash)</a>
-                                    <span class="d-block erp-td-muted">Dhanmondi outlet</span>
-                                </td>
-                                <td class="erp-td-num">৳ 8,000.00</td>
-                                <td class="erp-td-num">৳ 7,000.00</td>
-                                <td class="erp-td-num">
-                                    ৳ 0.00
+                                <td data-label="When" class="erp-td-muted">08 Oct 2026 08:00:11</td>
+                                <td data-label="Level"><span class="erp-chip erp-chip-soft">notice</span></td>
+                                <td data-label="What was said">
+                                    <span class="erp-cell-strong">SMTP login rejected for [masked] (552). The notification will retry, then fall back to in-app delivery.</span>
                                     
                                 </td>
-                                <td>
-                                    <span class="erp-status erp-status-active">Open</span>
-                                    <span class="d-block erp-td-muted">over its level</span>
-                                </td>
-                                <td class="erp-td-actions">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Vouchers</button>
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Re-describe</button>
-                                </td>
+                                <td data-label="Where" class="erp-td-muted font-monospace">MailTransport.php:118</td>
+                                <td data-label="Masked" class="erp-td-num text-end">1 value(s)</td>
                             </tr>
                             <tr>
-                                <td>
-                                    <span class="erp-cell-strong">PC-OLD</span>
-                                    <span class="d-block erp-td-muted">Old warehouse tin</span>
-                                </td>
-                                <td>
-                                    Nazmul Islam
-                                    <span class="d-block erp-td-muted">answerable for the cash</span>
-                                </td>
-                                <td>
-                                    <a href="./cash-bank.html">1115-PC-OLD — Old warehouse tin (petty cash)</a>
-                                    <span class="d-block erp-td-muted">Tejgaon warehouse</span>
-                                </td>
-                                <td class="erp-td-num">৳ 0.00</td>
-                                <td class="erp-td-num">৳ 5,000.00</td>
-                                <td class="erp-td-num">
-                                    ৳ 5,000.00
+                                <td data-label="When" class="erp-td-muted">08 Oct 2026 07:55:38</td>
+                                <td data-label="Level"><span class="erp-chip erp-chip-outline">info</span></td>
+                                <td data-label="What was said">
+                                    <span class="erp-cell-strong">Nightly sweep finished: 12 batches expired, 3 reorder alerts raised, 0 documents unreadable.</span>
                                     
                                 </td>
-                                <td>
-                                    <span class="erp-status erp-status-closed">Closed</span>
-                                    <span class="d-block erp-td-muted">closed 2026-09-30</span>
+                                <td data-label="Where" class="erp-td-muted font-monospace">BatchExpiryCommand.php:61</td>
+                                <td data-label="Masked" class="erp-td-num text-end">—</td>
+                            </tr>
+                            <tr>
+                                <td data-label="When" class="erp-td-muted">07 Oct 2026 23:59:59</td>
+                                <td data-label="Level"><span class="erp-chip erp-chip-outline">info</span></td>
+                                <td data-label="What was said">
+                                    <span class="erp-cell-strong">Log rotated: laravel.log (11.8 MB) → laravel-2026-10-07.log. Anything older than the retention setting was deleted by the scheduled run, not by a person.</span>
+                                    
                                 </td>
-                                <td class="erp-td-actions">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Vouchers</button>
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Re-describe</button>
+                                <td data-label="Where" class="erp-td-muted font-monospace">LogRotator.php:44</td>
+                                <td data-label="Masked" class="erp-td-num text-end">—</td>
+                            </tr>
+                            <tr>
+                                <td data-label="When" class="erp-td-muted">07 Oct 2026 22:40:07</td>
+                                <td data-label="Level"><span class="erp-chip erp-chip-danger">error</span></td>
+                                <td data-label="What was said">
+                                    <span class="erp-cell-strong">Courier API returned 401 for token [masked]. Four shipments stayed queued — nothing was lost, and nothing was sent twice.</span>
+                                    <div class="erp-td-muted font-monospace">CourierAuthException → CourierQueue::drain</div>
                                 </td>
+                                <td data-label="Where" class="erp-td-muted font-monospace">CourierQueue.php:203</td>
+                                <td data-label="Masked" class="erp-td-num text-end">2 value(s)</td>
+                            </tr>
+                            <tr>
+                                <td data-label="When" class="erp-td-muted">07 Oct 2026 17:02:55</td>
+                                <td data-label="Level"><span class="erp-chip erp-chip-warn">warning</span></td>
+                                <td data-label="What was said">
+                                    <span class="erp-cell-strong">Stock count 41 posted a variance against a product whose cost layer was created the same day. Allowed, and recorded so somebody can check the sequence.</span>
+                                    
+                                </td>
+                                <td data-label="Where" class="erp-td-muted font-monospace">StockCountService.php:311</td>
+                                <td data-label="Masked" class="erp-td-num text-end">—</td>
+                            </tr>
+                            <tr>
+                                <td data-label="When" class="erp-td-muted">07 Oct 2026 09:12:19</td>
+                                <td data-label="Level"><span class="erp-chip erp-chip-outline">info</span></td>
+                                <td data-label="What was said">
+                                    <span class="erp-cell-strong">Self-healing run: 4 safe operations executed, 63.8 MB freed. Uploads, backups and the audit trail untouched.</span>
+                                    
+                                </td>
+                                <td data-label="Where" class="erp-td-muted font-monospace">SelfHealing.php:88</td>
+                                <td data-label="Masked" class="erp-td-num text-end">—</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                <div class="erp-table-foot">Newest first, and capped at the line count you asked for: a viewer that tries to render a 12 MB file stops being a viewer. Each entry keeps its level, its file and line, and how many values were masked to produce it.</div>
             </div>
 
-            <div class="erp-table-shell mt-3" data-erp-table>
-                <div class="erp-card-head px-3 pt-3">
-                    <h2 class="erp-card-title">Paid out lately<span class="erp-chip erp-chip-outline">3 voucher(s)</span></h2>
-                </div>
-                <div class="erp-table-scroll">
-                    <table class="table erp-table erp-table-stack">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Voucher</th>
-                                <th>Float</th>
-                                <th>Payee</th>
-                                <th>Spent on</th>
-                                <th class="erp-th-num">Amount</th>
-                                <th>Recorded by</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                            <tr>
-                                <td>2026-10-08</td>
-                                <td>
-                                    <span class="erp-cell-strong">EX-2026-00418</span>
-                                    <span class="d-block erp-td-muted">posted to the ledger</span>
-                                </td>
-                                <td>Head office tin</td>
-                                <td>
-                                    Rickshaw
-                                    <span class="d-block erp-td-muted">Two rides to the courier office</span>
-                                </td>
-                                <td>
-                                    Local travel
-                                    <span class="d-block erp-td-muted">5220 — Travelling Expense</span>
-                                </td>
-                                <td class="erp-td-num">৳ 250.00</td>
-                                <td>
-                                    Rakib Hasan
-                                    <span class="d-block erp-td-muted">below the limit of 1,000.00</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2026-10-07</td>
-                                <td>
-                                    <span class="erp-cell-strong">EX-2026-00417</span>
-                                    <span class="d-block erp-td-muted">posted to the ledger</span>
-                                </td>
-                                <td>Counter till</td>
-                                <td>
-                                    Shahin Store
-                                    <span class="d-block erp-td-muted">Packing tape and markers</span>
-                                </td>
-                                <td>
-                                    Packaging materials
-                                    <span class="d-block erp-td-muted">5255 — Packing Materials</span>
-                                </td>
-                                <td class="erp-td-num">৳ 840.00</td>
-                                <td>
-                                    Jamal Uddin
-                                    <span class="d-block erp-td-muted">below the limit of 1,000.00</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2026-10-06</td>
-                                <td>
-                                    <span class="erp-cell-strong">EX-2026-00412</span>
-                                    <span class="d-block erp-td-muted">posted to the ledger</span>
-                                </td>
-                                <td>Depot tin</td>
-                                <td>
-                                    Paper shop
-                                    <span class="d-block erp-td-muted">Reams of paper for the counter</span>
-                                </td>
-                                <td>
-                                    Office supplies
-                                    <span class="d-block erp-td-muted">5240 — Office Supplies</span>
-                                </td>
-                                <td class="erp-td-num">৳ 2,000.00</td>
-                                <td>
-                                    Sumaiya Akter
-                                    <span class="d-block erp-td-muted">against request #31, approved by Md. Faruk</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <footer class="erp-table-foot">
-                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
-                        <span class="erp-td-muted">Every voucher is a payment out of the float's own account: Dr the category, Cr the tin. The float cannot pay more than it holds.</span>
-                        <a class="btn btn-outline-secondary btn-sm" href="./petty-cash-expenses.html">The voucher register</a>
-                    </div>
-                </footer>
-            </div>
-
-            <section class="erp-card mt-3">
-                <header class="erp-card-head">
-                    <div>
-                        <h2 class="erp-card-title">Declare a float</h2>
-                        <p class="erp-card-sub">This creates the float's own account in the chart of accounts under Current Assets and names the person answerable for what is in it. Nothing is posted — declaring a tin is not spending money.</p>
-                    </div>
-                </header>
-                <form onsubmit="return false">
-                    <div class="erp-form-grid">
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pc-code">Code</label>
-                            <input class="form-control" type="text" id="pc-code" placeholder="PC-HEAD">
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pc-name">Name</label>
-                            <input class="form-control" type="text" id="pc-name" placeholder="Head office tin">
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pc-custodian">Custodian</label>
-                            <select class="form-select" id="pc-custodian">
-                                <option>Rakib Hasan</option>
-                                <option>Sumaiya Akter</option>
-                                <option>Jamal Uddin</option>
-                            </select>
-                            <small class="form-text">The person answerable for the cash in the tin.</small>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pc-branch">Kept at</label>
-                            <select class="form-select" id="pc-branch">
-                                <option>Head office</option>
-                                <option>Uttara depot</option>
-                                <option>Dhanmondi outlet</option>
-                            </select>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pc-level">Level it is meant to hold</label>
-                            <div class="erp-input-group">
-                                <span class="input-group-text">৳</span>
-                                <input class="form-control erp-num" type="number" step="0.01" id="pc-level" placeholder="10,000.00">
-                            </div>
-                            <small class="form-text">The amount the replenishment screen will offer to put back.</small>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pc-account">Ledger account code</label>
-                            <input class="form-control" type="text" id="pc-account" placeholder="Filled in for you">
-                            <small class="form-text">Leave blank to keep the code derived from the float's own code.</small>
-                        </div>
-                        <div class="erp-form-field erp-form-field-wide">
-                            <label class="form-label" for="pc-agenda">What it is for</label>
-                            <input class="form-control" type="text" id="pc-agenda" placeholder="Couriers, tea, rickshaws and the small hardware nobody raises a purchase order for">
-                        </div>
-                    </div>
-                    <label class="form-check mt-2">
-                        <input class="form-check-input" type="checkbox" checked>
-                        <span class="form-check-label">Open it now</span>
-                    </label>
-                    <div class="mt-2">
-                        <button class="btn btn-primary" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i> Declare the float</button>
-                    </div>
-                </form>
-            </section>
-
-            <div class="erp-filter-note mt-2">
+            <div class="erp-note erp-note-info mt-3">
                 <i class="bi bi-info-circle" aria-hidden="true"></i>
-                <span>A voucher leaves through the same payment service every other payment uses, and a top-up is a transfer into the float — never a second record of the spending it already recorded. That is why the tin's balance on this screen and the balance in the books cannot drift apart.</span>
+                <div>
+                    <strong>What this page is not:</strong> monitoring. It shows what is in the files today — not whether an
+                    error is still happening, who it is affecting, or when it stopped being an incident and became a pattern.
+                    The <a href="./maintenance.html">maintenance desk</a> keeps what each run did as rows, which is the half that
+                    keeps its history.
+                </div>
             </div>
 
             <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
                 <p class="erp-field-label">More in this module</p>
                 <div class="d-flex flex-wrap gap-2">
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash-expenses.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Expenses</a>
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash-requests.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Requests</a>
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash-replenishment.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Replenishment</a>
-                    <a class="erp-chip erp-chip-outline" href="./expenses.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>All Expenses</a>
+                    <a class="erp-chip erp-chip-outline" href="./maintenance.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>System maintenance</a>
+                    <a class="erp-chip erp-chip-outline" href="./settings.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Settings desk</a>
+                    <a class="erp-chip erp-chip-outline" href="./reports.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Report centre</a>
                 </div>
             </nav>
-        </main>
 
-<footer class="erp-footer">
-    <span>BD ERP · Rafshan Trading Ltd.</span>
-    <span class="erp-footer-meta">
-        <span>07 Oct 2026, 06:20 PM · Asia/Dhaka</span>
-        <span class="d-none d-md-inline">Press <kbd>⌘</kbd><kbd>K</kbd> to jump anywhere</span>
-    </span>
-</footer>
-    </div>
+        </div>
+    </main>
 </div>
-<script>window.erpNavIndex = [];</script>
 
 <div class="erp-backdrop" data-erp-backdrop hidden></div>
 

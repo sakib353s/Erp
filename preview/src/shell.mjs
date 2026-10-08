@@ -186,6 +186,11 @@ export const SECTIONS = [
                 { label: 'Meetings', url: './meetings.html', icon: 'bi-calendar-event' },
                 { label: 'Meeting minutes', url: './minutes.html', icon: 'bi-journal-check' },
                 { label: 'Action items', url: './action-items.html', icon: 'bi-list-check' },
+                { label: 'Assets & vehicles', url: './assets.html', icon: 'bi-hdd-stack' },
+                { label: 'Vehicle trip log', url: './trips.html', icon: 'bi-signpost-split' },
+                { label: 'Equipment', url: './equipment.html', icon: 'bi-gear' },
+                { label: 'Depreciation', url: './depreciation.html', icon: 'bi-graph-down-arrow' },
+                { label: 'Disposals', url: './disposal.html', icon: 'bi-archive' },
                 { label: 'Workflows', url: '#', icon: 'bi-diagram-3' },
                 { label: 'Documents', url: '#', icon: 'bi-folder2-open' },
             ],
@@ -206,6 +211,7 @@ export const SECTIONS = [
                     { label: 'Users', url: '#', icon: 'bi-person-badge' },
                     { label: 'Roles & permissions', url: '#', icon: 'bi-shield-lock' },
                     { label: 'System maintenance', url: './maintenance.html', icon: 'bi-tools' },
+                    { label: 'Error log', url: './maintenance-logs.html', icon: 'bi-journal-code' },
                 ],
                 overflow: 38,
             },
@@ -296,7 +302,14 @@ export const PALETTE = [
     { label: 'Meetings', url: './meetings.html', icon: 'bi-calendar-event', section: 'Governance', group: 'Business management' },
     { label: 'Meeting minutes', url: './minutes.html', icon: 'bi-journal-check', section: 'Governance', group: 'Business management' },
     { label: 'Action items', url: './action-items.html', icon: 'bi-list-check', section: 'Governance', group: 'Business management' },
+    { label: 'Assets & vehicles', url: './assets.html', icon: 'bi-hdd-stack', section: 'Governance', group: 'Business management' },
+    { label: 'Vehicle management', url: './vehicles.html', icon: 'bi-truck', section: 'Governance', group: 'Business management' },
+    { label: 'Equipment', url: './equipment.html', icon: 'bi-gear', section: 'Governance', group: 'Business management' },
+    { label: 'Vehicle trip log', url: './trips.html', icon: 'bi-signpost-split', section: 'Governance', group: 'Business management' },
+    { label: 'Depreciation', url: './depreciation.html', icon: 'bi-graph-down-arrow', section: 'Governance', group: 'Business management' },
+    { label: 'Disposals', url: './disposal.html', icon: 'bi-archive', section: 'Governance', group: 'Business management' },
     { label: 'System maintenance', url: './maintenance.html', icon: 'bi-tools', section: 'Configuration', group: 'Settings' },
+    { label: 'Error log', url: './maintenance-logs.html', icon: 'bi-journal-code', section: 'Configuration', group: 'Settings' },
 ];
 
 const esc = (value) => String(value)
@@ -425,12 +438,19 @@ export function topbar(args = {}) {
     // rendering the default.
     const { trail = [], title = 'Dashboard', branch = 'Dhaka HQ', warehouse = 'Main warehouse' } =
         typeof args === 'string' ? { title: args } : args;
-    const crumbs = trail.map((crumb) => `
+    const crumbs = trail.map((crumb) => {
+        // Two pages were written before this signature and pass plain strings
+        // ('Sales & CRM', 'Customers'). Both shapes are real: a crumb without a
+        // URL is the page you are on, and one with a URL is the way back.
+        const label = typeof crumb === 'string' ? crumb : crumb.label;
+        const url = typeof crumb === 'string' ? null : crumb.url;
+        return `
         <li>
-            ${crumb.url
-                ? `<a href="${crumb.url}">${esc(crumb.label)}</a><i class="bi bi-chevron-right" aria-hidden="true"></i>`
-                : `<span class="is-current" aria-current="page">${esc(crumb.label)}</span>`}
-        </li>`).join('');
+            ${url
+                ? `<a href="${url}">${esc(label)}</a><i class="bi bi-chevron-right" aria-hidden="true"></i>`
+                : `<span class="is-current" aria-current="page">${esc(label)}</span>`}
+        </li>`;
+    }).join('');
 
     return `
 <header class="erp-topbar">

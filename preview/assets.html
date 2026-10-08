@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#ffffff">
-    <title>Petty cash · BD ERP — UI redesign preview</title>
+    <title>Asset register · BD ERP — UI redesign preview</title>
     <link rel="stylesheet" href="./assets/preview.css">
 </head>
 <body class="erp-body">
@@ -15,7 +15,7 @@
 <div class="erp-preview-bar">
     <i class="bi bi-easel2" aria-hidden="true"></i>
     <strong>UI redesign preview</strong>
-    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html">Labels</a><span style="opacity:.4">·</span><a href="./cash-bank.html">Cash & bank</a><span style="opacity:.4">·</span><a href="./bank-recon.html">Reconciliation</a><span style="opacity:.4">·</span><a href="./cash-counts.html">Cash count</a><span style="opacity:.4">·</span><a href="./bank-charges.html">Bank charges</a><span style="opacity:.4">·</span><a href="./expense-report.html">Expense report</a><span style="opacity:.4">·</span><a href="./cash-reports.html">Cash reports</a><span style="opacity:.4">·</span><a href="./cheques.html">Cheques</a><span style="opacity:.4">·</span><a href="./expenses.html">Expenses</a><span style="opacity:.4">·</span><a href="./expense-recurring.html">Recurring</a><span style="opacity:.4">·</span><a href="./petty-cash.html" style="color:#fff;text-decoration:underline">Petty cash</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
+    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html">Labels</a><span style="opacity:.4">·</span><a href="./cash-bank.html">Cash & bank</a><span style="opacity:.4">·</span><a href="./bank-recon.html">Reconciliation</a><span style="opacity:.4">·</span><a href="./cash-counts.html">Cash count</a><span style="opacity:.4">·</span><a href="./bank-charges.html">Bank charges</a><span style="opacity:.4">·</span><a href="./expense-report.html">Expense report</a><span style="opacity:.4">·</span><a href="./cash-reports.html">Cash reports</a><span style="opacity:.4">·</span><a href="./cheques.html">Cheques</a><span style="opacity:.4">·</span><a href="./expenses.html">Expenses</a><span style="opacity:.4">·</span><a href="./expense-recurring.html">Recurring</a><span style="opacity:.4">·</span><a href="./petty-cash.html">Petty cash</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
     <span class="erp-preview-note">Static render of the new shell — same CSS + JS the Laravel app ships. Press ⌘K / Ctrl+K.</span>
 </div>
 <div class="erp-shell">
@@ -645,7 +645,7 @@
     <div class="erp-topbar-crumbs">
         <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb"></ol></nav>
         <div class="erp-topbar-title">
-            <strong class="d-none d-md-inline">Petty cash</strong>
+            <strong class="d-none d-md-inline">Asset register</strong>
             <span class="erp-chip erp-chip-outline d-none d-xl-inline-flex" title="Current branch context">
                 <i class="bi bi-geo-alt" aria-hidden="true"></i>Dhaka HQ
             </span>
@@ -723,60 +723,198 @@
 
             <header class="erp-page-head">
                 <div>
-                    <p class="erp-eyebrow"><i class="bi bi-cash-coin" aria-hidden="true"></i> Cash &amp; bank · Petty cash</p>
-                    <h1 class="erp-h1">The float in the drawer</h1>
-                    <p class="erp-page-sub">A float is real money in a real place, held by a named person. It is its own account in the chart of accounts, so the balance below is the ledger's own figure rather than a number this desk keeps. Above the company's limit a voucher is asked for before it is paid, and whoever asked cannot be the person who approves it.</p>
+                    <p class="erp-eyebrow"><i class="bi bi-hdd-stack" aria-hidden="true"></i> Business Management · Assets</p>
+                    <h1 class="erp-h1">What the company owns, where it is, and what it is worth</h1>
+                    <p class="erp-page-sub">A register that answers three questions about every thing the company owns: where is it, what did it cost, and who answers for it. Book value is not an opinion — it is cost less the depreciation that has actually been posted to the ledger, which is why nothing on these pages moves it except a real journal entry.</p>
                 </div>
                 <div class="erp-page-head-actions">
-                    <a class="btn btn-outline-secondary" href="./petty-cash-expenses.html"><i class="bi bi-receipt" aria-hidden="true"></i> Vouchers</a>
-                    <a class="btn btn-outline-secondary" href="./petty-cash-requests.html"><i class="bi bi-question-circle" aria-hidden="true"></i> Requests <span class="erp-chip erp-chip-warn ms-1">1 waiting</span></a>
-                    <a class="btn btn-primary" href="./petty-cash-replenishment.html"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Replenish</a>
+                    <a class="btn btn-primary" href="#add"><i class="bi bi-plus-lg" aria-hidden="true"></i> Register an asset</a>
+                    <a class="btn btn-outline-secondary" href="./trips.html"><i class="bi bi-signpost-split" aria-hidden="true"></i> Trip log</a>
+                    <a class="btn btn-outline-secondary" href="./depreciation.html"><i class="bi bi-graph-down-arrow" aria-hidden="true"></i> Depreciation <span class="erp-chip erp-chip-warn ms-1">6 due</span></a>
                 </div>
             </header>
 
-            <div class="erp-kpi-grid mb-3">
+            <div class="erp-kpi-grid">
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-cash-stack" aria-hidden="true"></i> In the tins</p>
-                    <p class="erp-kpi-value">৳ 18,450.00</p>
-                    <p class="erp-kpi-foot">3 open float(s) of 4 declared</p>
+                    <p class="erp-kpi-label"><i class="bi bi-hdd-stack" aria-hidden="true"></i> Live assets</p>
+                    <p class="erp-kpi-value">18</p>
+                    <p class="erp-kpi-foot">On the working register — everything not written off</p>
                 </div>
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-bullseye" aria-hidden="true"></i> Meant to be there</p>
-                    <p class="erp-kpi-value">৳ 25,000.00</p>
-                    <p class="erp-kpi-foot">The level the open floats are replenished back to</p>
+                    <p class="erp-kpi-label"><i class="bi bi-cash-stack" aria-hidden="true"></i> At cost</p>
+                    <p class="erp-kpi-value">৳48,60,000.00</p>
+                    <p class="erp-kpi-foot">What these assets were bought for</p>
                 </div>
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Waiting to be put back</p>
-                    <p class="erp-kpi-value">৳ 6,550.00</p>
-                    <p class="erp-kpi-foot">What it would take to restore every float to its level</p>
+                    <p class="erp-kpi-label"><i class="bi bi-graph-down-arrow" aria-hidden="true"></i> Accumulated depreciation</p>
+                    <p class="erp-kpi-value">৳12,45,000.00</p>
+                    <p class="erp-kpi-foot">The part of that cost already charged to expense</p>
                 </div>
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Asked for, not yet paid</p>
-                    <p class="erp-kpi-value">৳ 2,000.00</p>
-                    <p class="erp-kpi-foot">1 request — nothing here has reached the ledger</p>
+                    <p class="erp-kpi-label"><i class="bi bi-wallet2" aria-hidden="true"></i> Book value</p>
+                    <p class="erp-kpi-value">৳36,15,000.00</p>
+                    <p class="erp-kpi-foot">Cost less accumulated depreciation — the figure the balance sheet carries</p>
+                </div>
+                <a class="erp-kpi text-decoration-none" href="./vehicles.html">
+                    <p class="erp-kpi-label"><i class="bi bi-truck" aria-hidden="true"></i> Vehicles</p>
+                    <p class="erp-kpi-value">4</p>
+                    <p class="erp-kpi-foot">Each one with plates, a driver and papers that run out</p>
+                </a>
+                <a class="erp-kpi text-decoration-none" href="./depreciation.html">
+                    <p class="erp-kpi-label"><i class="bi bi-calendar-check" aria-hidden="true"></i> Due for depreciation</p>
+                    <p class="erp-kpi-value">6</p>
+                    <p class="erp-kpi-foot">A month has fallen due and not been posted</p>
+                </a>
+            </div>
+
+            <section class="erp-card mb-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">The shelves</h2>
+                        <p class="erp-card-sub">One register, seen from six angles. A vehicle is an asset — which is why the trucks are not missing from the register and the register is not missing the trucks.</p>
+                    </div>
+                </header>
+                <div class="px-3 pb-2">
+                    
+                    <div class="erp-list-row">
+                        <div class="erp-list-row-main">
+                            <a class="erp-cell-strong" href="./assets.html"><i class="bi bi-hdd-stack me-1" aria-hidden="true"></i>Asset register</a>
+                            <div class="erp-td-muted">Every asset, every kind — 18 live rows</div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="erp-chip erp-chip-soft">18 live</span>
+                            <a class="btn btn-sm btn-outline-secondary" href="./assets.html">Open</a>
+                        </div>
+                    </div>
+                    <div class="erp-list-row">
+                        <div class="erp-list-row-main">
+                            <a class="erp-cell-strong" href="./vehicles.html"><i class="bi bi-truck me-1" aria-hidden="true"></i>Vehicle management</a>
+                            <div class="erp-td-muted">Plates, drivers, papers and running cost per kilometre</div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="erp-chip erp-chip-soft">4 live</span>
+                            <a class="btn btn-sm btn-outline-secondary" href="./vehicles.html">Open</a>
+                        </div>
+                    </div>
+                    <div class="erp-list-row">
+                        <div class="erp-list-row-main">
+                            <a class="erp-cell-strong" href="./equipment.html"><i class="bi bi-gear me-1" aria-hidden="true"></i>Equipment</a>
+                            <div class="erp-td-muted">Machinery, computers and the fit-out</div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="erp-chip erp-chip-soft">12 live</span>
+                            <a class="btn btn-sm btn-outline-secondary" href="./equipment.html">Open</a>
+                        </div>
+                    </div>
+                    <div class="erp-list-row">
+                        <div class="erp-list-row-main">
+                            <a class="erp-cell-strong" href="./trips.html"><i class="bi bi-signpost-split me-1" aria-hidden="true"></i>Vehicle trip log</a>
+                            <div class="erp-td-muted">Where each vehicle went, how far, and what the run cost — distance from the odometer, never typed</div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="erp-chip erp-chip-soft">38 this month</span>
+                            <a class="btn btn-sm btn-outline-secondary" href="./trips.html">Open</a>
+                        </div>
+                    </div>
+                    <div class="erp-list-row">
+                        <div class="erp-list-row-main">
+                            <a class="erp-cell-strong" href="./depreciation.html"><i class="bi bi-graph-down-arrow me-1" aria-hidden="true"></i>Depreciation</a>
+                            <div class="erp-td-muted">The month each asset owes, one journal entry at a time</div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="erp-chip erp-chip-soft">6 due now</span>
+                            <a class="btn btn-sm btn-outline-secondary" href="./depreciation.html">Open</a>
+                        </div>
+                    </div>
+                    <div class="erp-list-row">
+                        <div class="erp-list-row-main">
+                            <a class="erp-cell-strong" href="./disposal.html"><i class="bi bi-archive me-1" aria-hidden="true"></i>Disposal register</a>
+                            <div class="erp-td-muted">What was sold, scrapped or written off — with the reason and what came back</div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="erp-chip erp-chip-soft">2 written off</span>
+                            <a class="btn btn-sm btn-outline-secondary" href="./disposal.html">Open</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="erp-note erp-note-warn mb-3">
+                <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+                <div>
+                    <strong>3 asset(s) carry a cost that is not in the books yet.</strong>
+                    Until they are capitalised they cannot be depreciated — charging a monthly expense against a cost that was never recorded is inventing a loss, so the depreciation run skips them and says so.
+                    <a href="./depreciation.html#waiting">Take them through the depreciation desk</a> when the purchase is posted.
                 </div>
             </div>
 
-            <div class="erp-note erp-note-info mb-3">
-                <i class="bi bi-info-circle" aria-hidden="true"></i>
-                <div>At or above <strong>৳ 1,000.00</strong> a voucher is asked for rather than paid, and the answer has to come from somebody other than the person who asked. Below it the custodian pays and records it in one step.</div>
-            </div>
+            <form class="erp-filterbar" method="GET" action="#">
+                <div class="erp-filter">
+                    <label class="form-label" for="category">Kind</label>
+                    <select class="form-select" name="category" id="category">
+                        <option value="">Every kind</option>
+                        <option>Vehicles</option>
+                        <option>Equipment</option>
+                        <option>Machinery</option>
+                        <option>Computers &amp; IT</option>
+                        <option>Furniture &amp; fittings</option>
+                        <option>Other assets</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="status">Status</label>
+                    <select class="form-select" name="status" id="status">
+                        <option value="">Live only</option>
+                        <option>In use</option>
+                        <option>In store</option>
+                        <option>Under repair</option>
+                        <option>Disposed</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="custodian_id">Custodian</label>
+                    <select class="form-select" name="custodian_id" id="custodian_id">
+                        <option value="">Anybody</option>
+                        <option>Md. Rafiq</option>
+                        <option>Rehana Parvin</option>
+                        <option>Rakib Hasan</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="branch_id">Branch</label>
+                    <select class="form-select" name="branch_id" id="branch_id">
+                        <option value="">Every branch</option>
+                        <option>Head office</option>
+                        <option>Dhanmondi counter</option>
+                        <option>Uttara warehouse</option>
+                        <option>Company-wide only</option>
+                    </select>
+                </div>
+                <div class="erp-filter erp-filter-wide">
+                    <label class="form-label" for="q">Search</label>
+                    <input class="form-control" type="search" name="q" id="q" placeholder="Name, code, plates or location">
+                </div>
+                <div class="erp-filterbar-actions">
+                    <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                    <a class="btn btn-link" href="./assets.html">Reset</a>
+                </div>
+            </form>
 
-            <div class="erp-table-shell" data-erp-table>
+            <div class="erp-table-shell">
                 <div class="erp-card-head px-3 pt-3">
-                    <h2 class="erp-card-title">The floats<span class="erp-chip erp-chip-outline">4 float(s)</span></h2>
+                    <h2 class="erp-card-title">The register <span class="erp-chip erp-chip-outline">18 asset(s)</span></h2>
                 </div>
                 <div class="erp-table-scroll">
-                    <table class="table erp-table erp-table-stack">
+                    <table class="table erp-table">
                         <thead>
                             <tr>
-                                <th>Float</th>
+                                <th>Asset</th>
+                                <th>Where it is</th>
                                 <th>Custodian</th>
-                                <th>Where it is kept</th>
-                                <th class="erp-th-num">Holds</th>
-                                <th class="erp-th-num">Level</th>
-                                <th class="erp-th-num">To put back</th>
-                                <th>State</th>
+                                <th>Condition</th>
+                                <th class="text-end">Cost</th>
+                                <th class="text-end">Book value</th>
+                                <th>Status</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -784,302 +922,328 @@
                             
                             <tr>
                                 <td>
-                                    <span class="erp-cell-strong">PC-HEAD</span>
-                                    <span class="d-block erp-td-muted">Head office tin</span>
+                                    <a class="erp-cell-strong" href="./assets.html#detail">Hiace delivery van 1</a>
+                                    <div class="erp-td-muted">AST-000001 · Vehicle</div>
                                 </td>
-                                <td>
-                                    Rakib Hasan
-                                    <span class="d-block erp-td-muted">answerable for the cash</span>
-                                </td>
-                                <td>
-                                    <a href="./cash-bank.html">1115-PC-HEAD — Head office tin (petty cash)</a>
-                                    <span class="d-block erp-td-muted">Head office</span>
-                                </td>
-                                <td class="erp-td-num">৳ 6,250.00</td>
-                                <td class="erp-td-num">৳ 10,000.00</td>
-                                <td class="erp-td-num">
-                                    ৳ 3,750.00
-                                    <span class="d-block erp-td-muted"><a href="./petty-cash-replenishment.html">Put it back</a></span>
-                                </td>
-                                <td>
-                                    <span class="erp-status erp-status-active">Open</span>
-                                    <span class="d-block erp-td-muted">1 request waiting</span>
-                                </td>
-                                <td class="erp-td-actions">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Vouchers</button>
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Re-describe</button>
-                                </td>
+                                <td class="erp-td-muted">Vehicle pool</td>
+                                <td class="erp-td-muted">Md. Rafiq</td>
+                                <td><span class="erp-status erp-status-good">Good</span></td>
+                                <td class="erp-td-num text-end">৳8,64,000.00</td>
+                                <td class="erp-td-num text-end">৳6,30,000.00<div class="erp-td-muted">৳2,34,000.00 charged</div></td>
+                                <td><span class="erp-status erp-status-in_use">In use</span></td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="./assets.html#detail">Open</a></td>
                             </tr>
                             <tr>
                                 <td>
-                                    <span class="erp-cell-strong">PC-DEPOT</span>
-                                    <span class="d-block erp-td-muted">Depot tin</span>
+                                    <a class="erp-cell-strong" href="./assets.html#detail">Hiace delivery van 2</a>
+                                    <div class="erp-td-muted">AST-000002 · Vehicle</div>
                                 </td>
-                                <td>
-                                    Sumaiya Akter
-                                    <span class="d-block erp-td-muted">answerable for the cash</span>
-                                </td>
-                                <td>
-                                    <a href="./cash-bank.html">1115-PC-DEPOT — Depot tin (petty cash)</a>
-                                    <span class="d-block erp-td-muted">Uttara depot</span>
-                                </td>
-                                <td class="erp-td-num">৳ 4,200.00</td>
-                                <td class="erp-td-num">৳ 8,000.00</td>
-                                <td class="erp-td-num">
-                                    ৳ 3,800.00
-                                    <span class="d-block erp-td-muted"><a href="./petty-cash-replenishment.html">Put it back</a></span>
-                                </td>
-                                <td>
-                                    <span class="erp-status erp-status-active">Open</span>
-                                    
-                                </td>
-                                <td class="erp-td-actions">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Vouchers</button>
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Re-describe</button>
-                                </td>
+                                <td class="erp-td-muted">Vehicle pool</td>
+                                <td class="erp-td-muted">Md. Salauddin</td>
+                                <td><span class="erp-status erp-status-good">Good</span></td>
+                                <td class="erp-td-num text-end">৳8,64,000.00</td>
+                                <td class="erp-td-num text-end">৳6,66,000.00<div class="erp-td-muted">৳1,98,000.00 charged</div></td>
+                                <td><span class="erp-status erp-status-in_use">In use</span></td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="./assets.html#detail">Open</a></td>
                             </tr>
                             <tr>
                                 <td>
-                                    <span class="erp-cell-strong">PC-CNTR</span>
-                                    <span class="d-block erp-td-muted">Counter till</span>
+                                    <a class="erp-cell-strong" href="./assets.html#detail">Covered van (3 ton)</a>
+                                    <div class="erp-td-muted">AST-000003 · Vehicle</div>
                                 </td>
-                                <td>
-                                    Jamal Uddin
-                                    <span class="d-block erp-td-muted">answerable for the cash</span>
-                                </td>
-                                <td>
-                                    <a href="./cash-bank.html">1115-PC-CNTR — Counter till (petty cash)</a>
-                                    <span class="d-block erp-td-muted">Dhanmondi outlet</span>
-                                </td>
-                                <td class="erp-td-num">৳ 8,000.00</td>
-                                <td class="erp-td-num">৳ 7,000.00</td>
-                                <td class="erp-td-num">
-                                    ৳ 0.00
-                                    
-                                </td>
-                                <td>
-                                    <span class="erp-status erp-status-active">Open</span>
-                                    <span class="d-block erp-td-muted">over its level</span>
-                                </td>
-                                <td class="erp-td-actions">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Vouchers</button>
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Re-describe</button>
-                                </td>
+                                <td class="erp-td-muted">Vehicle pool</td>
+                                <td class="erp-td-muted">Jasim Uddin</td>
+                                <td><span class="erp-status erp-status-fair">Fair</span></td>
+                                <td class="erp-td-num text-end">৳12,00,000.00</td>
+                                <td class="erp-td-num text-end">৳9,10,000.00<div class="erp-td-muted">৳2,90,000.00 charged</div></td>
+                                <td><span class="erp-status erp-status-in_use">In use</span></td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="./assets.html#detail">Open</a></td>
                             </tr>
                             <tr>
                                 <td>
-                                    <span class="erp-cell-strong">PC-OLD</span>
-                                    <span class="d-block erp-td-muted">Old warehouse tin</span>
+                                    <a class="erp-cell-strong" href="./assets.html#detail">Double-cabin pickup</a>
+                                    <div class="erp-td-muted">AST-000004 · Vehicle</div>
                                 </td>
+                                <td class="erp-td-muted">Workshop, Tejgaon</td>
+                                <td class="erp-td-muted">Shahin Alam</td>
+                                <td><span class="erp-status erp-status-poor">Fair</span></td>
+                                <td class="erp-td-num text-end">৳6,00,000.00</td>
+                                <td class="erp-td-num text-end">৳3,25,000.00<div class="erp-td-muted">৳2,75,000.00 charged</div></td>
+                                <td><span class="erp-status erp-status-under_repair">Under repair</span></td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="./assets.html#detail">Open</a></td>
+                            </tr>
+                            <tr>
                                 <td>
-                                    Nazmul Islam
-                                    <span class="d-block erp-td-muted">answerable for the cash</span>
+                                    <a class="erp-cell-strong" href="./assets.html#detail">Embroidery machine (12-head)</a>
+                                    <div class="erp-td-muted">AST-000005 · Machinery</div>
                                 </td>
+                                <td class="erp-td-muted">Production floor</td>
+                                <td class="erp-td-muted">Rehana Parvin</td>
+                                <td><span class="erp-status erp-status-good">Good</span></td>
+                                <td class="erp-td-num text-end">৳4,50,000.00</td>
+                                <td class="erp-td-num text-end">৳3,60,000.00<div class="erp-td-muted">৳90,000.00 charged</div></td>
+                                <td><span class="erp-status erp-status-in_use">In use</span></td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="./assets.html#detail">Open</a></td>
+                            </tr>
+                            <tr>
                                 <td>
-                                    <a href="./cash-bank.html">1115-PC-OLD — Old warehouse tin (petty cash)</a>
-                                    <span class="d-block erp-td-muted">Tejgaon warehouse</span>
+                                    <a class="erp-cell-strong" href="./assets.html#detail">Generator 250 kVA</a>
+                                    <div class="erp-td-muted">AST-000006 · Equipment</div>
                                 </td>
-                                <td class="erp-td-num">৳ 0.00</td>
-                                <td class="erp-td-num">৳ 5,000.00</td>
-                                <td class="erp-td-num">
-                                    ৳ 5,000.00
-                                    
-                                </td>
+                                <td class="erp-td-muted">Generator shed</td>
+                                <td class="erp-td-muted">Nazrul Islam</td>
+                                <td><span class="erp-status erp-status-fair">Fair</span></td>
+                                <td class="erp-td-num text-end">৳9,00,000.00</td>
+                                <td class="erp-td-num text-end">৳5,25,000.00<div class="erp-td-muted">৳3,75,000.00 charged</div></td>
+                                <td><span class="erp-status erp-status-in_use">In use</span></td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="./assets.html#detail">Open</a></td>
+                            </tr>
+                            <tr>
                                 <td>
-                                    <span class="erp-status erp-status-closed">Closed</span>
-                                    <span class="d-block erp-td-muted">closed 2026-09-30</span>
+                                    <a class="erp-cell-strong" href="./assets.html#detail">Fusing machine</a>
+                                    <div class="erp-td-muted">AST-000007 · Equipment</div>
                                 </td>
-                                <td class="erp-td-actions">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Vouchers</button>
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Re-describe</button>
+                                <td class="erp-td-muted">Production floor</td>
+                                <td class="erp-td-muted">Rehana Parvin</td>
+                                <td><span class="erp-status erp-status-good">Good</span></td>
+                                <td class="erp-td-num text-end">৳1,80,000.00</td>
+                                <td class="erp-td-num text-end">৳1,44,000.00<div class="erp-td-muted">৳36,000.00 charged</div></td>
+                                <td><span class="erp-status erp-status-in_use">In use</span></td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="./assets.html#detail">Open</a></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="./assets.html#detail">POS terminal — Dhanmondi</a>
+                                    <div class="erp-td-muted">AST-000008 · Computers & IT</div>
                                 </td>
+                                <td class="erp-td-muted">Dhanmondi counter</td>
+                                <td class="erp-td-muted">Salma Begum</td>
+                                <td><span class="erp-status erp-status-good">Good</span></td>
+                                <td class="erp-td-num text-end">৳86,400.00</td>
+                                <td class="erp-td-num text-end">৳52,800.00<div class="erp-td-muted">৳33,600.00 charged</div></td>
+                                <td><span class="erp-status erp-status-in_use">In use</span></td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="./assets.html#detail">Open</a></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="./assets.html#detail">Racking — Uttara warehouse</a>
+                                    <div class="erp-td-muted">AST-000009 · Furniture & fittings</div>
+                                </td>
+                                <td class="erp-td-muted">Uttara warehouse</td>
+                                <td class="erp-td-muted">Rakib Hasan</td>
+                                <td><span class="erp-status erp-status-good">Good</span></td>
+                                <td class="erp-td-num text-end">৳3,20,000.00</td>
+                                <td class="erp-td-num text-end">৳3,20,000.00</td>
+                                <td><span class="erp-status erp-status-in_use">In use</span></td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="./assets.html#detail">Open</a></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="./assets.html#detail">Warehouse laptop</a>
+                                    <div class="erp-td-muted">AST-000010 · Computers & IT</div>
+                                </td>
+                                <td class="erp-td-muted">Uttara warehouse</td>
+                                <td class="erp-td-muted">Rakib Hasan</td>
+                                <td><span class="erp-status erp-status-good">Good</span></td>
+                                <td class="erp-td-num text-end">৳1,08,000.00</td>
+                                <td class="erp-td-num text-end">৳63,000.00<div class="erp-td-muted">৳45,000.00 charged</div></td>
+                                <td><span class="erp-status erp-status-stored">In store</span></td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="./assets.html#detail">Open</a></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                <div class="erp-table-foot">Showing 10 of 18 live assets. Disposed rows stay on the register and appear on the disposal register; the working lists let them go.</div>
             </div>
 
-            <div class="erp-table-shell mt-3" data-erp-table>
-                <div class="erp-card-head px-3 pt-3">
-                    <h2 class="erp-card-title">Paid out lately<span class="erp-chip erp-chip-outline">3 voucher(s)</span></h2>
-                </div>
-                <div class="erp-table-scroll">
-                    <table class="table erp-table erp-table-stack">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Voucher</th>
-                                <th>Float</th>
-                                <th>Payee</th>
-                                <th>Spent on</th>
-                                <th class="erp-th-num">Amount</th>
-                                <th>Recorded by</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                            <tr>
-                                <td>2026-10-08</td>
-                                <td>
-                                    <span class="erp-cell-strong">EX-2026-00418</span>
-                                    <span class="d-block erp-td-muted">posted to the ledger</span>
-                                </td>
-                                <td>Head office tin</td>
-                                <td>
-                                    Rickshaw
-                                    <span class="d-block erp-td-muted">Two rides to the courier office</span>
-                                </td>
-                                <td>
-                                    Local travel
-                                    <span class="d-block erp-td-muted">5220 — Travelling Expense</span>
-                                </td>
-                                <td class="erp-td-num">৳ 250.00</td>
-                                <td>
-                                    Rakib Hasan
-                                    <span class="d-block erp-td-muted">below the limit of 1,000.00</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2026-10-07</td>
-                                <td>
-                                    <span class="erp-cell-strong">EX-2026-00417</span>
-                                    <span class="d-block erp-td-muted">posted to the ledger</span>
-                                </td>
-                                <td>Counter till</td>
-                                <td>
-                                    Shahin Store
-                                    <span class="d-block erp-td-muted">Packing tape and markers</span>
-                                </td>
-                                <td>
-                                    Packaging materials
-                                    <span class="d-block erp-td-muted">5255 — Packing Materials</span>
-                                </td>
-                                <td class="erp-td-num">৳ 840.00</td>
-                                <td>
-                                    Jamal Uddin
-                                    <span class="d-block erp-td-muted">below the limit of 1,000.00</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2026-10-06</td>
-                                <td>
-                                    <span class="erp-cell-strong">EX-2026-00412</span>
-                                    <span class="d-block erp-td-muted">posted to the ledger</span>
-                                </td>
-                                <td>Depot tin</td>
-                                <td>
-                                    Paper shop
-                                    <span class="d-block erp-td-muted">Reams of paper for the counter</span>
-                                </td>
-                                <td>
-                                    Office supplies
-                                    <span class="d-block erp-td-muted">5240 — Office Supplies</span>
-                                </td>
-                                <td class="erp-td-num">৳ 2,000.00</td>
-                                <td>
-                                    Sumaiya Akter
-                                    <span class="d-block erp-td-muted">against request #31, approved by Md. Faruk</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <footer class="erp-table-foot">
-                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
-                        <span class="erp-td-muted">Every voucher is a payment out of the float's own account: Dr the category, Cr the tin. The float cannot pay more than it holds.</span>
-                        <a class="btn btn-outline-secondary btn-sm" href="./petty-cash-expenses.html">The voucher register</a>
-                    </div>
-                </footer>
-            </div>
-
-            <section class="erp-card mt-3">
+            <section class="erp-card mt-3" id="detail">
                 <header class="erp-card-head">
                     <div>
-                        <h2 class="erp-card-title">Declare a float</h2>
-                        <p class="erp-card-sub">This creates the float's own account in the chart of accounts under Current Assets and names the person answerable for what is in it. Nothing is posted — declaring a tin is not spending money.</p>
+                        <h2 class="erp-card-title">AST-000001 — Hiace delivery van 1</h2>
+                        <p class="erp-card-sub">Dhaka Metro-Ga 11-4471 · Vehicle · one row in this register, with plates</p>
+                    </div>
+                    <div class="erp-card-actions">
+                        <span class="erp-chip erp-chip-soft">In use</span>
+                        <span class="erp-chip erp-chip-soft">Good</span>
                     </div>
                 </header>
-                <form onsubmit="return false">
-                    <div class="erp-form-grid">
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pc-code">Code</label>
-                            <input class="form-control" type="text" id="pc-code" placeholder="PC-HEAD">
+                <div class="px-3 pb-3">
+                    <div class="erp-note erp-note-ok mb-3">
+                        <i class="bi bi-check2-circle" aria-hidden="true"></i>
+                        <div>Depreciating ৳9,000.00 a month (৳6,30,000.00 left to write off). The next charge falls due on 30 Sep 2026 — the last day of the month it covers.</div>
+                    </div>
+                    <div class="erp-split">
+                        <div class="erp-split-main">
+                            <dl class="erp-dl erp-dl-tight">
+                                <dt>Kind</dt><dd>Vehicle</dd>
+                                <dt>Where it is</dt><dd>Vehicle pool</dd>
+                                <dt>Branch</dt><dd>Head office</dd>
+                                <dt>Custodian</dt><dd>Md. Rafiq</dd>
+                                <dt>Acquired on</dt><dd>04 May 2024</dd>
+                                <dt>Acquisition cost</dt><dd>৳8,64,000.00</dd>
+                                <dt>Bought from</dt><dd>Navana Toyota, Tejgaon</dd>
+                                <dt>Warranty</dt><dd>04 May 2027 <span class="erp-chip erp-chip-ok ms-1">In warranty</span></dd>
+                                <dt>Registration</dt><dd>Dhaka Metro-Ga 11-4471</dd>
+                                <dt>Engine number</dt><dd>2TR-8874102</dd>
+                                <dt>Chassis number</dt><dd>TRH223-0094127</dd>
+                                <dt>Driver</dt><dd>Md. Rafiq</dd>
+                                <dt>Odometer</dt><dd>84,187 km</dd>
+                                <dt>Ledger account</dt><dd>1510 Vehicles</dd>
+                            </dl>
                         </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pc-name">Name</label>
-                            <input class="form-control" type="text" id="pc-name" placeholder="Head office tin">
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pc-custodian">Custodian</label>
-                            <select class="form-select" id="pc-custodian">
-                                <option>Rakib Hasan</option>
-                                <option>Sumaiya Akter</option>
-                                <option>Jamal Uddin</option>
-                            </select>
-                            <small class="form-text">The person answerable for the cash in the tin.</small>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pc-branch">Kept at</label>
-                            <select class="form-select" id="pc-branch">
-                                <option>Head office</option>
-                                <option>Uttara depot</option>
-                                <option>Dhanmondi outlet</option>
-                            </select>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pc-level">Level it is meant to hold</label>
-                            <div class="erp-input-group">
-                                <span class="input-group-text">৳</span>
-                                <input class="form-control erp-num" type="number" step="0.01" id="pc-level" placeholder="10,000.00">
-                            </div>
-                            <small class="form-text">The amount the replenishment screen will offer to put back.</small>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pc-account">Ledger account code</label>
-                            <input class="form-control" type="text" id="pc-account" placeholder="Filled in for you">
-                            <small class="form-text">Leave blank to keep the code derived from the float's own code.</small>
-                        </div>
-                        <div class="erp-form-field erp-form-field-wide">
-                            <label class="form-label" for="pc-agenda">What it is for</label>
-                            <input class="form-control" type="text" id="pc-agenda" placeholder="Couriers, tea, rickshaws and the small hardware nobody raises a purchase order for">
+                        <div class="erp-split-side">
+                            <section class="erp-card">
+                                <header class="erp-card-head">
+                                    <div>
+                                        <h2 class="erp-card-title">The papers hanging on it</h2>
+                                        <p class="erp-card-sub">Certificates on the company registers, linked to this vehicle — so they land on the renewals lens and the compliance calendar at the same time.</p>
+                                    </div>
+                                </header>
+                                <div class="px-3 pb-3">
+                                    <div class="erp-list-row">
+                                        <div class="erp-list-row-main">
+                                            <a class="erp-cell-strong" href="./records.html#detail">Fitness certificate — Hiace 1</a>
+                                            <div class="erp-td-muted">Company certificate · BRTA/FIT/2026/7741</div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div>22 Oct 2026</div>
+                                            <div class="erp-td-muted">Expiring · 14 days left</div>
+                                        </div>
+                                    </div>
+                                    <div class="erp-list-row">
+                                        <div class="erp-list-row-main">
+                                            <a class="erp-cell-strong" href="./records.html#detail">Tax token — Dhaka Metro-Ga 11-4471</a>
+                                            <div class="erp-td-muted">Company certificate · BRTA/TAX/2026/2210</div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div>30 Nov 2026</div>
+                                            <div class="erp-td-muted">In force · 53 days left</div>
+                                        </div>
+                                    </div>
+                                    <div class="erp-list-row">
+                                        <div class="erp-list-row-main">
+                                            <a class="erp-cell-strong" href="./records.html#detail">Goods-in-transit cover — fleet</a>
+                                            <div class="erp-td-muted">Insurance policy · GD-GIT-88 21 447</div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div>04 Dec 2026</div>
+                                            <div class="erp-td-muted">In force · 57 days left</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <section class="erp-card mt-3">
+                                <header class="erp-card-head">
+                                    <div>
+                                        <h2 class="erp-card-title">What has happened to it</h2>
+                                    </div>
+                                </header>
+                                <div class="px-3 pb-3">
+                                    <div class="erp-list-row erp-list-row-top">
+                                        <div class="erp-list-row-main">
+                                            <span class="erp-chip erp-chip-soft">Trip logged</span>
+                                            <div>Head office → Uttara depot on 08 Oct 2026, 67 km.</div>
+                                        </div>
+                                        <div class="erp-td-muted text-nowrap">08 Oct 2026<div>Md. Rafiq</div></div>
+                                    </div>
+                                    <div class="erp-list-row erp-list-row-top">
+                                        <div class="erp-list-row-main">
+                                            <span class="erp-chip erp-chip-soft">Depreciated</span>
+                                            <div>Depreciated ৳9,000.00 for 2026-08 (journal JV-2026-0904). Book value now ৳6,39,000.00.</div>
+                                        </div>
+                                        <div class="erp-td-muted text-nowrap">31 Aug 2026<div>System</div></div>
+                                    </div>
+                                    <div class="erp-list-row erp-list-row-top">
+                                        <div class="erp-list-row-main">
+                                            <span class="erp-chip erp-chip-soft">Moved</span>
+                                            <div>Moved: location.</div>
+                                        </div>
+                                        <div class="erp-td-muted text-nowrap">12 Jun 2026<div>Salma Begum</div></div>
+                                    </div>
+                                    <div class="erp-list-row erp-list-row-top">
+                                        <div class="erp-list-row-main">
+                                            <span class="erp-chip erp-chip-soft">Registered</span>
+                                            <div>Vehicle registered at ৳8,64,000.00 at Vehicle pool.</div>
+                                        </div>
+                                        <div class="erp-td-muted text-nowrap">04 May 2024<div>Instance Owner</div></div>
+                                    </div>
+                                </div>
+                            </section>
                         </div>
                     </div>
-                    <label class="form-check mt-2">
-                        <input class="form-check-input" type="checkbox" checked>
-                        <span class="form-check-label">Open it now</span>
-                    </label>
-                    <div class="mt-2">
-                        <button class="btn btn-primary" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i> Declare the float</button>
-                    </div>
-                </form>
+                </div>
             </section>
 
-            <div class="erp-filter-note mt-2">
-                <i class="bi bi-info-circle" aria-hidden="true"></i>
-                <span>A voucher leaves through the same payment service every other payment uses, and a top-up is a transfer into the float — never a second record of the spending it already recorded. That is why the tin's balance on this screen and the balance in the books cannot drift apart.</span>
-            </div>
+            <section class="erp-card mt-3" id="add">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">What kind of thing is it?</h2>
+                        <p class="erp-card-sub">The kind decides what the register asks for next — a van needs plates and a driver, a laptop does not — and what the depreciation default should be, because that is a property of the thing rather than of the company. Next code: <span class="erp-chip erp-chip-outline">AST-000019</span></p>
+                    </div>
+                </header>
+                <div class="px-3 pb-3">
+                    <div class="erp-list-row">
+                        <div class="erp-list-row-main">
+                            <span class="erp-cell-strong"><i class="bi bi-truck me-1" aria-hidden="true"></i>Vehicles</span>
+                            <div class="erp-td-muted">Plates, a driver, and papers that run out: fitness, insurance and tax token live in the certificate register and appear on the compliance calendar with everything else.</div>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="erp-chip erp-chip-outline">Depreciates · 96 months by default</span>
+                            <span class="erp-chip erp-chip-soft">Ledger 1510</span>
+                            <a class="btn btn-sm btn-primary" href="./assets.html#add">Choose</a>
+                        </div>
+                    </div>
+                    <div class="erp-list-row">
+                        <div class="erp-list-row-main">
+                            <span class="erp-cell-strong"><i class="bi bi-gear me-1" aria-hidden="true"></i>Equipment</span>
+                            <div class="erp-td-muted">Generators, fusing machines, cutting tables, tools — what the work is actually done with.</div>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="erp-chip erp-chip-outline">Depreciates · 60 months by default</span>
+                            <span class="erp-chip erp-chip-soft">Ledger 1520</span>
+                            <a class="btn btn-sm btn-primary" href="./equipment.html">Choose</a>
+                        </div>
+                    </div>
+                    <div class="erp-list-row">
+                        <div class="erp-list-row-main">
+                            <span class="erp-cell-strong"><i class="bi bi-pc-display me-1" aria-hidden="true"></i>Computers &amp; IT</span>
+                            <div class="erp-td-muted">Laptops, printers, POS terminals and the network — short lives, quick obsolescence.</div>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="erp-chip erp-chip-outline">Depreciates · 36 months by default</span>
+                            <span class="erp-chip erp-chip-soft">Ledger 1540</span>
+                            <a class="btn btn-sm btn-primary" href="./assets.html#add">Choose</a>
+                        </div>
+                    </div>
+                    <div class="erp-list-row">
+                        <div class="erp-list-row-main">
+                            <span class="erp-cell-strong"><i class="bi bi-lamp me-1" aria-hidden="true"></i>Furniture &amp; fittings</span>
+                            <div class="erp-td-muted">Desks, racking, counters and the fit-out of each outlet.</div>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="erp-chip erp-chip-outline">Not normally depreciated</span>
+                            <span class="erp-chip erp-chip-soft">Ledger 1530</span>
+                            <a class="btn btn-sm btn-primary" href="./assets.html#add">Choose</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
                 <p class="erp-field-label">More in this module</p>
                 <div class="d-flex flex-wrap gap-2">
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash-expenses.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Expenses</a>
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash-requests.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Requests</a>
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash-replenishment.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Replenishment</a>
-                    <a class="erp-chip erp-chip-outline" href="./expenses.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>All Expenses</a>
+                    <a class="erp-chip erp-chip-outline" href="./vehicles.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Vehicle management</a>
+                    <a class="erp-chip erp-chip-outline" href="./equipment.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Equipment</a>
+                    <a class="erp-chip erp-chip-outline" href="./trips.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Vehicle trip log</a>
+                    <a class="erp-chip erp-chip-outline" href="./depreciation.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Depreciation</a>
+                    <a class="erp-chip erp-chip-outline" href="./disposal.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Disposals</a>
+                    <a class="erp-chip erp-chip-outline" href="./compliance.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Compliance calendar</a>
                 </div>
             </nav>
-        </main>
 
-<footer class="erp-footer">
-    <span>BD ERP · Rafshan Trading Ltd.</span>
-    <span class="erp-footer-meta">
-        <span>07 Oct 2026, 06:20 PM · Asia/Dhaka</span>
-        <span class="d-none d-md-inline">Press <kbd>⌘</kbd><kbd>K</kbd> to jump anywhere</span>
-    </span>
-</footer>
-    </div>
+        </div>
+    </main>
 </div>
-<script>window.erpNavIndex = [];</script>
 
 <div class="erp-backdrop" data-erp-backdrop hidden></div>
 

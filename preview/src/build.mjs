@@ -9,10 +9,11 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { shellHeader, shellFooter } from './shell.mjs';
 import { designSystem, dashboard, orders, orderDetail, customers, customerProfile, pos, packaging, labels, cashBank, bankRecon, cheques, expenses, recurringExpenses, pettyCash, pettyCashExpenses, pettyCashRequests, pettyCashReplenishment, cashCounts, cashCountSheet, bankCharges, expenseReport, cashReports, reportCentre, reportFamily,
-    reportsCustom, reportsScheduled, settingsDesk, settingsBranch, maintenanceDesk,
+    reportsCustom, reportsScheduled, settingsDesk, settingsBranch, maintenanceDesk, maintenanceLogs,
     settingsLocalization, settingsTax,
     noticeBoard, taskBoard, registerDesk, complianceDesk,
     meetingsDiary, minutesRegister, meetingActionItems,
+    assetRegister, vehicleShelf, equipmentShelf, tripLog, depreciationDesk, disposalRegister,
     login, notFound } from './pages.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -47,6 +48,7 @@ const shellPages = [
     ['settings-localization.html', 'Bengali settings', settingsLocalization],
     ['settings-tax.html', 'VAT & tax settings', settingsTax],
     ['maintenance.html', 'System maintenance', maintenanceDesk],
+    ['maintenance-logs.html', 'Error log', maintenanceLogs],
     ['notices.html', 'Notice board', noticeBoard],
     ['tasks.html', 'Tasks & projects', taskBoard],
     ['records.html', 'Business registers', registerDesk],
@@ -54,6 +56,12 @@ const shellPages = [
     ['meetings.html', 'Meetings', meetingsDiary],
     ['minutes.html', 'Meeting minutes', minutesRegister],
     ['action-items.html', 'Action items', meetingActionItems],
+    ['assets.html', 'Asset register', assetRegister],
+    ['vehicles.html', 'Vehicle management', vehicleShelf],
+    ['equipment.html', 'Equipment', equipmentShelf],
+    ['trips.html', 'Vehicle trip log', tripLog],
+    ['depreciation.html', 'Depreciation', depreciationDesk],
+    ['disposal.html', 'Disposals', disposalRegister],
     ['petty-cash.html', 'Petty cash', pettyCash],
     ['petty-cash-requests.html', 'Petty cash requests', pettyCashRequests],
     ['petty-cash-expenses.html', 'Petty cash expenses', pettyCashExpenses],

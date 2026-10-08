@@ -4356,7 +4356,7 @@ ${previewBar('expense-report.html')}
                 </div>
                 <div class="erp-page-head-actions">
                     <a class="btn btn-outline-secondary" href="./expenses.html"><i class="bi bi-receipt" aria-hidden="true"></i> The register</a>
-                    <a class="btn btn-outline-secondary" href="./cash-flow.html"><i class="bi bi-arrow-left-right" aria-hidden="true"></i> Cash flow</a>
+                    <a class="btn btn-outline-secondary" href="./cash-reports.html"><i class="bi bi-arrow-left-right" aria-hidden="true"></i> Cash flow</a>
                     <button class="btn btn-primary" type="button"><i class="bi bi-download" aria-hidden="true"></i> Export CSV</button>
                 </div>
             </header>
@@ -5011,7 +5011,9 @@ export function reportFamily() {
 
                         <div class="mt-auto pt-3 d-flex flex-wrap gap-2">
                             ${allowed
-                                ? `<a class="btn btn-outline-secondary btn-sm" href="${entry.url}">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>`
+                                ? (entry.url
+                                    ? `<a class="btn btn-outline-secondary btn-sm" href="${entry.url}">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>`
+                                    : '<span class="erp-chip erp-chip-outline"><i class="bi bi-slash-circle" aria-hidden="true"></i> no screen yet</span>')
                                 : `<span class="erp-chip erp-chip-soft">Needs <span class="font-monospace ms-1">${entry.permission}</span></span>`}
                             ${entry.register ? '<span class="erp-chip erp-chip-outline"><i class="bi bi-journal-text" aria-hidden="true"></i> opened from the register</span>' : ''}
                         </div>
@@ -5757,7 +5759,7 @@ ${previewBar('maintenance.html')}
                     <p class="erp-page-sub">What this installation is, what may be done to it, and what will never be done to it automatically. Every operation records what it did — how many files, how many bytes, which tables — so “the system felt slower after maintenance” is a question with an answer.</p>
                 </div>
                 <div class="erp-page-head-actions">
-                    <a class="btn btn-outline-secondary" href="./maintenance-log.html"><i class="bi bi-journal-code" aria-hidden="true"></i> Error log</a>
+                    <a class="btn btn-outline-secondary" href="./maintenance-logs.html"><i class="bi bi-journal-code" aria-hidden="true"></i> Error log</a>
                     <a class="btn btn-outline-secondary" href="./settings.html"><i class="bi bi-sliders" aria-hidden="true"></i> Settings</a>
                 </div>
             </header>
@@ -7975,6 +7977,1583 @@ ${previewBar('action-items.html')}
                     </table>
                 </div>
             </section>`).join('')}
+
+        </div>
+    </main>
+</div>`;
+}
+
+/* ------------------------------------------------ 12-14. the asset register */
+
+const assetRows = [
+    { code: 'AST-000001', name: 'Hiace delivery van 1', kind: 'Vehicle', place: 'Vehicle pool', custodian: 'Md. Rafiq', condition: 'good', cost: '৳8,64,000.00', charged: '৳2,34,000.00', book: '৳6,30,000.00', status: 'in_use', statusLabel: 'In use' },
+    { code: 'AST-000002', name: 'Hiace delivery van 2', kind: 'Vehicle', place: 'Vehicle pool', custodian: 'Md. Salauddin', condition: 'good', cost: '৳8,64,000.00', charged: '৳1,98,000.00', book: '৳6,66,000.00', status: 'in_use', statusLabel: 'In use' },
+    { code: 'AST-000003', name: 'Covered van (3 ton)', kind: 'Vehicle', place: 'Vehicle pool', custodian: 'Jasim Uddin', condition: 'fair', cost: '৳12,00,000.00', charged: '৳2,90,000.00', book: '৳9,10,000.00', status: 'in_use', statusLabel: 'In use' },
+    { code: 'AST-000004', name: 'Double-cabin pickup', kind: 'Vehicle', place: 'Workshop, Tejgaon', custodian: 'Shahin Alam', condition: 'poor', cost: '৳6,00,000.00', charged: '৳2,75,000.00', book: '৳3,25,000.00', status: 'under_repair', statusLabel: 'Under repair' },
+    { code: 'AST-000005', name: 'Embroidery machine (12-head)', kind: 'Machinery', place: 'Production floor', custodian: 'Rehana Parvin', condition: 'good', cost: '৳4,50,000.00', charged: '৳90,000.00', book: '৳3,60,000.00', status: 'in_use', statusLabel: 'In use' },
+    { code: 'AST-000006', name: 'Generator 250 kVA', kind: 'Equipment', place: 'Generator shed', custodian: 'Nazrul Islam', condition: 'fair', cost: '৳9,00,000.00', charged: '৳3,75,000.00', book: '৳5,25,000.00', status: 'in_use', statusLabel: 'In use' },
+    { code: 'AST-000007', name: 'Fusing machine', kind: 'Equipment', place: 'Production floor', custodian: 'Rehana Parvin', condition: 'good', cost: '৳1,80,000.00', charged: '৳36,000.00', book: '৳1,44,000.00', status: 'in_use', statusLabel: 'In use' },
+    { code: 'AST-000008', name: 'POS terminal — Dhanmondi', kind: 'Computers & IT', place: 'Dhanmondi counter', custodian: 'Salma Begum', condition: 'good', cost: '৳86,400.00', charged: '৳33,600.00', book: '৳52,800.00', status: 'in_use', statusLabel: 'In use' },
+    { code: 'AST-000009', name: 'Racking — Uttara warehouse', kind: 'Furniture & fittings', place: 'Uttara warehouse', custodian: 'Rakib Hasan', condition: 'good', cost: '৳3,20,000.00', charged: '—', book: '৳3,20,000.00', status: 'in_use', statusLabel: 'In use' },
+    { code: 'AST-000010', name: 'Warehouse laptop', kind: 'Computers & IT', place: 'Uttara warehouse', custodian: 'Rakib Hasan', condition: 'good', cost: '৳1,08,000.00', charged: '৳45,000.00', book: '৳63,000.00', status: 'stored', statusLabel: 'In store' },
+];
+
+export function assetRegister() {
+    const shelves = [
+        { label: 'Asset register', icon: 'bi-hdd-stack', url: './assets.html', hint: 'Every asset, every kind — 18 live rows', count: '18 live' },
+        { label: 'Vehicle management', icon: 'bi-truck', url: './vehicles.html', hint: 'Plates, drivers, papers and running cost per kilometre', count: '4 live' },
+        { label: 'Equipment', icon: 'bi-gear', url: './equipment.html', hint: 'Machinery, computers and the fit-out', count: '12 live' },
+        { label: 'Vehicle trip log', icon: 'bi-signpost-split', url: './trips.html', hint: 'Where each vehicle went, how far, and what the run cost — distance from the odometer, never typed', count: '38 this month' },
+        { label: 'Depreciation', icon: 'bi-graph-down-arrow', url: './depreciation.html', hint: 'The month each asset owes, one journal entry at a time', count: '6 due now' },
+        { label: 'Disposal register', icon: 'bi-archive', url: './disposal.html', hint: 'What was sold, scrapped or written off — with the reason and what came back', count: '2 written off' },
+    ];
+
+    return `
+${previewBar('assets.html')}
+<div class="erp-shell">
+    ${sidebar('govern')}
+    <main class="erp-main">
+        ${topbar('Asset register')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-hdd-stack" aria-hidden="true"></i> Business Management · Assets</p>
+                    <h1 class="erp-h1">What the company owns, where it is, and what it is worth</h1>
+                    <p class="erp-page-sub">A register that answers three questions about every thing the company owns: where is it, what did it cost, and who answers for it. Book value is not an opinion — it is cost less the depreciation that has actually been posted to the ledger, which is why nothing on these pages moves it except a real journal entry.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-primary" href="#add"><i class="bi bi-plus-lg" aria-hidden="true"></i> Register an asset</a>
+                    <a class="btn btn-outline-secondary" href="./trips.html"><i class="bi bi-signpost-split" aria-hidden="true"></i> Trip log</a>
+                    <a class="btn btn-outline-secondary" href="./depreciation.html"><i class="bi bi-graph-down-arrow" aria-hidden="true"></i> Depreciation <span class="erp-chip erp-chip-warn ms-1">6 due</span></a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-hdd-stack" aria-hidden="true"></i> Live assets</p>
+                    <p class="erp-kpi-value">18</p>
+                    <p class="erp-kpi-foot">On the working register — everything not written off</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-cash-stack" aria-hidden="true"></i> At cost</p>
+                    <p class="erp-kpi-value">৳48,60,000.00</p>
+                    <p class="erp-kpi-foot">What these assets were bought for</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-graph-down-arrow" aria-hidden="true"></i> Accumulated depreciation</p>
+                    <p class="erp-kpi-value">৳12,45,000.00</p>
+                    <p class="erp-kpi-foot">The part of that cost already charged to expense</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-wallet2" aria-hidden="true"></i> Book value</p>
+                    <p class="erp-kpi-value">৳36,15,000.00</p>
+                    <p class="erp-kpi-foot">Cost less accumulated depreciation — the figure the balance sheet carries</p>
+                </div>
+                <a class="erp-kpi text-decoration-none" href="./vehicles.html">
+                    <p class="erp-kpi-label"><i class="bi bi-truck" aria-hidden="true"></i> Vehicles</p>
+                    <p class="erp-kpi-value">4</p>
+                    <p class="erp-kpi-foot">Each one with plates, a driver and papers that run out</p>
+                </a>
+                <a class="erp-kpi text-decoration-none" href="./depreciation.html">
+                    <p class="erp-kpi-label"><i class="bi bi-calendar-check" aria-hidden="true"></i> Due for depreciation</p>
+                    <p class="erp-kpi-value">6</p>
+                    <p class="erp-kpi-foot">A month has fallen due and not been posted</p>
+                </a>
+            </div>
+
+            <section class="erp-card mb-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">The shelves</h2>
+                        <p class="erp-card-sub">One register, seen from six angles. A vehicle is an asset — which is why the trucks are not missing from the register and the register is not missing the trucks.</p>
+                    </div>
+                </header>
+                <div class="px-3 pb-2">
+                    ${shelves.map((shelf) => `
+                    <div class="erp-list-row">
+                        <div class="erp-list-row-main">
+                            <a class="erp-cell-strong" href="${shelf.url}"><i class="bi ${shelf.icon} me-1" aria-hidden="true"></i>${shelf.label}</a>
+                            <div class="erp-td-muted">${shelf.hint}</div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="erp-chip erp-chip-soft">${shelf.count}</span>
+                            <a class="btn btn-sm btn-outline-secondary" href="${shelf.url}">Open</a>
+                        </div>
+                    </div>`).join('')}
+                </div>
+            </section>
+
+            <div class="erp-note erp-note-warn mb-3">
+                <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+                <div>
+                    <strong>3 asset(s) carry a cost that is not in the books yet.</strong>
+                    Until they are capitalised they cannot be depreciated — charging a monthly expense against a cost that was never recorded is inventing a loss, so the depreciation run skips them and says so.
+                    <a href="./depreciation.html#waiting">Take them through the depreciation desk</a> when the purchase is posted.
+                </div>
+            </div>
+
+            <form class="erp-filterbar" method="GET" action="#">
+                <div class="erp-filter">
+                    <label class="form-label" for="category">Kind</label>
+                    <select class="form-select" name="category" id="category">
+                        <option value="">Every kind</option>
+                        <option>Vehicles</option>
+                        <option>Equipment</option>
+                        <option>Machinery</option>
+                        <option>Computers &amp; IT</option>
+                        <option>Furniture &amp; fittings</option>
+                        <option>Other assets</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="status">Status</label>
+                    <select class="form-select" name="status" id="status">
+                        <option value="">Live only</option>
+                        <option>In use</option>
+                        <option>In store</option>
+                        <option>Under repair</option>
+                        <option>Disposed</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="custodian_id">Custodian</label>
+                    <select class="form-select" name="custodian_id" id="custodian_id">
+                        <option value="">Anybody</option>
+                        <option>Md. Rafiq</option>
+                        <option>Rehana Parvin</option>
+                        <option>Rakib Hasan</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="branch_id">Branch</label>
+                    <select class="form-select" name="branch_id" id="branch_id">
+                        <option value="">Every branch</option>
+                        <option>Head office</option>
+                        <option>Dhanmondi counter</option>
+                        <option>Uttara warehouse</option>
+                        <option>Company-wide only</option>
+                    </select>
+                </div>
+                <div class="erp-filter erp-filter-wide">
+                    <label class="form-label" for="q">Search</label>
+                    <input class="form-control" type="search" name="q" id="q" placeholder="Name, code, plates or location">
+                </div>
+                <div class="erp-filterbar-actions">
+                    <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                    <a class="btn btn-link" href="./assets.html">Reset</a>
+                </div>
+            </form>
+
+            <div class="erp-table-shell">
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">The register <span class="erp-chip erp-chip-outline">18 asset(s)</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead>
+                            <tr>
+                                <th>Asset</th>
+                                <th>Where it is</th>
+                                <th>Custodian</th>
+                                <th>Condition</th>
+                                <th class="text-end">Cost</th>
+                                <th class="text-end">Book value</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${assetRows.map((row) => `
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="./assets.html#detail">${row.name}</a>
+                                    <div class="erp-td-muted">${row.code} · ${row.kind}</div>
+                                </td>
+                                <td class="erp-td-muted">${row.place}</td>
+                                <td class="erp-td-muted">${row.custodian}</td>
+                                <td>${statusChip(row.condition, row.condition === 'good' ? 'Good' : 'Fair')}</td>
+                                <td class="erp-td-num text-end">${row.cost}</td>
+                                <td class="erp-td-num text-end">${row.book}${row.charged !== '—' ? `<div class="erp-td-muted">${row.charged} charged</div>` : ''}</td>
+                                <td>${statusChip(row.status, row.statusLabel)}</td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="./assets.html#detail">Open</a></td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="erp-table-foot">Showing 10 of 18 live assets. Disposed rows stay on the register and appear on the disposal register; the working lists let them go.</div>
+            </div>
+
+            <section class="erp-card mt-3" id="detail">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">AST-000001 — Hiace delivery van 1</h2>
+                        <p class="erp-card-sub">Dhaka Metro-Ga 11-4471 · Vehicle · one row in this register, with plates</p>
+                    </div>
+                    <div class="erp-card-actions">
+                        <span class="erp-chip erp-chip-soft">In use</span>
+                        <span class="erp-chip erp-chip-soft">Good</span>
+                    </div>
+                </header>
+                <div class="px-3 pb-3">
+                    <div class="erp-note erp-note-ok mb-3">
+                        <i class="bi bi-check2-circle" aria-hidden="true"></i>
+                        <div>Depreciating ৳9,000.00 a month (৳6,30,000.00 left to write off). The next charge falls due on 30 Sep 2026 — the last day of the month it covers.</div>
+                    </div>
+                    <div class="erp-split">
+                        <div class="erp-split-main">
+                            <dl class="erp-dl erp-dl-tight">
+                                <dt>Kind</dt><dd>Vehicle</dd>
+                                <dt>Where it is</dt><dd>Vehicle pool</dd>
+                                <dt>Branch</dt><dd>Head office</dd>
+                                <dt>Custodian</dt><dd>Md. Rafiq</dd>
+                                <dt>Acquired on</dt><dd>04 May 2024</dd>
+                                <dt>Acquisition cost</dt><dd>৳8,64,000.00</dd>
+                                <dt>Bought from</dt><dd>Navana Toyota, Tejgaon</dd>
+                                <dt>Warranty</dt><dd>04 May 2027 <span class="erp-chip erp-chip-ok ms-1">In warranty</span></dd>
+                                <dt>Registration</dt><dd>Dhaka Metro-Ga 11-4471</dd>
+                                <dt>Engine number</dt><dd>2TR-8874102</dd>
+                                <dt>Chassis number</dt><dd>TRH223-0094127</dd>
+                                <dt>Driver</dt><dd>Md. Rafiq</dd>
+                                <dt>Odometer</dt><dd>84,187 km</dd>
+                                <dt>Ledger account</dt><dd>1510 Vehicles</dd>
+                            </dl>
+                        </div>
+                        <div class="erp-split-side">
+                            <section class="erp-card">
+                                <header class="erp-card-head">
+                                    <div>
+                                        <h2 class="erp-card-title">The papers hanging on it</h2>
+                                        <p class="erp-card-sub">Certificates on the company registers, linked to this vehicle — so they land on the renewals lens and the compliance calendar at the same time.</p>
+                                    </div>
+                                </header>
+                                <div class="px-3 pb-3">
+                                    <div class="erp-list-row">
+                                        <div class="erp-list-row-main">
+                                            <a class="erp-cell-strong" href="./records.html#detail">Fitness certificate — Hiace 1</a>
+                                            <div class="erp-td-muted">Company certificate · BRTA/FIT/2026/7741</div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div>22 Oct 2026</div>
+                                            <div class="erp-td-muted">Expiring · 14 days left</div>
+                                        </div>
+                                    </div>
+                                    <div class="erp-list-row">
+                                        <div class="erp-list-row-main">
+                                            <a class="erp-cell-strong" href="./records.html#detail">Tax token — Dhaka Metro-Ga 11-4471</a>
+                                            <div class="erp-td-muted">Company certificate · BRTA/TAX/2026/2210</div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div>30 Nov 2026</div>
+                                            <div class="erp-td-muted">In force · 53 days left</div>
+                                        </div>
+                                    </div>
+                                    <div class="erp-list-row">
+                                        <div class="erp-list-row-main">
+                                            <a class="erp-cell-strong" href="./records.html#detail">Goods-in-transit cover — fleet</a>
+                                            <div class="erp-td-muted">Insurance policy · GD-GIT-88 21 447</div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div>04 Dec 2026</div>
+                                            <div class="erp-td-muted">In force · 57 days left</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <section class="erp-card mt-3">
+                                <header class="erp-card-head">
+                                    <div>
+                                        <h2 class="erp-card-title">What has happened to it</h2>
+                                    </div>
+                                </header>
+                                <div class="px-3 pb-3">
+                                    <div class="erp-list-row erp-list-row-top">
+                                        <div class="erp-list-row-main">
+                                            <span class="erp-chip erp-chip-soft">Trip logged</span>
+                                            <div>Head office → Uttara depot on 08 Oct 2026, 67 km.</div>
+                                        </div>
+                                        <div class="erp-td-muted text-nowrap">08 Oct 2026<div>Md. Rafiq</div></div>
+                                    </div>
+                                    <div class="erp-list-row erp-list-row-top">
+                                        <div class="erp-list-row-main">
+                                            <span class="erp-chip erp-chip-soft">Depreciated</span>
+                                            <div>Depreciated ৳9,000.00 for 2026-08 (journal JV-2026-0904). Book value now ৳6,39,000.00.</div>
+                                        </div>
+                                        <div class="erp-td-muted text-nowrap">31 Aug 2026<div>System</div></div>
+                                    </div>
+                                    <div class="erp-list-row erp-list-row-top">
+                                        <div class="erp-list-row-main">
+                                            <span class="erp-chip erp-chip-soft">Moved</span>
+                                            <div>Moved: location.</div>
+                                        </div>
+                                        <div class="erp-td-muted text-nowrap">12 Jun 2026<div>Salma Begum</div></div>
+                                    </div>
+                                    <div class="erp-list-row erp-list-row-top">
+                                        <div class="erp-list-row-main">
+                                            <span class="erp-chip erp-chip-soft">Registered</span>
+                                            <div>Vehicle registered at ৳8,64,000.00 at Vehicle pool.</div>
+                                        </div>
+                                        <div class="erp-td-muted text-nowrap">04 May 2024<div>Instance Owner</div></div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="erp-card mt-3" id="add">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">What kind of thing is it?</h2>
+                        <p class="erp-card-sub">The kind decides what the register asks for next — a van needs plates and a driver, a laptop does not — and what the depreciation default should be, because that is a property of the thing rather than of the company. Next code: <span class="erp-chip erp-chip-outline">AST-000019</span></p>
+                    </div>
+                </header>
+                <div class="px-3 pb-3">
+                    <div class="erp-list-row">
+                        <div class="erp-list-row-main">
+                            <span class="erp-cell-strong"><i class="bi bi-truck me-1" aria-hidden="true"></i>Vehicles</span>
+                            <div class="erp-td-muted">Plates, a driver, and papers that run out: fitness, insurance and tax token live in the certificate register and appear on the compliance calendar with everything else.</div>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="erp-chip erp-chip-outline">Depreciates · 96 months by default</span>
+                            <span class="erp-chip erp-chip-soft">Ledger 1510</span>
+                            <a class="btn btn-sm btn-primary" href="./assets.html#add">Choose</a>
+                        </div>
+                    </div>
+                    <div class="erp-list-row">
+                        <div class="erp-list-row-main">
+                            <span class="erp-cell-strong"><i class="bi bi-gear me-1" aria-hidden="true"></i>Equipment</span>
+                            <div class="erp-td-muted">Generators, fusing machines, cutting tables, tools — what the work is actually done with.</div>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="erp-chip erp-chip-outline">Depreciates · 60 months by default</span>
+                            <span class="erp-chip erp-chip-soft">Ledger 1520</span>
+                            <a class="btn btn-sm btn-primary" href="./equipment.html">Choose</a>
+                        </div>
+                    </div>
+                    <div class="erp-list-row">
+                        <div class="erp-list-row-main">
+                            <span class="erp-cell-strong"><i class="bi bi-pc-display me-1" aria-hidden="true"></i>Computers &amp; IT</span>
+                            <div class="erp-td-muted">Laptops, printers, POS terminals and the network — short lives, quick obsolescence.</div>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="erp-chip erp-chip-outline">Depreciates · 36 months by default</span>
+                            <span class="erp-chip erp-chip-soft">Ledger 1540</span>
+                            <a class="btn btn-sm btn-primary" href="./assets.html#add">Choose</a>
+                        </div>
+                    </div>
+                    <div class="erp-list-row">
+                        <div class="erp-list-row-main">
+                            <span class="erp-cell-strong"><i class="bi bi-lamp me-1" aria-hidden="true"></i>Furniture &amp; fittings</span>
+                            <div class="erp-td-muted">Desks, racking, counters and the fit-out of each outlet.</div>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="erp-chip erp-chip-outline">Not normally depreciated</span>
+                            <span class="erp-chip erp-chip-soft">Ledger 1530</span>
+                            <a class="btn btn-sm btn-primary" href="./assets.html#add">Choose</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
+                <p class="erp-field-label">More in this module</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="erp-chip erp-chip-outline" href="./vehicles.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Vehicle management</a>
+                    <a class="erp-chip erp-chip-outline" href="./equipment.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Equipment</a>
+                    <a class="erp-chip erp-chip-outline" href="./trips.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Vehicle trip log</a>
+                    <a class="erp-chip erp-chip-outline" href="./depreciation.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Depreciation</a>
+                    <a class="erp-chip erp-chip-outline" href="./disposal.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Disposals</a>
+                    <a class="erp-chip erp-chip-outline" href="./compliance.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Compliance calendar</a>
+                </div>
+            </nav>
+
+        </div>
+    </main>
+</div>`;
+}
+
+/* --------------------------------------------------- 12-14. the vehicle shelf */
+
+export function vehicleShelf() {
+    const vehicles = [
+        {
+            name: 'Hiace delivery van 1', plate: 'Dhaka Metro-Ga 11-4471', place: 'Vehicle pool', driver: 'Md. Rafiq',
+            odometer: '84,187 km', book: '৳6,30,000.00', status: 'in_use', statusLabel: 'In use',
+            paper: 'Fitness certificate — Hiace 1', tracked: '22 Oct 2026', paperState: 'expiring', paperStateLabel: 'Expiring',
+        },
+        {
+            name: 'Hiace delivery van 2', plate: 'Dhaka Metro-Ga 11-2345', place: 'Vehicle pool', driver: 'Md. Salauddin',
+            odometer: '61,505 km', book: '৳6,66,000.00', status: 'in_use', statusLabel: 'In use',
+            paper: 'Tax token — Dhaka Metro-Ga 11-2345', tracked: '30 Nov 2026', paperState: 'valid', paperStateLabel: 'In force',
+        },
+        {
+            name: 'Covered van (3 ton)', plate: 'Dhaka Metro-Ga 13-1187', place: 'Uttara warehouse', driver: 'Jasim Uddin',
+            odometer: '1,12,412 km', book: '৳9,10,000.00', status: 'in_use', statusLabel: 'In use',
+            paper: 'Goods-in-transit cover — covered van', tracked: '04 Dec 2026', paperState: 'valid', paperStateLabel: 'In force',
+        },
+        {
+            name: 'Double-cabin pickup', plate: 'Dhaka Metro-Kha 15-8890', place: 'Workshop, Tejgaon', driver: 'Shahin Alam',
+            odometer: '45,908 km', book: '৳3,25,000.00', status: 'under_repair', statusLabel: 'Under repair',
+            paper: 'Fitness certificate — pickup', tracked: '05 Oct 2026', paperState: 'overdue', paperStateLabel: 'Overdue',
+        },
+    ];
+
+    const costs = [
+        { plate: 'Dhaka Metro-Ga 11-4471', name: 'Hiace delivery van 1', trips: 12, km: '620.00 km', fuel: '৳21,700.00', other: '৳1,450.00', total: '৳23,150.00', perKm: '৳37.34' },
+        { plate: 'Dhaka Metro-Ga 11-2345', name: 'Hiace delivery van 2', trips: 10, km: '540.00 km', fuel: '৳18,900.00', other: '৳1,200.00', total: '৳20,100.00', perKm: '৳37.22' },
+        { plate: 'Dhaka Metro-Ga 13-1187', name: 'Covered van (3 ton)', trips: 9, km: '780.00 km', fuel: '৳28,600.00', other: '৳2,870.00', total: '৳31,470.00', perKm: '৳40.35' },
+        { plate: 'Dhaka Metro-Kha 15-8890', name: 'Double-cabin pickup', trips: 7, km: '200.00 km', fuel: '৳5,700.00', other: '৳600.00', total: '৳6,300.00', perKm: '৳31.50' },
+    ];
+
+    return `
+${previewBar('vehicles.html')}
+<div class="erp-shell">
+    ${sidebar('govern')}
+    <main class="erp-main">
+        ${topbar('Vehicle management')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-truck" aria-hidden="true"></i> Business Management · Assets · Vehicles</p>
+                    <h1 class="erp-h1">The fleet, its papers, and what each kilometre costs</h1>
+                    <p class="erp-page-sub">A vehicle is an asset with plates: the same register entry as a generator, plus a driver and dates that run out. Nothing here is a second list — it is the register read the way somebody who has to get a covered van to Narayanganj this afternoon needs it.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-primary" href="./assets.html#add"><i class="bi bi-plus-lg" aria-hidden="true"></i> Register a vehicle</a>
+                    <a class="btn btn-outline-secondary" href="./trips.html"><i class="bi bi-signpost-split" aria-hidden="true"></i> Trip log</a>
+                    <a class="btn btn-outline-secondary" href="./assets.html"><i class="bi bi-hdd-stack" aria-hidden="true"></i> Whole register</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-truck" aria-hidden="true"></i> Vehicles</p>
+                    <p class="erp-kpi-value">4</p>
+                    <p class="erp-kpi-foot">On the register and not written off</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-tools" aria-hidden="true"></i> Under repair</p>
+                    <p class="erp-kpi-value">1</p>
+                    <p class="erp-kpi-foot">Off the road, still on the books — the pickup is at the Tejgaon workshop</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-cash-stack" aria-hidden="true"></i> At cost</p>
+                    <p class="erp-kpi-value">৳35,28,000.00</p>
+                    <p class="erp-kpi-foot">What the fleet was bought for</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-wallet2" aria-hidden="true"></i> Book value</p>
+                    <p class="erp-kpi-value">৳25,31,000.00</p>
+                    <p class="erp-kpi-foot">Cost less the depreciation already charged</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-paperclip" aria-hidden="true"></i> Papers linked</p>
+                    <p class="erp-kpi-value">9</p>
+                    <p class="erp-kpi-foot">Certificates, insurance and contracts hanging on these four vehicles</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-shield-check" aria-hidden="true"></i> Warranty ending</p>
+                    <p class="erp-kpi-value">0</p>
+                    <p class="erp-kpi-foot">Nothing falls out of warranty this month</p>
+                </div>
+            </div>
+
+            <form class="erp-filterbar" method="GET" action="#">
+                <div class="erp-filter">
+                    <label class="form-label" for="vstatus">Status</label>
+                    <select class="form-select" name="status" id="vstatus">
+                        <option>On the road and off it</option>
+                        <option>In use</option>
+                        <option>In store</option>
+                        <option>Under repair</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="vbranch">Branch</label>
+                    <select class="form-select" name="branch_id" id="vbranch">
+                        <option>Every branch</option>
+                        <option>Head office</option>
+                        <option>Uttara warehouse</option>
+                    </select>
+                </div>
+                <div class="erp-filter erp-filter-wide">
+                    <label class="form-label" for="vq">Search</label>
+                    <input class="form-control" type="search" name="q" id="vq" placeholder="Plates, name, driver or location">
+                </div>
+                <div class="erp-filterbar-actions">
+                    <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                    <a class="btn btn-link" href="./vehicles.html">Reset</a>
+                </div>
+            </form>
+
+            <div class="erp-table-shell">
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">The vehicles <span class="erp-chip erp-chip-outline">4 vehicle(s)</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead>
+                            <tr>
+                                <th>Vehicle</th>
+                                <th>Driver</th>
+                                <th class="text-end">Odometer</th>
+                                <th>Next paper to run out</th>
+                                <th class="text-end">Book value</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${vehicles.map((vehicle) => `
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="./assets.html#detail">${vehicle.name}</a>
+                                    <div class="erp-td-muted">${vehicle.plate} · ${vehicle.place}</div>
+                                </td>
+                                <td class="erp-td-muted">${vehicle.driver}</td>
+                                <td class="erp-td-num text-end">${vehicle.odometer}</td>
+                                <td>
+                                    <a class="erp-cell-strong" href="./records.html#detail">${vehicle.paper}</a>
+                                    <div class="erp-td-muted">${vehicle.tracked} · ${statusChip(vehicle.paperState, vehicle.paperStateLabel)}</div>
+                                </td>
+                                <td class="erp-td-num text-end">${vehicle.book}</td>
+                                <td>${statusChip(vehicle.status, vehicle.statusLabel)}</td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="./assets.html#detail">Open</a></td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="erp-table-shell mt-3">
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">What they cost to run <span class="erp-chip erp-chip-outline">October 2026</span></h2>
+                    <div class="erp-card-actions">
+                        <a class="btn btn-sm btn-outline-secondary" href="./trips.html">Log a trip</a>
+                    </div>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead>
+                            <tr>
+                                <th>Vehicle</th>
+                                <th class="text-end">Trips</th>
+                                <th class="text-end">Distance</th>
+                                <th class="text-end">Fuel</th>
+                                <th class="text-end">Other</th>
+                                <th class="text-end">Total</th>
+                                <th class="text-end">Per km</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${costs.map((row) => `
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="./assets.html#detail">${row.plate}</a>
+                                    <div class="erp-td-muted">${row.name}</div>
+                                </td>
+                                <td class="erp-td-num text-end">${row.trips}</td>
+                                <td class="erp-td-num text-end">${row.km}</td>
+                                <td class="erp-td-num text-end">${row.fuel}</td>
+                                <td class="erp-td-num text-end">${row.other}</td>
+                                <td class="erp-td-num text-end erp-cell-strong">${row.total}</td>
+                                <td class="erp-td-num text-end">${row.perKm}</td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="erp-table-foot">Cost per kilometre is only shown when the distance is known — a total divided by a guessed distance is a number nobody should act on. Fuel and other costs are what the driver recorded on each trip; posting them to the books happens on the expense desk, where the money actually moves.</div>
+            </div>
+
+            <div class="erp-note erp-note-warn mt-3">
+                <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+                <div>
+                    <strong>The pickup's fitness certificate lapsed on 05 Oct 2026</strong> — and the vehicle is in the workshop, which is why nobody noticed. A lapsed fitness is not a paperwork problem: it is an uninsured van on the road the day it comes back. <a href="./compliance.html">The compliance calendar</a> has it, and so does this page.
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>`;
+}
+
+/* ------------------------------------------------- 12-14. the equipment shelf */
+
+export function equipmentShelf() {
+    const rows = [
+        { code: 'AST-000005', name: 'Embroidery machine (12-head)', kind: 'Machinery', place: 'Production floor', custodian: 'Rehana Parvin', condition: 'good', warranty: '18 Jan 2027', live: true, book: '৳3,60,000.00', perMonth: '৳7,500.00', status: 'in_use', statusLabel: 'In use' },
+        { code: 'AST-000006', name: 'Generator 250 kVA', kind: 'Equipment', place: 'Generator shed', custodian: 'Nazrul Islam', condition: 'fair', warranty: '—', live: false, book: '৳5,25,000.00', perMonth: '৳7,500.00', status: 'in_use', statusLabel: 'In use' },
+        { code: 'AST-000007', name: 'Fusing machine', kind: 'Equipment', place: 'Production floor', custodian: 'Rehana Parvin', condition: 'good', warranty: '12 Mar 2027', live: true, book: '৳1,44,000.00', perMonth: '৳3,000.00', status: 'in_use', statusLabel: 'In use' },
+        { code: 'AST-000008', name: 'POS terminal — Dhanmondi', kind: 'Computers & IT', place: 'Dhanmondi counter', custodian: 'Salma Begum', condition: 'good', warranty: '30 Jun 2027', live: true, book: '৳52,800.00', perMonth: '৳2,400.00', status: 'in_use', statusLabel: 'In use' },
+        { code: 'AST-000010', name: 'Warehouse laptop', kind: 'Computers & IT', place: 'Uttara warehouse', custodian: 'Rakib Hasan', condition: 'good', warranty: '20 Aug 2027', live: true, book: '৳63,000.00', perMonth: '৳3,000.00', status: 'stored', statusLabel: 'In store' },
+        { code: 'AST-000013', name: 'Overlock machine 5-thread ×4', kind: 'Machinery', place: 'Production floor', custodian: 'Rehana Parvin', condition: 'good', warranty: '—', live: false, book: '৳2,16,000.00', perMonth: '৳4,500.00', status: 'in_use', statusLabel: 'In use' },
+        { code: 'AST-000014', name: 'Steam boiler (cutting room)', kind: 'Machinery', place: 'Production floor', custodian: 'Nazrul Islam', condition: 'fair', warranty: '—', live: false, book: '৳4,80,000.00', perMonth: '৳10,000.00', status: 'in_use', statusLabel: 'In use' },
+        { code: 'AST-000015', name: 'Label printer (thermal 50×25)', kind: 'Computers & IT', place: 'Uttara warehouse', custodian: 'Rakib Hasan', condition: 'good', warranty: '05 Sep 2026', live: true, book: '৳37,500.00', perMonth: '৳3,125.00', status: 'in_use', statusLabel: 'In use' },
+        { code: 'AST-000016', name: 'Cutting table — head office', kind: 'Equipment', place: 'Production floor', custodian: 'Rehana Parvin', condition: 'fair', warranty: '—', live: false, book: '৳1,26,000.00', perMonth: '৳3,500.00', status: 'in_use', statusLabel: 'In use' },
+        { code: 'AST-000017', name: 'Air compressor', kind: 'Equipment', place: 'Generator shed', custodian: 'Nazrul Islam', condition: 'poor', warranty: '—', live: false, book: '৳96,000.00', perMonth: '—', status: 'under_repair', statusLabel: 'Under repair' },
+    ];
+
+    return `
+${previewBar('equipment.html')}
+<div class="erp-shell">
+    ${sidebar('govern')}
+    <main class="erp-main">
+        ${topbar('Equipment')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-gear" aria-hidden="true"></i> Business Management · Assets · Equipment</p>
+                    <h1 class="erp-h1">Machinery, computers and the fit-out</h1>
+                    <p class="erp-page-sub">The things the work is actually done with: sewing and embroidery machines with eight-year lives, POS terminals with three, a generator that costs more than a van. All the same shape of fact — something the company owns, somewhere it lives, somebody answerable for it, and a cost that turns into expense month by month.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-primary" href="./assets.html#add"><i class="bi bi-plus-lg" aria-hidden="true"></i> Register equipment</a>
+                    <a class="btn btn-outline-secondary" href="./depreciation.html"><i class="bi bi-graph-down-arrow" aria-hidden="true"></i> Depreciation desk</a>
+                    <a class="btn btn-outline-secondary" href="./assets.html"><i class="bi bi-hdd-stack" aria-hidden="true"></i> Whole register</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-gear" aria-hidden="true"></i> On the shelf</p>
+                    <p class="erp-kpi-value">12</p>
+                    <p class="erp-kpi-foot">Equipment, machinery and IT not written off</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-cash-stack" aria-hidden="true"></i> At cost</p>
+                    <p class="erp-kpi-value">৳10,84,000.00</p>
+                    <p class="erp-kpi-foot">What this shelf was bought for</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-graph-down-arrow" aria-hidden="true"></i> Depreciated</p>
+                    <p class="erp-kpi-value">৳5,27,000.00</p>
+                    <p class="erp-kpi-foot">Charged to expense by real journal entries</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-wallet2" aria-hidden="true"></i> Book value</p>
+                    <p class="erp-kpi-value">৳5,57,000.00</p>
+                    <p class="erp-kpi-foot">What the balance sheet carries for it</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-tools" aria-hidden="true"></i> Under repair</p>
+                    <p class="erp-kpi-value">1</p>
+                    <p class="erp-kpi-foot">The air compressor is off with a contractor — kit that is broken is still owned</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-shield-check" aria-hidden="true"></i> Warranty ending</p>
+                    <p class="erp-kpi-value">1</p>
+                    <p class="erp-kpi-foot">The label printer's cover runs out this month — claim while it can be claimed</p>
+                </div>
+            </div>
+
+            <form class="erp-filterbar" method="GET" action="#">
+                <div class="erp-filter">
+                    <label class="form-label" for="ekind">Kind</label>
+                    <select class="form-select" name="category" id="ekind">
+                        <option>All equipment</option>
+                        <option>Equipment</option>
+                        <option>Machinery</option>
+                        <option>Computers &amp; IT</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="estatus">Status</label>
+                    <select class="form-select" name="status" id="estatus">
+                        <option>Live only</option>
+                        <option>In use</option>
+                        <option>In store</option>
+                        <option>Under repair</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="ecustodian">Custodian</label>
+                    <select class="form-select" name="custodian_id" id="ecustodian">
+                        <option>Anybody</option>
+                        <option>Rehana Parvin</option>
+                        <option>Nazrul Islam</option>
+                        <option>Rakib Hasan</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="ebranch">Branch</label>
+                    <select class="form-select" name="branch_id" id="ebranch">
+                        <option>Every branch</option>
+                        <option>Head office</option>
+                        <option>Uttara warehouse</option>
+                        <option>Dhanmondi counter</option>
+                    </select>
+                </div>
+                <div class="erp-filter erp-filter-wide">
+                    <label class="form-label" for="eq">Search</label>
+                    <input class="form-control" type="search" name="q" id="eq" placeholder="Name, code, serial or location">
+                </div>
+                <div class="erp-filterbar-actions">
+                    <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                    <a class="btn btn-link" href="./equipment.html">Reset</a>
+                </div>
+            </form>
+
+            <div class="erp-table-shell">
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">Equipment <span class="erp-chip erp-chip-outline">12 item(s)</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Kind</th>
+                                <th>Where it is</th>
+                                <th>Custodian</th>
+                                <th>Condition</th>
+                                <th>Warranty</th>
+                                <th class="text-end">Book value</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rows.map((row) => `
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="./assets.html#detail">${row.name}</a>
+                                    <div class="erp-td-muted">${row.code}</div>
+                                </td>
+                                <td class="erp-td-muted">${row.kind}</td>
+                                <td class="erp-td-muted">${row.place}</td>
+                                <td class="erp-td-muted">${row.custodian}</td>
+                                <td>${statusChip(row.condition, row.condition.charAt(0).toUpperCase() + row.condition.slice(1))}</td>
+                                <td class="erp-td-muted">${row.warranty}${row.live ? '<div class="erp-td-muted">In warranty</div>' : ''}</td>
+                                <td class="erp-td-num text-end">${row.book}${row.perMonth !== '—' ? `<div class="erp-td-muted">${row.perMonth}/month</div>` : ''}</td>
+                                <td>${statusChip(row.status, row.statusLabel)}</td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="./assets.html#detail">Open</a></td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="erp-table-foot">Showing 10 of 12 items. The label printer's warranty ends 05 Sep 2026 — the register shows it because a claim made inside cover is free and one made outside it is not.</div>
+            </div>
+
+            <div class="erp-note erp-note-info mt-3">
+                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                <div>
+                    A machine that stops working does not stop being owned. Marking it <strong>under repair</strong> keeps it on the register and on the balance sheet — writing it off is a different action, with a date, a reason and whatever came back,
+                    <a href="./disposal.html">on the disposal register</a>.
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>`;
+}
+
+/* ------------------------------------------------------ 12-14. the trip log */
+
+export function tripLog() {
+    const trips = [
+        { date: '08 Oct 2026', plate: 'Dhaka Metro-Ga 11-4471', name: 'Hiace delivery van 1', route: 'Head office → Uttara depot', purpose: 'Deliver order 4412', driver: 'Md. Rafiq', out: '84,120', back: '84,187', km: '67.00 km', efficiency: '9.03 km/l', cost: '৳2,340.00', detail: '৳2,180.00 fuel · ৳160.00 other', state: 'expensed', stateLabel: 'Expensed' },
+        { date: '08 Oct 2026', plate: 'Dhaka Metro-Ga 13-1187', name: 'Covered van (3 ton)', route: 'Uttara warehouse → Narayanganj port', purpose: 'Collect imported fabric (BL 4471)', driver: 'Jasim Uddin', out: '1,12,300', back: '1,12,412', km: '112.00 km', efficiency: '3.65 km/l', cost: '৳4,180.00', detail: '৳4,000.00 fuel · ৳180.00 other', state: 'expensed', stateLabel: 'Expensed' },
+        { date: '07 Oct 2026', plate: 'Dhaka Metro-Ga 11-2345', name: 'Hiace delivery van 2', route: 'Head office → Dhanmondi counter', purpose: 'Stock transfer', driver: 'Md. Salauddin', out: '61,440', back: '61,505', km: '65.00 km', efficiency: '8.94 km/l', cost: '৳2,410.00', detail: '৳2,250.00 fuel · ৳160.00 other', state: 'expensed', stateLabel: 'Expensed' },
+        { date: '06 Oct 2026', plate: 'Dhaka Metro-Ga 11-4471', name: 'Hiace delivery van 1', route: 'Head office → Gazipur factory', purpose: 'Sample pickup', driver: 'Md. Rafiq', out: '83,940', back: '84,120', km: '180.00 km', efficiency: '9.18 km/l', cost: '৳6,120.00', detail: '৳5,820.00 fuel · ৳300.00 other', state: 'expensed', stateLabel: 'Expensed' },
+        { date: '05 Oct 2026', plate: 'Dhaka Metro-Ga 13-1187', name: 'Covered van (3 ton)', route: 'Uttara warehouse → Savar outlet', purpose: 'Deliver stock', driver: 'Jasim Uddin', out: '1,12,180', back: '1,12,300', km: '120.00 km', efficiency: '3.62 km/l', cost: '৳4,520.00', detail: '৳4,300.00 fuel · ৳220.00 other', state: 'unexpensed', stateLabel: 'On the expense desk yet to be recorded' },
+        { date: '05 Oct 2026', plate: 'Dhaka Metro-Ga 11-2345', name: 'Hiace delivery van 2', route: 'Dhanmondi counter → Head office', purpose: 'Cash collection', driver: 'Md. Salauddin', out: '61,320', back: '61,440', km: '120.00 km', efficiency: '9.23 km/l', cost: '৳3,900.00', detail: '৳3,750.00 fuel · ৳150.00 other', state: 'expensed', stateLabel: 'Expensed' },
+        { date: '04 Oct 2026', plate: 'Dhaka Metro-Ga 11-4471', name: 'Hiace delivery van 1', route: 'Head office → Chattogram port', purpose: 'Urgent fabric pickup', driver: 'Md. Rafiq', out: '83,420', back: '83,940', km: '520.00 km', efficiency: '8.61 km/l', cost: '৳17,480.00', detail: '৳16,880.00 fuel · ৳600.00 other', state: 'expensed', stateLabel: 'Expensed' },
+        { date: '07 Oct 2026', plate: 'Dhaka Metro-Kha 15-8890', name: 'Double-cabin pickup', route: 'Dhanmondi counter → Workshop, Tejgaon', purpose: 'Repair drop-off', driver: 'Shahin Alam', out: '45,900', back: '45,908', km: '8.00 km', efficiency: null, cost: '৳0.00', detail: 'no cost recorded', state: 'nocost', stateLabel: 'No cost recorded' },
+        { date: '03 Oct 2026', plate: 'Dhaka Metro-Kha 15-8890', name: 'Double-cabin pickup', route: 'Workshop, Tejgaon → Dhanmondi counter', purpose: 'Return from repair', driver: 'Shahin Alam', out: '45,880', back: '45,900', km: '20.00 km', efficiency: null, cost: '৳0.00', detail: 'no cost recorded', state: 'nocost', stateLabel: 'No cost recorded' },
+    ];
+
+    return `
+${previewBar('trips.html')}
+<div class="erp-shell">
+    ${sidebar('govern')}
+    <main class="erp-main">
+        ${topbar('Vehicle trip log')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-signpost-split" aria-hidden="true"></i> Business Management · Assets · Trip log</p>
+                    <h1 class="erp-h1">Every run out and back</h1>
+                    <p class="erp-page-sub">A trip is a date, a route, a driver, two odometer readings and what the run cost. The distance is derived from the odometer rather than typed — a typed distance and a measured one disagree eventually, and nobody can say which is right.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./vehicles.html"><i class="bi bi-truck" aria-hidden="true"></i> The fleet</a>
+                    <a class="btn btn-outline-secondary" href="./assets.html"><i class="bi bi-hdd-stack" aria-hidden="true"></i> Asset register</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-signpost-split" aria-hidden="true"></i> Trips in range</p>
+                    <p class="erp-kpi-value">38</p>
+                    <p class="erp-kpi-foot">01 Oct 2026 to 08 Oct 2026</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-speedometer2" aria-hidden="true"></i> Distance</p>
+                    <p class="erp-kpi-value">2,140.00 km</p>
+                    <p class="erp-kpi-foot">Only trips with both odometer readings contribute</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-fuel-pump" aria-hidden="true"></i> Fuel</p>
+                    <p class="erp-kpi-value">৳74,900.00</p>
+                    <p class="erp-kpi-foot">What these runs burned</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-receipt" aria-hidden="true"></i> Other costs</p>
+                    <p class="erp-kpi-value">৳6,120.00</p>
+                    <p class="erp-kpi-foot">Tolls, parking, helpers — whatever the driver recorded</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-cash-stack" aria-hidden="true"></i> Total</p>
+                    <p class="erp-kpi-value">৳81,020.00</p>
+                    <p class="erp-kpi-foot">৳37.86 per measured kilometre</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-exclamation-circle" aria-hidden="true"></i> Not on the expense desk</p>
+                    <p class="erp-kpi-value">3</p>
+                    <p class="erp-kpi-foot">Two runs with no cost recorded, one with ৳4,520.00 waiting to be expensed</p>
+                </div>
+            </div>
+
+            <section class="erp-card mb-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Log a run</h2>
+                        <p class="erp-card-sub">Fill in what you know. Both odometer readings give a real distance; with neither, the trip is still recorded and the kilometres stay blank rather than invented.</p>
+                    </div>
+                </header>
+                <form class="p-3 pt-0" method="POST" action="#">
+                    <div class="erp-form-grid">
+                        <div class="erp-form-field">
+                            <label class="erp-field-label" for="vehicle">Vehicle</label>
+                            <select class="form-select" name="business_asset_id" id="vehicle">
+                                <option>Dhaka Metro-Ga 11-4471 — Hiace delivery van 1</option>
+                                <option>Dhaka Metro-Ga 11-2345 — Hiace delivery van 2</option>
+                                <option>Dhaka Metro-Ga 13-1187 — Covered van (3 ton)</option>
+                                <option>Dhaka Metro-Kha 15-8890 — Double-cabin pickup</option>
+                            </select>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="erp-field-label" for="trip_date">Date</label>
+                            <input class="form-control" type="date" name="trip_date" id="trip_date" value="2026-10-08">
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="erp-field-label" for="from_location">From</label>
+                            <input class="form-control" type="text" name="from_location" id="from_location" value="Head office">
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="erp-field-label" for="to_location">To</label>
+                            <input class="form-control" type="text" name="to_location" id="to_location" placeholder="Uttara depot">
+                        </div>
+                        <div class="erp-form-field erp-form-field-wide">
+                            <label class="erp-field-label" for="purpose">Purpose</label>
+                            <input class="form-control" type="text" name="purpose" id="purpose" placeholder="Deliver order 4412, collect stock from the port, staff pickup">
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="erp-field-label" for="driver_id">Driver</label>
+                            <select class="form-select" name="driver_id" id="driver_id">
+                                <option>The vehicle's usual driver</option>
+                                <option>Md. Rafiq</option>
+                                <option>Md. Salauddin</option>
+                                <option>Jasim Uddin</option>
+                            </select>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="erp-field-label" for="odometer_start">Odometer out</label>
+                            <input class="form-control" type="number" name="odometer_start" id="odometer_start" value="84187">
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="erp-field-label" for="odometer_end">Odometer in</label>
+                            <input class="form-control" type="number" name="odometer_end" id="odometer_end">
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="erp-field-label" for="fuel_litres">Fuel (litres)</label>
+                            <input class="form-control" type="number" step="0.001" name="fuel_litres" id="fuel_litres">
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="erp-field-label" for="fuel_cost">Fuel cost (৳)</label>
+                            <input class="form-control" type="number" step="0.01" name="fuel_cost" id="fuel_cost">
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="erp-field-label" for="other_cost">Other cost (৳)</label>
+                            <input class="form-control" type="number" step="0.01" name="other_cost" id="other_cost">
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="erp-field-label" for="cost_note">What the other cost was</label>
+                            <input class="form-control" type="text" name="cost_note" id="cost_note" placeholder="Toll, parking, a helper's wage">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" type="submit"><i class="bi bi-plus-lg" aria-hidden="true"></i> Log the trip</button>
+                </form>
+            </section>
+
+            <form class="erp-filterbar" method="GET" action="#">
+                <div class="erp-filter">
+                    <label class="form-label" for="fasset">Vehicle</label>
+                    <select class="form-select" name="asset_id" id="fasset">
+                        <option>Every vehicle</option>
+                        <option>Dhaka Metro-Ga 11-4471</option>
+                        <option>Dhaka Metro-Ga 11-2345</option>
+                        <option>Dhaka Metro-Ga 13-1187</option>
+                        <option>Dhaka Metro-Kha 15-8890</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="tfrom">From</label>
+                    <input class="form-control" type="date" name="from" id="tfrom" value="2026-10-01">
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="tto">To</label>
+                    <input class="form-control" type="date" name="to" id="tto" value="2026-10-08">
+                </div>
+                <div class="erp-filter erp-filter-wide">
+                    <label class="form-label" for="tq">Search</label>
+                    <input class="form-control" type="search" name="q" id="tq" placeholder="Route, purpose or driver">
+                </div>
+                <div class="erp-filterbar-actions">
+                    <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                    <a class="btn btn-link" href="./trips.html">This month</a>
+                </div>
+            </form>
+
+            <div class="erp-table-shell">
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">The log <span class="erp-chip erp-chip-outline">38 trip(s)</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Vehicle</th>
+                                <th>Route</th>
+                                <th>Driver</th>
+                                <th class="text-end">Odometer</th>
+                                <th class="text-end">Distance</th>
+                                <th class="text-end">Cost</th>
+                                <th>In the books</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${trips.map((trip) => `
+                            <tr>
+                                <td class="erp-td-muted">${trip.date}</td>
+                                <td>
+                                    <a class="erp-cell-strong" href="./assets.html#detail">${trip.plate}</a>
+                                    <div class="erp-td-muted">${trip.name}</div>
+                                </td>
+                                <td>${trip.route}<div class="erp-td-muted">${trip.purpose}</div></td>
+                                <td class="erp-td-muted">${trip.driver}</td>
+                                <td class="erp-td-num text-end">${trip.out} → ${trip.back}</td>
+                                <td class="erp-td-num text-end">${trip.km}${trip.efficiency ? `<div class="erp-td-muted">${trip.efficiency}</div>` : ''}</td>
+                                <td class="erp-td-num text-end">${trip.cost}<div class="erp-td-muted">${trip.detail}</div></td>
+                                <td>${trip.state === 'expensed'
+                                    ? '<span class="erp-chip erp-chip-ok">Expensed</span>'
+                                    : (trip.state === 'unexpensed'
+                                        ? '<span class="erp-chip erp-chip-warn">On the expense desk yet to be recorded</span>'
+                                        : '<span class="erp-chip erp-chip-outline">No cost recorded</span>')}</td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="erp-table-foot">Showing 9 of 38 trips in the range. A trip with no odometer readings keeps a blank distance rather than a guess — and a blank distance never becomes a cost per kilometre.</div>
+            </div>
+
+            <div class="erp-note erp-note-info mt-3">
+                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                <div>
+                    Costs are recorded here and posted on the <strong>expense desk</strong> — that is where money actually leaves the company, with an expense category, an approver and a journal entry. A trip whose cost is recorded but never expensed is a real cost the books have not seen yet, which is why the column above says so out loud rather than quietly showing a total.
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>`;
+}
+
+/* --------------------------------------------------- 12-14. depreciation desk */
+
+export function depreciationDesk() {
+    const due = [
+        { code: 'AST-000001', name: 'Hiace delivery van 1', kind: 'Vehicle', from: '01 May 2024', last: '31 Aug 2026', due: '30 Sep 2026', charge: '৳9,000.00', left: '৳6,30,000.00', book: '৳6,30,000.00' },
+        { code: 'AST-000002', name: 'Hiace delivery van 2', kind: 'Vehicle', from: '01 Aug 2024', last: '31 Aug 2026', due: '30 Sep 2026', charge: '৳9,000.00', left: '৳6,66,000.00', book: '৳6,66,000.00' },
+        { code: 'AST-000003', name: 'Covered van (3 ton)', kind: 'Vehicle', from: '01 Nov 2024', last: '31 Aug 2026', due: '30 Sep 2026', charge: '৳10,000.00', left: '৳9,10,000.00', book: '৳9,10,000.00' },
+        { code: 'AST-000004', name: 'Double-cabin pickup', kind: 'Vehicle', from: '01 Mar 2023', last: '31 Aug 2026', due: '30 Sep 2026', charge: '৳6,250.00', left: '৳3,25,000.00', book: '৳3,25,000.00' },
+        { code: 'AST-000005', name: 'Embroidery machine (12-head)', kind: 'Machinery', from: '01 Oct 2025', last: '31 Aug 2026', due: '30 Sep 2026', charge: '৳7,500.00', left: '৳3,60,000.00', book: '৳3,60,000.00' },
+        { code: 'AST-000006', name: 'Generator 250 kVA', kind: 'Equipment', from: '01 Aug 2022', last: '31 Aug 2026', due: '30 Sep 2026', charge: '৳7,500.00', left: '৳5,25,000.00', book: '৳5,25,000.00' },
+    ];
+
+    const waiting = [
+        { code: 'AST-000018', name: 'Digital cutting plotter', kind: 'Machinery', cost: '৳6,40,000.00', acquired: '18 Sep 2026' },
+        { code: 'AST-000019', name: 'Outlet fit-out — Savar', kind: 'Other asset', cost: '৳4,20,000.00', acquired: '02 Oct 2026' },
+        { code: 'AST-000020', name: 'Delivery van (rented asset, bought out)', kind: 'Vehicle', cost: '৳2,80,000.00', acquired: '07 Oct 2026' },
+    ];
+
+    const unplanned = [
+        { code: 'AST-000009', name: 'Racking — Uttara warehouse', kind: 'Furniture & fittings', cost: '৳3,20,000.00', capitalised: '01 Feb 2025', method: 'Not depreciated' },
+        { code: 'AST-000021', name: 'Signage & shop fit-out', kind: 'Other asset', cost: '৳1,60,000.00', capitalised: '14 Apr 2026', method: 'Not depreciated' },
+        { code: 'AST-000022', name: 'Office furniture — head office', kind: 'Furniture & fittings', cost: '৳2,10,000.00', capitalised: '22 Jun 2026', method: 'Not depreciated' },
+    ];
+
+    const beingDepreciated = [
+        { code: 'AST-000001', name: 'Hiace delivery van 1', branch: 'Head office', method: 'Straight line', life: '96 m', salvage: '৳0.00', perMonth: '৳9,000.00', last: '31 Aug 2026', next: '30 Sep 2026' },
+        { code: 'AST-000002', name: 'Hiace delivery van 2', branch: 'Head office', method: 'Straight line', life: '96 m', salvage: '৳0.00', perMonth: '৳9,000.00', last: '31 Aug 2026', next: '30 Sep 2026' },
+        { code: 'AST-000003', name: 'Covered van (3 ton)', branch: 'Uttara warehouse', method: 'Straight line', life: '120 m', salvage: '৳60,000.00', perMonth: '৳10,000.00', last: '31 Aug 2026', next: '30 Sep 2026' },
+        { code: 'AST-000004', name: 'Double-cabin pickup', branch: 'Head office', method: 'Straight line', life: '96 m', salvage: '৳0.00', perMonth: '৳6,250.00', last: '31 Aug 2026', next: '30 Sep 2026' },
+        { code: 'AST-000005', name: 'Embroidery machine (12-head)', branch: 'Head office', method: 'Straight line', life: '60 m', salvage: '৳0.00', perMonth: '৳7,500.00', last: '31 Aug 2026', next: '30 Sep 2026' },
+        { code: 'AST-000006', name: 'Generator 250 kVA', branch: 'Head office', method: 'Straight line', life: '120 m', salvage: '৳0.00', perMonth: '৳7,500.00', last: '31 Aug 2026', next: '30 Sep 2026' },
+        { code: 'AST-000007', name: 'Fusing machine', branch: 'Head office', method: 'Straight line', life: '60 m', salvage: '৳0.00', perMonth: '৳3,000.00', last: '31 Aug 2026', next: '30 Sep 2026' },
+        { code: 'AST-000008', name: 'POS terminal — Dhanmondi', branch: 'Dhanmondi counter', method: 'Straight line', life: '36 m', salvage: '৳0.00', perMonth: '৳2,400.00', last: '31 Aug 2026', next: '30 Sep 2026' },
+        { code: 'AST-000010', name: 'Warehouse laptop', branch: 'Uttara warehouse', method: 'Straight line', life: '36 m', salvage: '৳0.00', perMonth: '৳3,000.00', last: '31 Aug 2026', next: '30 Sep 2026' },
+    ];
+
+    return `
+${previewBar('depreciation.html')}
+<div class="erp-shell">
+    ${sidebar('govern')}
+    <main class="erp-main">
+        ${topbar('Depreciation')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-graph-down-arrow" aria-hidden="true"></i> Business Management · Assets · Depreciation</p>
+                    <h1 class="erp-h1">What wearing out costs this month</h1>
+                    <p class="erp-page-sub">Wearing out is an expense that arrives without an invoice — once a month, for every capitalised asset, for years. This is the desk that charges it: one journal entry per asset per month, debit 5270 Depreciation Expense and credit 1590 Accumulated Depreciation, with the register's own figure following the ledger rather than the other way round.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./assets.html"><i class="bi bi-hdd-stack" aria-hidden="true"></i> Asset register</a>
+                    <a class="btn btn-outline-secondary" href="./disposal.html"><i class="bi bi-archive" aria-hidden="true"></i> Disposal register</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-calendar-check" aria-hidden="true"></i> Due now</p>
+                    <p class="erp-kpi-value">6</p>
+                    <p class="erp-kpi-foot">September has ended and these six have no entry for it yet</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-calculator" aria-hidden="true"></i> Charge if posted</p>
+                    <p class="erp-kpi-value">৳49,250.00</p>
+                    <p class="erp-kpi-foot">One month for each asset that is due</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-graph-down-arrow" aria-hidden="true"></i> Depreciating</p>
+                    <p class="erp-kpi-value">9</p>
+                    <p class="erp-kpi-foot">Capitalised, with a life and a monthly charge</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-journal-check" aria-hidden="true"></i> Posted to date</p>
+                    <p class="erp-kpi-value">৳12,45,000.00</p>
+                    <p class="erp-kpi-foot">286 journal entries across the whole register</p>
+                </div>
+                <a class="erp-kpi text-decoration-none" href="#waiting">
+                    <p class="erp-kpi-label"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Waiting to be capitalised</p>
+                    <p class="erp-kpi-value">3</p>
+                    <p class="erp-kpi-foot">Cost recorded, not yet in the books — nothing can be charged against them</p>
+                </a>
+                <a class="erp-kpi text-decoration-none" href="#nopolicy">
+                    <p class="erp-kpi-label"><i class="bi bi-question-circle" aria-hidden="true"></i> No policy yet</p>
+                    <p class="erp-kpi-value">6</p>
+                    <p class="erp-kpi-foot">In the books with no life set: a decision nobody has taken</p>
+                </a>
+            </div>
+
+            <div class="erp-note erp-note-warn mb-3">
+                <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+                <div>
+                    <strong>6 asset(s) have a month due.</strong>
+                    Posting it writes ৳49,250.00 of expense into the ledger and moves the same amount into accumulated depreciation — the register's book values drop by exactly what the books charged, because they are the same number. Each asset gets its own entry, so a later question about one van can be answered from the ledger.
+                </div>
+            </div>
+
+            <div class="erp-table-shell">
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">What is due <span class="erp-chip erp-chip-outline">6 asset(s)</span></h2>
+                    <div class="erp-card-actions">
+                        <form method="POST" action="#" data-confirm="Post one month of depreciation for 6 asset(s), ৳49,250.00 in total? One journal entry per asset, debit 5270 and credit 1590.">
+                            <button class="btn btn-primary btn-sm" type="submit"><i class="bi bi-journal-arrow-down" aria-hidden="true"></i> Post this month</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead>
+                            <tr>
+                                <th>Asset</th>
+                                <th>Charged from</th>
+                                <th>Last posted</th>
+                                <th>Falls due</th>
+                                <th class="text-end">This month</th>
+                                <th class="text-end">Left to write off</th>
+                                <th class="text-end">Book value now</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${due.map((row) => `
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="./assets.html#detail">${row.name}</a>
+                                    <div class="erp-td-muted">${row.code} · ${row.kind}</div>
+                                </td>
+                                <td class="erp-td-muted">${row.from}</td>
+                                <td class="erp-td-muted">${row.last}</td>
+                                <td class="erp-td-muted">${row.due}</td>
+                                <td class="erp-td-num text-end">${row.charge}</td>
+                                <td class="erp-td-num text-end">${row.left}</td>
+                                <td class="erp-td-num text-end">${row.book}</td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="./assets.html#detail">Open</a></td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="erp-table-foot">A charge is never dated in the future and never before the month it covers, so an asset registered mid-month is charged from the month it starts. The month is derived from the start date and the months already posted — which is why running the post twice in one day cannot charge the same month twice, and why a run that stops halfway can simply be run again. The monthly command (<code>erp:business:asset-depreciation</code>, 06:40 on the 1st) does the same thing without anybody remembering.</div>
+            </div>
+
+            <section class="erp-card mt-3" id="waiting">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Cost recorded, not in the books yet</h2>
+                        <p class="erp-card-sub">Nothing can be depreciated against a cost that was never recorded. Capitalise these when the purchase is posted and they join the schedule — the refusal is deliberate: charging a monthly expense against an unrecorded cost invents a loss.</p>
+                    </div>
+                    <div class="erp-card-actions"><span class="erp-chip erp-chip-outline">3 asset(s)</span></div>
+                </header>
+                <div class="px-3 pb-3">
+                    ${waiting.map((row) => `
+                    <div class="erp-list-row">
+                        <div class="erp-list-row-main">
+                            <a class="erp-cell-strong" href="./assets.html#detail">${row.name}</a>
+                            <div class="erp-td-muted">${row.code} · ${row.kind} · bought for ${row.cost} on ${row.acquired}</div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="erp-chip erp-chip-warn">Not capitalised</span>
+                            <a class="btn btn-sm btn-outline-secondary" href="./assets.html#detail">Capitalise it</a>
+                        </div>
+                    </div>`).join('')}
+                </div>
+            </section>
+
+            <section class="erp-card mt-3" id="nopolicy">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Capitalised, with no depreciation policy</h2>
+                        <p class="erp-card-sub">These assets are in the books but nobody has said how the cost turns into expense. Leaving them undepreciated is allowed — what is not allowed is leaving it unsaid, because an asset nobody decided about is still on the balance sheet at full value ten years later.</p>
+                    </div>
+                    <div class="erp-card-actions"><span class="erp-chip erp-chip-outline">6 asset(s)</span></div>
+                </header>
+                <div class="px-3 pb-3">
+                    ${unplanned.map((row) => `
+                    <div class="erp-list-row">
+                        <div class="erp-list-row-main">
+                            <a class="erp-cell-strong" href="./assets.html#detail">${row.name}</a>
+                            <div class="erp-td-muted">${row.code} · ${row.kind} · ${row.cost} · capitalised ${row.capitalised}</div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="erp-chip erp-chip-outline">${row.method}</span>
+                            <a class="btn btn-sm btn-outline-secondary" href="./assets.html#detail">Set the policy</a>
+                        </div>
+                    </div>`).join('')}
+                    <p class="erp-td-muted mb-0 mt-2">…and three more fit-out assets on the same footing. Every one of them has a written decision attached — “not depreciated” is a decision, and it is recorded on the asset with a date and a name.</p>
+                </div>
+            </section>
+
+            <div class="erp-table-shell mt-3">
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">Being depreciated <span class="erp-chip erp-chip-outline">9 asset(s)</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead>
+                            <tr>
+                                <th>Asset</th>
+                                <th>Method</th>
+                                <th class="text-end">Life</th>
+                                <th class="text-end">Salvage</th>
+                                <th class="text-end">Per month</th>
+                                <th>Last posted</th>
+                                <th>Next due</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${beingDepreciated.map((row) => `
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="./assets.html#detail">${row.name}</a>
+                                    <div class="erp-td-muted">${row.code} · ${row.branch}</div>
+                                </td>
+                                <td class="erp-td-muted">${row.method}</td>
+                                <td class="erp-td-num text-end">${row.life}</td>
+                                <td class="erp-td-num text-end">${row.salvage}</td>
+                                <td class="erp-td-num text-end">${row.perMonth}</td>
+                                <td class="erp-td-muted">${row.last}</td>
+                                <td class="erp-td-muted">${row.next}</td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="erp-table-foot">The schedule is a projection. Changing a life or a salvage value changes the future rows and leaves the posted months alone — the entries that exist, exist. The register carries the accumulated figure the ledger gave it, and no page in this module can move it by hand.</div>
+            </div>
+
+        </div>
+    </main>
+</div>`;
+}
+
+/* ------------------------------------------------------ 12-14. disposal register */
+
+export function disposalRegister() {
+    const rows = [
+        {
+            code: 'AST-000012', name: 'Delivery van (Suzuki, 2016)', kind: 'Vehicle', plates: 'Dhaka Metro-Ga 11-2218',
+            on: '12 Feb 2026', why: 'Chassis beyond repair after the Nabinagar accident — written off for scrap',
+            cost: '৳2,00,000.00', carried: '৳49,000.00', proceeds: '৳20,000.00', by: 'Salma Begum', branch: 'Head office',
+        },
+        {
+            code: 'AST-000011', name: 'Old generator 60 kVA', kind: 'Equipment', plates: null,
+            on: '30 Jun 2026', why: 'Replaced by the 250 kVA set; sold to a trader in Tejgaon',
+            cost: '৳3,80,000.00', carried: '৳38,000.00', proceeds: '৳45,000.00', by: 'Nazrul Islam', branch: 'Head office',
+        },
+    ];
+
+    return `
+${previewBar('disposal.html')}
+<div class="erp-shell">
+    ${sidebar('govern')}
+    <main class="erp-main">
+        ${topbar('Disposals')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-archive" aria-hidden="true"></i> Business Management · Assets · Disposals</p>
+                    <h1 class="erp-h1">What was sold, scrapped or written off</h1>
+                    <p class="erp-page-sub">A disposal is a decision with a date, a reason and — usually — something coming back. The register keeps all three, so “where did the 2016 Suzuki van go?” has an answer years later, and the difference between what it was carried at and what it fetched is visible to the people who have to account for it.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./assets.html"><i class="bi bi-hdd-stack" aria-hidden="true"></i> Asset register</a>
+                    <a class="btn btn-outline-secondary" href="./depreciation.html"><i class="bi bi-graph-down-arrow" aria-hidden="true"></i> Depreciation desk</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-archive" aria-hidden="true"></i> Written off</p>
+                    <p class="erp-kpi-value">2</p>
+                    <p class="erp-kpi-foot">Every asset taken off the working register, ever</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-calendar3" aria-hidden="true"></i> This year</p>
+                    <p class="erp-kpi-value">2</p>
+                    <p class="erp-kpi-foot">Disposals dated in 2026</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-cash-stack" aria-hidden="true"></i> Original cost</p>
+                    <p class="erp-kpi-value">৳5,80,000.00</p>
+                    <p class="erp-kpi-foot">What these two cost when they were bought</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-graph-down-arrow" aria-hidden="true"></i> Depreciated before disposal</p>
+                    <p class="erp-kpi-value">৳4,93,000.00</p>
+                    <p class="erp-kpi-foot">The part of that cost already charged to expense by real journal entries</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-wallet2" aria-hidden="true"></i> Carried value at disposal</p>
+                    <p class="erp-kpi-value">৳87,000.00</p>
+                    <p class="erp-kpi-foot">Cost less accumulated — what the balance sheet still carried</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-cash-coin" aria-hidden="true"></i> Proceeds</p>
+                    <p class="erp-kpi-value">৳65,000.00</p>
+                    <p class="erp-kpi-foot">৳22,000.00 below the carried value — a loss the books have to account for</p>
+                </div>
+            </div>
+
+            <div class="erp-table-shell">
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">The disposal register <span class="erp-chip erp-chip-outline">2 asset(s)</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead>
+                            <tr>
+                                <th>Asset</th>
+                                <th>Kind</th>
+                                <th>Disposed on</th>
+                                <th>Why</th>
+                                <th class="text-end">Cost</th>
+                                <th class="text-end">Carried value</th>
+                                <th class="text-end">Proceeds</th>
+                                <th>Written off by</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rows.map((row) => `
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="./assets.html#detail">${row.name}</a>
+                                    <div class="erp-td-muted">${row.code}${row.plates ? ` · ${row.plates}` : ''}</div>
+                                </td>
+                                <td class="erp-td-muted">${row.kind}</td>
+                                <td class="erp-td-muted">${row.on}</td>
+                                <td>${row.why}</td>
+                                <td class="erp-td-num text-end">${row.cost}</td>
+                                <td class="erp-td-num text-end">${row.carried}</td>
+                                <td class="erp-td-num text-end">${row.proceeds}</td>
+                                <td class="erp-td-muted">${row.by}<div class="erp-td-muted">${row.branch}</div></td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="erp-table-foot">Disposed assets stay on the asset register and on this list; only the working lists let them go. Nothing here is deleted, and the audit trail keeps the write-off with the reason, the actor and the figure the asset was carried at that day.</div>
+            </div>
+
+            <div class="erp-note erp-note-info mt-3">
+                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                <div>
+                    <strong>What this page does not do:</strong> post the disposal. Writing off the gain or loss, clearing the accumulated depreciation of an asset that has left, and booking the proceeds are accounting entries on the journals — this register records the physical fact and the money attached to it, and leaves the ledger entries to the people who keep the ledger. The carried value above is exactly the figure those entries start from.
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>`;
+}
+
+/* §15-28 error log viewer — the maintenance desk's second screen. It reads the
+   log files and masks secrets *before* rendering, which is the whole reason a
+   page like this can exist at all: a log without a viewer is a file nobody
+   reads, and a viewer without masking is a credential leak with a search box. */
+export function maintenanceLogs() {
+    const files = [
+        { name: 'laravel.log', size: '4.2 MB', modified: '08 Oct 2026 09:12', entries: '1,284', kept: '14 days' },
+        { name: 'laravel-2026-10-07.log', size: '11.8 MB', modified: '07 Oct 2026 23:59', entries: '3,918', kept: '14 days' },
+        { name: 'queue.log', size: '612 KB', modified: '08 Oct 2026 09:04', entries: '204', kept: '14 days' },
+        { name: 'maintenance.log', size: '88 KB', modified: '07 Oct 2026 09:12', entries: '19', kept: '14 days' },
+    ];
+
+    const counts = [
+        ['Entries in this file', '1,284', 'laravel.log as it stands on disk — read, never rewritten by this page', '1'],
+        ['Errors', '2', 'Both handled: one refused a run and said why, one retried and then stopped', '4'],
+        ['Warnings', '2', 'Nothing was thrown, but something needs a person', '3'],
+        ['Secrets masked', '3', 'Replaced as the line was read, before anything was sent to the browser', '5'],
+    ];
+
+    const entries = [
+        { at: '08 Oct 2026 09:12:44', level: 'error', tone: 'erp-chip-danger', masked: 0,
+          message: 'Depreciation run failed: the chart of accounts has no active account 5270, so the monthly charge cannot be posted.',
+          where: 'AssetService.php:952', trace: 'RuntimeException → AssetDepreciationCommand::handle' },
+        { at: '08 Oct 2026 08:41:02', level: 'warning', tone: 'erp-chip-warn', masked: 0,
+          message: 'Compliance watch skipped the digest: nobody holds business.records.manage. The registers themselves were read — only the announcement was dropped.',
+          where: 'ComplianceAlertCommand.php:74', trace: null },
+        { at: '08 Oct 2026 08:00:11', level: 'notice', tone: 'erp-chip-soft', masked: 1,
+          message: 'SMTP login rejected for [masked] (552). The notification will retry, then fall back to in-app delivery.',
+          where: 'MailTransport.php:118', trace: null },
+        { at: '08 Oct 2026 07:55:38', level: 'info', tone: 'erp-chip-outline', masked: 0,
+          message: 'Nightly sweep finished: 12 batches expired, 3 reorder alerts raised, 0 documents unreadable.',
+          where: 'BatchExpiryCommand.php:61', trace: null },
+        { at: '07 Oct 2026 23:59:59', level: 'info', tone: 'erp-chip-outline', masked: 0,
+          message: 'Log rotated: laravel.log (11.8 MB) → laravel-2026-10-07.log. Anything older than the retention setting was deleted by the scheduled run, not by a person.',
+          where: 'LogRotator.php:44', trace: null },
+        { at: '07 Oct 2026 22:40:07', level: 'error', tone: 'erp-chip-danger', masked: 2,
+          message: 'Courier API returned 401 for token [masked]. Four shipments stayed queued — nothing was lost, and nothing was sent twice.',
+          where: 'CourierQueue.php:203', trace: 'CourierAuthException → CourierQueue::drain' },
+        { at: '07 Oct 2026 17:02:55', level: 'warning', tone: 'erp-chip-warn', masked: 0,
+          message: 'Stock count 41 posted a variance against a product whose cost layer was created the same day. Allowed, and recorded so somebody can check the sequence.',
+          where: 'StockCountService.php:311', trace: null },
+        { at: '07 Oct 2026 09:12:19', level: 'info', tone: 'erp-chip-outline', masked: 0,
+          message: 'Self-healing run: 4 safe operations executed, 63.8 MB freed. Uploads, backups and the audit trail untouched.',
+          where: 'SelfHealing.php:88', trace: null },
+    ];
+
+    return `
+${previewBar('maintenance-logs.html')}
+<div class="erp-shell">
+    ${sidebar('configure')}
+    <main class="erp-main">
+        ${topbar({ title: 'Error log', trail: [{ label: 'Settings & masters' }, { label: 'System maintenance' }] })}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-journal-code" aria-hidden="true"></i> Settings · System maintenance</p>
+                    <h1 class="erp-h1">Error log</h1>
+                    <p class="erp-page-sub">What the application said when nobody was watching. This page reads the log files — it never writes to them and never deletes them — and every password, token and key in the text is replaced <em>before</em> the line is rendered, so the search box cannot be used to confirm a secret either.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./maintenance.html"><i class="bi bi-tools" aria-hidden="true"></i> Maintenance desk</a>
+                    <button class="btn btn-outline-secondary" type="button"><i class="bi bi-clipboard-check" aria-hidden="true"></i> Copy masked line</button>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid mb-3">
+                ${counts.map(([label, value, hint, hue]) => `
+                <div class="erp-kpi" style="--hue: var(--c${hue})">
+                    <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>${label}</p>
+                    <p class="erp-kpi-value">${value}</p>
+                    <p class="erp-kpi-foot">${hint}</p>
+                </div>`).join('')}
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-lg-6">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Files on disk</h2>
+                                <p class="erp-card-sub">Rotation keeps fourteen days. Older files are removed by the scheduled run — this page is not a delete button.</p>
+                            </div>
+                        </header>
+                        <div class="px-3 pb-2">
+                            ${files.map((file) => `
+                            <div class="erp-list-row">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-cell-strong font-monospace">${file.name}</span>
+                                    <div class="erp-td-muted">${file.modified} · keeps ${file.kept}</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="erp-chip erp-chip-outline">${file.entries} entries</span>
+                                    <span class="erp-chip erp-chip-outline">${file.size}</span>
+                                </div>
+                            </div>`).join('')}
+                        </div>
+                    </section>
+                </div>
+
+                <div class="col-lg-6">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">What masking does</h2>
+                                <p class="erp-card-sub">Three rules — and they are the reason a support person may read a production log.</p>
+                            </div>
+                        </header>
+                        <div class="p-3 pt-1">
+                            <div class="erp-note erp-note-info">
+                                <i class="bi bi-shield-lock" aria-hidden="true"></i>
+                                <div>
+                                    <strong>Redacted before rendering.</strong> A password, an API token, a card number or a
+                                    connection string is replaced with <span class="font-monospace">[masked]</span> as the line is
+                                    read, so the unmasked text never reaches the browser.
+                                </div>
+                            </div>
+                            <div class="erp-note erp-note-info mt-2">
+                                <i class="bi bi-search" aria-hidden="true"></i>
+                                <div>
+                                    <strong>The search runs after redaction.</strong> So an empty result is not proof that a leaked
+                                    key is absent — it is proof that no line contains your text once secrets were removed. Said out
+                                    loud on purpose.
+                                </div>
+                            </div>
+                            <div class="erp-note erp-note-info mt-2 mb-0">
+                                <i class="bi bi-file-earmark-lock" aria-hidden="true"></i>
+                                <div>
+                                    <strong>Read-only.</strong> Opening a log is not maintenance: nothing is written, nothing is
+                                    cleared, and this page cannot delete the evidence its own maintenance runs left behind.
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <form class="erp-filterbar" method="GET" action="./maintenance-logs.html">
+                <div class="erp-filter">
+                    <label class="form-label" for="file">File</label>
+                    <select class="form-select" name="file" id="file" data-erp-autosubmit>
+                        <option value="laravel.log" selected>laravel.log</option>
+                        <option value="laravel-2026-10-07.log">laravel-2026-10-07.log</option>
+                        <option value="queue.log">queue.log</option>
+                        <option value="maintenance.log">maintenance.log</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="level">Level</label>
+                    <select class="form-select" name="level" id="level" data-erp-autosubmit>
+                        <option value="">Every level</option>
+                        <option value="error" selected>Error and above</option>
+                        <option value="warning">Warning and above</option>
+                        <option value="info">Info and above</option>
+                        <option value="debug">Everything, including debug</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="limit">Lines</label>
+                    <select class="form-select" name="limit" id="limit" data-erp-autosubmit>
+                        <option value="50">Last 50</option>
+                        <option value="100" selected>Last 100</option>
+                        <option value="500">Last 500</option>
+                    </select>
+                </div>
+                <div class="erp-filter erp-filter-wide">
+                    <label class="form-label" for="q">Search (after masking)</label>
+                    <input class="form-control" type="search" name="q" id="q" placeholder="A message, a class, a document number">
+                </div>
+                <div class="erp-filterbar-actions">
+                    <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                    <a class="btn btn-link" href="./maintenance-logs.html">Reset</a>
+                </div>
+            </form>
+
+            <div class="erp-table-shell" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">Entries <span class="erp-chip erp-chip-outline">8 of 1,284 · newest first</span></h2>
+                    <div class="erp-card-actions">
+                        <span class="erp-chip erp-chip-outline"><i class="bi bi-shield-check" aria-hidden="true"></i> 3 value(s) masked on this page</span>
+                    </div>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack">
+                        <thead>
+                            <tr>
+                                <th>When</th>
+                                <th>Level</th>
+                                <th>What was said</th>
+                                <th>Where</th>
+                                <th class="text-end">Masked</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${entries.map((entry) => `
+                            <tr>
+                                <td data-label="When" class="erp-td-muted">${entry.at}</td>
+                                <td data-label="Level"><span class="erp-chip ${entry.tone}">${entry.level}</span></td>
+                                <td data-label="What was said">
+                                    <span class="erp-cell-strong">${entry.message}</span>
+                                    ${entry.trace ? `<div class="erp-td-muted font-monospace">${entry.trace}</div>` : ''}
+                                </td>
+                                <td data-label="Where" class="erp-td-muted font-monospace">${entry.where}</td>
+                                <td data-label="Masked" class="erp-td-num text-end">${entry.masked > 0 ? `${entry.masked} value(s)` : '—'}</td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="erp-table-foot">Newest first, and capped at the line count you asked for: a viewer that tries to render a 12 MB file stops being a viewer. Each entry keeps its level, its file and line, and how many values were masked to produce it.</div>
+            </div>
+
+            <div class="erp-note erp-note-info mt-3">
+                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                <div>
+                    <strong>What this page is not:</strong> monitoring. It shows what is in the files today — not whether an
+                    error is still happening, who it is affecting, or when it stopped being an incident and became a pattern.
+                    The <a href="./maintenance.html">maintenance desk</a> keeps what each run did as rows, which is the half that
+                    keeps its history.
+                </div>
+            </div>
+
+            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
+                <p class="erp-field-label">More in this module</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="erp-chip erp-chip-outline" href="./maintenance.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>System maintenance</a>
+                    <a class="erp-chip erp-chip-outline" href="./settings.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Settings desk</a>
+                    <a class="erp-chip erp-chip-outline" href="./reports.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Report centre</a>
+                </div>
+            </nav>
 
         </div>
     </main>

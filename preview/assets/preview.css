@@ -180,3 +180,43 @@
     background: var(--info-soft);
     color: var(--info);
 }
+
+/* §12-14: the asset register's own states and conditions — an asset in use,
+   one in store, one in the workshop, one written off; and how good it looks. */
+.erp-status-in_use,
+.erp-status-in-use {
+    background: var(--ok-soft);
+    color: var(--ok);
+}
+
+.erp-status-stored {
+    background: var(--surface-3);
+    color: var(--ink-2);
+}
+
+.erp-status-under_repair,
+.erp-status-under-repair {
+    background: var(--warn-soft);
+    color: var(--warn);
+}
+
+.erp-status-disposed {
+    background: var(--surface-3);
+    color: var(--ink-3);
+}
+
+.erp-status-new,
+.erp-status-good {
+    background: var(--ok-soft);
+    color: var(--ok);
+}
+
+.erp-status-fair {
+    background: var(--surface-3);
+    color: var(--ink-2);
+}
+
+.erp-status-poor {
+    background: var(--warn-soft);
+    color: var(--warn);
+}
