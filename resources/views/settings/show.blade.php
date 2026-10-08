@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('page_title', $definition['label'] ?? 'Settings')
+@section('page_title', @t('setting.'.$group, $definition['label'] ?? 'Settings'))
 
 @section('content')
     @php($allGroups = config('erp.settings.groups', []))
 
     <div class="erp-page-head">
         <div>
-            <h1 class="erp-h1">{{ $definition['label'] ?? ucfirst($group).' settings' }}</h1>
+            <h1 class="erp-h1">@t('setting.'.$group, $definition['label'] ?? ucfirst($group).' settings')</h1>
             <p class="erp-page-sub">{{ $definition['description'] ?? '' }}</p>
         </div>
     </div>
@@ -16,7 +16,7 @@
         @foreach($allGroups as $groupKey => $groupDef)
             <li class="nav-item">
                 <a class="nav-link {{ $groupKey === $group ? 'active' : '' }}"
-                   href="{{ route('settings.show', $groupKey) }}">{{ $groupDef['label'] ?? ucfirst($groupKey) }}</a>
+                   href="{{ route('settings.show', $groupKey) }}">@t('setting.'.$groupKey, $groupDef['label'] ?? ucfirst($groupKey))</a>
             </li>
         @endforeach
     </ul>
@@ -27,7 +27,7 @@
         <section class="erp-card erp-card-max">
             <header class="erp-card-head">
                 <div>
-                    <h2 class="erp-card-title">{{ $definition['label'] ?? ucfirst($group) }}</h2>
+                    <h2 class="erp-card-title">@t('setting.'.$group, $definition['label'] ?? ucfirst($group))</h2>
                     <p class="erp-card-sub">
                         Scope: <strong>{{ $companyOnly ? 'company policy — the same in every branch' : 'per branch may differ' }}</strong>
                         · this group needs <span class="font-monospace">{{ $definition['key'] ?? 'settings.update' }}</span> to read it,
@@ -43,7 +43,7 @@
                     @php($entry = $values[$key] ?? null)
                     @php($stored = is_array($entry) ? ($entry['value'] ?? null) : $entry)
                     @php($value = old("settings.$key", $stored !== null ? $stored : ($meta['default'] ?? null)))
-                    @php($label = ($meta['label'] ?? ucfirst(str_replace('_', ' ', $key))))
+                    @php($label = app(\App\Domain\Foundation\Services\Translator::class)->get('setting.'.$group.'.'.$key, ($meta['label'] ?? ucfirst(str_replace('_', ' ', $key)))))
                     {{-- Every field row carries its key as an anchor: the catalogue's
                          settings leaves deep-link to a single switch (e.g.
                          /app/settings/localization#bengali_numerals), and an anchor

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app(\App\Domain\Foundation\Services\Translator::class)->locale() === 'bn' ? 'bn' : 'en' }}">
 <head>
     <meta charset="utf-8">
-    <title>{{ $invoice->printed_title ?? 'INVOICE' }} {{ $invoice->invoice_no }}</title>
+    <title>@t('doc.invoice', $invoice->printed_title ?? 'INVOICE') {{ $invoice->invoice_no }}</title>
     <style>
         body { font-family: DejaVu Sans, sans-serif; font-size: 13px; color: #111; margin: 2rem; }
         h1 { font-size: 20px; margin: 0 0 .25rem; }
@@ -38,7 +38,7 @@
         || $invoice->lines->contains(fn ($line) => (float) $line->tax > 0);
 @endphp
 <header>
-    <h1>{{ $invoice->printed_title ?? 'INVOICE' }} {{ $invoice->invoice_no }}</h1>
+    <h1>@t('doc.invoice', $invoice->printed_title ?? 'INVOICE') {{ $invoice->invoice_no }}</h1>
     <div class="muted">
         {{ $company?->legal_name ?? $company?->name ?? '' }}
         @if ($company?->address_line1)

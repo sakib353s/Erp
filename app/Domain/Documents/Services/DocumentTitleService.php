@@ -51,7 +51,7 @@ class DocumentTitleService
 
         return [
             'code' => $type?->code,
-            'title' => $title,
+            'title' => $this->displayTitle($code, $title),
             'statutory' => $statutory,
             'tax_applicable' => $taxApplicable,
             'tax_block' => $taxApplicable && $hasTax,
@@ -61,7 +61,26 @@ class DocumentTitleService
     /** The title alone, for a template or a filename. */
     public function titleFor(?string $code): string
     {
-        return $this->titleFrom($this->type($code), $code);
+        return $this->displayTitle($code, $this->titleFrom($this->type($code), $code));
+    }
+
+    /**
+     * §16-50 — the paper's title in the reader's language.
+     *
+     * The honesty check above runs on the English claim (a statutory form must
+     * not print as INVOICE whether the reader reads Bangla or English), so by the
+     * time we reach here the word is already honest; we only pick the language.
+     * The key is the document type code, so `doc.invoice` carries the Bangla
+     * "চালান" — falling back to the English title when no Bangla row exists, never
+     * to an empty heading.
+     */
+    protected function displayTitle(?string $code, string $title): string
+    {
+        if (($code ?? '') === '') {
+            return $title;
+        }
+
+        return app(\App\Domain\Foundation\Services\Translator::class)->get('doc.'.$code, $title);
     }
 
     public function isStatutory(?string $code): bool

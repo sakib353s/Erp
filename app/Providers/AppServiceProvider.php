@@ -49,6 +49,7 @@ use App\Domain\Workflow\WorkflowDefinition;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -70,6 +71,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
+
+        // `@t('key', 'fallback')` in Blade, with the same fallback chain as the
+        // `t()` global (requested locale → English → the key itself), so a view
+        // author never reaches past the translation table into a missing row.
+        Blade::directive('t', function (string $expression) {
+            return "<?php echo e(app(\\App\\Domain\\Foundation\\Services\\Translator::class)->get($expression)); ?>";
+        });
 
         // Shared view helpers: DB-driven translation (D21) and a permission
         // probe for hiding controls (server-side gates remain authoritative).

@@ -85,6 +85,7 @@ class ContextController extends Controller
 
         $request->session()->put('locale', $locale);
         app(Translator::class)->setLocale($locale);
+        app()->setLocale($locale);
 
         return back()->with('status', $locale === 'bn' ? 'ভাষা বাংলা করা হয়েছে।' : 'Language set to English.');
     }

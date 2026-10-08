@@ -9,6 +9,7 @@ use App\Http\Middleware\EnsureSetupComplete;
 use App\Http\Middleware\GuardSetup;
 use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\SetTenantContext;
+use App\Http\Middleware\SetUiLocale;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -33,6 +34,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             CorrelationId::class,
             SecurityHeaders::class,
+            // §16-50: point the framework's own locale at the UI language so
+            // validation messages, auth copy and date formatting follow the
+            // reader's choice instead of staying English.
+            SetUiLocale::class,
             EnforceSessionPolicy::class,
         ]);
 

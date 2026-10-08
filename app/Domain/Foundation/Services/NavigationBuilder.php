@@ -110,7 +110,7 @@ class NavigationBuilder
             ->filter(fn (MenuItem $item) => $this->visible($item, $user, $portalFilter))
             ->map(fn (MenuItem $item) => [
                 'code' => $item->code,
-                'label' => $item->label,
+                'label' => $this->labelOf($item),
                 'label_key' => $item->label_key,
                 'route' => $item->route,
                 'url' => $this->url($item->route),
@@ -158,8 +158,8 @@ class NavigationBuilder
 
             $entries[] = [
                 'label' => $isAction
-                    ? $this->normalizeLabel($item->label, $item->parent?->label)
-                    : $this->normalizeLabel($item->label),
+                    ? $this->normalizeLabel($this->labelOf($item), $item->parent ? $this->labelOf($item->parent) : null)
+                    : $this->normalizeLabel($this->labelOf($item)),
                 'url' => $url,
                 'icon' => $item->icon ?: ($item->module?->icon ?? 'bi-dot'),
                 'section' => $sections[$sectionCode]['label'] ?? 'Navigate',
@@ -203,7 +203,7 @@ class NavigationBuilder
             ->unique('route')
             ->sortBy('sort')
             ->map(fn (MenuItem $i) => [
-                'label' => $this->normalizeLabel($i->label, $i->parent?->label),
+                'label' => $this->normalizeLabel($this->labelOf($i), $i->parent ? $this->labelOf($i->parent) : null),
                 'url' => $this->url($i->route),
                 'active' => false,
             ])
@@ -242,7 +242,7 @@ class NavigationBuilder
             ->sortBy('sort')
             ->take(12)
             ->map(fn (MenuItem $i) => [
-                'label' => $this->normalizeLabel($i->label),
+                'label' => $this->normalizeLabel($this->labelOf($i)),
                 'url' => $this->url($i->route),
                 'active' => false,
             ])
@@ -297,8 +297,8 @@ class NavigationBuilder
 
             $trail[] = [
                 'label' => $isLast
-                    ? $this->normalizeLabel($node->label, $this->parentLabel($items, $node))
-                    : ($node->route === null ? $node->label : $this->normalizeLabel($node->label)),
+                    ? $this->normalizeLabel($this->labelOf($node), $this->parentLabel($items, $node))
+                    : ($node->route === null ? $this->labelOf($node) : $this->normalizeLabel($this->labelOf($node))),
                 'url' => $isLast ? null : $this->url($node->route),
             ];
         }
@@ -525,7 +525,7 @@ class NavigationBuilder
                 $modules[] = [
                     'id' => $root->id,
                     'code' => $root->code,
-                    'label' => $root->label,
+                    'label' => $this->labelOf($root),
                     'label_key' => $root->label_key,
                     'route' => $root->route,
                     'url' => $this->url($root->route),
@@ -552,7 +552,7 @@ class NavigationBuilder
                 $modules[] = [
                     'id' => $root->id,
                     'code' => $root->code,
-                    'label' => $root->label,
+                    'label' => $this->labelOf($root),
                     'label_key' => $root->label_key,
                     'route' => null,
                     'url' => null,
@@ -588,7 +588,7 @@ class NavigationBuilder
         return [
             'id' => $item->id,
             'code' => $item->code,
-            'label' => $this->normalizeLabel($item->label),
+            'label' => $this->normalizeLabel($this->labelOf($item)),
             'label_key' => $item->label_key,
             'route' => null,
             'url' => null,
@@ -627,7 +627,7 @@ class NavigationBuilder
         return [
             'id' => $item->id,
             'code' => $item->code,
-            'label' => $this->normalizeLabel($item->label, $parent->label),
+            'label' => $this->normalizeLabel($this->labelOf($item), $this->labelOf($parent)),
             'label_key' => $item->label_key,
             'route' => $item->route,
             'url' => $this->url($item->route),
@@ -839,7 +839,7 @@ class NavigationBuilder
             $items[] = [
                 'id' => $item->id,
                 'code' => 'fav.'.$item->code,
-                'label' => $this->normalizeLabel($item->label),
+                'label' => $this->normalizeLabel($this->labelOf($item)),
                 'label_key' => $item->label_key,
                 'route' => $item->route,
                 'url' => $this->url($item->route),
@@ -890,9 +890,28 @@ class NavigationBuilder
         return null;
     }
 
+    /**
+     * §16-50 — resolve a menu row's display label in the reader's language.
+     *
+     * Every catalog row carries a `label_key`; the seeded `translations` table
+     * holds its Bangla (and English) form, so the sidebar, palette and breadcrumb
+     * read from there and fall back to the stored English label when a BN row is
+     * missing. A missing translation is a styling gap, never a blank link.
+     */
+    protected function labelOf(MenuItem $item): string
+    {
+        if (($item->label_key ?? '') !== '') {
+            return app(\App\Domain\Foundation\Services\Translator::class)->get($item->label_key, $item->label);
+        }
+
+        return (string) $item->label;
+    }
+
     protected function parentLabel(Collection $items, MenuItem $node): ?string
     {
-        return $node->parent_id !== null ? $items->get($node->parent_id)?->label : null;
+        $parent = $node->parent_id !== null ? $items->get($node->parent_id) : null;
+
+        return $parent !== null ? $this->labelOf($parent) : null;
     }
 
     /**

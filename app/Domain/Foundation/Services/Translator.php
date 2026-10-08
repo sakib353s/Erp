@@ -35,14 +35,19 @@ class Translator
      */
     public function locale(): string
     {
-        if ($this->locale !== null) {
-            return $this->locale;
-        }
-
+        // The reader's own choice — set by the language toggle and carried in the
+        // session — wins, and it wins *live*: a change to the session must be
+        // reflected on the very next read, so we never memoize a session value.
+        // (The memo below is only the resolved fallback, and the language switch
+        // clears it via flushLocale().)
         $session = session('locale');
 
         if (in_array($session, ['en', 'bn'], true)) {
-            return $this->locale = $session;
+            return $session;
+        }
+
+        if ($this->locale !== null) {
+            return $this->locale;
         }
 
         $configured = ($this->localization ?? app(LocalizationService::class))->locale();

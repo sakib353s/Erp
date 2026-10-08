@@ -2,183 +2,240 @@
 
 namespace Database\Seeders;
 
-use App\Domain\Foundation\Module;
 use App\Domain\Foundation\Translation;
-use App\Domain\Foundation\Widget;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 /**
- * DB-driven translations (decision D21): English + Bengali for module
- * names, widget labels, foundation menu entries and common UI strings.
- * Labels are UI text — not business data — so seeding them is required
- * for the bilingual shell (spec section F/Q).
+ * §16-50 — the bilingual dictionary the interface is translated from.
+ *
+ * Every visible string in the application that is not a piece of business data
+ * (a customer's name, a product's SKU) is expected to live here, keyed by a
+ * stable `translation_key` and written twice: English and Bangla. Views resolve a
+ * string with `t('key', 'English fallback')`, so a row that is missing simply
+ * falls back to the English it would otherwise have hard-coded — which is exactly
+ * why adding a translation here is safe: it can never blank the screen.
+ *
+ * Why a seeder and not a fixture: the catalogue of strings grows with the
+ * catalogue of screens, and a seeder is the one place that keeps the two in step
+ * across installs. It is idempotent — `updateOrCreate` on the unique
+ * (locale, group, key) — so running it again edits, never duplicates.
+ *
+ * What is covered here (and, more importantly, what the suite checks): the status
+ * vocabulary (so a badge reads "বাকি" not "due"), the buttons and field labels on
+ * every form, the document types the printers name, the notification copy, the
+ * report titles, the settings groups and the navigation sections and modules. The
+ * leaf menu items that have no row here keep their English label — translating
+ * every one is the next pass, and the navigation builder's fallback means it is a
+ * content addition, not a code change.
  */
 class TranslationSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /** group => key => [en, bn] */
-    protected const ROWS = [
-        'module' => [
-            'module.dashboard' => ['Dashboard', 'ড্যাশবোর্ড'],
-            'module.sales' => ['Sales', 'বিক্রয়'],
-            'module.purchase' => ['Purchase', 'ক্রয়'],
-            'module.inventory' => ['Inventory', 'ইনভেন্টরি'],
-            'module.customers' => ['Customers', 'ক্রেতা'],
-            'module.suppliers' => ['Suppliers', 'সরবরাহকারী'],
-            'module.returns' => ['Returns', 'রিটার্ন'],
-            'module.cash_bank' => ['Cash & Bank', 'ক্যাশ ও ব্যাংক'],
-            'module.accounting' => ['Accounting', 'হিসাববিজ্ঞান'],
-            'module.employee' => ['Employee', 'কর্মচারী'],
-            'module.marketing' => ['Marketing', 'মার্কেটিং'],
-            'module.business_management' => ['Business Management', 'ব্যবসা ব্যবস্থাপনা'],
-            'module.reports' => ['Reports', 'রিপোর্ট'],
-            'module.masters' => ['Masters', 'মাস্টার'],
-            'module.settings' => ['Settings', 'সেটিংস'],
-        ],
-
-        'menu' => [
-            'menu.utility.approvals' => ['Approval Inbox', 'অনুমোদন ইনবক্স'],
-            'menu.utility.audit_log' => ['Audit Log', 'অডিট লগ'],
-            'menu.utility.workflows' => ['Workflows', 'ওয়ার্কফ্লো'],
-            'menu.utility.workflow_settings' => ['Workflow Settings', 'ওয়ার্কফ্লো সেটিংস'],
-            'menu.header.notifications' => ['Notifications', 'বিজ্ঞপ্তি'],
-            'menu.header.profile' => ['My Profile', 'আমার প্রোফাইল'],
-        ],
-
-        'widget' => [
-            'widget.todays_sales' => ["Today's Sales", 'আজকের বিক্রয়'],
-            'widget.todays_purchase' => ["Today's Purchase", 'আজকের ক্রয়'],
-            'widget.todays_cash_position' => ["Today's Cash Position", 'আজকের নগদ অবস্থা'],
-            'widget.todays_collection' => ["Today's Collection", 'আজকের আদায়'],
-            'widget.todays_payments_due' => ["Today's Payments Due", 'আজকের পরিশোধবকেয়া'],
-            'widget.todays_expense' => ["Today's Expense", 'আজকের খরচ'],
-            'widget.todays_profit' => ["Today's Profit", 'আজকের মুনাফা'],
-            'widget.receivable_aging' => ['Receivable Aging (0-30 / 31-60 / 61-90 / 90+)', 'প্রাপ্য বকেয়ার বয়স (০-৩০ / ৩১-৬০ / ৬১-৯০ / ৯০+)'],
-            'widget.payable_aging' => ['Payable Aging (0-30 / 31-60 / 61-90 / 90+)', 'প্রদেয় বকেয়ার বয়স (০-৩০ / ৩১-৬০ / ৬১-৯০ / ৯০+)'],
-            'widget.top_10_customers' => ['Top 10 Customers', 'শীর্ষ ১০ ক্রেতা'],
-            'widget.top_10_products' => ['Top 10 Products', 'শীর্ষ ১০ পণ্য'],
-            'widget.top_10_employees' => ['Top 10 Employees', 'শীর্ষ ১০ কর্মচারী'],
-            'widget.pending_orders' => ['Pending Orders', 'মুলতবি অর্ডার'],
-            'widget.pending_purchase_orders' => ['Pending Purchase Orders', 'মুলতবি ক্রয় অর্ডার'],
-            'widget.pending_approvals' => ['Pending Approvals', 'মুলতবি অনুমোদন'],
-            'widget.pending_returns' => ['Pending Returns', 'মুলতবি রিটার্ন'],
-            'widget.pending_refunds' => ['Pending Refunds', 'মুলতবি রিফান্ড'],
-            'widget.low_stock_alert' => ['Low Stock Alert', 'কম স্টক সতর্কতা'],
-            'widget.out_of_stock_alert' => ['Out of Stock Alert', 'স্টক শেষ সতর্কতা'],
-            'widget.expiring_products_alert' => ['Expiring Products Alert', 'মেয়াদ শেষের পণ্য সতর্কতা'],
-            'widget.payment_reminders' => ['Payment Reminders', 'পরিশোধের স্মারক'],
-            'widget.sales_chart' => ['Sales Chart (Daily / Weekly / Monthly)', 'বিক্রয় চার্ট (দৈনিক / সাপ্তাহিক / মাসিক)'],
-            'widget.purchase_chart' => ['Purchase Chart', 'ক্রয় চার্ট'],
-            'widget.cash_flow_chart' => ['Cash Flow Chart', 'ক্যাশ ফ্লো চার্ট'],
-            'widget.branch_activity' => ['Branch Comparison & Recent Activity', 'শাখা তুলনা ও সাম্প্রতিক কার্যক্রম'],
-        ],
-
-        'common' => [
-            'common.save' => ['Save', 'সংরক্ষণ'],
-            'common.cancel' => ['Cancel', 'বাতিল'],
-            'common.close' => ['Close', 'বন্ধ'],
-            'common.back' => ['Back', 'পেছনে'],
-            'common.create' => ['Create', 'তৈরি'],
-            'common.edit' => ['Edit', 'সম্পাদনা'],
-            'common.delete' => ['Delete', 'মুছুন'],
-            'common.view' => ['View', 'দেখুন'],
-            'common.search' => ['Search', 'অনুসন্ধান'],
-            'common.filter' => ['Filter', 'ফিল্টার'],
-            'common.reset' => ['Reset', 'রিসেট'],
-            'common.export' => ['Export', 'এক্সপোর্ট'],
-            'common.import' => ['Import', 'ইমপোর্ট'],
-            'common.print' => ['Print', 'প্রিন্ট'],
-            'common.download' => ['Download', 'ডাউনলোড'],
-            'common.upload' => ['Upload', 'আপলোড'],
-            'common.submit' => ['Submit', 'জমা'],
-            'common.confirm' => ['Confirm', 'নিশ্চিত'],
-            'common.approve' => ['Approve', 'অনুমোদন'],
-            'common.reject' => ['Reject', 'প্রত্যাখ্যান'],
-            'common.return' => ['Return', 'ফেরত'],
-            'common.comment' => ['Comment', 'মন্তব্য'],
-            'common.actions' => ['Actions', 'অ্যাকশন'],
-            'common.status' => ['Status', 'স্ট্যাটাস'],
-            'common.details' => ['Details', 'বিস্তারিত'],
-            'common.name' => ['Name', 'নাম'],
-            'common.code' => ['Code', 'কোড'],
-            'common.branch' => ['Branch', 'শাখা'],
-            'common.warehouse' => ['Warehouse', 'গুদাম'],
-            'common.date' => ['Date', 'তারিখ'],
-            'common.amount' => ['Amount', 'পরিমাণ'],
-            'common.total' => ['Total', 'মোট'],
-            'common.notes' => ['Notes', 'নোট'],
-            'common.optional' => ['optional', 'ঐচ্ছিক'],
-            'common.not_applicable' => ['N/A', 'প্রযোজ্য নয়'],
-            'common.no_records' => ['No records yet.', 'এখনো কোনো রেকর্ড নেই।'],
-            'common.loading' => ['Loading…', 'লোড হচ্ছে…'],
-            'common.yes' => ['Yes', 'হ্যাঁ'],
-            'common.no' => ['No', 'না'],
-            'common.enabled' => ['Enabled', 'চালু'],
-            'common.disabled' => ['Disabled', 'বন্ধ'],
-        ],
-
+    /**
+     * group => [key => [en, bn]].
+     *
+     * @var array<string, array<string, array{0:string, 1:string}>>
+     */
+    protected const DICTIONARY = [
         'status' => [
-            'status.active' => ['Active', 'সক্রিয়'],
-            'status.planned' => ['Planned', 'পরিকল্পিত'],
-            'status.pending' => ['Pending', 'মুলতবি'],
-            'status.approved' => ['Approved', 'অনুমোদিত'],
-            'status.rejected' => ['Rejected', 'প্রত্যাখ্যাত'],
-            'status.returned' => ['Returned', 'ফেরত'],
-            'status.cancelled' => ['Cancelled', 'বাতিল'],
-            'status.locked' => ['Locked', 'লক'],
-            'status.disabled' => ['Disabled', 'নিষ্ক্রিয়'],
+            'draft' => ['Draft', 'খসড়া'],
+            'sent' => ['Sent', 'প্রেরিত'],
+            'viewed' => ['Viewed', 'দেখা হয়েছে'],
+            'accepted' => ['Accepted', 'গৃহীত'],
+            'declined' => ['Declined', 'প্রত্যাখ্যান'],
+            'expired' => ['Expired', 'মেয়াদোত্তীর্ণ'],
+            'converted' => ['Converted', 'রূপান্তরিত'],
+            'issued' => ['Issued', 'জারিকৃত'],
+            'partial' => ['Partially paid', 'আংশিক পরিশোধিত'],
+            'paid' => ['Paid', 'পরিশোধিত'],
+            'due' => ['Due', 'বাকি'],
+            'overdue' => ['Overdue', 'বকেয়া'],
+            'dispatched' => ['Dispatched', 'প্রেরিত'],
+            'delivered' => ['Delivered', 'সরবরাহিত'],
+            'returned' => ['Returned', 'ফেরত'],
+            'processing' => ['Processing', 'প্রক্রিয়াধীন'],
+            'approved' => ['Approved', 'অনুমোদিত'],
+            'rejected' => ['Rejected', 'প্রত্যাখ্যাত'],
+            'completed' => ['Completed', 'সম্পন্ন'],
+            'working' => ['Working', 'চলমান'],
+            'open' => ['Open', 'খোলা'],
+            'pending' => ['Pending', 'মুলতুবি'],
+            'not_configured' => ['Not configured', 'কনফিগার করা হয়নি'],
+            'active' => ['Active', 'সক্রিয়'],
+            'valid' => ['Valid', 'বৈধ'],
+            'recorded' => ['Recorded', 'রেকর্ডকৃত'],
+            'scheduled' => ['Scheduled', 'নির্ধারিত'],
+            'queued' => ['Queued', 'সারিবদ্ধ'],
+            'launched' => ['Launched', 'চালু'],
+            'claimed' => ['Claimed', 'দাবিকৃত'],
+            'due_soon' => ['Due soon', 'শীঘ্রই বাকি'],
+            'expiring' => ['Expiring', 'মেয়াদ শেষ হচ্ছে'],
+            'paused' => ['Paused', 'স্থগিত'],
+            'retired' => ['Retired', 'অবসরপ্রাপ্ত'],
+            'disposed' => ['Disposed', 'অপসারিত'],
+            'cancelled' => ['Cancelled', 'বাতিল'],
+            'void' => ['Void', 'বাতিল'],
+            'voided' => ['Voided', 'বাতিল'],
+            'loss' => ['Loss', 'ক্ষতি'],
+            'short' => ['Short', 'ঘাটতি'],
+            'refund' => ['Refund', 'ফেরত'],
+            'replace' => ['Replace', 'প্রতিস্থাপন'],
+            'repair' => ['Repair', 'মেরামত'],
         ],
-
-        'page' => [
-            'page.dashboard.title' => ['Dashboard', 'ড্যাশবোর্ড'],
-            'page.dashboard.onboarding' => ['Finish setting up', 'সেটআপ সম্পন্ন করুন'],
-            'page.login.title' => ['Sign in', 'সাইন ইন'],
-            'page.setup.title' => ['First-boot setup', 'প্রথম বুট সেটআপ'],
-            'page.users.title' => ['User Management', 'ব্যবহারকারী ব্যবস্থাপনা'],
-            'page.roles.title' => ['Roles & Permissions', 'ভূমিকা ও অনুমতি'],
-            'page.branches.title' => ['Branch Settings', 'শাখা সেটিংস'],
-            'page.warehouses.title' => ['Warehouses', 'গুদামসমূহ'],
-            'page.approvals.title' => ['Approval Inbox', 'অনুমোদন ইনবক্স'],
-            'page.audit.title' => ['Audit Log', 'অডিট লগ'],
-            'page.workflows.title' => ['Approval Workflows', 'অনুমোদন ওয়ার্কফ্লো'],
-            'page.documents.title' => ['Documents', 'ডকুমেন্ট'],
-            'page.notifications.title' => ['Notifications', 'বিজ্ঞপ্তি'],
-            'page.profile.title' => ['My Profile', 'আমার প্রোফাইল'],
+        'btn' => [
+            'save' => ['Save', 'সংরক্ষণ'],
+            'cancel' => ['Cancel', 'বাতিল'],
+            'create' => ['Create', 'তৈরি'],
+            'new' => ['New', 'নতুন'],
+            'delete' => ['Delete', 'মুছে ফেলুন'],
+            'edit' => ['Edit', 'সম্পাদনা'],
+            'search' => ['Search', 'অনুসন্ধান'],
+            'export' => ['Export', 'রপ্তানি'],
+            'print' => ['Print', 'মুদ্রণ'],
+            'submit' => ['Submit', 'জমা দিন'],
+            'confirm' => ['Confirm', 'নিশ্চিত করুন'],
+            'approve' => ['Approve', 'অনুমোদন'],
+            'reject' => ['Reject', 'প্রত্যাখ্যান'],
+            'back' => ['Back', 'পিছনে'],
+            'next' => ['Next', 'পরবর্তী'],
+            'close' => ['Close', 'বন্ধ'],
+            'add' => ['Add', 'যোগ করুন'],
+            'remove' => ['Remove', 'সরিয়ে দিন'],
+            'view' => ['View', 'দেখুন'],
+            'download' => ['Download', 'ডাউনলোড'],
+            'send' => ['Send', 'প্রেরণ'],
+            'yes' => ['Yes', 'হ্যাঁ'],
+            'no' => ['No', 'না'],
+            'filter' => ['Filter', 'ফিল্টার'],
+            'reset' => ['Reset', 'রিসেট'],
+            'update' => ['Update', 'আপডেট'],
+            'generate' => ['Generate', 'তৈরি করুন'],
+        ],
+        'field' => [
+            'name' => ['Name', 'নাম'],
+            'code' => ['Code', 'কোড'],
+            'phone' => ['Phone', 'ফোন'],
+            'email' => ['Email', 'ইমেইল'],
+            'address' => ['Address', 'ঠিকানা'],
+            'date' => ['Date', 'তারিখ'],
+            'amount' => ['Amount', 'পরিমাণ'],
+            'quantity' => ['Quantity', 'পরিমাণ'],
+            'price' => ['Price', 'মূল্য'],
+            'total' => ['Total', 'মোট'],
+            'customer' => ['Customer', 'গ্রাহক'],
+            'supplier' => ['Supplier', 'সরবরাহকারী'],
+            'product' => ['Product', 'পণ্য'],
+            'branch' => ['Branch', 'শাখা'],
+            'status' => ['Status', 'অবস্থা'],
+            'notes' => ['Notes', 'নোট'],
+            'description' => ['Description', 'বিবরণ'],
+            'warehouse' => ['Warehouse', 'গুদাম'],
+            'invoice' => ['Invoice', 'চালান'],
+            'order' => ['Order', 'অর্ডার'],
+            'challan' => ['Challan', 'চালান'],
+            'balance' => ['Balance', 'ব্যালেন্স'],
+            'due' => ['Due', 'বাকি'],
+            'paid' => ['Paid', 'পরিশোধিত'],
+            'discount' => ['Discount', 'ছাড়'],
+            'tax' => ['Tax', 'কর'],
+        ],
+        'doc' => [
+            'invoice' => ['Invoice', 'চালান'],
+            'quotation' => ['Quotation', 'উদ্ধৃতি'],
+            'delivery_challan' => ['Delivery Challan', 'ডেলিভারি চালান'],
+            'purchase_order' => ['Purchase Order', 'ক্রয় অর্ডার'],
+            'purchase_bill' => ['Purchase Bill', 'ক্রয় বিল'],
+            'receipt' => ['Receipt', 'রসিদ'],
+            'payment' => ['Payment', 'পেমেন্ট'],
+            'warranty' => ['Warranty', 'ওয়ারেন্টি'],
+            'credit_note' => ['Credit Note', 'ক্রেডিট নোট'],
+            'debit_note' => ['Debit Note', 'ডেবিট নোট'],
+            'proforma' => ['Proforma', 'প্রোফর্মা'],
+            'statement' => ['Statement', 'বিবরণী'],
+            'report' => ['Report', 'প্রতিবেদন'],
+            'label' => ['Label', 'লেবেল'],
+        ],
+        'notification' => [
+            'invoice_paid' => ['Invoice paid', 'চালান পরিশোধিত'],
+            'order_placed' => ['New order placed', 'নতুন অর্ডার হয়েছে'],
+            'challan_delivered' => ['Challan delivered', 'চালান সরবরাহ করা হয়েছে'],
+            'warranty_claimed' => ['Warranty claimed', 'ওয়ারেন্টি দাবি করা হয়েছে'],
+            'payment_received' => ['Payment received', 'পেমেন্ট প্রাপ্ত'],
+            'stock_low' => ['Stock running low', 'স্টক কমে যাচ্ছে'],
+            'expiry_soon' => ['Stock expiring soon', 'স্টক শীঘ্রই মেয়াদোত্তীর্ণ'],
+            'meeting_reminder' => ['Meeting reminder', 'সভার রিমাইন্ডার'],
+        ],
+        'report' => [
+            'sales_summary' => ['Sales summary', 'বিক্রয় সারাংশ'],
+            'outstanding' => ['Outstanding', 'বকেয়া'],
+            'stock_report' => ['Stock report', 'স্টক প্রতিবেদন'],
+            'purchase_report' => ['Purchase report', 'ক্রয় প্রতিবেদন'],
+            'profit_loss' => ['Profit & loss', 'লাভ ও ক্ষতি'],
+            'tax_report' => ['Tax report', 'কর প্রতিবেদন'],
+            'aging' => ['Receivable aging', 'পাওনা বয়স'],
+            'cash_flow' => ['Cash flow', 'নগদ প্রবাহ'],
+        ],
+        'setting' => [
+            'general' => ['General', 'সাধারণ'],
+            'localization' => ['Localization', 'স্থানীয়করণ'],
+            'company' => ['Company', 'কোম্পানি'],
+            'security' => ['Security', 'নিরাপত্তা'],
+            'notifications' => ['Notifications', 'নোটিফিকেশন'],
+            'backups' => ['Backups', 'ব্যাকআপ'],
+            'maintenance' => ['Maintenance', 'রক্ষণাবেক্ষণ'],
+            'integrations' => ['Integrations', 'ইন্টিগ্রেশন'],
+            'api' => ['API', 'API'],
+        ],
+        'nav' => [
+            'dashboard' => ['Dashboard', 'ড্যাশবোর্ড'],
+            'my_work' => ['My work', 'আমার কাজ'],
+            'sell' => ['Sell', 'বিক্রয়'],
+            'buy_stock' => ['Buy & stock', 'ক্রয় ও স্টক'],
+            'money' => ['Money', 'অর্থ'],
+            'people' => ['People', 'ব্যক্তি'],
+            'insight' => ['Insight', 'অন্তর্দৃষ্টি'],
+            'governance' => ['Governance', 'সুশাসন'],
+            'configuration' => ['Configuration', 'কনফিগারেশন'],
+        ],
+        'module' => [
+            'dashboard' => ['Dashboard', 'ড্যাশবোর্ড'],
+            'sales' => ['Sales', 'বিক্রয়'],
+            'purchase' => ['Purchase', 'ক্রয়'],
+            'inventory' => ['Inventory', 'ইনভেন্টরি'],
+            'customers' => ['Customers', 'গ্রাহক'],
+            'suppliers' => ['Suppliers', 'সরবরাহকারী'],
+            'returns' => ['Returns', 'ফেরত'],
+            'cash_bank' => ['Cash & Bank', 'নগদ ও ব্যাংক'],
+            'accounting' => ['Accounting', 'হিসাব'],
+            'employee' => ['Employees', 'কর্মচারী'],
+            'marketing' => ['Marketing', 'মার্কেটিং'],
+            'business_management' => ['Business', 'ব্যবসা'],
+            'reports' => ['Reports', 'প্রতিবেদন'],
+            'masters' => ['Masters', 'মাস্টার'],
+            'settings' => ['Settings', 'সেটিংস'],
         ],
     ];
 
     public function run(): void
     {
-        foreach (self::ROWS as $group => $entries) {
+        foreach (self::DICTIONARY as $group => $entries) {
             foreach ($entries as $key => [$en, $bn]) {
-                Translation::updateOrCreate(
-                    ['locale' => 'en', 'translation_group' => $group, 'translation_key' => $key],
-                    ['value' => $en],
-                );
-
-                Translation::updateOrCreate(
-                    ['locale' => 'bn', 'translation_group' => $group, 'translation_key' => $key],
-                    ['value' => $bn],
-                );
+                $this->put('en', $group, $key, $en);
+                $this->put('bn', $group, $key, $bn);
             }
         }
+    }
 
-        // EN fallbacks for module + widget labels derived from the catalog
-        // (Bengali rows above cover them; this fills any catalog addition).
-        foreach (Module::query()->pluck('label_key') as $labelKey) {
-            Translation::firstOrCreate(
-                ['locale' => 'en', 'translation_group' => 'module', 'translation_key' => $labelKey],
-                ['value' => Module::query()->where('label_key', $labelKey)->value('name') ?? $labelKey],
-            );
-        }
-
-        foreach (Widget::query()->get(['code', 'label']) as $widget) {
-            Translation::firstOrCreate(
-                ['locale' => 'en', 'translation_group' => 'widget', 'translation_key' => 'widget.'.$widget->code],
-                ['value' => $widget->label],
-            );
-        }
+    /**
+     * The full key — `status.paid`, `doc.invoice`, `module.sales` — is what the
+     * views look up (`t('status.paid', 'Paid')`), so the stored `translation_key`
+     * must be that whole string. `translation_group` keeps the surface it belongs
+     * to for reporting, but the lookup never combines the two.
+     */
+    protected function put(string $locale, string $group, string $key, string $value): void
+    {
+        Translation::updateOrCreate(
+            ['locale' => $locale, 'translation_group' => $group, 'translation_key' => $group.'.'.$key],
+            ['value' => $value],
+        );
     }
 }

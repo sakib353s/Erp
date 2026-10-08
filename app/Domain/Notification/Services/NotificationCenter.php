@@ -5,6 +5,7 @@ namespace App\Domain\Notification\Services;
 use App\Domain\Foundation\Company;
 use App\Domain\Foundation\Permission;
 use App\Domain\Foundation\Services\TenantContext;
+use App\Domain\Foundation\Services\Translator;
 use App\Domain\Foundation\User;
 use App\Domain\Notification\Notification;
 use App\Domain\Notification\NotificationPreference;
@@ -42,6 +43,16 @@ class NotificationCenter
         if ($dedupeKey !== null && Notification::query()->where('user_id', $user->id)->where('dedupe_key', $dedupeKey)->exists()) {
             return null;
         }
+
+        // §16-50 — the notification copy follows the reader's language. The event
+        // type is the stable key ('invoice.paid' → `notification.invoice_paid`);
+        // the passed string is the English fallback, so a missing Bangla row keeps
+        // the message readable rather than blanking it. Dynamic bodies (which carry
+        // names and numbers) are left as the caller wrote them.
+        $title = app(Translator::class)->get('notification.'.str_replace('.', '_', $eventType), $title);
+        $body = $body !== null
+            ? app(Translator::class)->get('notification.'.str_replace('.', '_', $eventType).'_body', $body)
+            : null;
 
         try {
             return Notification::create([
