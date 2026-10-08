@@ -105,6 +105,7 @@ export const SECTIONS = [
                     { label: 'Cash Receipts', url: './cash-bank.html', icon: 'bi-box-arrow-in-down' },
                     { label: 'Cash Payments', url: './cash-bank.html', icon: 'bi-box-arrow-up' },
                     { label: 'Cash Transfer', url: './cash-bank.html', icon: 'bi-arrow-left-right' },
+                    { label: 'Cash Count', url: './cash-counts.html', icon: 'bi-clipboard-check' },
                 ],
             },
             {
@@ -224,6 +225,7 @@ export const PALETTE = [
     { label: 'Cash Receipts', url: './cash-bank.html', icon: 'bi-box-arrow-in-down', section: 'Cash & bank', group: 'Cash Management' },
     { label: 'Cash Payments', url: './cash-bank.html', icon: 'bi-box-arrow-up', section: 'Cash & bank', group: 'Cash Management' },
     { label: 'Cash Transfer', url: './cash-bank.html', icon: 'bi-arrow-left-right', section: 'Cash & bank', group: 'Cash Management' },
+    { label: 'Cash Count', url: './cash-counts.html', icon: 'bi-clipboard-check', section: 'Cash & bank', group: 'Cash Management' },
     { label: 'All Bank Accounts', url: './cash-bank.html', icon: 'bi-bank', section: 'Cash & bank', group: 'Bank Accounts' },
     { label: 'Bank Reconciliation', url: './bank-recon.html', icon: 'bi-shield-check', section: 'Cash & bank', group: 'Bank Accounts' },
     { label: 'Bank Statement Import', url: './bank-recon.html', icon: 'bi-file-earmark-spreadsheet', section: 'Cash & bank', group: 'Bank Accounts' },
@@ -550,6 +552,7 @@ export function previewBar(current) {
         ['labels.html', 'Labels'],
         ['cash-bank.html', 'Cash & bank'],
         ['bank-recon.html', 'Reconciliation'],
+        ['cash-counts.html', 'Cash count'],
         ['cheques.html', 'Cheques'],
         ['expenses.html', 'Expenses'],
         ['expense-recurring.html', 'Recurring'],

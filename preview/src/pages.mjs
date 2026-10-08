@@ -3567,3 +3567,378 @@ ${footer()}
 </div>
 <script>window.erpNavIndex = [];</script>`;
 }
+
+export function cashCounts() {
+    const drawers = [
+        { code: '1110', name: 'Cash in Hand', where: 'Head office', books: '38,420.00', last: '2026-10-07', gap: 'Short 120.00', state: 'balanced', pending: '' },
+        { code: '1110-CNTR', name: 'Counter tin — Dhanmondi', where: 'Dhanmondi outlet', books: '9,650.00', last: '2026-10-08', gap: 'Waiting', state: 'pending', pending: 'Expected 9,650.00, counted 9,410.00' },
+        { code: '1110-DEPOT', name: 'Depot tin — Uttara', where: 'Uttara depot', books: '12,800.00', last: 'never counted', gap: '—', state: 'idle', pending: '' },
+    ];
+
+    const counts = [
+        { date: '2026-10-08', drawer: 'Counter tin — Dhanmondi', books: '9,650.00', counted: '9,410.00', gap: 'Short 240.00', state: 'pending', tone: 'short', by: 'Jamal Uddin', decided: '' },
+        { date: '2026-10-07', drawer: 'Cash in Hand', books: '38,540.00', counted: '38,420.00', gap: 'Short 120.00', state: 'posted', tone: 'short', by: 'Rakib Hasan', decided: 'posted to the ledger' },
+        { date: '2026-10-06', drawer: 'Depot tin — Uttara', books: '12,750.00', counted: '12,800.00', gap: 'Over 50.00', state: 'posted', tone: 'over', by: 'Sumaiya Akter', decided: 'posted to the ledger' },
+        { date: '2026-10-05', drawer: 'Counter tin — Dhanmondi', books: '9,200.00', counted: '8,900.00', gap: 'Short 300.00', state: 'rejected', tone: 'short', by: 'Jamal Uddin', decided: 'refused by Md. Faruk — recount with the supervisor' },
+    ];
+
+    const denominations = [
+        ['৳ 1000 note', 28], ['৳ 500 note', 4], ['৳ 200 note', 1], ['৳ 100 note', 3],
+        ['৳ 50 note', 1], ['৳ 20 note', 1], ['৳ 10 note', 1], ['৳ 5 coin', 2],
+    ];
+
+    return `
+${previewBar('cash-counts.html')}
+<div class="erp-app-body">
+    ${sidebar('cash_bank')}
+    <main class="erp-main">
+        ${topbar('Cash count')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-clipboard-check" aria-hidden="true"></i> Cash &amp; bank · Cash management · Cash count</p>
+                    <h1 class="erp-page-title">Counting the drawer</h1>
+                    <p class="erp-page-sub">Every other screen here believes the ledger. This one asks what is actually in the tin: the notes and coins are written down, added up, and compared with the books, and the gap — if there is one — is the only thing that posts. Above the company's tolerance the gap waits for somebody other than the person holding the money.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./cash-bank.html"><i class="bi bi-cash-stack" aria-hidden="true"></i> Cash in hand</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-safe" aria-hidden="true"></i> Drawers in this company</p>
+                    <p class="erp-kpi-value">3</p>
+                    <p class="erp-kpi-foot">1 of them never counted yet</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Waiting for a signature</p>
+                    <p class="erp-kpi-value">৳ 240.00</p>
+                    <p class="erp-kpi-foot">1 count — the difference has not reached the ledger</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-arrow-down-circle" aria-hidden="true"></i> Short this month</p>
+                    <p class="erp-kpi-value">৳ 420.00</p>
+                    <p class="erp-kpi-foot">Posted to Cash Over &amp; Short (5250)</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-arrow-up-circle" aria-hidden="true"></i> Over this month</p>
+                    <p class="erp-kpi-value">৳ 50.00</p>
+                    <p class="erp-kpi-foot">3 count(s) posted this month</p>
+                </div>
+            </div>
+
+            <div class="erp-note erp-note-info mb-3">
+                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                <div>A difference of <strong>৳ 100.00</strong> or more is recorded but not posted until somebody other than the counter approves it. Below that, the difference is corrected as it is counted. <a href="./index.html">Cash &amp; Bank settings</a></div>
+            </div>
+
+            <div class="erp-table-shell" data-erp-table>
+                <header class="erp-table-head">
+                    <div>
+                        <h2 class="erp-table-title">The drawers</h2>
+                        <p class="erp-table-count">3 cash account(s)</p>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack">
+                        <thead>
+                            <tr>
+                                <th>Drawer</th>
+                                <th>Where</th>
+                                <th class="erp-th-num">Books say</th>
+                                <th>Last counted</th>
+                                <th>Waiting</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${drawers.map((d) => `
+                            <tr>
+                                <td>
+                                    <span class="erp-cell-strong">${d.code}</span>
+                                    <span class="d-block erp-td-muted">${d.name}</span>
+                                </td>
+                                <td>
+                                    ${d.where}
+                                    <span class="d-block erp-td-muted"><a href="./cash-bank.html">read the ledger</a></span>
+                                </td>
+                                <td class="erp-td-num">৳ ${d.books}</td>
+                                <td>
+                                    ${d.last}
+                                    <span class="d-block erp-td-muted">${d.gap === '—' ? '' : (d.state === 'balanced' ? statusChip('balanced', 'Counted exactly') : d.gap)}</span>
+                                </td>
+                                <td>
+                                    ${d.state === 'pending' ? statusChip('pending_approval', 'Awaiting approval') : '<span class="erp-td-muted">nothing waiting</span>'}
+                                    ${d.pending ? `<span class="d-block erp-td-muted"><a href="./cash-count.html">${d.pending}</a></span>` : ''}
+                                </td>
+                                <td class="erp-td-actions">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button">Count it</button>
+                                </td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <section class="erp-card mt-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Count a drawer</h2>
+                        <p class="erp-card-sub">Write the notes down and the desk adds them up against the figure you type — a breakdown that does not add up to the total is refused, because the whole reason for writing denominations down is that somebody can check them afterwards.</p>
+                    </div>
+                </header>
+                <form onsubmit="return false">
+                    <div class="erp-form-grid">
+                        <div class="erp-form-field">
+                            <label class="form-label" for="cc-account">Drawer</label>
+                            <select class="form-select" id="cc-account">
+                                <option>1110 — Cash in Hand (books say 38,420.00)</option>
+                                <option>1110-CNTR — Counter tin — Dhanmondi (books say 9,650.00)</option>
+                                <option>1110-DEPOT — Depot tin — Uttara (books say 12,800.00)</option>
+                            </select>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="cc-branch">Kept at</label>
+                            <select class="form-select" id="cc-branch">
+                                <option>Head office (head office)</option>
+                                <option>Dhanmondi outlet</option>
+                                <option>Uttara depot</option>
+                            </select>
+                            <p class="form-text">The ledger's figure is read for this branch, not the whole company.</p>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="cc-date">Counted on</label>
+                            <input class="form-control" type="date" id="cc-date" value="2026-10-08">
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="cc-amount">What was in the tin</label>
+                            <input class="form-control" type="text" inputmode="decimal" id="cc-amount" placeholder="9410.00">
+                            <p class="form-text">Zero is a perfectly good answer — an empty drawer.</p>
+                        </div>
+                    </div>
+
+                    <p class="erp-field-label mt-2">Notes and coins (optional, but they have to add up)</p>
+                    <div class="erp-count-grid">
+                        ${denominations.map(([label, count]) => `
+                        <div class="erp-count-row">
+                            <span class="erp-count-label">${label}</span>
+                            <input class="form-control form-control-sm erp-num" type="text" inputmode="numeric" value="${count}" aria-label="${label} counted">
+                        </div>`).join('')}
+                    </div>
+
+                    <div class="erp-form-grid mt-2">
+                        <div class="erp-form-field erp-form-field-wide">
+                            <label class="form-label" for="cc-reason">Why it does not match (when it does not)</label>
+                            <input class="form-control" type="text" id="cc-reason" maxlength="300" placeholder="Change given wrong at 4pm — the customer came back">
+                            <p class="form-text">Required whenever the counted figure differs from the books: the next person to count this drawer reads it.</p>
+                        </div>
+                        <div class="erp-form-field erp-form-field-wide">
+                            <label class="form-label" for="cc-notes">Anything else worth writing down</label>
+                            <input class="form-control" type="text" id="cc-notes" maxlength="300" placeholder="Counted with the shift supervisor present">
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary mt-2" type="button"><i class="bi bi-check2-circle" aria-hidden="true"></i> Record the count</button>
+                </form>
+            </section>
+
+            <form class="erp-filterbar mt-3" onsubmit="return false" role="search">
+                <div class="erp-filter">
+                    <label class="form-label" for="ccf-account">Drawer</label>
+                    <select class="form-select" id="ccf-account"><option>Every drawer</option><option>Cash in Hand</option><option>Counter tin — Dhanmondi</option></select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="ccf-status">State</label>
+                    <select class="form-select" id="ccf-status"><option>Everything</option><option>Waiting for approval</option><option>Counted and posted</option><option>Refused</option></select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="ccf-from">From</label>
+                    <input class="form-control" type="date" id="ccf-from" value="2026-10-01">
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="ccf-to">To</label>
+                    <input class="form-control" type="date" id="ccf-to" value="2026-10-08">
+                </div>
+                <div class="erp-filterbar-actions">
+                    <a class="btn btn-link" href="./cash-counts.html">Reset</a>
+                    <button class="btn btn-primary" type="button"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                </div>
+            </form>
+
+            <div class="erp-table-shell mt-3" data-erp-table>
+                <header class="erp-table-head">
+                    <div>
+                        <h2 class="erp-table-title">Counts made</h2>
+                        <p class="erp-table-count">4 count(s) shown</p>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Drawer</th>
+                                <th class="erp-th-num">Books said</th>
+                                <th class="erp-th-num">Counted</th>
+                                <th class="erp-th-num">Difference</th>
+                                <th>State</th>
+                                <th>Counted by</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${counts.map((c) => `
+                            <tr>
+                                <td>${c.date}</td>
+                                <td><span class="erp-cell-strong">${c.drawer}</span></td>
+                                <td class="erp-td-num">৳ ${c.books}</td>
+                                <td class="erp-td-num">৳ ${c.counted}</td>
+                                <td class="erp-td-num">${statusChip(c.tone, c.gap)}</td>
+                                <td>
+                                    ${statusChip(c.state === 'pending' ? 'pending_approval' : c.state, c.state === 'pending' ? 'Waiting for approval' : (c.state === 'posted' ? 'Counted and posted' : 'Refused'))}
+                                    ${c.decided === 'posted to the ledger' ? '<span class="d-block erp-td-muted">posted to the ledger</span>' : ''}
+                                </td>
+                                <td>
+                                    ${c.by}
+                                    ${c.decided && c.decided !== 'posted to the ledger' ? `<span class="d-block erp-td-muted">${c.decided}</span>` : ''}
+                                </td>
+                                <td class="erp-td-actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="./cash-count.html">The sheet</a>
+                                </td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>`;
+}
+
+export function cashCountSheet() {
+    const lines = [
+        ['৳ 1000 note', 7, '7,000.00'],
+        ['৳ 500 note', 4, '2,000.00'],
+        ['৳ 200 note', 1, '200.00'],
+        ['৳ 100 note', 2, '200.00'],
+        ['৳ 10 note', 1, '10.00'],
+    ];
+
+    return `
+${previewBar('cash-count.html')}
+<div class="erp-app-body">
+    ${sidebar('cash_bank')}
+    <main class="erp-main">
+        ${topbar('Cash count sheet')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-clipboard-check" aria-hidden="true"></i> Cash &amp; bank · Cash management · Cash count</p>
+                    <h1 class="erp-page-title">The counted drawer</h1>
+                    <p class="erp-page-sub">What the books said on the day, what was found in the tin, and the notes and coins that were added up to say so — kept together because a count is evidence rather than a figure. Nothing on this sheet was recalculated afterwards.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./cash-counts.html"><i class="bi bi-arrow-left" aria-hidden="true"></i> All counts</a>
+                    <a class="btn btn-outline-secondary" href="./cash-bank.html"><i class="bi bi-journal-text" aria-hidden="true"></i> The drawer's ledger</a>
+                </div>
+            </header>
+
+            <div class="erp-note erp-note-warn mb-3">
+                <i class="bi bi-hourglass-split" aria-hidden="true"></i>
+                <div>The difference is <strong>not in the ledger</strong>. It is at or above the tolerance of ৳ 100.0000, so somebody other than Jamal Uddin has to approve it — money that is missing must not be written off by the person who was holding it.</div>
+            </div>
+
+            <div class="erp-split">
+                <section class="erp-card">
+                    <header class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">1110-CNTR — Counter tin — Dhanmondi</h2>
+                            <p class="erp-card-sub">Counted on 2026-10-08 · Dhanmondi outlet</p>
+                        </div>
+                        ${statusChip('pending_approval', 'Waiting for approval')}
+                    </header>
+                    <div class="erp-dl erp-dl-tight erp-dl-striped">
+                        <dt>Books said</dt>
+                        <dd class="erp-money-flat">৳ 9,650.00</dd>
+                        <dt>Counted</dt>
+                        <dd class="erp-money-flat">৳ 9,410.00</dd>
+                        <dt>Difference</dt>
+                        <dd>${statusChip('short', 'Short 240.00')}</dd>
+                        <dt>Tolerance it was judged against</dt>
+                        <dd class="erp-money-flat">৳ 100.0000</dd>
+                        <dt>Counted by</dt>
+                        <dd>Jamal Uddin</dd>
+                        <dt>Why it did not match</dt>
+                        <dd>Change given wrong at the counter, two customers came back</dd>
+                        <dt>Noted</dt>
+                        <dd>Counted with the shift supervisor present</dd>
+                    </div>
+                </section>
+
+                <section class="erp-card">
+                    <header class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">What the drawer was holding</h2>
+                            <p class="erp-card-sub">Added up by hand — the figures here are the ones written down at the tin.</p>
+                        </div>
+                    </header>
+                    <div class="erp-table-scroll">
+                        <table class="table erp-table erp-table-compact">
+                            <thead>
+                                <tr>
+                                    <th>Denomination</th>
+                                    <th class="erp-th-num">Count</th>
+                                    <th class="erp-th-num">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${lines.map(([label, count, amount]) => `
+                                <tr>
+                                    <td>${label}</td>
+                                    <td class="erp-td-num">${count}</td>
+                                    <td class="erp-td-num">৳ ${amount}</td>
+                                </tr>`).join('')}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="2">Added up</th>
+                                    <th class="erp-th-num">৳ 9,410.00</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <section class="erp-card mt-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Answer for the difference</h2>
+                        <p class="erp-card-sub">Approving posts it — a shortage debits Cash Over &amp; Short and credits the drawer. Refusing leaves the books untouched and needs a reason the next counter can read.</p>
+                    </div>
+                </header>
+                <form onsubmit="return false">
+                    <div class="erp-form-field erp-form-field-wide">
+                        <label class="form-label" for="ccd-note">Why (kept with the decision)</label>
+                        <input class="form-control" type="text" id="ccd-note" maxlength="300" placeholder="The courier was paid from the till and the voucher was filed late">
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" type="button" name="action" value="approve"><i class="bi bi-check2" aria-hidden="true"></i> Approve and post the difference</button>
+                        <button class="btn btn-outline-secondary" type="button" name="action" value="reject"><i class="bi bi-x-lg" aria-hidden="true"></i> Refuse the count</button>
+                    </div>
+                </form>
+            </section>
+
+            <p class="erp-filter-note mt-3">
+                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                This drawer now reads ৳ 9,650.00 in the books, and it was last counted 2026-10-08. Another count of it is still waiting for a decision.
+            </p>
+
+        </div>
+    </main>
+</div>`;
+}

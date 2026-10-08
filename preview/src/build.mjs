@@ -8,7 +8,7 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { shellHeader, shellFooter } from './shell.mjs';
-import { designSystem, dashboard, orders, orderDetail, customers, customerProfile, pos, packaging, labels, cashBank, bankRecon, cheques, expenses, recurringExpenses, pettyCash, pettyCashExpenses, pettyCashRequests, pettyCashReplenishment, login, notFound } from './pages.mjs';
+import { designSystem, dashboard, orders, orderDetail, customers, customerProfile, pos, packaging, labels, cashBank, bankRecon, cheques, expenses, recurringExpenses, pettyCash, pettyCashExpenses, pettyCashRequests, pettyCashReplenishment, cashCounts, cashCountSheet, login, notFound } from './pages.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const outDir = resolve(here, '..');
@@ -28,6 +28,8 @@ const shellPages = [
     ['cheques.html', 'Cheque register', cheques],
     ['expenses.html', 'Expense desk', expenses],
     ['expense-recurring.html', 'Recurring expenses', recurringExpenses],
+    ['cash-counts.html', 'Cash counts', cashCounts],
+    ['cash-count.html', 'Cash count sheet', cashCountSheet],
     ['petty-cash.html', 'Petty cash', pettyCash],
     ['petty-cash-requests.html', 'Petty cash requests', pettyCashRequests],
     ['petty-cash-expenses.html', 'Petty cash expenses', pettyCashExpenses],
