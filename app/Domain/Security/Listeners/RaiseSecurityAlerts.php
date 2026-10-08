@@ -6,6 +6,7 @@ use App\Domain\Notification\Services\NotificationCenter;
 use App\Domain\Security\AuthEvent;
 use App\Domain\Security\Events\LoginFailed;
 use App\Domain\Security\Events\LoginSucceeded;
+use App\Domain\Security\Services\SecureAlertService;
 use App\Domain\Settings\Services\SettingService;
 
 /**
@@ -30,7 +31,7 @@ class RaiseSecurityAlerts
             return;
         }
 
-        $recent = $this->notifications->securityAlert(
+        $recent = app(\App\Domain\Security\Services\SecureAlertService::class)->raise(
             type: match ($event->reason) {
                 'new_ip_address' => 'login.new_ip',
                 default => 'login.new_device',
@@ -67,7 +68,7 @@ class RaiseSecurityAlerts
             return; // already alerted for this burst
         }
 
-        $this->notifications->securityAlert(
+        app(\App\Domain\Security\Services\SecureAlertService::class)->raise(
             type: 'login.brute_force',
             severity: 'critical',
             title: 'Possible brute-force attack',
