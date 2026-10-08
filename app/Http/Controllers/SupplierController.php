@@ -222,11 +222,4 @@ class SupplierController extends Controller
         ]);
     }
 
-    /** @return array<int, int> */
-    protected function branchIds(Request $request): array
-    {
-        $ids = $request->user()?->accessibleBranchIds();
-
-        return $ids === null ? [] : array_map('intval', $ids);
-    }
 }

@@ -147,7 +147,11 @@ class ReportCentreTest extends TestCase
 
     public function test_a_family_hub_links_what_the_reader_may_open_and_names_what_they_may_not(): void
     {
-        $reader = $this->reader(['reports.view', 'reports.sales']);
+        // The family key opens the hub; the report's own key opens the report —
+        // two doors, deliberately, so a manager can read the sales reports
+        // without being handed the payroll. This reader holds the sales report
+        // key, so every sales report is a link to them …
+        $reader = $this->reader(['reports.view', 'reports.sales', 'sales.reports.view']);
 
         $response = $this->actingAs($reader)->get(route('reports.sales'));
 
@@ -160,10 +164,13 @@ class ReportCentreTest extends TestCase
         // … the ones this reader may open are links …
         $response->assertSee(route('sales.reports.summary'), false);
 
-        // … and the ones they may not are named with the key they need, not hidden.
+        // … and the ones they may not — the drawer and the returns register are
+        // other people's keys — are named with the key they need rather than
+        // hidden, and are not links.
         $response->assertSee('Needs')
-            ->assertSee('sales.reports.view')
-            ->assertDontSee(route('sales.reports.custom'), false);
+            ->assertSee('pos.cash_drawer')
+            ->assertSee('returns.view')
+            ->assertDontSee(route('pos.drawer'), false);
     }
 
     public function test_a_hub_says_what_is_missing_in_words_instead_of_showing_a_blank_card(): void
@@ -345,6 +352,12 @@ class ReportCentreTest extends TestCase
         $this->actingAs($this->admin)->post(route('reports.index'))->assertStatus(405);
         $this->actingAs($this->admin)->post(route('reports.finance'))->assertStatus(405);
         $this->actingAs($this->admin)->post(route('reports.custom'))->assertStatus(405);
-        $this->actingAs($this->admin)->get(route('reports.scheduled.store'))->assertStatus(405);
+        // The one form the centre carries is the schedule writer, and its URI is
+        // also a page — so GETting that URL is the page, by design. What must
+        // hold is that the form's own route is a POST and nothing else.
+        $store = app('router')->getRoutes()->getByName('reports.scheduled.store');
+
+        $this->assertNotNull($store);
+        $this->assertSame(['POST'], $store->methods(), 'the only write on the centre is the schedule form');
     }
 }

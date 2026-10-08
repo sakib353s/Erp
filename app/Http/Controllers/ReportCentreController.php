@@ -49,17 +49,25 @@ class ReportCentreController extends Controller
     /** One family hub — the catalogue leaves 13-01…13-09. */
     public function family(Request $request, string $family): View
     {
-        $definition = $this->registry->family($family);
+        /*
+         * The definition comes from `families()`, not from `family()`: the page
+         * prints how many reports this installation really registers for the
+         * family, and that count is only known after the registry has looked
+         * each one up in the router. Reading the raw catalogue here left the
+         * hub asking a family definition for a figure it never carried.
+         */
+        $families = $this->registry->families($request->user());
 
-        abort_if($definition === null, 404);
+        abort_if(! isset($families[$family]), 404);
 
+        $definition = $families[$family];
         $entries = $this->registry->forUser($request->user(), $family);
 
         return view('reports.family', [
-            'family' => $definition + ['slug' => $family],
+            'family' => $definition,
             'entries' => $entries,
             'openable' => count(array_filter($entries, fn (array $row): bool => $row['allowed'])),
-            'families' => $this->registry->families($request->user()),
+            'families' => $families,
             'schedules' => ScheduledReport::query()
                 ->where('company_id', $request->user()->company_id)
                 ->where('is_active', true)
