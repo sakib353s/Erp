@@ -577,6 +577,19 @@ return [
                         'min' => 0,
                         'help' => 'A voucher at or above this amount is asked for rather than paid: the request waits, nothing is posted, and somebody other than the person who asked approves it. Below it the custodian pays and records the voucher in one step. Zero means every voucher is the custodian\'s to pay.',
                     ],
+                    /* §08-05: how big a counted difference has to be before it
+                       waits for somebody other than the person holding the tin.
+                       Zero means every difference is the counter's to post, which
+                       is how a one-person cash desk works — and it is the default
+                       on purpose, because demanding a signature for a ten-taka
+                       gap teaches people to stop counting. */
+                    'cash_count_tolerance' => [
+                        'label' => 'A counted difference needs approval at or above',
+                        'type' => 'number',
+                        'default' => 0,
+                        'min' => 0,
+                        'help' => 'A drawer counted short or over by this much keeps the difference out of the ledger until somebody else approves it. The number a count was judged against is copied onto the count itself, so changing this later never rewrites what a past count was measured against.',
+                    ],
                     'expense_approval_above' => [
                         'label' => 'Expenses need approval at or above',
                         'type' => 'number',

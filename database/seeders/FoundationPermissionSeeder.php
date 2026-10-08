@@ -183,6 +183,12 @@ class FoundationPermissionSeeder extends Seeder
             ['cash', 'receipts', 'create', 'cash.receipts.create', 'Record money received'],
             ['cash', 'payments', 'create', 'cash.payments.create', 'Record money paid out'],
             ['cash', 'transfers', 'create', 'cash.transfers', "Move money between the company's own accounts"],
+            // §08-05: counting a drawer and answering for what is missing from it
+            // are two different jobs. Anybody trusted with the till can count it;
+            // writing off a difference at or above the tolerance is somebody
+            // else's signature, which is the whole reason a big gap waits.
+            ['cash', 'counts', 'create', 'cash.counts', 'Count a cash drawer against the books'],
+            ['cash', 'counts', 'decide', 'cash.counts.approve', 'Approve or refuse a counted difference at or above the tolerance'],
             ['bank', 'accounts', 'manage', 'bank.accounts', 'Declare, rename and close cash and bank accounts'],
             ['bank', 'books', 'view', 'bank.view', "Read an account's book, the way a statement is read"],
             ['wallets', 'accounts', 'manage', 'wallets.accounts', 'Open and configure mobile wallets'],

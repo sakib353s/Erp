@@ -1344,6 +1344,13 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
     color: var(--info);
 }
 
+/* §08-05: a drawer counted over — not a gain, a sign that something was
+   recorded wrong, so it reads as a caution rather than as success */
+.erp-status-over {
+    background: var(--warn-soft);
+    color: var(--warn);
+}
+
 /* Waiting on someone / partially done */
 .erp-status-pending,
 .erp-status-pending_dispatch,
@@ -1403,7 +1410,9 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 .erp-status-qty-mismatch,
 .erp-status-unmatched,
 /* §04-47: stock and its value have left the company */
-.erp-status-loss {
+.erp-status-loss,
+/* §08-05: a drawer counted short — the books said more than the tin held */
+.erp-status-short {
     background: var(--danger-soft);
     color: var(--danger);
 }
@@ -3001,3 +3010,36 @@ hr { border-color: var(--line); opacity: 1; }
 .erp-timeline-marker.erp-timeline-promoter { background: var(--ok); }
 .erp-timeline-marker.erp-timeline-passive { background: var(--warn); }
 .erp-timeline-marker.erp-timeline-detractor { background: var(--danger); }
+
+/* ------------------------------------------------ 22b. the cash count desk */
+/* §08-05: a count is read by adding it up again, so each denomination gets its
+   own line with its own box, in a grid that folds to one column on a phone. */
+.erp-count-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 8px 16px;
+    margin-top: 6px;
+}
+
+.erp-count-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 10px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface-2);
+}
+
+.erp-count-label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-2);
+    white-space: nowrap;
+}
+
+.erp-count-row .form-control {
+    max-width: 96px;
+    text-align: right;
+}

@@ -119,6 +119,11 @@ class SystemRoleSeeder extends Seeder
                 // came out of it — and the service still refuses them their own
                 // request.
                 'pettycash.funds', 'pettycash.spend', 'pettycash.approve', 'pettycash.replenish',
+                // §08-05: the manager also answers for a counted difference —
+                // counting the drawer is the cash desk's, signing off what is
+                // missing from it is a second pair of eyes, and the service
+                // refuses the counter their own count.
+                'cash.counts', 'cash.counts.approve',
                 // §04-28: stock leaving the building on a transfer is the same
                 // kind of decision as stock being written off, so it is the same
                 // desk that signs it off — and never the person who raised it.
@@ -177,8 +182,10 @@ class SystemRoleSeeder extends Seeder
                 // deliberately not here: they are the manager's two acts.
                 'pettycash.spend', 'pettycash.replenish',
                 // §04-31: the storekeeper counts the shelves; posting the
-                // difference into stock is the manager's signature.
-                'inventory.counts.view', 'inventory.counts.create',
+                // difference into stock is the manager's signature. §08-05 is the
+                // same shape for cash: this desk counts the till, and a shortage
+                // big enough to matter waits for somebody else.
+                'inventory.counts.view', 'inventory.counts.create', 'cash.counts',
                 // §04-55: the storekeeper is the person who notices the shelf is
                 // empty, so the desk is readable here — proposing a purchase and
                 // drafting one stay with the buyer (inventory.reorder.suggest).

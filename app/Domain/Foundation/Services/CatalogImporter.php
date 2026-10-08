@@ -246,12 +246,13 @@ class CatalogImporter
         // Phase D accounting (09-03…09-10, 09-32)
         /* §08 — cash & bank. The catalogue's leaves are the things the desk
          * actually does (read a position, take money in, pay money out, move it
-         * between accounts), the registry those accounts live in, the statement
-         * desk that proves them, and the cheque register. The leaves still
-         * PLANNED here — cash count, expenses, petty cash and bank-charge
-         * auto-posting — have no screen behind them yet, and a link to a screen
-         * that does not exist is worse than no link: the menu builder refuses to
-         * render one.
+         * between accounts, count the drawer), the registry those accounts live
+         * in, the statement desk that proves them, the cheque register, the
+         * expense desk with its schedules and its petty cash tin. The three
+         * leaves still PLANNED here — bank-charge auto-posting, expense reports
+         * and cash reports — have no screen behind them yet, and a link to a
+         * screen that does not exist is worse than no link: the menu builder
+         * refuses to render one.
          */
         'cash & bank > cash management > cash in hand' => ['/app/cash-bank', 'cash.view'],
         'cash & bank > cash management > cash receipts' => ['/app/cash-bank/receipts', 'cash.view'],
@@ -300,6 +301,8 @@ class CatalogImporter
         // §08-21: the float. Four screens for four jobs — the overview reads the
         // tins, requests is what has been asked for, expenses is what has been
         // paid, and replenishment is what has been put back.
+        // §08-05: the drawer counted by a person against the books.
+        'cash & bank > cash management > cash count' => ['/app/cash-bank/cash-counts', 'cash.counts'],
         'cash & bank > petty cash > petty cash overview' => ['/app/cash-bank/petty-cash', 'pettycash.funds'],
         'cash & bank > petty cash > petty cash requests' => ['/app/cash-bank/petty-cash/requests', 'pettycash.spend'],
         'cash & bank > petty cash > petty cash expenses' => ['/app/cash-bank/petty-cash/expenses', 'pettycash.spend'],

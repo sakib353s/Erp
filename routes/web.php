@@ -9,6 +9,7 @@ use App\Http\Controllers\BankReconciliationController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BulkPriceUpdateController;
 use App\Http\Controllers\CashBankController;
+use App\Http\Controllers\CashCountController;
 use App\Http\Controllers\ChequeController;
 use App\Http\Controllers\PettyCashController;
 use App\Http\Controllers\ExpenseController;
@@ -1071,6 +1072,27 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::post('/app/cash-bank/petty-cash/replenishments', [PettyCashController::class, 'storeReplenishment'])
         ->middleware('permission:pettycash.replenish')
         ->name('cash-bank.petty-cash.replenishments.store');
+
+    /*
+     * §08-05 — counting the drawer. Reading a count is the module floor
+     * (`cash.view`); counting one is `cash.counts`, and answering for a
+     * difference at or above the company's tolerance is `cash.counts.approve`.
+     * The split matters: the person who was holding the money must not be the
+     * person who writes off what is missing from it, and the service refuses
+     * that even for somebody holding both keys.
+     */
+    Route::get('/app/cash-bank/cash-counts', [CashCountController::class, 'index'])
+        ->middleware('permission:cash.view')
+        ->name('cash-bank.cash-counts');
+    Route::post('/app/cash-bank/cash-counts', [CashCountController::class, 'store'])
+        ->middleware('permission:cash.counts')
+        ->name('cash-bank.cash-counts.store');
+    Route::post('/app/cash-bank/cash-counts/{cashCount}/decide', [CashCountController::class, 'decide'])
+        ->middleware('permission:cash.counts.approve')
+        ->name('cash-bank.cash-counts.decide');
+    Route::get('/app/cash-bank/cash-counts/{cashCount}', [CashCountController::class, 'show'])
+        ->middleware('permission:cash.view')
+        ->name('cash-bank.cash-counts.show');
 
     Route::get('/app/accounting/opening-trial-balance', [FinancialReportController::class, 'openingTrialBalance'])
         ->middleware('permission:accounting.reports.view')
