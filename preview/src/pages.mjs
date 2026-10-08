@@ -6,6 +6,7 @@
  * never reach the application (global invariant: no fake data in the app).
  */
 import { previewBar, sidebar, topbar, footer } from './shell.mjs';
+import { SAMPLE_BARCODE, SAMPLE_QR } from './samples.mjs';
 
 const money = (value) => `<span class="erp-amount">৳ ${value}</span>`;
 
@@ -1286,6 +1287,210 @@ ${topbar({ title: 'Packaging types', trail: [{ label: 'Inventory & warehouse' },
                     <a class="erp-chip erp-chip-outline" href="./packaging.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Packaging cost</a>
                     <a class="erp-chip erp-chip-outline" href="./packaging.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Packaging report</a>
                     <a class="erp-chip erp-chip-outline" href="./dashboard.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Stock overview</a>
+                </div>
+            </nav>
+        </main>
+${footer()}
+    </div>
+</div>
+<script>window.erpNavIndex = [];</script>`;
+}
+
+/* -------------------------------------- 11. label desk: barcodes and QR codes */
+export function labels() {
+    const sheets = [
+        ['labels-20261008-0915-4b7c1a2e.html', '24 labels · A4 sheet, 24 labels (3 × 8)', '18.4 KB', '08 Oct 2026, 09:15', 'Dhaka HQ', '4 people printed it'],
+        ['labels-20261007-1740-c19e6d84.html', '12 labels · Thermal roll, 50 × 25 mm', '9.1 KB', '07 Oct 2026, 17:40', 'Dhaka HQ', '2 people printed it'],
+        ['labels-20261007-1102-77aa0f31.html', '240 labels · A4 sheet, 21 labels (3 × 7)', '96.7 KB', '07 Oct 2026, 11:02', 'company-wide', 'not printed yet'],
+    ];
+
+    const rows = sheets.map(([name, what, size, when, branch, prints]) => `
+                    <tr>
+                        <td data-label="Sheet"><span class="erp-cell-strong">${name}</span><span class="d-block erp-td-muted" style="font-family:var(--font-mono, monospace)">sha256 9f2c…${name.slice(-8, -5)}</span></td>
+                        <td data-label="What it is">${what}</td>
+                        <td data-label="Size" class="erp-td-num erp-td-muted">${size}</td>
+                        <td data-label="Filed" class="erp-td-muted">${when}<span class="d-block erp-td-muted">${branch}</span></td>
+                        <td data-label="Prints" class="erp-td-muted">${prints}</td>
+                        <td data-label="" class="erp-td-actions">
+                            <div class="d-flex flex-wrap align-items-center gap-1 justify-content-end">
+                                <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Open</button>
+                                <form class="d-flex align-items-center gap-1" method="POST" action="./labels.html">
+                                    <label class="visually-hidden" for="print_copies_x">Copies printed</label>
+                                    <input class="form-control form-control-sm" style="width:4.5rem" type="number" id="print_copies_x" name="copies" value="1" min="1" max="200">
+                                    <button class="btn btn-sm btn-outline-secondary" type="submit" title="Record a print run of this sheet"><i class="bi bi-printer" aria-hidden="true"></i> Record print</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>`).join('');
+
+    return `
+${previewBar('labels.html')}
+<div class="erp-shell" data-rail="expanded">
+${sidebar('inventory')}
+    <div class="erp-main">
+${topbar({ title: 'Label desk', trail: [{ label: 'Inventory & warehouse' }, { label: 'Barcode & QR' }, { label: 'Print labels' }] })}
+        <main class="erp-content" id="erpContent">
+            <header class="erp-page-head">
+                <div class="erp-page-head-main">
+                    <p class="erp-eyebrow">Inventory &middot; Labels &amp; barcodes</p>
+                    <h1 class="erp-h1">What goes on the sticker</h1>
+                    <p class="erp-page-sub">A label is a promise to a scanner: it carries the product's own code, printed wide enough that a hand scanner reads it first time. Nothing is filed from this screen until you ask for it, and every sheet you do file keeps its own checksum and its own print log.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./labels.html"><i class="bi bi-upc-scan" aria-hidden="true"></i> One barcode</a>
+                    <a class="btn btn-outline-secondary" href="./labels.html"><i class="bi bi-qr-code" aria-hidden="true"></i> One QR code</a>
+                    <a class="btn btn-outline-secondary" href="./labels.html"><i class="bi bi-broadcast" aria-hidden="true"></i> Scanner test</a>
+                    <button class="erp-icon-btn" type="button" title="Pin this page" aria-label="Pin this page"><i class="bi bi-star" aria-hidden="true"></i></button>
+                </div>
+            </header>
+
+            <div class="erp-note erp-note-info mb-3">
+                <i class="bi bi-check2-circle" aria-hidden="true"></i>
+                <div>Filed 24 label(s) on 1 page(s) — 0.35 mm per bar at the narrowest. <a class="fw-semibold" href="./labels.html">Open the filed sheet</a></div>
+            </div>
+
+            <div class="erp-note erp-note-warn mb-3">
+                <i class="bi bi-rulers" aria-hidden="true"></i>
+                <div>
+                    <strong class="d-block mb-1">2 things to look at before this sheet is printed</strong>
+                    <ul class="mb-1 ps-3">
+                        <li>A very long code: a 484-module code needs 121.0 mm at the smallest printable bar, but this label leaves 32.0 mm. Use a wider label, or encode a shorter code for this product.</li>
+                        <li>Corrugated box, 12 inch: there is no room for a readable barcode and a QR on a 38 mm label, so the QR was left off — the bars are what the warehouse scanner reads.</li>
+                    </ul>
+                    <span class="d-block mt-1">A narrower bar than 0.25 mm may still scan on a good desk scanner and will fail on a cheap one. Change the paper and generate again — the previous sheet stays filed and can be ignored.</span>
+                </div>
+            </div>
+
+            <section class="erp-card mb-3">
+                <header class="erp-card-head">
+                    <h2 class="erp-card-title">What is being labelled</h2>
+                    <div class="erp-card-actions"><span class="erp-chip erp-chip-outline">A4 sheet, 24 labels (3 × 8, 70 × 37 mm)</span></div>
+                </header>
+
+                <p class="erp-field-label mb-2">This run labels</p>
+                <div class="d-flex flex-wrap gap-3 mb-3">
+                    <div class="form-check"><input class="form-check-input" type="radio" name="subject_type" id="st_product" checked><label class="form-check-label" for="st_product">Products — a shelf label or a shelf-sticker for the catalogue row</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="subject_type" id="st_batch"><label class="form-check-label" for="st_batch">Batches — a sticker for one received lot, with its expiry</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="subject_type" id="st_order"><label class="form-check-label" for="st_order">Sales orders — a pick/parcel sticker for the order</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="subject_type" id="st_invoice"><label class="form-check-label" for="st_invoice">Invoices — a sticker for the parcel that carries an invoice</label></div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label" for="template">Sheet</label>
+                        <select class="form-select" id="template">
+                            <option>A4 sheet, 24 labels (3 × 8, 70 × 37 mm)</option>
+                            <option>A4 sheet, 21 labels (3 × 7, 63.5 × 38.1 mm)</option>
+                            <option>Thermal roll, 50 × 25 mm</option>
+                            <option>Thermal roll, 38 × 25 mm</option>
+                        </select>
+                        <div class="form-text">4 papers are wired in. The sheet is laid out to the millimetre — a run is generated, filed, and printed as one document.</div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label" for="copies">Copies each</label>
+                        <input class="form-control" type="number" min="1" max="200" id="copies" value="1">
+                        <div class="form-text">One run may produce 500 labels.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="erp-field-label mb-2">On every label</p>
+                        <div class="d-flex flex-wrap gap-3">
+                            <div class="form-check"><input class="form-check-input" type="checkbox" id="lb_company" checked><label class="form-check-label" for="lb_company">Company name</label></div>
+                            <div class="form-check"><input class="form-check-input" type="checkbox" id="lb_price" checked><label class="form-check-label" for="lb_price">Price and unit</label></div>
+                            <div class="form-check"><input class="form-check-input" type="checkbox" id="lb_code" checked><label class="form-check-label" for="lb_code">The code in text</label></div>
+                            <div class="form-check"><input class="form-check-input" type="checkbox" id="lb_qr"><label class="form-check-label" for="lb_qr">A QR beside the bars</label></div>
+                            <div>
+                                <label class="form-label" for="qr_level">QR level</label>
+                                <select class="form-select form-select-sm" id="qr_level">
+                                    <option>L — 7 % recoverable (densest)</option>
+                                    <option selected>M — 15 % (the usual choice)</option>
+                                    <option>Q — 25 %</option>
+                                    <option>H — 30 % (survives a scuff)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="erp-table-shell" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">Products <span class="erp-chip erp-chip-outline">3 shown</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="erp-table">
+                        <thead>
+                            <tr><th scope="col" style="width:2.4rem;"><input class="form-check-input" type="checkbox" aria-label="Tick every product"></th><th>Product</th><th>What the label would carry</th><th>Unit</th><th>State</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-label="Tick"><input class="form-check-input" type="checkbox" checked></td>
+                                <td data-label="Product"><span class="erp-cell-strong">Corrugated box, 12 inch</span><span class="d-block erp-td-muted">PKD-BOX · PKD-BOX-12</span></td>
+                                <td data-label="Payload"><span class="font-monospace">8801234567890</span><span class="d-block erp-td-muted">its barcode</span></td>
+                                <td data-label="Unit">pc</td>
+                                <td data-label="State">${statusChip('active', 'stock-managed')}</td>
+                            </tr>
+                            <tr>
+                                <td data-label="Tick"><input class="form-check-input" type="checkbox" checked></td>
+                                <td data-label="Product"><span class="erp-cell-strong">Kraft paper bag, large</span><span class="d-block erp-td-muted">BAG-KR · BAG-KR-L</span></td>
+                                <td data-label="Payload"><span class="font-monospace">BAG-KR-L</span><span class="d-block erp-td-muted">no barcode — the SKU stands in</span></td>
+                                <td data-label="Unit">pc</td>
+                                <td data-label="State">${statusChip('active', 'stock-managed')}</td>
+                            </tr>
+                            <tr>
+                                <td data-label="Tick"><input class="form-check-input" type="checkbox"></td>
+                                <td data-label="Product"><span class="erp-cell-strong">Packing tape, 2 inch</span><span class="d-block erp-td-muted">TAPE-2 · TAPE-SKU-1</span></td>
+                                <td data-label="Payload"><span class="font-monospace">8801234567890</span><span class="d-block erp-td-muted">its barcode</span></td>
+                                <td data-label="Unit">roll</td>
+                                <td data-label="State">${statusChip('active', 'stock-managed')}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="erp-split mt-3">
+                <section class="erp-card">
+                    <header class="erp-card-head">
+                        <h2 class="erp-card-title">One QR code, with the whole payload</h2>
+                        <div class="erp-card-actions"><a class="btn btn-sm btn-outline-secondary" href="./labels.html"><i class="bi bi-download" aria-hidden="true"></i> Save SVG</a></div>
+                    </header>
+                    <div class="erp-label-preview">${SAMPLE_QR}</div>
+                    <p class="text-muted mb-0 mt-2">Product 12 · https://erp.example.com/app/inventory/products/12</p>
+                </section>
+
+                <aside>
+                    <div class="erp-card">
+                        <header class="erp-card-head"><h2 class="erp-card-title">One barcode, shown honestly</h2></header>
+                        <div class="erp-label-preview" style="padding:16px 12px;">${SAMPLE_BARCODE}</div>
+                        <dl class="erp-dl erp-dl-tight erp-dl-striped mt-3">
+                            <dt>Encoded</dt><dd><span class="font-monospace">8801234567890</span></dd>
+                            <dt>Symbol</dt><dd>Code 128 · subset B · 16 symbols (start, 13 data, check, stop)</dd>
+                            <dt>Check digit</dt><dd>47 — weighted mod 103, so a scanner can tell a misread from a read</dd>
+                            <dt>Worth</dt><dd>132 modules of bars, plus a 10-module quiet zone at each end: 152 modules across</dd>
+                        </dl>
+                    </div>
+                </aside>
+            </div>
+
+            <div class="erp-table-shell mt-3" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">Sheets filed <span class="erp-chip erp-chip-outline">3 most recent</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="erp-table">
+                        <thead><tr><th>Sheet</th><th>What it is</th><th class="erp-th-num">Size</th><th>Filed</th><th>Prints</th><th></th></tr></thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                </div>
+            </div>
+
+            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
+                <p class="erp-field-label">More in this module</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="erp-chip erp-chip-outline" href="./labels.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>One barcode</a>
+                    <a class="erp-chip erp-chip-outline" href="./labels.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>One QR code</a>
+                    <a class="erp-chip erp-chip-outline" href="./labels.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Scanner test</a>
+                    <a class="erp-chip erp-chip-outline" href="./packaging.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Packaging types</a>
                 </div>
             </nav>
         </main>

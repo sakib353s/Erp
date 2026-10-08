@@ -219,6 +219,7 @@ class FoundationPermissionSeeder extends Seeder
             ['inventory', 'reservations', 'view', 'inventory.reservations.view', 'View stock reservations'],
             ['inventory', 'reservations', 'manage', 'inventory.reservations.manage', 'Release or expire stock holds'],
             ['inventory', 'labels', 'manage', 'inventory.labels', 'Generate and print labels'],
+            ['inventory', 'products', 'print', 'inventory.products.print', 'Print a product barcode or QR code'],
             ['inventory', 'configure', 'manage', 'inventory.configure', 'Configure inventory settings'],
 
             // Phase G — sales core (02-01…02-70)

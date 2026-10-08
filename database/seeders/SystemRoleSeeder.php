@@ -87,6 +87,9 @@ class SystemRoleSeeder extends Seeder
                 // §04-12: the catalogue is maintained in bulk by the desk that
                 // owns masters, and taking a copy of it out is part of that job.
                 'inventory.products.import', 'inventory.products.export',
+                // §04-13/52/53: printing a shelf label is part of maintaining the
+                // catalogue the labels point at, and the sheet desk is the same job.
+                'inventory.products.print', 'inventory.labels',
                 // §04-28: stock leaving the building on a transfer is the same
                 // kind of decision as stock being written off, so it is the same
                 // desk that signs it off — and never the person who raised it.
@@ -150,6 +153,9 @@ class SystemRoleSeeder extends Seeder
                 // exist and what is left of them; declaring and retiring a type
                 // changes what everybody can use, so that stays with a manager.
                 'inventory.packaging',
+                // §04-13/52/53: the labels that go on the boxes arrive at this desk:
+                // it prints them and the barcodes they carry.
+                'inventory.labels', 'inventory.products.print',
                 // §04-38: the label on the shelf is read at this desk, so the
                 // register and its date corrections belong here first.
                 'inventory.batch.view', 'inventory.batch.manage',

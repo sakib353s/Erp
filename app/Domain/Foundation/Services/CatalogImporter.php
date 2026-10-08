@@ -321,6 +321,20 @@ class CatalogImporter
         'inventory > reorder > reorder quantity setup' => ['/app/inventory/reorder-levels', 'inventory.reorder.view'],
         'inventory > reorder > reorder history' => ['/app/inventory/reorder-history', 'inventory.reorder.view'],
         'inventory > reorder > reorder settings' => ['/app/settings/reorder', 'settings.view'],
+        // §04-13/04-52/04-53/04-54: the Barcode & QR branch and the two product
+        // leaves that belong to it. One desk files label sheets, one screen
+        // encodes a single barcode, one encodes a single QR code, and the scanner
+        // bench proves the counter reads them. The two that are really *settings*
+        // (which paper, which input mode) point into the settings engine rather
+        // than at a second copy of the same form.
+        'inventory > products > product barcode' => ['/app/inventory/labels/barcodes', 'inventory.products.print'],
+        'inventory > products > product qr code' => ['/app/inventory/labels/qr-codes', 'inventory.products.print'],
+        'inventory > barcode & qr > generate barcode' => ['/app/inventory/labels/barcodes', 'inventory.labels'],
+        'inventory > barcode & qr > generate qr code' => ['/app/inventory/labels/qr-codes', 'inventory.labels'],
+        'inventory > barcode & qr > print labels' => ['/app/inventory/labels', 'inventory.labels'],
+        'inventory > barcode & qr > label templates' => ['/app/settings/labels', 'settings.view'],
+        'inventory > barcode & qr > barcode scanner setup' => ['/app/inventory/labels/scanner', 'inventory.labels'],
+        'inventory > barcode & qr > barcode settings' => ['/app/settings/barcode', 'settings.view'],
         // §04-31: a count sheet is opened here; "Cycle Count" starts a subset sheet.
         'inventory > stock > stock count' => ['/app/inventory/counts', 'inventory.counts.view'],
         'inventory > stock > cycle count' => ['/app/inventory/counts/create?scope=cycle', 'inventory.counts.create'],

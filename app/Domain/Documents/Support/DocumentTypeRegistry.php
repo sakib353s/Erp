@@ -49,6 +49,12 @@ final class DocumentTypeRegistry
         // how the desk and the purchase order it produced refer to each other.
         ['code' => 'reorder_suggestion', 'type_group' => 'inventory', 'name' => 'Reorder Suggestion', 'printed_title' => 'REORDER SUGGESTION'],
 
+        // §04-53: a printed label sheet is a document like any other — stored,
+        // checksummed and logged — but it carries no number of its own, because
+        // nothing downstream ever refers to "label sheet 12". The codes that
+        // appear on it belong to the things being labelled.
+        ['code' => 'label_sheet', 'type_group' => 'inventory', 'name' => 'Label Sheet', 'printed_title' => 'LABELS', 'requires_numbering' => false],
+
         // ---- Accounting
         ['code' => 'journal_voucher', 'type_group' => 'accounting', 'name' => 'Journal Voucher', 'printed_title' => 'JOURNAL VOUCHER'],
         ['code' => 'expense_voucher', 'type_group' => 'accounting', 'name' => 'Expense Voucher', 'printed_title' => 'EXPENSE VOUCHER'],

@@ -220,7 +220,7 @@ class BarcodeService
     /**
      * The symbol as SVG.
      *
-     * @param  array{moduleWidth?: float, height?: float, showText?: bool, title?: string, class?: string}  $options
+     * @param  array{moduleWidth?: float, height?: float, showText?: bool, title?: string, class?: string, stretch?: bool}  $options
      * @return array{svg: string, meta: array<string, mixed>}
      */
     public function svg(string $value, array $options = []): array
@@ -280,8 +280,15 @@ class BarcodeService
             )
             : '';
 
+        // `stretch` is for the label sheet: the bars are given an exact box in
+        // millimetres so the printed module width is the one the fit check
+        // measured, rather than whatever the SVG's own aspect ratio happened to be.
+        $fit = (bool) ($options['stretch'] ?? false)
+            ? ' preserveAspectRatio="none"'
+            : '';
+
         $svg = sprintf(
-            '<svg xmlns="http://www.w3.org/2000/svg" class="%s" role="img" width="%s" height="%s" viewBox="0 0 %s %s" shape-rendering="crispEdges" aria-label="%s"><title>%s</title><rect x="0" y="0" width="%s" height="%s" fill="#fff"/>%s%s</svg>',
+            '<svg xmlns="http://www.w3.org/2000/svg" class="%s" role="img" width="%s" height="%s" viewBox="0 0 %s %s"'.$fit.' shape-rendering="crispEdges" aria-label="%s"><title>%s</title><rect x="0" y="0" width="%s" height="%s" fill="#fff"/>%s%s</svg>',
             $this->escape($class),
             $this->num($width),
             $this->num($height),

@@ -2784,6 +2784,31 @@ hr { border-color: var(--line); opacity: 1; }
 /* Line editor header for the totals row of a document table. */
 .erp-table tfoot th { font-size: 12.5px; color: var(--ink-2); background: var(--surface-2); }
 
+/* ------------------------------------------ 30c. label desk (§04-13/52/53) */
+/*
+ * The generator screens draw one symbol at the size it would really print, on a
+ * white panel. The white is the point: what is being judged is bar width and
+ * contrast, and a tinted panel would flatter both. The QR and the bars are
+ * allowed to be wider than the card and scroll, rather than being shrunk to a
+ * size nobody prints.
+ */
+.erp-label-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 22px 18px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    overflow-x: auto;
+}
+
+.erp-label-preview svg,
+.erp-label-preview img {
+    max-width: 100%;
+    height: auto;
+}
+
 /* ------------------------------------------------- 31. detail layout & docs */
 /*
  * Master-detail two-pane layout (§18.2 DetailPanel, §18.4 768-1199):

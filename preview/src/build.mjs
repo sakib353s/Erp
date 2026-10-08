@@ -8,7 +8,7 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { shellHeader, shellFooter } from './shell.mjs';
-import { designSystem, dashboard, orders, orderDetail, customers, customerProfile, pos, packaging, login, notFound } from './pages.mjs';
+import { designSystem, dashboard, orders, orderDetail, customers, customerProfile, pos, packaging, labels, login, notFound } from './pages.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const outDir = resolve(here, '..');
@@ -22,6 +22,7 @@ const shellPages = [
     ['customer-profile.html', 'Customer 360', customerProfile],
     ['pos.html', 'POS terminal', pos],
     ['packaging.html', 'Packaging', packaging],
+    ['labels.html', 'Label desk', labels],
 ];
 
 for (const [file, title, renderer] of shellPages) {

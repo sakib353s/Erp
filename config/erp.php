@@ -662,6 +662,129 @@ return [
                 ],
             ],
 
+            /*
+             * §04-53 Label Templates — how a label sheet is laid out and what a
+             * label carries. Every field here is read by the sheet renderer, so
+             * changing one changes the paper: the template chooses the geometry
+             * the labels physically fit on, and the flags decide what is printed
+             * beside the bars. Nothing here can change what a barcode *says* —
+             * that is the product's own code.
+             */
+            'labels' => [
+                'label' => 'Label Templates',
+                'description' => 'The paper the labels are printed on, and what each label carries.',
+                'fields' => [
+                    'template' => [
+                        'label' => 'Sheet template',
+                        'type' => 'select',
+                        'options' => [
+                            'a4_3x8' => 'A4 sheet, 24 labels (3 × 8, 70 × 37 mm)',
+                            'a4_3x7' => 'A4 sheet, 21 labels (3 × 7, 63.5 × 38.1 mm)',
+                            'thermal_50x25' => 'Thermal roll, 50 × 25 mm',
+                            'thermal_38x25' => 'Thermal roll, 38 × 25 mm',
+                        ],
+                        'default' => 'a4_3x8',
+                        'help' => 'Label paper is bought by part number, so this is geometry rather than preference: the columns, the label size and the page margins all follow from it. A code that cannot be printed large enough on the sheet you picked is reported on the desk before anything is printed.',
+                    ],
+                    'copies' => [
+                        'label' => 'Copies of each label',
+                        'type' => 'number',
+                        'default' => 1,
+                        'min' => 1,
+                        'max' => 200,
+                        'help' => 'How many of each label the desk prints by default — a shelf usually needs one, a box often needs four.',
+                    ],
+                    'show_price' => [
+                        'label' => 'Print the price on the label',
+                        'type' => 'boolean',
+                        'default' => true,
+                        'help' => 'The price shown is the same one the till resolves through the pricing chain, so a shelf label and the counter cannot disagree. Off for labels that go on the outside of a parcel.',
+                    ],
+                    'show_company' => [
+                        'label' => 'Print the company name',
+                        'type' => 'boolean',
+                        'default' => true,
+                        'help' => 'Off when the labels are internal and the name would only take room the barcode needs.',
+                    ],
+                    'show_code_text' => [
+                        'label' => 'Print the code as readable text',
+                        'type' => 'boolean',
+                        'default' => true,
+                        'help' => 'A label whose bars cannot be read is still useful if somebody can type the number — which is exactly when this line matters.',
+                    ],
+                    'qr_on_label' => [
+                        'label' => 'Print a QR code beside the barcode',
+                        'type' => 'boolean',
+                        'default' => false,
+                        'help' => 'A QR carries the same payload as the bars but survives a scuff, a curve or a phone camera at an angle, at the cost of label space. Off by default because a 1D barcode is what a warehouse scanner reads.',
+                    ],
+                    'qr_level' => [
+                        'label' => 'QR error correction',
+                        'type' => 'select',
+                        'options' => [
+                            'L' => 'L — smallest, about 7% recoverable',
+                            'M' => 'M — the usual choice, about 15% recoverable',
+                            'Q' => 'Q — about 25% recoverable',
+                            'H' => 'H — largest, about 30% recoverable',
+                        ],
+                        'default' => 'M',
+                        'help' => 'Higher levels survive more damage and print larger; a label that will be handled or stored outdoors is worth Q or H.',
+                    ],
+                ],
+            ],
+
+            /*
+             * §04-54 Barcode Settings — how a keyboard-wedge scanner is read.
+             * A wedge scanner types the code into whatever field has focus and
+             * finishes with Enter; these values are what tells the screen that a
+             * burst of keystrokes was a scan rather than somebody typing, and
+             * what should happen when it was one.
+             */
+            'barcode' => [
+                'label' => 'Barcode Settings',
+                'description' => 'How the desk reads a scanner, and what it does with a scan.',
+                'fields' => [
+                    'scan_mode' => [
+                        'label' => 'Scanner input',
+                        'type' => 'select',
+                        'options' => [
+                            'keyboard_wedge' => 'Keyboard-wedge scanner (types and presses Enter)',
+                            'manual' => 'Typing only (no scanner attached)',
+                        ],
+                        'default' => 'keyboard_wedge',
+                        'help' => 'A wedge scanner is indistinguishable from a fast typist, so the desk has to be told one is attached. In typing-only mode the fast-burst rule is switched off and nothing is submitted on its own.',
+                    ],
+                    'scan_min_length' => [
+                        'label' => 'Shortest code to treat as a scan',
+                        'type' => 'number',
+                        'default' => 4,
+                        'min' => 2,
+                        'max' => 32,
+                        'help' => 'A burst shorter than this is treated as typing, so a stray keypress cannot look up a product.',
+                    ],
+                    'scan_clear_ms' => [
+                        'label' => 'Idle time that ends a scan (ms)',
+                        'type' => 'number',
+                        'default' => 120,
+                        'min' => 30,
+                        'max' => 2000,
+                        'help' => 'The gap between keystrokes above which the burst is considered finished. Slower readers — a worn scanner, or a phone — need a larger value.',
+                    ],
+                    'scan_beep' => [
+                        'label' => 'Beep when a scan is read',
+                        'type' => 'boolean',
+                        'default' => true,
+                        'help' => 'A short tone confirms the code was read, which is the only feedback a scanner operator gets while looking at the box rather than the screen.',
+                    ],
+                    'scan_autofocus' => [
+                        'label' => 'Focus the scan field on open',
+                        'type' => 'boolean',
+                        'default' => true,
+                        'help' => 'On, a scan works the moment the screen opens; off, the operator clicks the field first. Turn it off on a shared terminal where a stray scan would land in the wrong place.',
+                    ],
+                ],
+            ],
+
             'appearance' => [
                 'label' => 'Appearance',
                 'description' => 'Workspace identity and default reading density.',

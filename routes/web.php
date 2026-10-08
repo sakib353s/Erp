@@ -34,6 +34,7 @@ use App\Http\Controllers\InventoryReportController;
 use App\Http\Controllers\InventoryCountController;
 use App\Http\Controllers\InventoryDamageController;
 use App\Http\Controllers\InventoryPackagingController;
+use App\Http\Controllers\InventoryLabelController;
 use App\Http\Controllers\InventoryReservationController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\MaintenanceController;
@@ -895,6 +896,47 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::get('/app/inventory/products/export', [ProductController::class, 'export'])
         ->middleware('permission:inventory.products.export')
         ->name('inventory.products.export');
+
+    /*
+     * §04-13/04-52/04-53/04-54 — barcodes, QR codes and labels.
+     *
+     * The generated sheet is served from the file that was stored, not re-rendered:
+     * what the printer receives has to be the bytes whose checksum was recorded,
+     * or the checksum means nothing. The two per-product endpoints return SVG, so
+     * a product screen can show its own barcode with an <img> and the browser can
+     * save it; they take the print key rather than the view key because a barcode
+     * is a thing you print.
+     */
+    Route::get('/app/inventory/labels', [InventoryLabelController::class, 'index'])
+        ->middleware('permission:inventory.labels')
+        ->name('inventory.labels.index');
+    Route::post('/app/inventory/labels/generate', [InventoryLabelController::class, 'generate'])
+        ->middleware('permission:inventory.labels')
+        ->name('inventory.labels.generate');
+    Route::get('/app/inventory/labels/barcodes', [InventoryLabelController::class, 'barcodes'])
+        ->middleware('permission:inventory.labels')
+        ->name('inventory.labels.barcodes');
+    Route::get('/app/inventory/labels/qr-codes', [InventoryLabelController::class, 'qrCodes'])
+        ->middleware('permission:inventory.labels')
+        ->name('inventory.labels.qr-codes');
+    Route::get('/app/inventory/labels/scanner', [InventoryLabelController::class, 'scanner'])
+        ->middleware('permission:inventory.labels')
+        ->name('inventory.labels.scanner');
+    Route::get('/app/inventory/labels/lookup', [InventoryLabelController::class, 'lookup'])
+        ->middleware('permission:inventory.labels')
+        ->name('inventory.labels.lookup');
+    Route::get('/app/inventory/labels/sheets/{labelSheet}', [InventoryLabelController::class, 'sheet'])
+        ->middleware('permission:inventory.labels')
+        ->name('inventory.labels.sheet');
+    Route::post('/app/inventory/labels/sheets/{labelSheet}/print', [InventoryLabelController::class, 'print'])
+        ->middleware('permission:inventory.labels')
+        ->name('inventory.labels.print');
+    Route::get('/app/inventory/products/{product}/barcode.svg', [InventoryLabelController::class, 'productBarcode'])
+        ->middleware('permission:inventory.products.print')
+        ->name('inventory.products.barcode');
+    Route::get('/app/inventory/products/{product}/qr.svg', [InventoryLabelController::class, 'productQr'])
+        ->middleware('permission:inventory.products.print')
+        ->name('inventory.products.qr');
 
     // §04-04 — a copy of the catalogue row, never a copy of the stock.
     Route::get('/app/inventory/products/{product}/duplicate', [ProductController::class, 'duplicateForm'])

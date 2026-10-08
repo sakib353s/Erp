@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en" data-accent="teal" data-density="comfortable">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#ffffff">
+    <title>Label desk · BD ERP — UI redesign preview</title>
+    <link rel="stylesheet" href="./assets/preview.css">
+</head>
+<body class="erp-body">
+<a class="erp-skip-link" href="#erpContent">Skip to main content</a>
+
+
+<div class="erp-preview-bar">
+    <i class="bi bi-easel2" aria-hidden="true"></i>
+    <strong>UI redesign preview</strong>
+    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html" style="color:#fff;text-decoration:underline">Labels</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
+    <span class="erp-preview-note">Static render of the new shell — same CSS + JS the Laravel app ships. Press ⌘K / Ctrl+K.</span>
+</div>
+<div class="erp-shell" data-rail="expanded">
+
+<aside class="erp-sidebar" id="erpSidebar" aria-label="Primary navigation">
+    <div class="erp-sidebar-head">
+        <a class="erp-brand" href="./dashboard.html">
+            <span class="erp-brand-mark" aria-hidden="true">BE</span>
+            <span class="erp-brand-text">
+                <strong>BD ERP</strong>
+                <small>Rafshan Trading Ltd.</small>
+            </span>
+        </a>
+        <button class="erp-icon-btn d-lg-none" type="button" data-erp-sidebar-close aria-label="Close navigation">
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <div class="erp-sidebar-context">
+        <button class="erp-nav-search" type="button" data-palette-open>
+            <i class="bi bi-search" aria-hidden="true"></i>
+            <span>Search or jump to…</span>
+            <kbd>⌘K</kbd>
+        </button>
+    </div>
+
+    <nav class="erp-sidebar-nav" aria-label="Sections">
+        <div class="erp-nav-section" data-hue="0">
+            <p class="erp-nav-section-label">
+                <i class="bi bi-star" aria-hidden="true"></i>
+                <span>Pinned</span>
+            </p>
+            
+    <div class="erp-nav-group">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-pinned-0" aria-expanded="false">
+            <i class="bi bi-star erp-nav-icon" aria-hidden="true"></i>
+            <span>Pinned pages</span>
+            <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
+        </button>
+        <div class="collapse" id="nav-pinned-0">
+            <div class="erp-nav-sub">
+        <a class="erp-nav-link" href="./orders.html">
+            <span>Sales orders</span>
+        </a>
+        <a class="erp-nav-link" href="./pos.html">
+            <span>POS terminal</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Trial balance</span>
+        </a></div>
+        </div>
+    </div>
+        </div>
+        <div class="erp-nav-section" data-hue="8">
+            <p class="erp-nav-section-label">
+                <i class="bi bi-lightning-charge" aria-hidden="true"></i>
+                <span>My work</span>
+            </p>
+            
+    <div class="erp-nav-group">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-work-0" aria-expanded="false">
+            <i class="bi bi-inbox erp-nav-icon" aria-hidden="true"></i>
+            <span>Work queue</span>
+            <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
+        </button>
+        <div class="collapse" id="nav-work-0">
+            <div class="erp-nav-sub">
+        <a class="erp-nav-link" href="./dashboard.html">
+            <span>Dashboard</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Approval inbox</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Notifications</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Audit log</span>
+        </a></div>
+        </div>
+    </div>
+        </div>
+        <div class="erp-nav-section" data-hue="1">
+            <p class="erp-nav-section-label">
+                <i class="bi bi-cart3" aria-hidden="true"></i>
+                <span>Sales &amp; CRM</span>
+            </p>
+            
+    <div class="erp-nav-group">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-crm-0" aria-expanded="false">
+            <i class="bi bi-cart3 erp-nav-icon" aria-hidden="true"></i>
+            <span>Sales</span>
+            <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
+        </button>
+        <div class="collapse" id="nav-crm-0">
+            <div class="erp-nav-sub">
+        <a class="erp-nav-link" href="./orders.html">
+            <span>Orders</span>
+        </a>
+        <a class="erp-nav-link" href="./order-detail.html">
+            <span>Invoices</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Quotations</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Delivery challans</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Shipments</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Delivery riders</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Coupons &amp; promotions</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Sales team</span>
+        </a><button class="erp-nav-link" type="button" data-palette-open title="Search every page in this module">
+                <i class="bi bi-plus-circle erp-nav-icon" aria-hidden="true"></i>
+                <span>34 more — search</span>
+           </button></div>
+        </div>
+    </div>
+    <div class="erp-nav-group">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-crm-1" aria-expanded="false">
+            <i class="bi bi-upc-scan erp-nav-icon" aria-hidden="true"></i>
+            <span>Counter (POS)</span>
+            <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
+        </button>
+        <div class="collapse" id="nav-crm-1">
+            <div class="erp-nav-sub">
+        <a class="erp-nav-link" href="./pos.html">
+            <span>Terminal</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Sessions</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Returns</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Exchange</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Cash drawer</span>
+        </a></div>
+        </div>
+    </div>
+        <a class="erp-nav-link" href="#">
+            <i class="bi bi-people erp-nav-icon" aria-hidden="true"></i>
+            <span>Customers</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <i class="bi bi-arrow-counterclockwise erp-nav-icon" aria-hidden="true"></i>
+            <span>Returns</span>
+        </a>
+        </div>
+        <div class="erp-nav-section" data-hue="2">
+            <p class="erp-nav-section-label">
+                <i class="bi bi-box-seam" aria-hidden="true"></i>
+                <span>Inventory &amp; warehouse</span>
+            </p>
+            
+    <div class="erp-nav-group">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-stock-0" aria-expanded="false">
+            <i class="bi bi-box-seam erp-nav-icon" aria-hidden="true"></i>
+            <span>Inventory</span>
+            <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
+        </button>
+        <div class="collapse" id="nav-stock-0">
+            <div class="erp-nav-sub">
+        <a class="erp-nav-link" href="#">
+            <span>Products</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Stock overview</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Adjustments</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Transfers</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Stock movements</span>
+        </a><button class="erp-nav-link" type="button" data-palette-open title="Search every page in this module">
+                <i class="bi bi-plus-circle erp-nav-icon" aria-hidden="true"></i>
+                <span>21 more — search</span>
+           </button></div>
+        </div>
+    </div>
+        <a class="erp-nav-link" href="#">
+            <i class="bi bi-bag-check erp-nav-icon" aria-hidden="true"></i>
+            <span>Purchase</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <i class="bi bi-truck erp-nav-icon" aria-hidden="true"></i>
+            <span>Suppliers</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <i class="bi bi-building erp-nav-icon" aria-hidden="true"></i>
+            <span>Warehouses</span>
+        </a>
+        </div>
+        <div class="erp-nav-section" data-hue="5">
+            <p class="erp-nav-section-label">
+                <i class="bi bi-cash-stack" aria-hidden="true"></i>
+                <span>Accounts &amp; finance</span>
+            </p>
+            
+    <div class="erp-nav-group">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-finance-0" aria-expanded="false">
+            <i class="bi bi-journal-text erp-nav-icon" aria-hidden="true"></i>
+            <span>Accounting</span>
+            <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
+        </button>
+        <div class="collapse" id="nav-finance-0">
+            <div class="erp-nav-sub">
+        <a class="erp-nav-link" href="#">
+            <span>Chart of accounts</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Journals</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>General ledger</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Trial balance</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Opening balances</span>
+        </a></div>
+        </div>
+    </div>
+        <a class="erp-nav-link" href="#">
+            <i class="bi bi-bank erp-nav-icon" aria-hidden="true"></i>
+            <span>Cash &amp; bank</span>
+        </a>
+        </div>
+        <div class="erp-nav-section" data-hue="6">
+            <p class="erp-nav-section-label">
+                <i class="bi bi-people" aria-hidden="true"></i>
+                <span>People &amp; payroll</span>
+            </p>
+            
+        <a class="erp-nav-link" href="#">
+            <i class="bi bi-person-badge erp-nav-icon" aria-hidden="true"></i>
+            <span>Employee</span>
+        </a>
+        </div>
+        <div class="erp-nav-section" data-hue="3">
+            <p class="erp-nav-section-label">
+                <i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
+                <span>Reports &amp; insight</span>
+            </p>
+            
+    <div class="erp-nav-group">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-insight-0" aria-expanded="false">
+            <i class="bi bi-graph-up-arrow erp-nav-icon" aria-hidden="true"></i>
+            <span>Reports</span>
+            <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
+        </button>
+        <div class="collapse" id="nav-insight-0">
+            <div class="erp-nav-sub">
+        <a class="erp-nav-link" href="#">
+            <span>Sales summary</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Sales trend</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Invoice aging</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Peak hours</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Custom report</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Documents</span>
+        </a><button class="erp-nav-link" type="button" data-palette-open title="Search every page in this module">
+                <i class="bi bi-plus-circle erp-nav-icon" aria-hidden="true"></i>
+                <span>26 more — search</span>
+           </button></div>
+        </div>
+    </div>
+        </div>
+        <div class="erp-nav-section" data-hue="7">
+            <p class="erp-nav-section-label">
+                <i class="bi bi-shield-check" aria-hidden="true"></i>
+                <span>Governance</span>
+            </p>
+            
+    <div class="erp-nav-group">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-govern-0" aria-expanded="false">
+            <i class="bi bi-building erp-nav-icon" aria-hidden="true"></i>
+            <span>Business management</span>
+            <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
+        </button>
+        <div class="collapse" id="nav-govern-0">
+            <div class="erp-nav-sub">
+        <a class="erp-nav-link" href="#">
+            <span>Workflows</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Documents</span>
+        </a></div>
+        </div>
+    </div>
+        </div>
+        <div class="erp-nav-section" data-hue="8">
+            <p class="erp-nav-section-label">
+                <i class="bi bi-sliders" aria-hidden="true"></i>
+                <span>Settings &amp; masters</span>
+            </p>
+            
+    <div class="erp-nav-group">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-configure-0" aria-expanded="false">
+            <i class="bi bi-sliders erp-nav-icon" aria-hidden="true"></i>
+            <span>Settings</span>
+            <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
+        </button>
+        <div class="collapse" id="nav-configure-0">
+            <div class="erp-nav-sub">
+        <a class="erp-nav-link" href="#">
+            <span>Company profile</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Users</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Roles &amp; permissions</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Branches</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Appearance</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>Courier partners</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>POS settings</span>
+        </a>
+        <a class="erp-nav-link" href="#">
+            <span>System maintenance</span>
+        </a><button class="erp-nav-link" type="button" data-palette-open title="Search every page in this module">
+                <i class="bi bi-plus-circle erp-nav-icon" aria-hidden="true"></i>
+                <span>38 more — search</span>
+           </button></div>
+        </div>
+    </div>
+        <a class="erp-nav-link" href="#">
+            <i class="bi bi-list-check erp-nav-icon" aria-hidden="true"></i>
+            <span>Master data</span>
+        </a>
+        </div></nav>
+
+    <div class="erp-sidebar-foot">
+        
+        <a class="erp-util-link" href="#">
+            <i class="bi bi-building" aria-hidden="true"></i>
+            <span>Company profile</span>
+        </a>
+        <a class="erp-util-link" href="#">
+            <i class="bi bi-list-check" aria-hidden="true"></i>
+            <span>Master data</span>
+        </a>
+        <a class="erp-util-link" href="#">
+            <i class="bi bi-person-badge" aria-hidden="true"></i>
+            <span>Employees</span>
+        </a>
+        <a class="erp-util-link active" href="#">
+            <i class="bi bi-inbox" aria-hidden="true"></i>
+            <span>Approval inbox</span>
+        </a>
+        <a class="erp-util-link" href="#">
+            <i class="bi bi-shield-lock" aria-hidden="true"></i>
+            <span>Audit log</span>
+        </a>
+        <div class="erp-sidebar-foot-row">
+            <button class="erp-rail-toggle d-none d-lg-flex" type="button" data-erp-rail-toggle aria-expanded="true"
+                    title="Collapse navigation">
+                <i class="bi bi-chevron-double-left" aria-hidden="true"></i>
+                <span>Collapse</span>
+            </button>
+        </div>
+        <span class="erp-version">Build 2026.10 · v2</span>
+    </div>
+</aside>
+    <div class="erp-main">
+
+<header class="erp-topbar">
+    <button class="erp-icon-btn d-lg-none" type="button" data-erp-sidebar-open aria-label="Open navigation">
+        <i class="bi bi-list" aria-hidden="true"></i>
+    </button>
+
+    <div class="erp-topbar-crumbs">
+        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb">
+        <li>
+            <span class="is-current" aria-current="page">Inventory &amp; warehouse</span>
+        </li>
+        <li>
+            <span class="is-current" aria-current="page">Barcode &amp; QR</span>
+        </li>
+        <li>
+            <span class="is-current" aria-current="page">Print labels</span>
+        </li></ol></nav>
+        <div class="erp-topbar-title">
+            <strong class="d-none d-md-inline">Label desk</strong>
+            <span class="erp-chip erp-chip-outline d-none d-xl-inline-flex" title="Current branch context">
+                <i class="bi bi-geo-alt" aria-hidden="true"></i>Dhaka HQ
+            </span>
+            <span class="erp-chip erp-chip-outline d-none d-xxl-inline-flex" title="Current warehouse context">
+                <i class="bi bi-box-seam" aria-hidden="true"></i>Main warehouse
+            </span>
+        </div>
+    </div>
+
+    <button class="erp-global-search d-none d-md-flex" type="button" data-palette-open aria-label="Search the workspace">
+        <i class="bi bi-search" aria-hidden="true"></i>
+        <span>Search pages, orders, invoices…</span>
+        <kbd>⌘K</kbd>
+    </button>
+
+    <div class="erp-topbar-actions">
+        <form class="erp-switcher d-none d-lg-flex" onsubmit="return false">
+            <label class="erp-visually-hidden" for="branchSwitch">Branch</label>
+            <i class="bi bi-geo-alt" aria-hidden="true"></i>
+            <select class="erp-switcher-select" id="branchSwitch">
+                <option>Dhaka HQ</option>
+                <option>Chattogram branch</option>
+                <option>Sylhet outlet</option>
+            </select>
+        </form>
+
+        <button class="erp-icon-btn d-none d-md-inline-flex" type="button" data-erp-theme-toggle
+                aria-pressed="false" title="Switch appearance">
+            <i class="bi bi-moon-stars" aria-hidden="true"></i>
+        </button>
+
+        <button class="erp-icon-btn d-none d-xl-inline-flex" type="button" data-erp-density-toggle
+                aria-pressed="false" title="Compact rows">
+            <i class="bi bi-list-ul" aria-hidden="true"></i>
+        </button>
+
+        <button class="erp-lang-btn" type="button" title="Switch language">বাংলা</button>
+
+        <div class="dropdown">
+            <button class="erp-icon-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications">
+                <i class="bi bi-bell" aria-hidden="true"></i>
+                <span class="erp-badge-count">4</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end erp-notif-menu">
+                <div class="dropdown-header d-flex justify-content-between align-items-center">
+                    <span>Notifications</span>
+                    <span class="erp-chip erp-chip-outline">4 unread</span>
+                </div>
+                <a class="dropdown-item fw-semibold" href="#">Order SO-2026-01845 needs confirmation
+                    <small class="d-block fw-normal text-body-secondary">unread · high</small></a>
+                <a class="dropdown-item fw-semibold" href="#">Courier settlement ready to reconcile
+                    <small class="d-block fw-normal text-body-secondary">unread · normal</small></a>
+                <a class="dropdown-item" href="#">Stock adjustment ADJ-00031 approved
+                    <small class="d-block fw-normal text-body-secondary">read · normal</small></a>
+                <a class="dropdown-item text-center fw-semibold" href="#">View all notifications</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="erp-avatar-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Account menu">S</button>
+            <div class="dropdown-menu dropdown-menu-end">
+                <div class="dropdown-header">
+                    <strong>Sakib Rahman</strong>
+                    <small class="d-block text-body-secondary">sakib@rafshtrading.bd</small>
+                </div>
+                <a class="dropdown-item" href="#"><i class="bi bi-person me-2" aria-hidden="true"></i>My profile</a>
+                <a class="dropdown-item" href="#"><i class="bi bi-bell me-2" aria-hidden="true"></i>Notifications</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2" aria-hidden="true"></i>Sign out</a>
+            </div>
+        </div>
+    </div>
+</header>
+        <main class="erp-content" id="erpContent">
+            <header class="erp-page-head">
+                <div class="erp-page-head-main">
+                    <p class="erp-eyebrow">Inventory &middot; Labels &amp; barcodes</p>
+                    <h1 class="erp-h1">What goes on the sticker</h1>
+                    <p class="erp-page-sub">A label is a promise to a scanner: it carries the product's own code, printed wide enough that a hand scanner reads it first time. Nothing is filed from this screen until you ask for it, and every sheet you do file keeps its own checksum and its own print log.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./labels.html"><i class="bi bi-upc-scan" aria-hidden="true"></i> One barcode</a>
+                    <a class="btn btn-outline-secondary" href="./labels.html"><i class="bi bi-qr-code" aria-hidden="true"></i> One QR code</a>
+                    <a class="btn btn-outline-secondary" href="./labels.html"><i class="bi bi-broadcast" aria-hidden="true"></i> Scanner test</a>
+                    <button class="erp-icon-btn" type="button" title="Pin this page" aria-label="Pin this page"><i class="bi bi-star" aria-hidden="true"></i></button>
+                </div>
+            </header>
+
+            <div class="erp-note erp-note-info mb-3">
+                <i class="bi bi-check2-circle" aria-hidden="true"></i>
+                <div>Filed 24 label(s) on 1 page(s) — 0.35 mm per bar at the narrowest. <a class="fw-semibold" href="./labels.html">Open the filed sheet</a></div>
+            </div>
+
+            <div class="erp-note erp-note-warn mb-3">
+                <i class="bi bi-rulers" aria-hidden="true"></i>
+                <div>
+                    <strong class="d-block mb-1">2 things to look at before this sheet is printed</strong>
+                    <ul class="mb-1 ps-3">
+                        <li>A very long code: a 484-module code needs 121.0 mm at the smallest printable bar, but this label leaves 32.0 mm. Use a wider label, or encode a shorter code for this product.</li>
+                        <li>Corrugated box, 12 inch: there is no room for a readable barcode and a QR on a 38 mm label, so the QR was left off — the bars are what the warehouse scanner reads.</li>
+                    </ul>
+                    <span class="d-block mt-1">A narrower bar than 0.25 mm may still scan on a good desk scanner and will fail on a cheap one. Change the paper and generate again — the previous sheet stays filed and can be ignored.</span>
+                </div>
+            </div>
+
+            <section class="erp-card mb-3">
+                <header class="erp-card-head">
+                    <h2 class="erp-card-title">What is being labelled</h2>
+                    <div class="erp-card-actions"><span class="erp-chip erp-chip-outline">A4 sheet, 24 labels (3 × 8, 70 × 37 mm)</span></div>
+                </header>
+
+                <p class="erp-field-label mb-2">This run labels</p>
+                <div class="d-flex flex-wrap gap-3 mb-3">
+                    <div class="form-check"><input class="form-check-input" type="radio" name="subject_type" id="st_product" checked><label class="form-check-label" for="st_product">Products — a shelf label or a shelf-sticker for the catalogue row</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="subject_type" id="st_batch"><label class="form-check-label" for="st_batch">Batches — a sticker for one received lot, with its expiry</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="subject_type" id="st_order"><label class="form-check-label" for="st_order">Sales orders — a pick/parcel sticker for the order</label></div>
+                    <div class="form-check"><input class="form-check-input" type="radio" name="subject_type" id="st_invoice"><label class="form-check-label" for="st_invoice">Invoices — a sticker for the parcel that carries an invoice</label></div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label" for="template">Sheet</label>
+                        <select class="form-select" id="template">
+                            <option>A4 sheet, 24 labels (3 × 8, 70 × 37 mm)</option>
+                            <option>A4 sheet, 21 labels (3 × 7, 63.5 × 38.1 mm)</option>
+                            <option>Thermal roll, 50 × 25 mm</option>
+                            <option>Thermal roll, 38 × 25 mm</option>
+                        </select>
+                        <div class="form-text">4 papers are wired in. The sheet is laid out to the millimetre — a run is generated, filed, and printed as one document.</div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label" for="copies">Copies each</label>
+                        <input class="form-control" type="number" min="1" max="200" id="copies" value="1">
+                        <div class="form-text">One run may produce 500 labels.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="erp-field-label mb-2">On every label</p>
+                        <div class="d-flex flex-wrap gap-3">
+                            <div class="form-check"><input class="form-check-input" type="checkbox" id="lb_company" checked><label class="form-check-label" for="lb_company">Company name</label></div>
+                            <div class="form-check"><input class="form-check-input" type="checkbox" id="lb_price" checked><label class="form-check-label" for="lb_price">Price and unit</label></div>
+                            <div class="form-check"><input class="form-check-input" type="checkbox" id="lb_code" checked><label class="form-check-label" for="lb_code">The code in text</label></div>
+                            <div class="form-check"><input class="form-check-input" type="checkbox" id="lb_qr"><label class="form-check-label" for="lb_qr">A QR beside the bars</label></div>
+                            <div>
+                                <label class="form-label" for="qr_level">QR level</label>
+                                <select class="form-select form-select-sm" id="qr_level">
+                                    <option>L — 7 % recoverable (densest)</option>
+                                    <option selected>M — 15 % (the usual choice)</option>
+                                    <option>Q — 25 %</option>
+                                    <option>H — 30 % (survives a scuff)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="erp-table-shell" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">Products <span class="erp-chip erp-chip-outline">3 shown</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="erp-table">
+                        <thead>
+                            <tr><th scope="col" style="width:2.4rem;"><input class="form-check-input" type="checkbox" aria-label="Tick every product"></th><th>Product</th><th>What the label would carry</th><th>Unit</th><th>State</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-label="Tick"><input class="form-check-input" type="checkbox" checked></td>
+                                <td data-label="Product"><span class="erp-cell-strong">Corrugated box, 12 inch</span><span class="d-block erp-td-muted">PKD-BOX · PKD-BOX-12</span></td>
+                                <td data-label="Payload"><span class="font-monospace">8801234567890</span><span class="d-block erp-td-muted">its barcode</span></td>
+                                <td data-label="Unit">pc</td>
+                                <td data-label="State"><span class="erp-status erp-status-active">stock-managed</span></td>
+                            </tr>
+                            <tr>
+                                <td data-label="Tick"><input class="form-check-input" type="checkbox" checked></td>
+                                <td data-label="Product"><span class="erp-cell-strong">Kraft paper bag, large</span><span class="d-block erp-td-muted">BAG-KR · BAG-KR-L</span></td>
+                                <td data-label="Payload"><span class="font-monospace">BAG-KR-L</span><span class="d-block erp-td-muted">no barcode — the SKU stands in</span></td>
+                                <td data-label="Unit">pc</td>
+                                <td data-label="State"><span class="erp-status erp-status-active">stock-managed</span></td>
+                            </tr>
+                            <tr>
+                                <td data-label="Tick"><input class="form-check-input" type="checkbox"></td>
+                                <td data-label="Product"><span class="erp-cell-strong">Packing tape, 2 inch</span><span class="d-block erp-td-muted">TAPE-2 · TAPE-SKU-1</span></td>
+                                <td data-label="Payload"><span class="font-monospace">8801234567890</span><span class="d-block erp-td-muted">its barcode</span></td>
+                                <td data-label="Unit">roll</td>
+                                <td data-label="State"><span class="erp-status erp-status-active">stock-managed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="erp-split mt-3">
+                <section class="erp-card">
+                    <header class="erp-card-head">
+                        <h2 class="erp-card-title">One QR code, with the whole payload</h2>
+                        <div class="erp-card-actions"><a class="btn btn-sm btn-outline-secondary" href="./labels.html"><i class="bi bi-download" aria-hidden="true"></i> Save SVG</a></div>
+                    </header>
+                    <div class="erp-label-preview"><svg xmlns="http://www.w3.org/2000/svg" class="erp-qr" role="img" width="246" height="246" viewBox="0 0 246 246" shape-rendering="crispEdges" aria-label="QR M version 4"><title>Product 12</title><rect x="0" y="0" width="246" height="246" fill="#fff"/><g fill="#000"><rect x="24" y="24" width="42" height="6"/><rect x="72" y="24" width="6" height="6"/><rect x="84" y="24" width="6" height="6"/><rect x="102" y="24" width="24" height="6"/><rect x="132" y="24" width="6" height="6"/><rect x="156" y="24" width="12" height="6"/><rect x="180" y="24" width="42" height="6"/><rect x="24" y="30" width="6" height="6"/><rect x="60" y="30" width="6" height="6"/><rect x="102" y="30" width="12" height="6"/><rect x="120" y="30" width="6" height="6"/><rect x="132" y="30" width="12" height="6"/><rect x="156" y="30" width="6" height="6"/><rect x="180" y="30" width="6" height="6"/><rect x="216" y="30" width="6" height="6"/><rect x="24" y="36" width="6" height="6"/><rect x="36" y="36" width="18" height="6"/><rect x="60" y="36" width="6" height="6"/><rect x="78" y="36" width="24" height="6"/><rect x="108" y="36" width="36" height="6"/><rect x="150" y="36" width="24" height="6"/><rect x="180" y="36" width="6" height="6"/><rect x="192" y="36" width="18" height="6"/><rect x="216" y="36" width="6" height="6"/><rect x="24" y="42" width="6" height="6"/><rect x="36" y="42" width="18" height="6"/><rect x="60" y="42" width="6" height="6"/><rect x="72" y="42" width="18" height="6"/><rect x="120" y="42" width="12" height="6"/><rect x="162" y="42" width="12" height="6"/><rect x="180" y="42" width="6" height="6"/><rect x="192" y="42" width="18" height="6"/><rect x="216" y="42" width="6" height="6"/><rect x="24" y="48" width="6" height="6"/><rect x="36" y="48" width="18" height="6"/><rect x="60" y="48" width="6" height="6"/><rect x="72" y="48" width="6" height="6"/><rect x="96" y="48" width="6" height="6"/><rect x="120" y="48" width="12" height="6"/><rect x="138" y="48" width="6" height="6"/><rect x="150" y="48" width="18" height="6"/><rect x="180" y="48" width="6" height="6"/><rect x="192" y="48" width="18" height="6"/><rect x="216" y="48" width="6" height="6"/><rect x="24" y="54" width="6" height="6"/><rect x="60" y="54" width="6" height="6"/><rect x="72" y="54" width="12" height="6"/><rect x="96" y="54" width="6" height="6"/><rect x="114" y="54" width="6" height="6"/><rect x="126" y="54" width="6" height="6"/><rect x="144" y="54" width="6" height="6"/><rect x="180" y="54" width="6" height="6"/><rect x="216" y="54" width="6" height="6"/><rect x="24" y="60" width="42" height="6"/><rect x="72" y="60" width="6" height="6"/><rect x="84" y="60" width="6" height="6"/><rect x="96" y="60" width="6" height="6"/><rect x="108" y="60" width="6" height="6"/><rect x="120" y="60" width="6" height="6"/><rect x="132" y="60" width="6" height="6"/><rect x="144" y="60" width="6" height="6"/><rect x="156" y="60" width="6" height="6"/><rect x="168" y="60" width="6" height="6"/><rect x="180" y="60" width="42" height="6"/><rect x="72" y="66" width="6" height="6"/><rect x="90" y="66" width="6" height="6"/><rect x="126" y="66" width="36" height="6"/><rect x="24" y="72" width="6" height="6"/><rect x="48" y="72" width="6" height="6"/><rect x="60" y="72" width="36" height="6"/><rect x="114" y="72" width="6" height="6"/><rect x="126" y="72" width="6" height="6"/><rect x="144" y="72" width="18" height="6"/><rect x="168" y="72" width="36" height="6"/><rect x="216" y="72" width="6" height="6"/><rect x="54" y="78" width="6" height="6"/><rect x="114" y="78" width="24" height="6"/><rect x="162" y="78" width="6" height="6"/><rect x="174" y="78" width="6" height="6"/><rect x="198" y="78" width="12" height="6"/><rect x="24" y="84" width="18" height="6"/><rect x="60" y="84" width="6" height="6"/><rect x="78" y="84" width="6" height="6"/><rect x="90" y="84" width="30" height="6"/><rect x="132" y="84" width="6" height="6"/><rect x="156" y="84" width="12" height="6"/><rect x="198" y="84" width="6" height="6"/><rect x="210" y="84" width="6" height="6"/><rect x="24" y="90" width="24" height="6"/><rect x="54" y="90" width="6" height="6"/><rect x="72" y="90" width="24" height="6"/><rect x="102" y="90" width="6" height="6"/><rect x="138" y="90" width="18" height="6"/><rect x="168" y="90" width="6" height="6"/><rect x="216" y="90" width="6" height="6"/><rect x="24" y="96" width="6" height="6"/><rect x="42" y="96" width="6" height="6"/><rect x="54" y="96" width="24" height="6"/><rect x="84" y="96" width="6" height="6"/><rect x="102" y="96" width="6" height="6"/><rect x="114" y="96" width="12" height="6"/><rect x="150" y="96" width="6" height="6"/><rect x="162" y="96" width="12" height="6"/><rect x="180" y="96" width="24" height="6"/><rect x="24" y="102" width="6" height="6"/><rect x="36" y="102" width="12" height="6"/><rect x="54" y="102" width="6" height="6"/><rect x="72" y="102" width="24" height="6"/><rect x="108" y="102" width="6" height="6"/><rect x="126" y="102" width="24" height="6"/><rect x="162" y="102" width="6" height="6"/><rect x="186" y="102" width="6" height="6"/><rect x="198" y="102" width="12" height="6"/><rect x="24" y="108" width="6" height="6"/><rect x="42" y="108" width="6" height="6"/><rect x="60" y="108" width="12" height="6"/><rect x="90" y="108" width="6" height="6"/><rect x="102" y="108" width="18" height="6"/><rect x="126" y="108" width="12" height="6"/><rect x="144" y="108" width="42" height="6"/><rect x="198" y="108" width="6" height="6"/><rect x="210" y="108" width="6" height="6"/><rect x="30" y="114" width="12" height="6"/><rect x="48" y="114" width="12" height="6"/><rect x="66" y="114" width="12" height="6"/><rect x="90" y="114" width="6" height="6"/><rect x="114" y="114" width="24" height="6"/><rect x="150" y="114" width="6" height="6"/><rect x="162" y="114" width="24" height="6"/><rect x="30" y="120" width="6" height="6"/><rect x="42" y="120" width="6" height="6"/><rect x="60" y="120" width="12" height="6"/><rect x="78" y="120" width="6" height="6"/><rect x="90" y="120" width="6" height="6"/><rect x="108" y="120" width="6" height="6"/><rect x="126" y="120" width="36" height="6"/><rect x="168" y="120" width="6" height="6"/><rect x="180" y="120" width="6" height="6"/><rect x="192" y="120" width="6" height="6"/><rect x="210" y="120" width="6" height="6"/><rect x="24" y="126" width="24" height="6"/><rect x="66" y="126" width="6" height="6"/><rect x="84" y="126" width="12" height="6"/><rect x="102" y="126" width="18" height="6"/><rect x="132" y="126" width="6" height="6"/><rect x="144" y="126" width="12" height="6"/><rect x="162" y="126" width="18" height="6"/><rect x="198" y="126" width="18" height="6"/><rect x="36" y="132" width="6" height="6"/><rect x="48" y="132" width="30" height="6"/><rect x="102" y="132" width="6" height="6"/><rect x="114" y="132" width="18" height="6"/><rect x="144" y="132" width="6" height="6"/><rect x="162" y="132" width="6" height="6"/><rect x="186" y="132" width="6" height="6"/><rect x="198" y="132" width="6" height="6"/><rect x="210" y="132" width="6" height="6"/><rect x="36" y="138" width="6" height="6"/><rect x="102" y="138" width="36" height="6"/><rect x="144" y="138" width="12" height="6"/><rect x="162" y="138" width="6" height="6"/><rect x="180" y="138" width="12" height="6"/><rect x="210" y="138" width="6" height="6"/><rect x="24" y="144" width="6" height="6"/><rect x="36" y="144" width="12" height="6"/><rect x="54" y="144" width="30" height="6"/><rect x="90" y="144" width="18" height="6"/><rect x="132" y="144" width="24" height="6"/><rect x="180" y="144" width="6" height="6"/><rect x="192" y="144" width="12" height="6"/><rect x="216" y="144" width="6" height="6"/><rect x="24" y="150" width="12" height="6"/><rect x="42" y="150" width="6" height="6"/><rect x="54" y="150" width="6" height="6"/><rect x="66" y="150" width="6" height="6"/><rect x="78" y="150" width="6" height="6"/><rect x="90" y="150" width="6" height="6"/><rect x="120" y="150" width="12" height="6"/><rect x="138" y="150" width="6" height="6"/><rect x="150" y="150" width="18" height="6"/><rect x="174" y="150" width="6" height="6"/><rect x="198" y="150" width="6" height="6"/><rect x="210" y="150" width="6" height="6"/><rect x="36" y="156" width="18" height="6"/><rect x="60" y="156" width="18" height="6"/><rect x="102" y="156" width="12" height="6"/><rect x="120" y="156" width="6" height="6"/><rect x="132" y="156" width="12" height="6"/><rect x="150" y="156" width="6" height="6"/><rect x="162" y="156" width="6" height="6"/><rect x="174" y="156" width="6" height="6"/><rect x="192" y="156" width="6" height="6"/><rect x="204" y="156" width="12" height="6"/><rect x="36" y="162" width="6" height="6"/><rect x="48" y="162" width="12" height="6"/><rect x="72" y="162" width="12" height="6"/><rect x="90" y="162" width="24" height="6"/><rect x="126" y="162" width="30" height="6"/><rect x="162" y="162" width="18" height="6"/><rect x="186" y="162" width="6" height="6"/><rect x="210" y="162" width="6" height="6"/><rect x="24" y="168" width="12" height="6"/><rect x="42" y="168" width="6" height="6"/><rect x="60" y="168" width="12" height="6"/><rect x="78" y="168" width="6" height="6"/><rect x="96" y="168" width="36" height="6"/><rect x="144" y="168" width="18" height="6"/><rect x="168" y="168" width="36" height="6"/><rect x="210" y="168" width="12" height="6"/><rect x="72" y="174" width="6" height="6"/><rect x="90" y="174" width="6" height="6"/><rect x="102" y="174" width="36" height="6"/><rect x="156" y="174" width="18" height="6"/><rect x="192" y="174" width="6" height="6"/><rect x="204" y="174" width="12" height="6"/><rect x="24" y="180" width="42" height="6"/><rect x="72" y="180" width="54" height="6"/><rect x="132" y="180" width="6" height="6"/><rect x="150" y="180" width="12" height="6"/><rect x="168" y="180" width="6" height="6"/><rect x="180" y="180" width="6" height="6"/><rect x="192" y="180" width="12" height="6"/><rect x="210" y="180" width="6" height="6"/><rect x="24" y="186" width="6" height="6"/><rect x="60" y="186" width="6" height="6"/><rect x="78" y="186" width="6" height="6"/><rect x="96" y="186" width="6" height="6"/><rect x="108" y="186" width="18" height="6"/><rect x="144" y="186" width="12" height="6"/><rect x="168" y="186" width="6" height="6"/><rect x="192" y="186" width="6" height="6"/><rect x="216" y="186" width="6" height="6"/><rect x="24" y="192" width="6" height="6"/><rect x="36" y="192" width="18" height="6"/><rect x="60" y="192" width="6" height="6"/><rect x="72" y="192" width="12" height="6"/><rect x="90" y="192" width="6" height="6"/><rect x="102" y="192" width="6" height="6"/><rect x="120" y="192" width="6" height="6"/><rect x="144" y="192" width="12" height="6"/><rect x="168" y="192" width="36" height="6"/><rect x="216" y="192" width="6" height="6"/><rect x="24" y="198" width="6" height="6"/><rect x="36" y="198" width="18" height="6"/><rect x="60" y="198" width="6" height="6"/><rect x="78" y="198" width="6" height="6"/><rect x="102" y="198" width="6" height="6"/><rect x="132" y="198" width="18" height="6"/><rect x="156" y="198" width="6" height="6"/><rect x="180" y="198" width="18" height="6"/><rect x="204" y="198" width="6" height="6"/><rect x="24" y="204" width="6" height="6"/><rect x="36" y="204" width="18" height="6"/><rect x="60" y="204" width="6" height="6"/><rect x="78" y="204" width="42" height="6"/><rect x="126" y="204" width="6" height="6"/><rect x="150" y="204" width="18" height="6"/><rect x="174" y="204" width="36" height="6"/><rect x="24" y="210" width="6" height="6"/><rect x="60" y="210" width="6" height="6"/><rect x="90" y="210" width="6" height="6"/><rect x="114" y="210" width="30" height="6"/><rect x="150" y="210" width="36" height="6"/><rect x="24" y="216" width="42" height="6"/><rect x="72" y="216" width="18" height="6"/><rect x="102" y="216" width="6" height="6"/><rect x="120" y="216" width="12" height="6"/><rect x="138" y="216" width="36" height="6"/><rect x="198" y="216" width="6" height="6"/><rect x="216" y="216" width="6" height="6"/></g></svg></div>
+                    <p class="text-muted mb-0 mt-2">Product 12 · https://erp.example.com/app/inventory/products/12</p>
+                </section>
+
+                <aside>
+                    <div class="erp-card">
+                        <header class="erp-card-head"><h2 class="erp-card-title">One barcode, shown honestly</h2></header>
+                        <div class="erp-label-preview" style="padding:16px 12px;"><svg xmlns="http://www.w3.org/2000/svg" class="erp-barcode" role="img" width="435.6" height="106.5" viewBox="0 0 435.6 106.5" shape-rendering="crispEdges" aria-label="Code 128 8801234567890"><title>Corrugated box, 12 inch — 8801234567890</title><rect x="0" y="0" width="435.6" height="106.5" fill="#fff"/><rect x="22" y="0" width="4.4" height="84" /><rect x="28.6" y="0" width="2.2" height="84" /><rect x="35.2" y="0" width="2.2" height="84" /><rect x="46.2" y="0" width="6.6" height="84" /><rect x="55" y="0" width="2.2" height="84" /><rect x="61.6" y="0" width="4.4" height="84" /><rect x="70.4" y="0" width="6.6" height="84" /><rect x="79.2" y="0" width="2.2" height="84" /><rect x="85.8" y="0" width="4.4" height="84" /><rect x="94.6" y="0" width="2.2" height="84" /><rect x="101.2" y="0" width="6.6" height="84" /><rect x="110" y="0" width="4.4" height="84" /><rect x="118.8" y="0" width="2.2" height="84" /><rect x="125.4" y="0" width="6.6" height="84" /><rect x="136.4" y="0" width="4.4" height="84" /><rect x="143" y="0" width="4.4" height="84" /><rect x="151.8" y="0" width="6.6" height="84" /><rect x="162.8" y="0" width="2.2" height="84" /><rect x="167.2" y="0" width="4.4" height="84" /><rect x="176" y="0" width="2.2" height="84" /><rect x="180.4" y="0" width="6.6" height="84" /><rect x="191.4" y="0" width="4.4" height="84" /><rect x="200.2" y="0" width="2.2" height="84" /><rect x="206.8" y="0" width="6.6" height="84" /><rect x="215.6" y="0" width="4.4" height="84" /><rect x="222.2" y="0" width="6.6" height="84" /><rect x="233.2" y="0" width="2.2" height="84" /><rect x="239.8" y="0" width="4.4" height="84" /><rect x="248.6" y="0" width="6.6" height="84" /><rect x="257.4" y="0" width="2.2" height="84" /><rect x="264" y="0" width="6.6" height="84" /><rect x="272.8" y="0" width="4.4" height="84" /><rect x="279.4" y="0" width="6.6" height="84" /><rect x="288.2" y="0" width="6.6" height="84" /><rect x="297" y="0" width="2.2" height="84" /><rect x="303.6" y="0" width="4.4" height="84" /><rect x="312.4" y="0" width="6.6" height="84" /><rect x="323.4" y="0" width="2.2" height="84" /><rect x="327.8" y="0" width="4.4" height="84" /><rect x="336.6" y="0" width="2.2" height="84" /><rect x="343.2" y="0" width="6.6" height="84" /><rect x="352" y="0" width="4.4" height="84" /><rect x="360.8" y="0" width="2.2" height="84" /><rect x="369.6" y="0" width="6.6" height="84" /><rect x="378.4" y="0" width="4.4" height="84" /><rect x="385" y="0" width="4.4" height="84" /><rect x="396" y="0" width="6.6" height="84" /><rect x="404.8" y="0" width="2.2" height="84" /><rect x="409.2" y="0" width="4.4" height="84" /><text x="217.8" y="104.5" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="18.5" fill="#111">8801234567890</text></svg></div>
+                        <dl class="erp-dl erp-dl-tight erp-dl-striped mt-3">
+                            <dt>Encoded</dt><dd><span class="font-monospace">8801234567890</span></dd>
+                            <dt>Symbol</dt><dd>Code 128 · subset B · 16 symbols (start, 13 data, check, stop)</dd>
+                            <dt>Check digit</dt><dd>47 — weighted mod 103, so a scanner can tell a misread from a read</dd>
+                            <dt>Worth</dt><dd>132 modules of bars, plus a 10-module quiet zone at each end: 152 modules across</dd>
+                        </dl>
+                    </div>
+                </aside>
+            </div>
+
+            <div class="erp-table-shell mt-3" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">Sheets filed <span class="erp-chip erp-chip-outline">3 most recent</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="erp-table">
+                        <thead><tr><th>Sheet</th><th>What it is</th><th class="erp-th-num">Size</th><th>Filed</th><th>Prints</th><th></th></tr></thead>
+                        <tbody>
+                    <tr>
+                        <td data-label="Sheet"><span class="erp-cell-strong">labels-20261008-0915-4b7c1a2e.html</span><span class="d-block erp-td-muted" style="font-family:var(--font-mono, monospace)">sha256 9f2c…a2e</span></td>
+                        <td data-label="What it is">24 labels · A4 sheet, 24 labels (3 × 8)</td>
+                        <td data-label="Size" class="erp-td-num erp-td-muted">18.4 KB</td>
+                        <td data-label="Filed" class="erp-td-muted">08 Oct 2026, 09:15<span class="d-block erp-td-muted">Dhaka HQ</span></td>
+                        <td data-label="Prints" class="erp-td-muted">4 people printed it</td>
+                        <td data-label="" class="erp-td-actions">
+                            <div class="d-flex flex-wrap align-items-center gap-1 justify-content-end">
+                                <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Open</button>
+                                <form class="d-flex align-items-center gap-1" method="POST" action="./labels.html">
+                                    <label class="visually-hidden" for="print_copies_x">Copies printed</label>
+                                    <input class="form-control form-control-sm" style="width:4.5rem" type="number" id="print_copies_x" name="copies" value="1" min="1" max="200">
+                                    <button class="btn btn-sm btn-outline-secondary" type="submit" title="Record a print run of this sheet"><i class="bi bi-printer" aria-hidden="true"></i> Record print</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td data-label="Sheet"><span class="erp-cell-strong">labels-20261007-1740-c19e6d84.html</span><span class="d-block erp-td-muted" style="font-family:var(--font-mono, monospace)">sha256 9f2c…d84</span></td>
+                        <td data-label="What it is">12 labels · Thermal roll, 50 × 25 mm</td>
+                        <td data-label="Size" class="erp-td-num erp-td-muted">9.1 KB</td>
+                        <td data-label="Filed" class="erp-td-muted">07 Oct 2026, 17:40<span class="d-block erp-td-muted">Dhaka HQ</span></td>
+                        <td data-label="Prints" class="erp-td-muted">2 people printed it</td>
+                        <td data-label="" class="erp-td-actions">
+                            <div class="d-flex flex-wrap align-items-center gap-1 justify-content-end">
+                                <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Open</button>
+                                <form class="d-flex align-items-center gap-1" method="POST" action="./labels.html">
+                                    <label class="visually-hidden" for="print_copies_x">Copies printed</label>
+                                    <input class="form-control form-control-sm" style="width:4.5rem" type="number" id="print_copies_x" name="copies" value="1" min="1" max="200">
+                                    <button class="btn btn-sm btn-outline-secondary" type="submit" title="Record a print run of this sheet"><i class="bi bi-printer" aria-hidden="true"></i> Record print</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td data-label="Sheet"><span class="erp-cell-strong">labels-20261007-1102-77aa0f31.html</span><span class="d-block erp-td-muted" style="font-family:var(--font-mono, monospace)">sha256 9f2c…f31</span></td>
+                        <td data-label="What it is">240 labels · A4 sheet, 21 labels (3 × 7)</td>
+                        <td data-label="Size" class="erp-td-num erp-td-muted">96.7 KB</td>
+                        <td data-label="Filed" class="erp-td-muted">07 Oct 2026, 11:02<span class="d-block erp-td-muted">company-wide</span></td>
+                        <td data-label="Prints" class="erp-td-muted">not printed yet</td>
+                        <td data-label="" class="erp-td-actions">
+                            <div class="d-flex flex-wrap align-items-center gap-1 justify-content-end">
+                                <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Open</button>
+                                <form class="d-flex align-items-center gap-1" method="POST" action="./labels.html">
+                                    <label class="visually-hidden" for="print_copies_x">Copies printed</label>
+                                    <input class="form-control form-control-sm" style="width:4.5rem" type="number" id="print_copies_x" name="copies" value="1" min="1" max="200">
+                                    <button class="btn btn-sm btn-outline-secondary" type="submit" title="Record a print run of this sheet"><i class="bi bi-printer" aria-hidden="true"></i> Record print</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
+                <p class="erp-field-label">More in this module</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="erp-chip erp-chip-outline" href="./labels.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>One barcode</a>
+                    <a class="erp-chip erp-chip-outline" href="./labels.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>One QR code</a>
+                    <a class="erp-chip erp-chip-outline" href="./labels.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Scanner test</a>
+                    <a class="erp-chip erp-chip-outline" href="./packaging.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Packaging types</a>
+                </div>
+            </nav>
+        </main>
+
+<footer class="erp-footer">
+    <span>BD ERP · Rafshan Trading Ltd.</span>
+    <span class="erp-footer-meta">
+        <span>07 Oct 2026, 06:20 PM · Asia/Dhaka</span>
+        <span class="d-none d-md-inline">Press <kbd>⌘</kbd><kbd>K</kbd> to jump anywhere</span>
+    </span>
+</footer>
+    </div>
+</div>
+<script>window.erpNavIndex = [];</script>
+
+<div class="erp-backdrop" data-erp-backdrop hidden></div>
+
+
+<div class="erp-palette" id="erpPalette" hidden role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="erp-palette-panel">
+        <div class="erp-palette-search">
+            <i class="bi bi-search" aria-hidden="true"></i>
+            <label class="erp-visually-hidden" for="erpPaletteInput">Search the workspace</label>
+            <input class="erp-palette-input" id="erpPaletteInput" type="text" autocomplete="off" spellcheck="false"
+                   placeholder="Search pages, reports, and actions…" data-palette-input>
+            <kbd>esc</kbd>
+        </div>
+        <div class="erp-palette-list" data-palette-list role="listbox" aria-label="Results"></div>
+        <div class="erp-palette-foot">
+            <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+            <span><kbd>↵</kbd> open</span>
+            <span class="ms-auto">33 destinations available to you</span>
+        </div>
+    </div>
+</div>
+
+<div class="erp-toast-stack" data-erp-toasts role="status" aria-live="polite"></div>
+
+<script>window.erpNavIndex = [{"label":"Dashboard","url":"./dashboard.html","icon":"bi-grid-1x2","section":"My work","group":"Dashboard"},{"label":"Approval inbox","url":"#","icon":"bi-inbox","section":"My work","group":"Workflow"},{"label":"Sales orders","url":"./orders.html","icon":"bi-receipt","section":"Sales & CRM","group":"Sales"},{"label":"Create order","url":"./orders.html","icon":"bi-plus-circle","section":"Sales & CRM","group":"Sales","hint":"action"},{"label":"Bulk confirm orders","url":"./orders.html","icon":"bi-check2-square","section":"Sales & CRM","group":"Sales","hint":"action"},{"label":"Bulk print invoice","url":"./orders.html","icon":"bi-printer","section":"Sales & CRM","group":"Sales","hint":"action"},{"label":"Invoices","url":"./order-detail.html","icon":"bi-file-earmark-text","section":"Sales & CRM","group":"Sales"},{"label":"Mushak 9.1 tax invoice","url":"#","icon":"bi-file-earmark-ruled","section":"Sales & CRM","group":"Sales"},{"label":"POS terminal","url":"./pos.html","icon":"bi-upc-scan","section":"Sales & CRM","group":"Counter (POS)"},{"label":"Cash in / cash out","url":"#","icon":"bi-cash-stack","section":"Sales & CRM","group":"Counter (POS)"},{"label":"Coupon analytics","url":"#","icon":"bi-ticket-perforated","section":"Sales & CRM","group":"Sales"},{"label":"Products","url":"#","icon":"bi-boxes","section":"Inventory & warehouse","group":"Inventory"},{"label":"Stock overview","url":"#","icon":"bi-clipboard-check","section":"Inventory & warehouse","group":"Inventory"},{"label":"Stock movement ledger","url":"#","icon":"bi-list-columns","section":"Inventory & warehouse","group":"Inventory"},{"label":"Packaging types","url":"./packaging.html","icon":"bi-box-seam","section":"Inventory & warehouse","group":"Packaging"},{"label":"Print labels","url":"./labels.html","icon":"bi-printer","section":"Inventory & warehouse","group":"Barcode & QR"},{"label":"Generate barcode","url":"./labels.html","icon":"bi-upc-scan","section":"Inventory & warehouse","group":"Barcode & QR"},{"label":"Generate QR code","url":"./labels.html","icon":"bi-qr-code","section":"Inventory & warehouse","group":"Barcode & QR"},{"label":"Barcode scanner setup","url":"./labels.html","icon":"bi-broadcast","section":"Inventory & warehouse","group":"Barcode & QR"},{"label":"Purchase orders","url":"#","icon":"bi-bag-check","section":"Inventory & warehouse","group":"Purchase"},{"label":"Chart of accounts","url":"#","icon":"bi-diagram-3","section":"Accounts & finance","group":"Accounting"},{"label":"Journal entries","url":"#","icon":"bi-journal-text","section":"Accounts & finance","group":"Accounting"},{"label":"Trial balance","url":"#","icon":"bi-clipboard-data","section":"Accounts & finance","group":"Accounting"},{"label":"General ledger","url":"#","icon":"bi-list-columns","section":"Accounts & finance","group":"Accounting"},{"label":"Employees","url":"#","icon":"bi-person-badge","section":"People & payroll","group":"Employee"},{"label":"Sales summary report","url":"#","icon":"bi-bar-chart","section":"Reports & insight","group":"Reports"},{"label":"Invoice aging report","url":"#","icon":"bi-calendar-check","section":"Reports & insight","group":"Reports"},{"label":"Custom report builder","url":"#","icon":"bi-sliders2","section":"Reports & insight","group":"Reports"},{"label":"Workflows","url":"#","icon":"bi-diagram-3","section":"Governance","group":"Business management"},{"label":"Users","url":"#","icon":"bi-person-badge","section":"Configuration","group":"Settings"},{"label":"Roles & permissions","url":"#","icon":"bi-shield-lock","section":"Configuration","group":"Settings"},{"label":"Appearance","url":"#","icon":"bi-palette","section":"Configuration","group":"Settings"},{"label":"System maintenance","url":"#","icon":"bi-tools","section":"Configuration","group":"Settings"}];</script>
+<script type="module" src="./assets/preview.js"></script>
+</body>
+</html>

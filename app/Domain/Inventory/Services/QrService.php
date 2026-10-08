@@ -145,7 +145,7 @@ class QrService
     /**
      * The symbol as SVG, quiet zone included.
      *
-     * @param  array{moduleSize?: float, class?: string, title?: string}  $options
+     * @param  array{moduleSize?: float, class?: string, title?: string, stretch?: bool}  $options
      * @return array{svg: string, meta: array<string, mixed>}
      */
     public function svg(string $data, array $options = []): array
@@ -193,8 +193,12 @@ class QrService
             }
         }
 
+        $fit = (bool) ($options['stretch'] ?? false)
+            ? ' preserveAspectRatio="none"'
+            : '';
+
         $svg = sprintf(
-            '<svg xmlns="http://www.w3.org/2000/svg" class="%s" role="img" width="%s" height="%s" viewBox="0 0 %s %s" shape-rendering="crispEdges" aria-label="%s"><title>%s</title><rect x="0" y="0" width="%s" height="%s" fill="#fff"/><g fill="#000">%s</g></svg>',
+            '<svg xmlns="http://www.w3.org/2000/svg" class="%s" role="img" width="%s" height="%s" viewBox="0 0 %s %s"'.$fit.' shape-rendering="crispEdges" aria-label="%s"><title>%s</title><rect x="0" y="0" width="%s" height="%s" fill="#fff"/><g fill="#000">%s</g></svg>',
             $this->escape($class),
             $this->num($side),
             $this->num($side),

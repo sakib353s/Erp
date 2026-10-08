@@ -74,6 +74,35 @@ class DocumentRenderer
         );
     }
 
+    /**
+     * §04-53 — a printed label sheet, filed like any other generated document.
+     *
+     * The sheet is rendered from the real sheet data (the same array the desk
+     * previewed), so what is stored and checksummed is exactly what the printer
+     * receives. It is stored under the company directory with no number of its
+     * own: label sheets are not registered documents, and the codes printed on
+     * them belong to the products and batches being labelled. The branch is
+     * nullable — a sheet generated with no branch in context is company-wide and
+     * says so rather than pointing at a branch it was not printed in.
+     *
+     * @param  array<string, mixed>  $sheet
+     */
+    public function renderLabelSheet(array $sheet, ?int $branchId, User $user, ?string $basename = null): Document
+    {
+        $html = view('inventory.labels.sheet', ['sheet' => $sheet])->render();
+
+        return $this->storeGenerated(
+            $html,
+            companyId: (int) $sheet['company_id'],
+            directory: 'labels',
+            basename: $basename ?? 'labels-'.now()->format('Ymd-His'),
+            owner: null,
+            typeCode: 'label_sheet',
+            user: $user,
+            branchId: $branchId,
+        );
+    }
+
     /** Rule 16: every print is attributable — user, IP, type, format, copies. */
     public function recordPrint(Model $printable, string $typeCode, Request $request, ?string $correlationId = null): PrintHistory
     {
@@ -92,18 +121,25 @@ class DocumentRenderer
         ]);
     }
 
+    /**
+     * The owner may be null: a label sheet is generated *for* many rows at once
+     * (twelve products, three batches) and none of them owns it, so saying so is
+     * more honest than picking the first one and naming it the owner. In that
+     * case the caller states the branch the sheet was printed in.
+     */
     public function storeGenerated(
         string $content,
         int $companyId,
         string $directory,
         string $basename,
-        Model $owner,
+        ?Model $owner,
         ?string $typeCode,
         User $user,
         string $mime = 'text/html',
         string $extension = 'html',
+        ?int $branchId = null,
     ): Document {
-        $originalName = $basename.'-'.substr(sha1((string) $owner->getKey()), 0, 8).'.'.$extension;
+        $originalName = $basename.'-'.substr(sha1((string) ($owner?->getKey() ?? $basename)), 0, 8).'.'.$extension;
         $path = sprintf('generated/%d/%s/%s', $companyId, $directory, $originalName);
 
         Storage::disk('local')->put($path, $content);
@@ -114,9 +150,9 @@ class DocumentRenderer
 
         return Document::query()->create([
             'company_id' => $companyId,
-            'branch_id' => $owner->getAttribute('branch_id'),
-            'owner_type' => $owner::class,
-            'owner_id' => $owner->getKey(),
+            'branch_id' => $owner?->getAttribute('branch_id') ?? $branchId,
+            'owner_type' => $owner !== null ? $owner::class : null,
+            'owner_id' => $owner?->getKey(),
             'document_type_id' => $type?->id,
             'purpose' => 'generated',
             'visibility' => 'private',

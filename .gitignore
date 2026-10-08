@@ -31,3 +31,8 @@ Thumbs.db
 # session, never to the repository.
 /.audit*.py
 /.patch_*.py
+
+# The label slice's proof kit: the PHP-in-WASM probes, the third-party decoders
+# and the reference tables they are compared against. Re-runnable evidence for
+# §04-13/04-52, but it is scratch — it never ships.
+/.labelcheck/
