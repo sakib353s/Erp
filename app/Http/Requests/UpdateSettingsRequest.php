@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Domain\Settings\Support\GroupRules;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 /**
  * Group settings validated STRICTLY from config('erp.settings.groups')
@@ -34,18 +34,8 @@ class UpdateSettingsRequest extends FormRequest
     {
         $rules = ['settings' => ['required', 'array']];
 
-        foreach ((array) $this->fields as $key => $meta) {
-            $type = $meta['type'] ?? 'text';
-            $field = "settings.{$key}";
-            $base = ['nullable'];
-
-            $rules[$field] = match ($type) {
-                'boolean' => ['nullable', 'boolean'],
-                'number' => $this->withLimits($base, ['numeric'], $meta),
-                'integer' => $this->withLimits($base, ['integer'], $meta),
-                'select' => ['nullable', 'string', Rule::in(array_keys($meta['options'] ?? []))],
-                default => ['nullable', 'string', 'max:'.(int) ($meta['max'] ?? 500)],
-            };
+        foreach (GroupRules::fields(['fields' => (array) $this->fields]) as $key => $fieldRules) {
+            $rules["settings.{$key}"] = $fieldRules;
         }
 
         return $rules;
@@ -53,26 +43,7 @@ class UpdateSettingsRequest extends FormRequest
 
     public function attributes(): array
     {
-        $attributes = ['settings' => 'settings'];
-
-        foreach ((array) $this->fields as $key => $meta) {
-            $attributes["settings.{$key}"] = $meta['label'] ?? $key;
-        }
-
-        return $attributes;
-    }
-
-    /** @return array<int, string> */
-    protected function withLimits(array $rules, array $typeRules, array $meta): array
-    {
-        if (isset($meta['min'])) {
-            $typeRules[] = 'min:'.$meta['min'];
-        }
-
-        if (isset($meta['max'])) {
-            $typeRules[] = 'max:'.$meta['max'];
-        }
-
-        return array_merge($rules, $typeRules);
+        return ['settings' => 'settings']
+            + GroupRules::attributes(['fields' => (array) $this->fields], 'settings.');
     }
 }

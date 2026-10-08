@@ -126,10 +126,11 @@
       "trace": "docs/TRACEABILITY/14-masters.md"
     },
     "15_settings": {
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "rows_total": 35,
-      "rows_done": 0,
-      "trace": "docs/TRACEABILITY/15-settings.md"
+      "rows_done": 7,
+      "trace": "docs/TRACEABILITY/15-settings.md",
+      "notes": "The settings desk has a landing page and one screen per group, driven from `config('erp.settings.groups')`. Added: a key per group (`settings.view` opens the module, `settings.<group>` opens that group, `settings.update` writes), an `InvariantGuard` called from the single write path (`SettingService::set()`) refusing values below fixed floors, protected identity keys, and branch overrides of company policy (security, audit, workflow, notifications), and branch scope that actually reaches the code reading the values (`effective()` resolves branch → company → default; the label desk and POS receipt use it). `SettingService::setGroup()` now reports stored and refused keys separately so a refusal is never reported as a save. Still PLANNED: invoice/print templates (needs §19), the gateway/SMS/SMTP/WhatsApp/Firebase groups (need adapters), data export and backup/restore (need a tested restore path), API keys, and the maintenance family."
     },
     "16_cross_cutting": {
       "status": "PLANNED",

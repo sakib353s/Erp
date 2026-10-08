@@ -385,6 +385,7 @@ return [
 
         'groups' => [
             'general' => [
+                'key' => 'settings.general',
                 'label' => 'General Settings',
                 'description' => 'Company-wide display and formatting defaults.',
                 'fields' => [
@@ -416,6 +417,7 @@ return [
             ],
 
             'localization' => [
+                'key' => 'settings.localization',
                 'label' => 'Bengali / Localization Settings',
                 'description' => 'Language toggle, Bengali numerals and amount-in-words behaviour.',
                 'fields' => [
@@ -436,6 +438,7 @@ return [
             ],
 
             'security' => [
+                'key' => 'settings.security',
                 'label' => 'Security Settings',
                 'description' => 'Password policy, lockout policy and session policy.',
                 'fields' => [
@@ -453,6 +456,7 @@ return [
             ],
 
             'notifications' => [
+                'key' => 'settings.notifications',
                 'label' => 'Notification Settings',
                 'description' => 'Channel defaults. External channels stay disabled until a real provider is configured.',
                 'fields' => [
@@ -465,6 +469,7 @@ return [
             ],
 
             'workflow' => [
+                'key' => 'settings.workflow',
                 'label' => 'Workflow & Approval Settings',
                 'description' => 'Defaults for the generic database-driven approval engine.',
                 'fields' => [
@@ -475,6 +480,7 @@ return [
             ],
 
             'numbering' => [
+                'key' => 'settings.numbering',
                 'label' => 'Document Numbering',
                 'description' => 'Default numbering pattern applied to new numbering rules.',
                 'fields' => [
@@ -497,6 +503,7 @@ return [
             ],
 
             'dashboard' => [
+                'key' => 'settings.dashboard',
                 'label' => 'Dashboard Settings',
                 'description' => 'Widget cache and layout behaviour.',
                 'fields' => [
@@ -506,6 +513,7 @@ return [
             ],
 
             'audit' => [
+                'key' => 'settings.audit',
                 'label' => 'Audit Log Retention',
                 'description' => 'Retention policy for the tamper-evident audit trail.',
                 'fields' => [
@@ -516,6 +524,7 @@ return [
             ],
 
             'pos' => [
+                'key' => 'pos.settings.configure',
                 'label' => 'POS Settings',
                 'description' => 'Receipt paper width, footer text, cash rounding and offline sync for the counter.',
                 'fields' => [
@@ -561,6 +570,7 @@ return [
                against is copied onto the expense itself, so changing this
                later never rewrites what a past approval was based on. */
             'cash' => [
+                'key' => 'settings.cash',
                 'label' => 'Cash & Bank',
                 'description' => 'The money desk: how much may be spent before a signature is needed.',
                 'fields' => [
@@ -600,6 +610,7 @@ return [
                 ],
             ],
             'inventory' => [
+                'key' => 'settings.inventory',
                 'label' => 'Inventory Settings',
                 'description' => 'Thresholds the stock reports and alerts judge against.',
                 'fields' => [
@@ -675,6 +686,7 @@ return [
             ],
 
             'reorder' => [
+                'key' => 'settings.reorder',
                 'label' => 'Reorder Settings',
                 'description' => 'How the reorder desk measures demand and what it is allowed to do with it.',
                 'fields' => [
@@ -710,6 +722,7 @@ return [
              * that is the product's own code.
              */
             'labels' => [
+                'key' => 'settings.labels',
                 'label' => 'Label Templates',
                 'description' => 'The paper the labels are printed on, and what each label carries.',
                 'fields' => [
@@ -780,6 +793,7 @@ return [
              * what should happen when it was one.
              */
             'barcode' => [
+                'key' => 'settings.barcode',
                 'label' => 'Barcode Settings',
                 'description' => 'How the desk reads a scanner, and what it does with a scan.',
                 'fields' => [
@@ -831,6 +845,7 @@ return [
              * and each user may still switch light/dark + row density locally.
              */
             'appearance' => [
+                'key' => 'settings.appearance',
                 'label' => 'Appearance',
                 'description' => 'Workspace identity and default reading density.',
                 'fields' => [

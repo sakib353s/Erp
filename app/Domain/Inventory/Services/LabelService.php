@@ -111,10 +111,16 @@ class LabelService
         protected PricingService $pricing,
     ) {}
 
-    /** The template key the operator chose, or the default when nothing is stored yet. */
+    /**
+     * The template the operator chose, or the default when nothing is stored yet.
+     *
+     * Read through the effective value, so a branch that prints on different
+     * paper gets its own sheet: §15-03's branch settings are only real where the
+     * code that uses the value asks the branch-aware question.
+     */
     public function template(): string
     {
-        $key = (string) $this->settings->get('labels', 'template', 'a4_3x8');
+        $key = (string) $this->settings->effective('labels', 'template', null);
 
         return isset(self::TEMPLATES[$key]) ? $key : 'a4_3x8';
     }

@@ -64,7 +64,9 @@ class FoundationPermissionSeeder extends Seeder
             ['masters', 'price_lists', 'rules', 'pricing.rules', 'Manage pricing rules'],
             ['masters', 'price_lists', 'override', 'pricing.override', 'Override pricing rules without approval'],
 
-            ['settings', 'company', 'manage', 'settings.company', 'Edit company profile'],
+            // settings.company is declared once, above. The alias key below is
+            // the older name of the same permission, kept for tenants that still
+            // hold it.
             ['settings', 'company', 'manage', 'company.manage', 'Edit company profile (alias)'],
 
             ['settings', 'roles', 'view', 'roles.view', 'View roles & permissions'],
@@ -84,6 +86,29 @@ class FoundationPermissionSeeder extends Seeder
             ['inventory', 'warehouses', 'delete', 'warehouses.delete', 'Delete warehouses'],
 
             ['settings', 'settings', 'view', 'settings.view', 'View settings'],
+            // §15-01…§15-17: the settings desk is one page per group and the
+            // groups are different jobs. `settings.view` opens the module
+            // (the index lists every group either way), `settings.<group>` opens
+            // that group's numbers, and `settings.update` is what actually
+            // writes. A person who may set the company's document numbering has
+            // no business rewriting the password policy, and one key for both
+            // would have said they did.
+            ['settings', 'general', 'manage', 'settings.general', 'Set formats, decimal places and the landing page'],
+            ['settings', 'localization', 'manage', 'settings.localization', 'Set language, Bengali numerals, amount in words and lakh/crore grouping'],
+            ['settings', 'security', 'manage', 'settings.security', 'Set the password, lockout and session policy'],
+            ['settings', 'notifications', 'manage', 'settings.notifications', 'Decide which channels notify whom'],
+            ['settings', 'workflow', 'manage', 'settings.workflow', 'Set approval SLAs, escalation and self-approval rules'],
+            ['settings', 'numbering', 'manage', 'settings.numbering', 'Set how documents are numbered'],
+            ['settings', 'dashboard', 'manage', 'settings.dashboard', 'Set dashboard refresh behaviour'],
+            ['settings', 'audit', 'manage', 'settings.audit', 'Set how long audit evidence is kept and whether it may be exported'],
+            ['settings', 'cash', 'manage', 'settings.cash', 'Set the cash approval limits and count tolerance'],
+            ['settings', 'inventory', 'manage', 'settings.inventory', 'Set the stock valuation method, approval gates and stock switches'],
+            ['settings', 'reorder', 'manage', 'settings.reorder', 'Set how demand is measured for reorder suggestions'],
+            ['settings', 'labels', 'manage', 'settings.labels', 'Set label sheet geometry and QR density'],
+            ['settings', 'barcode', 'manage', 'settings.barcode', 'Set scanner input and barcode symbology'],
+            ['settings', 'appearance', 'manage', 'settings.appearance', 'Set the accent colour, density and sidebar behaviour'],
+            ['settings', 'branches', 'manage', 'settings.branch', 'Set what a branch may decide for itself, and remove an override'],
+
             ['settings', 'settings', 'update', 'settings.update', 'Change settings'],
             ['settings', 'settings', 'reset', 'settings.reset', 'Reset settings to defaults'],
 

@@ -209,6 +209,38 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
         ->middleware('permission:pos.settings.configure')
         ->name('settings.pos.update');
 
+    /*
+     * §15 — the settings desk and branch scope.
+     *
+     * The index is the module's own landing page: every group, how many of its
+     * fields are really set, who set them last, and the key each group needs.
+     * The group screens themselves are behind their own key now (checked in the
+     * controller, because one route serves fifteen groups), and the branch screen
+     * is where an outlet sets what it may decide for itself — with the ability to
+     * remove an override so it follows the company again. Company policy
+     * (security, audit, workflow, notifications) is listed there too, with the
+     * reason it cannot be overridden.
+     *
+     * These sit before the {group} catch-all on purpose: `branches/{branch}` is
+     * two segments and would not match it anyway, but the ordering is what keeps
+     * a future one-segment literal from being swallowed.
+     */
+    Route::get('/app/settings', [SettingController::class, 'index'])
+        ->middleware('permission:settings.view')
+        ->name('settings.index');
+    Route::get('/app/settings/branches', [SettingController::class, 'branches'])
+        ->middleware('permission:settings.branch')
+        ->name('settings.branches');
+    Route::get('/app/settings/branches/{branch}', [SettingController::class, 'branch'])
+        ->middleware('permission:settings.branch')
+        ->name('settings.branch.show');
+    Route::post('/app/settings/branches/{branch}', [SettingController::class, 'updateBranch'])
+        ->middleware('permission:settings.branch')
+        ->name('settings.branch.update');
+    Route::delete('/app/settings/branches/{branch}/{group}/{key}', [SettingController::class, 'forgetBranchSetting'])
+        ->middleware('permission:settings.branch')
+        ->name('settings.branch.forget');
+
     /* ---- Settings ---- */
     Route::get('/app/settings/{group}', [SettingController::class, 'show'])
         ->middleware('permission:settings.view')

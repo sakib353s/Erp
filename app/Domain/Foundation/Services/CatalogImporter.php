@@ -65,6 +65,18 @@ class CatalogImporter
         'settings' => 'bi-sliders',
     ];
 
+    /**
+     * Module code → [route, permission key] for the modules whose header is a
+     * page in its own right. The settings desk and the report centre are real
+     * landing pages, so the module name in the sidebar goes there instead of
+     * being a group that a reader has to guess their way through.
+     */
+    protected const MODULE_HOME = [
+        'dashboard' => ['/app/dashboard', 'dashboard.view'],
+        'reports' => ['/app/reports', 'reports.view'],
+        'settings' => ['/app/settings', 'settings.view'],
+    ];
+
     /** First word of a label that marks an ACTION leaf rather than a page. */
     protected const ACTION_VERBS = [
         'add', 'apply', 'allocate', 'archive', 'approve', 'attach', 'bulk', 'cancel',
@@ -82,19 +94,19 @@ class CatalogImporter
      * for pages implemented in the foundation phases.
      */
     protected const OVERRIDES = [
-        'settings > general settings' => ['/app/settings/general', 'settings.view'],
+        'settings > general settings' => ['/app/settings/general', 'settings.general'],
         'settings > company settings' => ['/app/settings/company', 'settings.company'],
-        'settings > security settings' => ['/app/settings/security', 'settings.view'],
-        'settings > notification settings' => ['/app/settings/notifications', 'settings.view'],
-        'settings > audit log retention' => ['/app/settings/audit', 'settings.view'],
+        'settings > security settings' => ['/app/settings/security', 'settings.security'],
+        'settings > notification settings' => ['/app/settings/notifications', 'settings.notifications'],
+        'settings > audit log retention' => ['/app/settings/audit', 'settings.audit'],
         'settings > user management' => ['/app/users', 'users.view'],
         'settings > roles & permissions' => ['/app/roles', 'roles.view'],
-        'settings > branch settings' => ['/app/branches', 'branches.view'],
-        'settings > invoice settings > invoice number format' => ['/app/settings/numbering', 'settings.view'],
-        'settings > bengali settings > bengali language toggle' => ['/app/settings/localization', 'settings.view'],
-        'settings > bengali settings > bengali numerals' => ['/app/settings/localization#numerals', 'settings.view'],
-        'settings > bengali settings > amount in words (bengali)' => ['/app/settings/localization#amount-words', 'settings.view'],
-        'settings > bengali settings > lakh / crore format' => ['/app/settings/localization#lakh-crore', 'settings.view'],
+        'settings > branch settings' => ['/app/settings/branches', 'settings.branch'],
+        'settings > invoice settings > invoice number format' => ['/app/settings/numbering', 'settings.numbering'],
+        'settings > bengali settings > bengali language toggle' => ['/app/settings/localization', 'settings.localization'],
+        'settings > bengali settings > bengali numerals' => ['/app/settings/localization#numerals', 'settings.localization'],
+        'settings > bengali settings > amount in words (bengali)' => ['/app/settings/localization#amount-words', 'settings.localization'],
+        'settings > bengali settings > lakh / crore format' => ['/app/settings/localization#lakh-crore', 'settings.localization'],
         'employee > employees > all employees' => ['/app/employees', 'employees.view'],
 
         // §03 purchase + §06 suppliers — the pages that now exist
@@ -765,10 +777,30 @@ class CatalogImporter
             );
         }
 
-        $route = $code === 'dashboard' ? '/app/dashboard' : null;
-        $active = $route !== null && $this->routeExists($route, $uris);
+        [$route, $permissionKey] = self::MODULE_HOME[$code] ?? [null, null];
+
+        // A module header is only a link when its own page really exists: a
+        // sidebar entry that 404s is worse than a group you have to open.
+        if ($route !== null && ! $this->routeExists($route, $uris)) {
+            $route = null;
+        }
+
+        $active = $route !== null;
         $stats['items']++;
         $stats[$active ? 'active' : 'planned']++;
+
+        $permissionId = null;
+
+        if ($route !== null && $permissionKey !== null && ! $dryRun) {
+            [$module_, $resource, $action] = array_pad(explode('.', $permissionKey, 3), 3, 'view');
+
+            $permissionId = Permission::updateOrCreate(['key' => $permissionKey], [
+                'module' => $module_, 'resource' => $resource, 'action' => $action,
+                'label' => 'View '.$this->title($name), 'is_system' => true,
+            ])->id;
+
+            $stats['permissions']++;
+        }
 
         $row = $this->syncItem($code, [
             'module_id' => $moduleModel?->id,
@@ -777,22 +809,13 @@ class CatalogImporter
             'label_key' => 'module.'.$code,
             'route' => $route,
             'icon' => self::MODULE_ICONS[$code] ?? null,
-            'permission_id' => ($code === 'dashboard' && ! $dryRun)
-                ? Permission::updateOrCreate(['key' => 'dashboard.view'], [
-                    'module' => 'dashboard', 'resource' => 'dashboard', 'action' => 'view',
-                    'label' => 'View dashboard', 'is_system' => true,
-                ])->id
-                : null,
+            'permission_id' => $permissionId,
             'location' => 'sidebar',
             'status' => $active ? 'active' : 'planned',
             'action' => null,
             'feature_key' => $code,
             'sort' => $number * 10,
         ], $dryRun, $created, $usedCodes);
-
-        if ($code === 'dashboard') {
-            $stats['permissions']++;
-        }
 
         $created[$code] = ['row' => $row, 'parent' => null, 'is_page' => $route !== null];
 

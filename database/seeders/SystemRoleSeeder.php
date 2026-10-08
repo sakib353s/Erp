@@ -149,6 +149,14 @@ class SystemRoleSeeder extends Seeder
                 // not the marketing or custom-schedule keys.
                 'reports.view', 'reports.sales', 'reports.purchase', 'reports.inventory',
                 'reports.customers', 'reports.suppliers', 'reports.finance', 'reports.hr',
+                // §15: a department manager decides the display and document
+                // settings of their own outlet — the receipt footer, the label
+                // geometry, the accent — and sees the desk. Not the security,
+                // audit or workflow groups: those are company policy and the
+                // branch screen refuses them anyway, and not `settings.update`,
+                // which is what the company's own values are written with.
+                'settings.general', 'settings.localization', 'settings.labels',
+                'settings.barcode', 'settings.branch',
             ]],
             ['slug' => 'employee', 'name' => 'Employee', 'description' => 'Staff account: own portal access only — own leave, own payslips.', 'keys' => [
                 'dashboard.view', 'employees.view', 'documents.view', 'search.view',

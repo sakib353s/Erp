@@ -44,14 +44,18 @@ class PosSettingsController extends Controller
             $request->user(),
         );
 
-        $changed = array_keys(array_filter($result, fn ($rejected) => ! $rejected));
+        // The service reports stored and refused keys separately: counting a
+        // refusal as a save would tell a person their till was reconfigured when
+        // nothing changed.
+        $redirect = back()->with('status', $result['saved'] === []
+            ? 'No changes to save.'
+            : 'Saved '.count($result['saved']).'.');
 
-        return back()->with(
-            'status',
-            $changed === []
-                ? 'No changes to save.'
-                : 'Saved '.count($changed).'.',
-        );
+        if ($result['rejected'] !== []) {
+            $redirect->with('warning', 'Refused: '.implode(', ', $result['rejected']).' cannot be changed from a settings screen.');
+        }
+
+        return $redirect;
     }
 
     /** @return array<string, array<string, mixed>> */

@@ -197,7 +197,9 @@ class CommitPosSale
             // the total; the adjustment lands in the invoice rounding column so
             // GL/stock keep matching the (rounded) grand total.
             $grand = (float) $calc['grand_total'];
-            $increment = (float) $this->settings->get('pos', 'rounding_increment', null);
+            // Rounding is a counter's own habit (nobody tends to carry 5-paisa
+            // coins), so it resolves per branch first.
+            $increment = (float) $this->settings->effective('pos', 'rounding_increment');
             if ($increment > 0.011) {
                 // epsilon keeps true half-way values half-up through FP noise
                 $rounded = round(round($grand / $increment + 1e-9, 0) * $increment, 2);

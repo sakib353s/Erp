@@ -273,14 +273,18 @@ class PosController extends Controller
         abort_unless($posTransaction->company_id === $request->user()->company_id, 404);
 
         $invoice = $posTransaction->invoice;
-        $paper = (string) $this->settings->get('pos', 'paper_width', null);
+
+        // The till belongs to a branch, and a branch may print its own receipt:
+        // both values are read branch-first (§15-03), so an outlet that uses 58mm
+        // paper does not have to be the company default.
+        $paper = (string) $this->settings->effective('pos', 'paper_width');
 
         return view('pos.receipt', [
             'txn' => $posTransaction,
             'invoice' => $invoice,
             'lines' => $invoice?->lines ?? collect(),
             'paperWidth' => in_array($paper, ['58', '80'], true) ? $paper : '80',
-            'footer' => trim((string) $this->settings->get('pos', 'receipt_footer', null)),
+            'footer' => trim((string) $this->settings->effective('pos', 'receipt_footer')),
         ]);
     }
 

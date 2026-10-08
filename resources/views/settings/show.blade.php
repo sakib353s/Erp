@@ -26,7 +26,14 @@
 
         <section class="erp-card erp-card-max">
             <header class="erp-card-head">
-                <h2 class="erp-card-title">{{ $definition['label'] ?? ucfirst($group) }}</h2>
+                <div>
+                    <h2 class="erp-card-title">{{ $definition['label'] ?? ucfirst($group) }}</h2>
+                    <p class="erp-card-sub">
+                        Scope: <strong>{{ $companyOnly ? 'company policy — the same in every branch' : 'per branch may differ' }}</strong>
+                        · this group needs <span class="font-monospace">{{ $definition['key'] ?? 'settings.update' }}</span> to read it,
+                        <span class="font-monospace">settings.update</span> to change it.
+                    </p>
+                </div>
                 <span class="erp-chip erp-chip-soft">stored in <code>settings</code> table</span>
             </header>
 
@@ -84,6 +91,71 @@
             </div>
         </section>
     </form>
+
+    @if (! empty($floors))
+        <div class="erp-note mt-3">
+            <i class="bi bi-shield-lock" aria-hidden="true"></i>
+            <div>
+                <strong class="d-block mb-1">Some fields in this group have a floor</strong>
+                <ul class="mb-0 ps-3">
+                    @foreach ($floors as $key => $rule)
+                        <li><span class="font-monospace">{{ $key }}</span> — lowest {{ $rule['floor'] }}. {{ $rule['why'] }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    @endif
+
+    @if (! $companyOnly)
+        <section class="erp-card erp-card-max mt-3">
+            <header class="erp-card-head">
+                <div>
+                    <h2 class="erp-card-title">Branches that differ</h2>
+                    <p class="erp-card-sub">An outlet may set its own value for this group. The company value stays as it is everywhere else — and a branch can be put back on the company's value at any time.</p>
+                </div>
+                <div class="erp-card-actions">
+                    <a class="erp-chip erp-chip-outline" href="{{ route('settings.branches') }}">
+                        <i class="bi bi-diagram-3" aria-hidden="true"></i> Branch settings
+                    </a>
+                </div>
+            </header>
+            @if ($branchOverrides === [])
+                <div class="p-3">
+                    <p class="erp-filter-note mb-0">
+                        <i class="bi bi-info-circle" aria-hidden="true"></i>
+                        Every branch currently follows the company value for this group. Nothing has been overridden.
+                    </p>
+                </div>
+            @else
+                <div class="erp-table-scroll">
+                    <table class="erp-table erp-table-compact">
+                        <thead>
+                            <tr><th>Branch</th><th>Keys set there</th><th>Changed</th><th></th></tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($branchOverrides as $override)
+                                <tr>
+                                    <td>
+                                        <span class="erp-cell-strong">
+                                            {{ \App\Domain\Foundation\Branch::query()->whereKey($override['branch_id'])->value('name') ?? 'Branch #'.$override['branch_id'] }}
+                                        </span>
+                                    </td>
+                                    <td class="erp-td-muted font-monospace">{{ implode(', ', $override['keys']) }}</td>
+                                    <td class="erp-td-muted">{{ $override['updated_at'] ? \Illuminate\Support\Carbon::parse($override['updated_at'])->format('Y-m-d H:i') : '—' }}</td>
+                                    <td class="text-end">
+                                        <a class="btn btn-outline-secondary btn-sm"
+                                           href="{{ route('settings.branch.show', $override['branch_id']) }}">
+                                            Open <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+        </section>
+    @endif
 
     <div class="mt-3">
         <x-ui.related-pages />
