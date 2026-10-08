@@ -185,6 +185,13 @@ class FoundationPermissionSeeder extends Seeder
             ['business', 'meetings', 'view', 'business.meetings.view', 'See the meetings you are on, their minutes and your action items'],
             ['business', 'meetings', 'manage', 'business.meetings.manage', 'Call, move, cancel, hold and minute meetings, and raise action items from them'],
 
+            // §12-14: what the company owns and what it costs to keep. Reading
+            // the register is an office job; moving an asset, writing it off or
+            // starting its depreciation is the manager's — those three change
+            // the books, not just the list.
+            ['business', 'assets', 'view', 'business.assets.view', 'Read the asset register, vehicles, equipment and the trip log'],
+            ['business', 'assets', 'manage', 'business.assets.manage', 'Register, move, capitalise, depreciate and dispose of assets, and log trips'],
+
             ['settings', 'company', 'manage', 'settings.company', 'Edit company profile'],
 
             // Phase H — HRM (§10): attendance, leave, structure

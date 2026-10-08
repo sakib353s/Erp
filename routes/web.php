@@ -9,6 +9,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BankChargeController;
 use App\Http\Controllers\BankReconciliationController;
 use App\Http\Controllers\BranchController;
+use App\Http\Controllers\AssetController;
 use App\Http\Controllers\BusinessRecordController;
 use App\Http\Controllers\BulkPriceUpdateController;
 use App\Http\Controllers\CashBankController;
@@ -2278,6 +2279,60 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
         Route::post('/app/records/{record}/retire', [BusinessRecordController::class, 'retire'])
             ->whereNumber('record')
             ->name('records.retire');
+    });
+
+    /* ---- §12 Business Management: the asset register (12-14) ----
+     *
+     * One register, four screens: the register itself, the vehicles, the
+     * equipment and the trip log. A vehicle is an asset with plates, so the
+     * vehicle list is a lens on `business_assets` rather than a second table —
+     * which is why nothing here can lose a truck.
+     *
+     * The literal segments come before `{asset}` and the binding is constrained
+     * to digits, so `/app/assets/vehicles` is a shelf and `/app/assets/12` is an
+     * asset, and neither can be mistaken for the other.
+     *
+     * Reading is `business.assets.view`: everybody needs to know where the laptop
+     * is. Everything that touches the books — registering, moving, capitalising,
+     * depreciating, writing off, logging trips — is `business.assets.manage`.
+     */
+    Route::middleware('permission:business.assets.view')->group(function () {
+        Route::get('/app/assets', [AssetController::class, 'index'])->name('assets.index');
+        Route::get('/app/assets/vehicles', [AssetController::class, 'vehicles'])->name('assets.vehicles');
+        Route::get('/app/assets/equipment', [AssetController::class, 'equipment'])->name('assets.equipment');
+        Route::get('/app/assets/trips', [AssetController::class, 'trips'])->name('assets.trips');
+        Route::get('/app/assets/depreciation', [AssetController::class, 'depreciation'])->name('assets.depreciation');
+        Route::get('/app/assets/disposal', [AssetController::class, 'disposal'])->name('assets.disposal');
+        Route::get('/app/assets/{asset}', [AssetController::class, 'show'])
+            ->whereNumber('asset')
+            ->name('assets.show');
+    });
+
+    Route::middleware('permission:business.assets.manage')->group(function () {
+        Route::get('/app/assets/create', [AssetController::class, 'create'])->name('assets.create');
+        Route::post('/app/assets', [AssetController::class, 'store'])->name('assets.store');
+        Route::post('/app/assets/trips', [AssetController::class, 'logTrip'])->name('assets.trips.log');
+        Route::post('/app/assets/depreciation/run', [AssetController::class, 'runDepreciation'])
+            ->name('assets.depreciation.run');
+        Route::put('/app/assets/{asset}', [AssetController::class, 'update'])
+            ->whereNumber('asset')
+            ->name('assets.update');
+        Route::post('/app/assets/{asset}/depreciation', [AssetController::class, 'setDepreciation'])
+            ->whereNumber('asset')
+            ->name('assets.depreciation.set');
+        Route::post('/app/assets/{asset}/capitalise', [AssetController::class, 'capitalise'])
+            ->whereNumber('asset')
+            ->name('assets.capitalise');
+        Route::post('/app/assets/{asset}/dispose', [AssetController::class, 'dispose'])
+            ->whereNumber('asset')
+            ->name('assets.dispose');
+        Route::post('/app/assets/{asset}/records', [AssetController::class, 'linkRecord'])
+            ->whereNumber('asset')
+            ->name('assets.records.link');
+        Route::delete('/app/assets/{asset}/records/{record}', [AssetController::class, 'unlinkRecord'])
+            ->whereNumber('asset')
+            ->whereNumber('record')
+            ->name('assets.records.unlink');
     });
 
     /* ---- Audit trail ---- */

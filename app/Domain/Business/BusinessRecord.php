@@ -44,7 +44,7 @@ class BusinessRecord extends Model
     ];
 
     protected $fillable = [
-        'company_id', 'branch_id', 'kind', 'title', 'reference_no', 'issuer',
+        'company_id', 'branch_id', 'business_asset_id', 'kind', 'title', 'reference_no', 'issuer',
         'value_amount', 'issued_on', 'starts_on', 'expires_on', 'due_on',
         'repeat_months', 'last_completed_on', 'status', 'retired_on', 'notes',
         'meta', 'created_by',
@@ -70,6 +70,14 @@ class BusinessRecord extends Model
     public function branch(): BelongsTo
     {
         return $this->belongsTo(Branch::class);
+    }
+
+    /** §12-14: the asset this paper belongs to, when it belongs to one — a
+        vehicle's fitness, a machine's insurance. It stays a certificate either
+        way, which is what keeps it on the renewals lens and the calendar. */
+    public function asset(): BelongsTo
+    {
+        return $this->belongsTo(BusinessAsset::class, 'business_asset_id');
     }
 
     public function creator(): BelongsTo

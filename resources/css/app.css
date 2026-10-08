@@ -1406,6 +1406,53 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
     color: var(--ink-3);
 }
 
+/* §12-14: the asset register's own states. "In use" is the good case — it is out
+   there doing its job. "In store" is quiet because it is a position, not a
+   problem. "Under repair" is the one that costs money twice: off the road while
+   still on the books. */
+.erp-status-in_use,
+.erp-status-in-use {
+    background: var(--ok-soft);
+    color: var(--ok);
+}
+
+.erp-status-stored {
+    background: var(--surface-3);
+    color: var(--ink-2);
+}
+
+.erp-status-under_repair,
+.erp-status-under-repair {
+    background: var(--warn-soft);
+    color: var(--warn);
+}
+
+/* §12-14: written off. Quiet, like a retirement — it was a decision with a date
+   and a reason, not a failure. The disposal register reads better for it. */
+.erp-status-disposed {
+    background: var(--surface-3);
+    color: var(--ink-3);
+}
+
+/* §12-14: an asset's condition. "New" and "good" are the same reading — this
+   thing is fine. "Fair" is honest and neutral: it works, it shows its age.
+   "Poor" is the one worth a repair-or-replace decision. */
+.erp-status-new,
+.erp-status-good {
+    background: var(--ok-soft);
+    color: var(--ok);
+}
+
+.erp-status-fair {
+    background: var(--surface-3);
+    color: var(--ink-2);
+}
+
+.erp-status-poor {
+    background: var(--warn-soft);
+    color: var(--warn);
+}
+
 /* Waiting on someone / partially done */
 .erp-status-pending,
 .erp-status-pending_dispatch,

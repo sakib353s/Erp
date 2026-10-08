@@ -558,6 +558,22 @@ class CatalogImporter
         'business management > meetings > meeting minutes' => ['/app/meetings/minutes', 'business.meetings.view'],
         'business management > meetings > action items' => ['/app/meetings/action-items', 'business.meetings.view'],
 
+        // §12-14: the asset register and the three lenses on it the menu asks for.
+        // The vehicle trip log is a leaf of its own because a fleet's running cost
+        // is a desk somebody sits at, not a tab inside a vehicle.
+        'business management > assets > asset register' => ['/app/assets', 'business.assets.view'],
+        'business management > assets > vehicle management' => ['/app/assets/vehicles', 'business.assets.view'],
+        'business management > assets > vehicle trip log' => ['/app/assets/trips', 'business.assets.view'],
+        'business management > assets > equipment' => ['/app/assets/equipment', 'business.assets.view'],
+
+        // The same register, seen from accounting — where the accountant looks for
+        // it. Depreciation and disposal are the two screens that are accounting
+        // work even though the facts live in the register.
+        'accounting > fixed assets > asset register' => ['/app/assets', 'business.assets.view'],
+        'accounting > fixed assets > add asset' => ['/app/assets/create', 'business.assets.manage'],
+        'accounting > fixed assets > asset depreciation' => ['/app/assets/depreciation', 'business.assets.view'],
+        'accounting > fixed assets > asset disposal' => ['/app/assets/disposal', 'business.assets.view'],
+
         // §12-03/04: the company's own papers, and the two screens that already
         // existed for its identity and its preferences.
         'business management > company > company profile' => ['/app/settings/company', 'settings.company'],

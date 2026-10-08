@@ -173,6 +173,10 @@ class SystemRoleSeeder extends Seeder
                 // minuting it and turning what was decided into work somebody
                 // owns. The employee bundle gets the reading half only.
                 'business.meetings.view', 'business.meetings.manage',
+                // §12-14: the register of what the company owns, and the
+                // permission to write things off — a manager's call, because
+                // disposal and depreciation touch the books.
+                'business.assets.view', 'business.assets.manage',
             ]],
             ['slug' => 'employee', 'name' => 'Employee', 'description' => 'Staff account: own portal access only — own leave, own payslips.', 'keys' => [
                 'dashboard.view', 'employees.view', 'documents.view', 'search.view',
@@ -186,6 +190,10 @@ class SystemRoleSeeder extends Seeder
                 // §12-11: your own meetings, their minutes, and the action
                 // items you owe — not the office's diary.
                 'business.meetings.view',
+                // §12-14: everybody can see what the company has and where it
+                // is — that is how a laptop gets handed back — but not write it
+                // off. The employee bundle gets the reading half.
+                'business.assets.view',
             ]],
             ['slug' => 'technician', 'name' => 'Technician', 'description' => 'Service technician (portal-capable).', 'keys' => [
                 'dashboard.view', 'documents.view', 'documents.upload', 'search.view',

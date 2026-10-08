@@ -62,3 +62,16 @@ Schedule::command('erp:business:meeting-reminders')->everyFifteenMinutes();
 // the day's expenses are generated rather than after them.
 Schedule::command('erp:cash:bank-charges')->dailyAt('06:10');
 Schedule::command('erp:cash:recurring-expenses')->dailyAt('06:20');
+
+/*
+ | Depreciation (§12-14). Wearing out is the only expense that arrives without an
+ | invoice, once a month, for years — which makes it the first thing that quietly
+ | stops happening when it depends on somebody remembering.
+ |
+ | On the first morning of the month, so the month that just ended is charged
+ | while it is still news, and dated the last day of that month rather than the
+ | day the command ran. The accounts it posts to (5270 and 1590) are seeded; the
+ | command says so plainly if they are missing rather than posting somewhere
+ | approximate.
+ */
+Schedule::command('erp:business:asset-depreciation')->monthlyOn(1, '06:40');

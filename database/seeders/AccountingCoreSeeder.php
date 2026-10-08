@@ -41,6 +41,18 @@ class AccountingCoreSeeder extends Seeder
         ['1140', 'Inventory', 'asset', 'ASSET', ['parent' => '1100', 'is_system' => true]],
         ['1500', 'Fixed Assets', 'asset', 'ASSET', ['parent' => '1000', 'is_group' => true, 'is_system' => true]],
 
+        // §12-14: the fixed-asset leaves the register books against. The register
+        // itself does not post the purchase — the books do — but depreciation has
+        // to land somewhere exact: each category has its own cost account so the
+        // balance sheet can answer "how much of this are vehicles?" without a
+        // spreadsheet, and 1590 is the contra-asset the monthly charge credits.
+        ['1510', 'Vehicles', 'asset', 'ASSET', ['parent' => '1500', 'is_system' => true]],
+        ['1520', 'Equipment & Machinery', 'asset', 'ASSET', ['parent' => '1500', 'is_system' => true]],
+        ['1530', 'Furniture & Fittings', 'asset', 'ASSET', ['parent' => '1500', 'is_system' => true]],
+        ['1540', 'Computers & IT', 'asset', 'ASSET', ['parent' => '1500', 'is_system' => true]],
+        ['1580', 'Other Fixed Assets', 'asset', 'ASSET', ['parent' => '1500', 'is_system' => true]],
+        ['1590', 'Accumulated Depreciation', 'asset', 'ASSET', ['parent' => '1500', 'is_system' => true]],
+
         // Liabilities
         ['2000', 'Liabilities', 'liability', 'LIABILITY', ['is_group' => true, 'is_system' => true]],
         ['2100', 'Current Liabilities', 'liability', 'LIABILITY', ['parent' => '2000', 'is_group' => true, 'is_system' => true]],
@@ -80,6 +92,11 @@ class AccountingCoreSeeder extends Seeder
         // charges a year late; the bank charge desk defaults to exactly this leaf
         // and a rule may point somewhere else if the accountant wants that.
         ['5280', 'Bank Charges', 'expense', 'EXPENSE', ['parent' => '5200', 'is_system' => true]],
+        // §12-14: wearing out is an expense that arrives without an invoice, once
+        // a month, for every capitalised asset. It gets its own account for the
+        // same reason bank charges do: a company that never looks at it is the
+        // company that finds out at year end.
+        ['5270', 'Depreciation Expense', 'expense', 'EXPENSE', ['parent' => '5200', 'is_system' => true]],
         ['5300', 'Bad Debt Expense', 'expense', 'EXPENSE', ['parent' => '5000', 'is_system' => true]],
     ];
 
