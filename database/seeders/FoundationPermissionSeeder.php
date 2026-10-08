@@ -215,6 +215,18 @@ class FoundationPermissionSeeder extends Seeder
             // because automation must not be able to record what its operator
             // could not type.
             ['expenses', 'recurring', 'manage', 'expenses.recurring', 'Schedule the expenses that come round again and generate what is due'],
+            // §08-21: the float in the drawer. Four keys rather than one,
+            // because the people are different people. `pettycash.funds` declares
+            // the float itself, which is a chart-of-accounts act rather than a
+            // spending one; `pettycash.spend` is the custodian paying vouchers and
+            // reading the register; `pettycash.replenish` puts money back into the
+            // tin; `pettycash.approve` is the signature a voucher at or above the
+            // limit waits for. The service refuses a request decided by the person
+            // who asked, so holding both keys is not a way round it.
+            ['pettycash', 'funds', 'manage', 'pettycash.funds', 'Declare a float, name its custodian and close it'],
+            ['pettycash', 'vouchers', 'create', 'pettycash.spend', 'Pay a voucher out of the float and read its register'],
+            ['pettycash', 'requests', 'decide', 'pettycash.approve', 'Decide the vouchers a custodian had to ask for'],
+            ['pettycash', 'replenishment', 'create', 'pettycash.replenish', 'Put money back into a float'],
             ['accounting', 'opening', 'create', 'accounting.opening.create', 'Post opening balances'],
             ['accounting', 'receipts', 'view', 'accounting.receipts.view', 'View receipts'],
             ['accounting', 'receipts', 'create', 'accounting.receipts.create', 'Record receipts'],

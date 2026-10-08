@@ -112,6 +112,13 @@ class SystemRoleSeeder extends Seeder
                 // approval key still cannot approve their own entry — and the
                 // category mapping stays with whoever configures the books.
                 'expenses.view', 'expenses.create', 'expenses.approve', 'expenses.recurring',
+                // §08-21: the float is a chart-of-accounts act to declare, a
+                // custodian's to spend and a manager's to sign for. The manager
+                // carries all four because a small company's manager is both the
+                // person who opens the tin and the second pair of eyes on what
+                // came out of it — and the service still refuses them their own
+                // request.
+                'pettycash.funds', 'pettycash.spend', 'pettycash.approve', 'pettycash.replenish',
                 // §04-28: stock leaving the building on a transfer is the same
                 // kind of decision as stock being written off, so it is the same
                 // desk that signs it off — and never the person who raised it.
@@ -164,6 +171,11 @@ class SystemRoleSeeder extends Seeder
                 // write-off approval stay with a manager (§04-48).
                 'inventory.damage.create', 'inventory.loss.create',
                 'inventory.writeoffs.create',
+                // §08-21: the storekeeper keeps the tin — pays out of it and
+                // puts money back into it. Declaring the float (which creates a
+                // ledger account) and approving what the custodian asked for are
+                // deliberately not here: they are the manager's two acts.
+                'pettycash.spend', 'pettycash.replenish',
                 // §04-31: the storekeeper counts the shelves; posting the
                 // difference into stock is the manager's signature.
                 'inventory.counts.view', 'inventory.counts.create',

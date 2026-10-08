@@ -564,6 +564,19 @@ return [
                 'label' => 'Cash & Bank',
                 'description' => 'The money desk: how much may be spent before a signature is needed.',
                 'fields' => [
+                    /* §08-21: the float's own limit. It is deliberately a
+                       separate number from the expense limit above, because a
+                       drawer of small money is judged by a different scale: what
+                       needs a signature out of petty cash is not what needs one
+                       on the expense desk. Zero means the custodian may pay
+                       vouchers directly, which is how a small float works. */
+                    'petty_cash_approval_above' => [
+                        'label' => 'Petty cash above this needs approval',
+                        'type' => 'number',
+                        'default' => 0,
+                        'min' => 0,
+                        'help' => 'A voucher at or above this amount is asked for rather than paid: the request waits, nothing is posted, and somebody other than the person who asked approves it. Below it the custodian pays and records the voucher in one step. Zero means every voucher is the custodian\'s to pay.',
+                    ],
                     'expense_approval_above' => [
                         'label' => 'Expenses need approval at or above',
                         'type' => 'number',

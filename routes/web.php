@@ -10,6 +10,7 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BulkPriceUpdateController;
 use App\Http\Controllers\CashBankController;
 use App\Http\Controllers\ChequeController;
+use App\Http\Controllers\PettyCashController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\CodController;
 use App\Http\Controllers\CustomerController;
@@ -1025,6 +1026,51 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::put('/app/cash-bank/expense-categories/{category}', [ExpenseController::class, 'updateCategory'])
         ->middleware('permission:expenses.categories')
         ->name('cash-bank.expense-categories.update');
+
+    /*
+     * §08-21 — the float in the drawer. Four jobs, four keys: reading a float and
+     * paying a voucher out of it is the custodian's (`pettycash.spend`), putting
+     * money back in is its own act (`pettycash.replenish`) because it changes the
+     * ledger's cash position, deciding what a custodian had to ask for is a
+     * second pair of eyes (`pettycash.approve`), and declaring the float itself
+     * creates a chart-of-accounts leaf, so it stays with `pettycash.funds`.
+     *
+     * Nobody can approve their own request — PettyCashService refuses it — so
+     * holding the approval key is not a way round the maker-checker rule.
+     */
+    Route::get('/app/cash-bank/petty-cash', [PettyCashController::class, 'index'])
+        ->middleware('permission:pettycash.funds')
+        ->name('cash-bank.petty-cash');
+    Route::post('/app/cash-bank/petty-cash', [PettyCashController::class, 'storeFund'])
+        ->middleware('permission:pettycash.funds')
+        ->name('cash-bank.petty-cash.store');
+    Route::put('/app/cash-bank/petty-cash/{fund}', [PettyCashController::class, 'updateFund'])
+        ->middleware('permission:pettycash.funds')
+        ->name('cash-bank.petty-cash.update');
+    Route::post('/app/cash-bank/petty-cash/{fund}/close', [PettyCashController::class, 'closeFund'])
+        ->middleware('permission:pettycash.funds')
+        ->name('cash-bank.petty-cash.close');
+    Route::get('/app/cash-bank/petty-cash/requests', [PettyCashController::class, 'requests'])
+        ->middleware('permission:pettycash.spend')
+        ->name('cash-bank.petty-cash.requests');
+    Route::post('/app/cash-bank/petty-cash/requests', [PettyCashController::class, 'storeRequest'])
+        ->middleware('permission:pettycash.spend')
+        ->name('cash-bank.petty-cash.requests.store');
+    Route::post('/app/cash-bank/petty-cash/requests/{pettyRequest}/decide', [PettyCashController::class, 'decideRequest'])
+        ->middleware('permission:pettycash.approve')
+        ->name('cash-bank.petty-cash.requests.decide');
+    Route::get('/app/cash-bank/petty-cash/expenses', [PettyCashController::class, 'expenses'])
+        ->middleware('permission:pettycash.spend')
+        ->name('cash-bank.petty-cash.expenses');
+    Route::post('/app/cash-bank/petty-cash/expenses', [PettyCashController::class, 'storeVoucher'])
+        ->middleware('permission:pettycash.spend')
+        ->name('cash-bank.petty-cash.expenses.store');
+    Route::get('/app/cash-bank/petty-cash/replenishments', [PettyCashController::class, 'replenishments'])
+        ->middleware('permission:pettycash.replenish')
+        ->name('cash-bank.petty-cash.replenishments');
+    Route::post('/app/cash-bank/petty-cash/replenishments', [PettyCashController::class, 'storeReplenishment'])
+        ->middleware('permission:pettycash.replenish')
+        ->name('cash-bank.petty-cash.replenishments.store');
 
     Route::get('/app/accounting/opening-trial-balance', [FinancialReportController::class, 'openingTrialBalance'])
         ->middleware('permission:accounting.reports.view')

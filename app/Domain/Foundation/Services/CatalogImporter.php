@@ -297,6 +297,13 @@ class CatalogImporter
         // §08-19: the recurring desk is its own screen because it is not a list of
         // expenses at all — it is the schedules that will produce them.
         'cash & bank > expenses > recurring expenses' => ['/app/cash-bank/expenses/recurring', 'expenses.recurring'],
+        // §08-21: the float. Four screens for four jobs — the overview reads the
+        // tins, requests is what has been asked for, expenses is what has been
+        // paid, and replenishment is what has been put back.
+        'cash & bank > petty cash > petty cash overview' => ['/app/cash-bank/petty-cash', 'pettycash.funds'],
+        'cash & bank > petty cash > petty cash requests' => ['/app/cash-bank/petty-cash/requests', 'pettycash.spend'],
+        'cash & bank > petty cash > petty cash expenses' => ['/app/cash-bank/petty-cash/expenses', 'pettycash.spend'],
+        'cash & bank > petty cash > petty cash replenishment' => ['/app/cash-bank/petty-cash/replenishments', 'pettycash.replenish'],
         'accounting > chart of accounts > coa tree' => ['/app/accounting/coa', 'accounting.coa.view'],
         'accounting > chart of accounts > account groups' => ['/app/accounting/account-groups', 'accounting.coa.view'],
         'accounting > chart of accounts > add account' => ['/app/accounting/accounts/create', 'accounting.coa.manage'],
