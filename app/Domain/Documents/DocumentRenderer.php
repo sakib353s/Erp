@@ -131,21 +131,50 @@ class DocumentRenderer
         );
     }
 
-    /** Rule 16: every print is attributable — user, IP, type, format, copies. */
-    public function recordPrint(Model $printable, string $typeCode, Request $request, ?string $correlationId = null): PrintHistory
-    {
+    /**
+     * Rule 16: every print is attributable — user, IP, type, format, copies.
+     *
+     * §16-25 adds what the sheet itself carried: the filed copy it was rendered
+     * from, the title that appeared on it, the paper it was printed on, the copy
+     * locale, any watermark and the checksum of the bytes. A history row that
+     * cannot be matched against the paper in somebody's hand is a log of clicks,
+     * not a record of documents.
+     *
+     * @param  ?string  $printableType  set when the subject is not an entity (a report)
+     */
+    public function recordPrint(
+        Model $printable,
+        string $typeCode,
+        Request $request,
+        ?string $correlationId = null,
+        ?Document $document = null,
+        ?string $title = null,
+        string $pageFormat = 'a4',
+        string $locale = 'en',
+        ?string $watermark = null,
+        ?string $checksum = null,
+        int $copies = 1,
+        ?string $printableType = null,
+        ?int $printableId = null,
+    ): PrintHistory {
         $type = DocumentType::query()->where('code', $typeCode)->first();
 
         return PrintHistory::query()->create([
             'company_id' => $printable->getAttribute('company_id'),
             'document_type_id' => $type?->id,
-            'printable_type' => $printable::class,
-            'printable_id' => $printable->getKey(),
+            'document_id' => $document?->id,
+            'printable_type' => $printableType ?? $printable::class,
+            'printable_id' => $printableId ?? $printable->getKey(),
             'format' => 'html',
+            'printed_title' => $title ?? $type?->printed_title,
+            'page_format' => $pageFormat,
+            'locale' => $locale,
+            'watermark' => $watermark,
+            'checksum' => $checksum ?? $document?->checksum,
             'user_id' => $request->user()?->id,
             'ip' => $request->ip(),
             'correlation_id' => $correlationId ?? (string) Str::uuid(),
-            'copies' => 1,
+            'copies' => $copies,
         ]);
     }
 

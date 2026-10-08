@@ -153,6 +153,10 @@ class FoundationPermissionSeeder extends Seeder
             ['business_management', 'documents', 'upload', 'documents.upload', 'Upload documents'],
             ['business_management', 'documents', 'download', 'documents.download', 'Download documents'],
             ['business_management', 'documents', 'manage', 'documents.manage', 'Manage (replace/delete) documents'],
+            // §16-25: who printed or downloaded a document, on what paper and with
+            // which checksum. Reading that is an accountability job, so it has its
+            // own key rather than riding on the ability to raise the document.
+            ['business_management', 'documents', 'history', 'documents.view_history', 'Read the print and download history of a document'],
 
             ['settings', 'notifications', 'view', 'notifications.view', 'View notifications'],
             ['settings', 'security', 'view', 'security.alerts.view', 'View security alerts'],

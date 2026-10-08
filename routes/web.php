@@ -76,6 +76,7 @@ use App\Http\Controllers\ProductImportController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProofOfDeliveryController;
+use App\Http\Controllers\DocumentRenderController;
 use App\Http\Controllers\DocumentShareController;
 use App\Http\Controllers\InvoiceVerificationController;
 use App\Http\Controllers\PublicDocumentController;
@@ -2638,6 +2639,29 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::delete('/app/documents/{document}', [DocumentController::class, 'destroy'])
         ->middleware('permission:documents.manage')
         ->name('documents.destroy');
+
+    /* §16-23/§16-24/§16-25: the reusable document renderer. Literal segments come
+     | first so `/app/documents/print` can never be read as a document id, and the
+     | company-wide log is a literal of its own for the same reason. The door that
+     | renders a document carries no permission of its own: the key depends on the
+     | document's type and is asserted inside the controller, where the type is
+     | known — a per-type key in the router would have to be one key for twelve
+     | documents, which is exactly the mistake this slice exists to remove. */
+    Route::get('/app/documents/print', [DocumentRenderController::class, 'index'])
+        ->middleware('permission:documents.view')
+        ->name('documents.print.index');
+    Route::get('/app/documents/print-log', [DocumentRenderController::class, 'log'])
+        ->middleware('permission:documents.view_history')
+        ->name('documents.print.log');
+    Route::get('/app/documents/print/{type}/{id}', [DocumentRenderController::class, 'show'])
+        ->where('type', '[a-z_]+')
+        ->whereNumber('id')
+        ->name('documents.print.show');
+    Route::get('/app/documents/print/{type}/{id}/history', [DocumentRenderController::class, 'history'])
+        ->where('type', '[a-z_]+')
+        ->whereNumber('id')
+        ->middleware('permission:documents.view_history')
+        ->name('documents.print.history');
 
     /* §16-21: the file's own page, and the three doors that publish, replace or
      | withdraw its public link. Literal segments first, and the id is numeric so

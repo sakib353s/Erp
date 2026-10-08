@@ -12,6 +12,24 @@
             </p>
         </div>
         <div class="d-flex gap-2">
+            {{-- §16-23/§16-25: the same invoice through the reusable renderer, and
+                 the record of every copy that has come off a printer since. --}}
+            @if ($perm('sales.invoices.print'))
+                <a class="btn btn-outline-dark" target="_blank" rel="noopener"
+                   href="{{ route('documents.print.show', ['type' => 'invoice', 'id' => $invoice->id]) }}">
+                    <i class="bi bi-printer" aria-hidden="true"></i> Print
+                </a>
+                <a class="btn btn-outline-dark"
+                   href="{{ route('documents.print.show', ['type' => 'invoice', 'id' => $invoice->id, 'action' => 'download']) }}">
+                    <i class="bi bi-download" aria-hidden="true"></i> Save copy
+                </a>
+            @endif
+            @if ($perm('documents.view_history'))
+                <a class="btn btn-outline-dark"
+                   href="{{ route('documents.print.history', ['type' => 'invoice', 'id' => $invoice->id]) }}">
+                    <i class="bi bi-clock-history" aria-hidden="true"></i> Print history
+                </a>
+            @endif
             @if ($perm('sales.invoices.statutory_print') && $invoice->tax_applicable)
                 <a class="btn btn-outline-dark" target="_blank" rel="noopener"
                    href="{{ route('sales.invoices.mushak-91', $invoice) }}">

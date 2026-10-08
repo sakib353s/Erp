@@ -8,6 +8,13 @@
             <h1 class="erp-h1">Documents</h1>
             <p class="erp-page-sub">Safe storage: extension allow-list, real MIME sniffing, per-type size limits, checksummed and audited on every access.</p>
         </div>
+        @if ($perm('documents.view'))
+            <div class="d-flex gap-2">
+                <a class="btn btn-outline-dark" href="{{ route('documents.print.index') }}">
+                    <i class="bi bi-printer" aria-hidden="true"></i> Printing
+                </a>
+            </div>
+        @endif
     </div>
 
     @if ($perm('documents.upload'))

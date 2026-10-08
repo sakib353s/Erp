@@ -86,6 +86,15 @@ final class DocumentTypeRegistry
         ['code' => 'payroll', 'type_group' => 'hr', 'name' => 'Payroll Sheet', 'printed_title' => 'PAYROLL', 'tax_applicable' => true],
         ['code' => 'payslip', 'type_group' => 'hr', 'name' => 'Payslip', 'printed_title' => 'PAYSLIP', 'tax_applicable' => true],
 
+        // ---- §16-23: the three papers the reusable renderer produces that are
+        // reads of what the ledgers and the audit chain already recorded. None of
+        // them is numbered: a person quotes the account or the period, never
+        // "statement 14", and a number that nothing refers to is a number that
+        // will be wrong on the day it is needed.
+        ['code' => 'account_ledger', 'type_group' => 'reporting', 'name' => 'Account Ledger', 'printed_title' => 'ACCOUNT LEDGER', 'requires_numbering' => false],
+        ['code' => 'party_statement', 'type_group' => 'reporting', 'name' => 'Party Statement', 'printed_title' => 'STATEMENT OF ACCOUNT', 'requires_numbering' => false],
+        ['code' => 'audit_report', 'type_group' => 'reporting', 'name' => 'Audit Trail Report', 'printed_title' => 'AUDIT TRAIL REPORT', 'requires_numbering' => false],
+
         // ---- Statutory (SEPARATE types — never merged with 'invoice') (Rule 9)
         ['code' => 'mushak_9_1', 'type_group' => 'statutory', 'name' => 'Mushak 9.1 (VAT Challan)', 'printed_title' => 'MUSHAK 9.1', 'is_statutory' => true, 'tax_applicable' => true],
         ['code' => 'mushak_11', 'type_group' => 'statutory', 'name' => 'Mushak 11 (Monthly VAT Return)', 'printed_title' => 'MUSHAK 11', 'is_statutory' => true, 'tax_applicable' => true],

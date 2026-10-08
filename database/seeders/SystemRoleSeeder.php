@@ -54,7 +54,7 @@ class SystemRoleSeeder extends Seeder
         $bundles = [
             ['slug' => 'manager', 'name' => 'Manager', 'description' => 'Department manager: approvals, HR oversight, masters view, reports.', 'keys' => [
                 'dashboard.view', 'approvals.view', 'approvals.decide', 'approvals.comment',
-                'settings.view', 'employees.view', 'audit.view', 'documents.view',
+                'settings.view', 'employees.view', 'audit.view', 'documents.view', 'documents.view_history',
                 'masters.view', 'branches.view', 'roles.view', 'users.view', 'search.view',
                 // HRM (§10): a manager runs their team's attendance and approves leave
                 'attendance.view', 'attendance.manage', 'attendance.report',

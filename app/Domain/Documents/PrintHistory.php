@@ -15,11 +15,23 @@ class PrintHistory extends Model
     protected $table = 'print_history';
 
     protected $fillable = [
-        'company_id', 'document_type_id', 'printable_type', 'printable_id',
-        'format', 'user_id', 'ip', 'correlation_id', 'copies',
+        'company_id', 'document_type_id', 'document_id', 'printable_type', 'printable_id',
+        'format', 'printed_title', 'page_format', 'locale', 'watermark', 'checksum',
+        'user_id', 'ip', 'correlation_id', 'copies',
     ];
 
     protected $casts = ['copies' => 'integer'];
+
+    public function document(): BelongsTo
+    {
+        return $this->belongsTo(Document::class);
+    }
+
+    /** §16-25: the filed copy this print came from, for the reader. */
+    public function filedCopy(): ?Document
+    {
+        return $this->document;
+    }
 
     public function documentType(): BelongsTo
     {
