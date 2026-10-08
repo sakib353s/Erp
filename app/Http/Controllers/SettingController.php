@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Domain\Foundation\Branch;
+use App\Domain\Foundation\Concerns\BranchScope;
 use App\Domain\Foundation\User;
 use App\Domain\Foundation\Services\TenantContext;
 use App\Domain\Settings\Services\InvariantGuard;
@@ -193,9 +194,9 @@ class SettingController extends Controller
     }
 
     /** §15-03: what one branch decides for itself, against what the company says. */
-    public function branch(Request $request, Branch $branch): View
+    public function branch(Request $request, Branch|string $branch): View
     {
-        $this->assertBranchInScope($branch);
+        $branch = $this->scopedBranch($branch);
 
         $groups = [];
 
@@ -232,9 +233,9 @@ class SettingController extends Controller
     }
 
     /** Write this branch's own values. Policy groups are refused by the guard. */
-    public function updateBranch(Request $request, Branch $branch): RedirectResponse
+    public function updateBranch(Request $request, Branch|string $branch): RedirectResponse
     {
-        $this->assertBranchInScope($branch);
+        $branch = $this->scopedBranch($branch);
 
         $submitted = (array) $request->input('settings', []);
         $writable = [];
@@ -311,10 +312,10 @@ class SettingController extends Controller
     }
 
     /** Remove an override, so the branch follows the company again. */
-    public function forgetBranchSetting(Request $request, Branch $branch, string $group, string $key): RedirectResponse
+    public function forgetBranchSetting(Request $request, Branch|string $branch, string $group, string $key): RedirectResponse
     {
         $this->definition($group);
-        $this->assertBranchInScope($branch);
+        $branch = $this->scopedBranch($branch);
 
         $removed = $this->settings->forget($group, $key, $branch->id, $request->user());
 
@@ -342,6 +343,32 @@ class SettingController extends Controller
      * desk, `settings.<group>` opens that group. A reader who holds the floor but
      * not the group is told which key they need rather than shown a 404.
      */
+    /**
+     * Resolve the branch the URL names, then check the actor's scope.
+     *
+     * Resolving it here rather than through route-model binding is the whole
+     * point: the branch scope is a *query* scope, so an implicit binding on a
+     * branch the actor may not use answers 404 — "no such branch" — when the
+     * truth is "not yours", which leaves the person with nothing to ask for.
+     * The row is looked up inside the company (a branch of another company is
+     * genuinely not found), and only then is the scope refused as a 403.
+     */
+    protected function scopedBranch(Branch|string $branch): Branch
+    {
+        if (! $branch instanceof Branch) {
+            $branch = Branch::query()
+                ->withoutGlobalScope(BranchScope::class)
+                ->where('company_id', $this->context->companyId())
+                ->find((int) $branch);
+        }
+
+        abort_if($branch === null, 404, 'No such branch in this company.');
+
+        $this->assertBranchInScope($branch);
+
+        return $branch;
+    }
+
     /**
      * A branch outside the actor's scope is a refusal the person can act on, not
      * a server error: the tenant context throws at the service edge, so the

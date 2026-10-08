@@ -13,7 +13,6 @@ use App\Domain\Foundation\Permission;
 use App\Domain\Foundation\Role;
 use App\Domain\Foundation\Services\TenantContext;
 use App\Domain\Foundation\User;
-use App\Domain\Settings\Services\SettingService;
 use Database\Seeders\AccountingCoreSeeder;
 use Database\Seeders\FoundationPermissionSeeder;
 use Database\Seeders\ReferenceDataSeeder;
@@ -37,7 +36,6 @@ class CompanyService
 {
     public function __construct(
         protected AuditRecorder $audit,
-        protected SettingService $settings,
         protected TenantContext $context,
     ) {}
 
@@ -114,8 +112,15 @@ class CompanyService
 
             $this->materializeDefaults($company, $actor);
 
+            /*
+             * Its own action, not `config.update`: the audit trail answers "who
+             * changed which setting" with that action, and an instance being
+             * created is not a settings edit. Mixing the two made the trail's
+             * first two rows look like somebody had touched settings before
+             * anybody had logged in.
+             */
             $this->audit->record([
-                'action' => 'config.update',
+                'action' => 'instance.initialised',
                 'entity_type' => 'company',
                 'entity_id' => $company->id,
                 'branch_id' => $branch->id,
@@ -152,21 +157,24 @@ class CompanyService
     }
 
     /**
-     * Materialise structural defaults after first boot: security/general/
-     * localization settings rows (so the onboarding checklist reflects
-     * reality), default numbering rules and the Administrator role.
+     * Materialise structural defaults after first boot: the document types and
+     * their numbering rules, the Administrator role, and the feature rows.
      * NO business data — only structural scaffolding.
+     *
+     * Settings are deliberately NOT written here. A setting's default lives in
+     * `config/erp.php` and is read through `SettingService::get()`, which falls
+     * back to it — so an installation that has never opened the settings desk
+     * already behaves as the defaults describe. Writing those defaults as rows
+     * would instead say that somebody chose them: the desk counts "how many of
+     * its values are actually set" and can no longer answer it, a branch
+     * override would be missing its company value to fall back to, the audit
+     * trail would open with thirty `config.update` entries recording that
+     * nothing changed, and the onboarding checklist's "Security settings
+     * reviewed" step would tick itself on a brand-new install — which is the
+     * one thing a checklist that claims to show *real* completion must not do.
      */
     protected function materializeDefaults(Company $company, User $actor): void
     {
-        foreach (['general', 'localization', 'security', 'numbering'] as $group) {
-            $fields = config("erp.settings.groups.{$group}.fields", []);
-
-            foreach ($fields as $key => $meta) {
-                $this->settings->set($group, $key, $meta['default'] ?? null, null, $actor);
-            }
-        }
-
         // Structural document types (idempotent — normally already seeded).
         $registry = DocumentTypeRegistry::map();
 

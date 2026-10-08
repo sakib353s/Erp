@@ -133,7 +133,7 @@ class SettingService
             return false;
         }
 
-        return $this->row($group, $key, $branchId) !== null;
+        return $this->ownRow($group, $key, $branchId) !== null;
     }
 
     public function hasExplicitGroup(string $group, ?int $branchId = null): bool
@@ -306,7 +306,10 @@ class SettingService
 
         $this->context->assertBranchAccess($branchId);
 
-        $row = $this->row($group, $key, $branchId);
+        // The branch's own row, not the value in force: a branch that never
+        // overrode anything must not have its delete take the company's row
+        // with it.
+        $row = $this->ownRow($group, $key, $branchId);
 
         if ($row === null) {
             return false;
@@ -372,6 +375,19 @@ class SettingService
     /* Internals                                                           */
     /* ------------------------------------------------------------------ */
 
+    /**
+     * The row that answers for a scope: the branch's own value when a branch is
+     * asked for (falling back to the company's), and *only* the company's when
+     * no branch is named.
+     *
+     * `null` used to mean "whatever branch this request is on", which made the
+     * company value unreadable the moment anybody worked in a branch: the
+     * company's own row could not be read to compare against, a branch form
+     * showed the branch's number in the "company value" column, and forgetting
+     * an override — which reads before it deletes — would delete the company's
+     * number instead. `effective()` is the reader that resolves branch-first;
+     * this one answers the scope it was asked about.
+     */
     protected function row(string $group, string $key, ?int $branchId): ?Setting
     {
         $companyId = $this->context->companyId();
@@ -380,7 +396,7 @@ class SettingService
             return null;
         }
 
-        $branch = $branchId ?? $this->context->branchId() ?? Setting::COMPANY_SCOPE;
+        $branch = $branchId ?? Setting::COMPANY_SCOPE;
 
         return Setting::query()
             ->where('company_id', $companyId)
@@ -388,6 +404,23 @@ class SettingService
             ->where('setting_key', $key)
             ->whereIn('branch_id', array_values(array_unique([$branch, Setting::COMPANY_SCOPE])))
             ->orderByRaw('branch_id = 0 ASC') // branch-specific row wins
+            ->first();
+    }
+
+    /** This branch's own row for the key — no fallback to the company's. */
+    protected function ownRow(string $group, string $key, int $branchId): ?Setting
+    {
+        $companyId = $this->context->companyId();
+
+        if ($companyId === null || $branchId === Setting::COMPANY_SCOPE) {
+            return null;
+        }
+
+        return Setting::query()
+            ->where('company_id', $companyId)
+            ->where('branch_id', $branchId)
+            ->where('setting_group', $group)
+            ->where('setting_key', $key)
             ->first();
     }
 

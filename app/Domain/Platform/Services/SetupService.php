@@ -94,8 +94,11 @@ class SetupService
             // Single-use: consumed only after the transaction commits.
             DB::afterCommit(fn () => $this->token->consume());
 
+            // Its own action, like the company record's: completing first-boot
+            // setup is not a settings edit, and the audit trail answers "who
+            // changed which setting" with that action.
             $this->audit->record([
-                'action' => 'config.update',
+                'action' => 'instance.setup_completed',
                 'entity_type' => 'instance',
                 'entity_id' => null,
                 'actor_id' => $admin->id,
