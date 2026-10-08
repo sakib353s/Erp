@@ -135,6 +135,14 @@ export const SECTIONS = [
                 ],
             },
             {
+                label: 'Petty Cash', icon: 'bi-cash-coin', items: [
+                    { label: 'Petty Cash Overview', url: './petty-cash.html', icon: 'bi-cash-coin' },
+                    { label: 'Petty Cash Requests', url: './petty-cash-requests.html', icon: 'bi-question-circle' },
+                    { label: 'Petty Cash Expenses', url: './petty-cash-expenses.html', icon: 'bi-receipt' },
+                    { label: 'Petty Cash Replenishment', url: './petty-cash-replenishment.html', icon: 'bi-arrow-down-up' },
+                ],
+            },
+            {
                 label: 'Mobile Banking', icon: 'bi-phone', items: [
                     { label: 'bKash Account', url: './cash-bank.html', icon: 'bi-phone' },
                     { label: 'Nagad Account', url: './cash-bank.html', icon: 'bi-phone' },
@@ -231,6 +239,10 @@ export const PALETTE = [
     { label: 'Expense Categories', url: './expenses.html', icon: 'bi-diagram-3', section: 'Cash & bank', group: 'Expenses' },
     { label: 'Pending Approval', url: './expenses.html', icon: 'bi-hourglass-split', section: 'Cash & bank', group: 'Expenses' },
     { label: 'Recurring Expenses', url: './expense-recurring.html', icon: 'bi-arrow-repeat', section: 'Cash & bank', group: 'Expenses' },
+    { label: 'Petty Cash Overview', url: './petty-cash.html', icon: 'bi-cash-coin', section: 'Cash & bank', group: 'Petty Cash' },
+    { label: 'Petty Cash Requests', url: './petty-cash-requests.html', icon: 'bi-question-circle', section: 'Cash & bank', group: 'Petty Cash' },
+    { label: 'Petty Cash Expenses', url: './petty-cash-expenses.html', icon: 'bi-receipt', section: 'Cash & bank', group: 'Petty Cash' },
+    { label: 'Petty Cash Replenishment', url: './petty-cash-replenishment.html', icon: 'bi-arrow-down-up', section: 'Cash & bank', group: 'Petty Cash' },
     { label: 'Print labels', url: './labels.html', icon: 'bi-printer', section: 'Inventory & warehouse', group: 'Barcode & QR' },
     { label: 'Generate barcode', url: './labels.html', icon: 'bi-upc-scan', section: 'Inventory & warehouse', group: 'Barcode & QR' },
     { label: 'Generate QR code', url: './labels.html', icon: 'bi-qr-code', section: 'Inventory & warehouse', group: 'Barcode & QR' },
@@ -541,6 +553,7 @@ export function previewBar(current) {
         ['cheques.html', 'Cheques'],
         ['expenses.html', 'Expenses'],
         ['expense-recurring.html', 'Recurring'],
+        ['petty-cash.html', 'Petty cash'],
         ['login.html', 'Sign in'],
     ];
 

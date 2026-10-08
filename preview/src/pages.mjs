@@ -2706,3 +2706,864 @@ ${footer()}
 </div>
 <script>window.erpNavIndex = [];</script>`;
 }
+
+/* -------------------------------------------------------------- 16. petty cash */
+export function pettyCash() {
+    const funds = [
+        { code: 'PC-HEAD', name: 'Head office tin', custodian: 'Rakib Hasan', where: '1115-PC-HEAD — Head office tin (petty cash)', branch: 'Head office', holds: '6,250.00', level: '10,000.00', back: '3,750.00', state: 'active', note: '1 request waiting' },
+        { code: 'PC-DEPOT', name: 'Depot tin', custodian: 'Sumaiya Akter', where: '1115-PC-DEPOT — Depot tin (petty cash)', branch: 'Uttara depot', holds: '4,200.00', level: '8,000.00', back: '3,800.00', state: 'active', note: '' },
+        { code: 'PC-CNTR', name: 'Counter till', custodian: 'Jamal Uddin', where: '1115-PC-CNTR — Counter till (petty cash)', branch: 'Dhanmondi outlet', holds: '8,000.00', level: '7,000.00', back: '0.00', state: 'active', note: 'over its level' },
+        { code: 'PC-OLD', name: 'Old warehouse tin', custodian: 'Nazmul Islam', where: '1115-PC-OLD — Old warehouse tin (petty cash)', branch: 'Tejgaon warehouse', holds: '0.00', level: '5,000.00', back: '5,000.00', state: 'closed', note: 'closed 2026-09-30' },
+    ];
+
+    const vouchers = [
+        { date: '2026-10-08', no: 'EX-2026-00418', fund: 'Head office tin', payee: 'Rickshaw', what: 'Two rides to the courier office', spent: 'Local travel — 5220 — Travelling Expense', amount: '250.00', by: 'Rakib Hasan', note: 'below the limit of 1,000.00' },
+        { date: '2026-10-07', no: 'EX-2026-00417', fund: 'Counter till', payee: 'Shahin Store', what: 'Packing tape and markers', spent: 'Packaging materials — 5255 — Packing Materials', amount: '840.00', by: 'Jamal Uddin', note: 'below the limit of 1,000.00' },
+        { date: '2026-10-06', no: 'EX-2026-00412', fund: 'Depot tin', payee: 'Paper shop', what: 'Reams of paper for the counter', spent: 'Office supplies — 5240 — Office Supplies', amount: '2,000.00', by: 'Sumaiya Akter', note: 'against request #31, approved by Md. Faruk' },
+    ];
+
+    return `
+${previewBar('petty-cash.html')}
+<div class="erp-app-body">
+    ${sidebar('cash_bank')}
+    <main class="erp-main">
+        ${topbar('Petty cash')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-cash-coin" aria-hidden="true"></i> Cash &amp; bank · Petty cash</p>
+                    <h1 class="erp-page-title">The float in the drawer</h1>
+                    <p class="erp-page-sub">A float is real money in a real place, held by a named person. It is its own account in the chart of accounts, so the balance below is the ledger's own figure rather than a number this desk keeps. Above the company's limit a voucher is asked for before it is paid, and whoever asked cannot be the person who approves it.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./petty-cash-expenses.html"><i class="bi bi-receipt" aria-hidden="true"></i> Vouchers</a>
+                    <a class="btn btn-outline-secondary" href="./petty-cash-requests.html"><i class="bi bi-question-circle" aria-hidden="true"></i> Requests <span class="erp-chip erp-chip-warn ms-1">1 waiting</span></a>
+                    <a class="btn btn-primary" href="./petty-cash-replenishment.html"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Replenish</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-cash-stack" aria-hidden="true"></i> In the tins</p>
+                    <p class="erp-kpi-value">৳ 18,450.00</p>
+                    <p class="erp-kpi-foot">3 open float(s) of 4 declared</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-bullseye" aria-hidden="true"></i> Meant to be there</p>
+                    <p class="erp-kpi-value">৳ 25,000.00</p>
+                    <p class="erp-kpi-foot">The level the open floats are replenished back to</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Waiting to be put back</p>
+                    <p class="erp-kpi-value">৳ 6,550.00</p>
+                    <p class="erp-kpi-foot">What it would take to restore every float to its level</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Asked for, not yet paid</p>
+                    <p class="erp-kpi-value">৳ 2,000.00</p>
+                    <p class="erp-kpi-foot">1 request — nothing here has reached the ledger</p>
+                </div>
+            </div>
+
+            <div class="erp-note erp-note-info mb-3">
+                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                <div>At or above <strong>৳ 1,000.00</strong> a voucher is asked for rather than paid, and the answer has to come from somebody other than the person who asked. Below it the custodian pays and records it in one step.</div>
+            </div>
+
+            <div class="erp-table-shell" data-erp-table>
+                <header class="erp-table-head">
+                    <div>
+                        <h2 class="erp-table-title">The floats</h2>
+                        <p class="erp-table-count">4 float(s)</p>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack">
+                        <thead>
+                            <tr>
+                                <th>Float</th>
+                                <th>Custodian</th>
+                                <th>Where it is kept</th>
+                                <th class="erp-th-num">Holds</th>
+                                <th class="erp-th-num">Level</th>
+                                <th class="erp-th-num">To put back</th>
+                                <th>State</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${funds.map((f) => `
+                            <tr>
+                                <td>
+                                    <span class="erp-cell-strong">${f.code}</span>
+                                    <span class="d-block erp-td-muted">${f.name}</span>
+                                </td>
+                                <td>
+                                    ${f.custodian}
+                                    <span class="d-block erp-td-muted">answerable for the cash</span>
+                                </td>
+                                <td>
+                                    <a href="./cash-bank.html">${f.where}</a>
+                                    <span class="d-block erp-td-muted">${f.branch}</span>
+                                </td>
+                                <td class="erp-td-num">৳ ${f.holds}</td>
+                                <td class="erp-td-num">৳ ${f.level}</td>
+                                <td class="erp-td-num">
+                                    ৳ ${f.back}
+                                    ${f.state === 'active' && f.back !== '0.00' ? '<span class="d-block erp-td-muted"><a href="./petty-cash-replenishment.html">Put it back</a></span>' : ''}
+                                </td>
+                                <td>
+                                    ${statusChip(f.state, f.state === 'active' ? 'Open' : 'Closed')}
+                                    ${f.note ? `<span class="d-block erp-td-muted">${f.note}</span>` : ''}
+                                </td>
+                                <td class="erp-td-actions">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button">Vouchers</button>
+                                    <button class="btn btn-sm btn-outline-secondary" type="button">Re-describe</button>
+                                </td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="erp-table-shell mt-3" data-erp-table>
+                <header class="erp-table-head">
+                    <div>
+                        <h2 class="erp-table-title">Paid out lately</h2>
+                        <p class="erp-table-count">3 voucher(s)</p>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Voucher</th>
+                                <th>Float</th>
+                                <th>Payee</th>
+                                <th>Spent on</th>
+                                <th class="erp-th-num">Amount</th>
+                                <th>Recorded by</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${vouchers.map((v) => `
+                            <tr>
+                                <td>${v.date}</td>
+                                <td>
+                                    <span class="erp-cell-strong">${v.no}</span>
+                                    <span class="d-block erp-td-muted">posted to the ledger</span>
+                                </td>
+                                <td>${v.fund}</td>
+                                <td>
+                                    ${v.payee}
+                                    <span class="d-block erp-td-muted">${v.what}</span>
+                                </td>
+                                <td>
+                                    ${v.spent.split(' — ')[0]}
+                                    <span class="d-block erp-td-muted">${v.spent.split(' — ').slice(1).join(' — ')}</span>
+                                </td>
+                                <td class="erp-td-num">৳ ${v.amount}</td>
+                                <td>
+                                    ${v.by}
+                                    <span class="d-block erp-td-muted">${v.note}</span>
+                                </td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <footer class="erp-table-foot">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                        <span class="erp-td-muted">Every voucher is a payment out of the float's own account: Dr the category, Cr the tin. The float cannot pay more than it holds.</span>
+                        <a class="btn btn-outline-secondary btn-sm" href="./petty-cash-expenses.html">The voucher register</a>
+                    </div>
+                </footer>
+            </div>
+
+            <section class="erp-card mt-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Declare a float</h2>
+                        <p class="erp-card-sub">This creates the float's own account in the chart of accounts under Current Assets and names the person answerable for what is in it. Nothing is posted — declaring a tin is not spending money.</p>
+                    </div>
+                </header>
+                <form onsubmit="return false">
+                    <div class="erp-form-grid">
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pc-code">Code</label>
+                            <input class="form-control" type="text" id="pc-code" placeholder="PC-HEAD">
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pc-name">Name</label>
+                            <input class="form-control" type="text" id="pc-name" placeholder="Head office tin">
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pc-custodian">Custodian</label>
+                            <select class="form-select" id="pc-custodian">
+                                <option>Rakib Hasan</option>
+                                <option>Sumaiya Akter</option>
+                                <option>Jamal Uddin</option>
+                            </select>
+                            <small class="form-text">The person answerable for the cash in the tin.</small>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pc-branch">Kept at</label>
+                            <select class="form-select" id="pc-branch">
+                                <option>Head office</option>
+                                <option>Uttara depot</option>
+                                <option>Dhanmondi outlet</option>
+                            </select>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pc-level">Level it is meant to hold</label>
+                            <div class="erp-input-group">
+                                <span class="input-group-text">৳</span>
+                                <input class="form-control erp-num" type="number" step="0.01" id="pc-level" placeholder="10,000.00">
+                            </div>
+                            <small class="form-text">The amount the replenishment screen will offer to put back.</small>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pc-account">Ledger account code</label>
+                            <input class="form-control" type="text" id="pc-account" placeholder="Filled in for you">
+                            <small class="form-text">Leave blank to keep the code derived from the float's own code.</small>
+                        </div>
+                        <div class="erp-form-field erp-form-field-wide">
+                            <label class="form-label" for="pc-agenda">What it is for</label>
+                            <input class="form-control" type="text" id="pc-agenda" placeholder="Couriers, tea, rickshaws and the small hardware nobody raises a purchase order for">
+                        </div>
+                    </div>
+                    <label class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" checked>
+                        <span class="form-check-label">Open it now</span>
+                    </label>
+                    <div class="mt-2">
+                        <button class="btn btn-primary" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i> Declare the float</button>
+                    </div>
+                </form>
+            </section>
+
+            <div class="erp-filter-note mt-2">
+                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                <span>A voucher leaves through the same payment service every other payment uses, and a top-up is a transfer into the float — never a second record of the spending it already recorded. That is why the tin's balance on this screen and the balance in the books cannot drift apart.</span>
+            </div>
+
+            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
+                <p class="erp-field-label">More in this module</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="erp-chip erp-chip-outline" href="./petty-cash-expenses.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Expenses</a>
+                    <a class="erp-chip erp-chip-outline" href="./petty-cash-requests.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Requests</a>
+                    <a class="erp-chip erp-chip-outline" href="./petty-cash-replenishment.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Replenishment</a>
+                    <a class="erp-chip erp-chip-outline" href="./expenses.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>All Expenses</a>
+                </div>
+            </nav>
+        </main>
+${footer()}
+    </div>
+</div>
+<script>window.erpNavIndex = [];</script>`;
+}
+
+/* --------------------------------------------------- 17. petty cash requests */
+export function pettyCashRequests() {
+    const requests = [
+        { needed: '2026-10-08', fund: 'Head office tin', code: 'PC-HEAD', payee: 'Paper shop', what: 'Reams of paper for the counter', category: 'Office supplies', account: '5240 — Office Supplies', amount: '2,000.00', by: 'Rakib Hasan', asked: '2026-10-08', state: 'pending_approval', label: 'Waiting for approval', note: '' },
+        { needed: '2026-10-05', fund: 'Depot tin', code: 'PC-DEPOT', payee: 'Shahin Store', what: 'Packing tape, markers', category: 'Packaging materials', account: '5255 — Packing Materials', amount: '1,450.00', by: 'Sumaiya Akter', asked: '2026-10-05', state: 'approved', label: 'Approved and paid', note: 'paid out — EX-2026-00415' },
+        { needed: '2026-10-03', fund: 'Head office tin', code: 'PC-HEAD', payee: 'Furniture mart', what: 'A chair for the counter', category: 'Office supplies', account: '5240 — Office Supplies', amount: '9,800.00', by: 'Rakib Hasan', asked: '2026-10-03', state: 'rejected', label: 'Rejected', note: 'Raise a purchase order for that' },
+    ];
+
+    return `
+${previewBar('petty-cash-requests.html')}
+<div class="erp-app-body">
+    ${sidebar('cash_bank')}
+    <main class="erp-main">
+        ${topbar('Petty cash requests')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-question-circle" aria-hidden="true"></i> Cash &amp; bank · Petty cash · Requests</p>
+                    <h1 class="erp-page-title">Money asked for before it is spent</h1>
+                    <p class="erp-page-sub">Above the company's limit nothing comes out of a float until somebody asks and somebody else agrees. A request is not a voucher: while it waits there is no payment, no number and nothing in the ledger — so a waiting request can never be mistaken for money that has moved.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./petty-cash.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> The floats</a>
+                    <a class="btn btn-primary" href="./petty-cash-expenses.html"><i class="bi bi-receipt" aria-hidden="true"></i> Vouchers</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Waiting for an answer</p>
+                    <p class="erp-kpi-value">৳ 2,000.00</p>
+                    <p class="erp-kpi-foot">1 request — none of them has reached the ledger yet</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-receipt" aria-hidden="true"></i> Paid out of the floats this month</p>
+                    <p class="erp-kpi-value">৳ 14,240.00</p>
+                    <p class="erp-kpi-foot">9 voucher(s), each through the payment book</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-sliders" aria-hidden="true"></i> Approval limit</p>
+                    <p class="erp-kpi-value">৳ 1,000.00</p>
+                    <p class="erp-kpi-foot">At or above this a voucher is asked for; below it the custodian pays it</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-cash-stack" aria-hidden="true"></i> In the tins now</p>
+                    <p class="erp-kpi-value">৳ 18,450.00</p>
+                    <p class="erp-kpi-foot">3 open float(s); ৳ 6,550.00 short of their level</p>
+                </div>
+            </div>
+
+            <div class="erp-table-shell" data-erp-table>
+                <header class="erp-table-head">
+                    <div>
+                        <h2 class="erp-table-title">What people have asked for</h2>
+                        <p class="erp-table-count">3 request(s) shown</p>
+                    </div>
+                    <div class="erp-table-tools">
+                        <select class="form-select form-select-sm" aria-label="Filter by state">
+                            <option>Everything</option>
+                            <option selected>Waiting for approval</option>
+                            <option>Approved and paid</option>
+                            <option>Rejected</option>
+                        </select>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack">
+                        <thead>
+                            <tr>
+                                <th>Needed on</th>
+                                <th>Float</th>
+                                <th>Payee</th>
+                                <th>Category</th>
+                                <th class="erp-th-num">Amount</th>
+                                <th>Asked by</th>
+                                <th>State</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${requests.map((r) => `
+                            <tr>
+                                <td>${r.needed}</td>
+                                <td>
+                                    <span class="erp-cell-strong">${r.fund}</span>
+                                    <span class="d-block erp-td-muted">${r.code}</span>
+                                </td>
+                                <td>
+                                    ${r.payee}
+                                    <span class="d-block erp-td-muted">${r.what}</span>
+                                </td>
+                                <td>
+                                    ${r.category}
+                                    <span class="d-block erp-td-muted">${r.account}</span>
+                                </td>
+                                <td class="erp-td-num">৳ ${r.amount}</td>
+                                <td>
+                                    ${r.by}
+                                    <span class="d-block erp-td-muted">${r.asked}</span>
+                                </td>
+                                <td>
+                                    ${statusChip(r.state, r.label)}
+                                    ${r.note ? `<span class="d-block erp-td-muted">${r.note}</span>` : ''}
+                                </td>
+                                <td class="erp-td-actions">
+                                    ${r.state === 'pending_approval' ? `
+                                    <div class="d-flex flex-column gap-1">
+                                        <input class="form-control form-control-sm" type="text" placeholder="Why (kept with the decision)">
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-sm btn-primary" type="button">Pay it</button>
+                                            <button class="btn btn-sm btn-outline-secondary" type="button">Refuse</button>
+                                        </div>
+                                    </div>` : r.state === 'approved' ? `
+                                    <span class="erp-cell-strong">EX-2026-00415</span>
+                                    <span class="d-block erp-td-muted">paid out</span>` : `
+                                    <span class="erp-td-muted">Raise a purchase order for that</span>`}
+                                </td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <footer class="erp-table-foot">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                        <span class="erp-td-muted">The person who asked for the money cannot be the person who answers — that rule lives in the service, not in a hidden button.</span>
+                        <span class="erp-chip erp-chip-outline">Maker ≠ checker</span>
+                    </div>
+                </footer>
+            </div>
+
+            <section class="erp-card mt-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Ask for money out of a float</h2>
+                        <p class="erp-card-sub">At or above ৳ 1,000.00 this waits for somebody else's answer. Below it, the same form pays the money and records the voucher in one step.</p>
+                    </div>
+                </header>
+                <form onsubmit="return false">
+                    <div class="erp-form-grid">
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pr-fund">Float</label>
+                            <select class="form-select" id="pr-fund">
+                                <option>PC-HEAD — Head office tin</option>
+                                <option>PC-DEPOT — Depot tin</option>
+                                <option>PC-CNTR — Counter till</option>
+                            </select>
+                            <small class="form-text">The money leaves the float's own account, so the tin has to be holding it.</small>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pr-category">What it is for</label>
+                            <select class="form-select" id="pr-category">
+                                <option>Office supplies (5240)</option>
+                                <option>Local travel (5220)</option>
+                                <option>Packaging materials (5255)</option>
+                            </select>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pr-payee">Payee</label>
+                            <input class="form-control" type="text" id="pr-payee" placeholder="Who is to be paid">
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pr-amount">Amount</label>
+                            <div class="erp-input-group">
+                                <span class="input-group-text">৳</span>
+                                <input class="form-control erp-num" type="number" step="0.01" id="pr-amount" placeholder="2,000.00">
+                            </div>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pr-needed">Needed on</label>
+                            <input class="form-control" type="date" id="pr-needed" value="2026-10-08">
+                        </div>
+                        <div class="erp-form-field erp-form-field-wide">
+                            <label class="form-label" for="pr-what">What it is</label>
+                            <input class="form-control" type="text" id="pr-what" placeholder="Courier to Uttara — three parcels">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary mt-2" type="button"><i class="bi bi-send" aria-hidden="true"></i> Send the request</button>
+                </form>
+            </section>
+
+            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
+                <p class="erp-field-label">More in this module</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="erp-chip erp-chip-outline" href="./petty-cash.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Overview</a>
+                    <a class="erp-chip erp-chip-outline" href="./petty-cash-expenses.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Expenses</a>
+                    <a class="erp-chip erp-chip-outline" href="./petty-cash-replenishment.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Replenishment</a>
+                </div>
+            </nav>
+        </main>
+${footer()}
+    </div>
+</div>
+<script>window.erpNavIndex = [];</script>`;
+}
+
+/* --------------------------------------------------- 18. petty cash expenses */
+export function pettyCashExpenses() {
+    const vouchers = [
+        { date: '2026-10-08', no: 'EX-2026-00418', fund: 'Head office tin', payee: 'Rickshaw', what: 'Two rides to the courier office', spent: 'Local travel', account: '5220 — Travelling Expense', amount: '250.00', by: 'Rakib Hasan', note: 'below the limit of 1,000.00' },
+        { date: '2026-10-07', no: 'EX-2026-00417', fund: 'Counter till', payee: 'Shahin Store', what: 'Packing tape and markers', spent: 'Packaging materials', account: '5255 — Packing Materials', amount: '840.00', by: 'Jamal Uddin', note: 'below the limit of 1,000.00' },
+        { date: '2026-10-06', no: 'EX-2026-00412', fund: 'Depot tin', payee: 'Paper shop', what: 'Reams of paper for the counter', spent: 'Office supplies', account: '5240 — Office Supplies', amount: '2,000.00', by: 'Sumaiya Akter', note: 'against request #31, approved by Md. Faruk' },
+        { date: '2026-10-04', no: 'EX-2026-00406', fund: 'Head office tin', payee: 'Nur Electric', what: 'Replacement lock for the shutter', spent: 'Repairs & maintenance', account: '5260 — Repairs & Maintenance', amount: '1,150.00', by: 'Rakib Hasan', note: 'against request #29, approved by Md. Faruk' },
+    ];
+
+    return `
+${previewBar('petty-cash-expenses.html')}
+<div class="erp-app-body">
+    ${sidebar('cash_bank')}
+    <main class="erp-main">
+        ${topbar('Petty cash expenses')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-receipt" aria-hidden="true"></i> Cash &amp; bank · Petty cash · Expenses</p>
+                    <h1 class="erp-page-title">What came out of the float</h1>
+                    <p class="erp-page-sub">Every voucher here is a real payment: the money left the float's own account and the ledger knows about it — debited to the category it was spent on, credited to the tin. The float cannot pay more than it holds, which is why the register and the ledger always agree.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./petty-cash.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> The floats</a>
+                    <a class="btn btn-primary" href="./petty-cash-replenishment.html"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Replenish</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-receipt" aria-hidden="true"></i> Paid out this month</p>
+                    <p class="erp-kpi-value">৳ 14,240.00</p>
+                    <p class="erp-kpi-foot">9 voucher(s) out of the floats</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-cash-stack" aria-hidden="true"></i> In the tins now</p>
+                    <p class="erp-kpi-value">৳ 18,450.00</p>
+                    <p class="erp-kpi-foot">Across 3 open float(s) of 4</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Short of their level</p>
+                    <p class="erp-kpi-value">৳ 6,550.00</p>
+                    <p class="erp-kpi-foot">What a replenishment would put back</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Put back this month</p>
+                    <p class="erp-kpi-value">৳ 12,000.00</p>
+                    <p class="erp-kpi-foot">Transfers into the floats, never a second record of the spending</p>
+                </div>
+            </div>
+
+            <form class="erp-filterbar" onsubmit="return false" role="search">
+                <div class="erp-filter">
+                    <label class="form-label" for="pe-fund">Float</label>
+                    <select class="form-select" id="pe-fund">
+                        <option>Every float</option>
+                        <option>Head office tin</option>
+                        <option>Depot tin</option>
+                        <option>Counter till</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="pe-category">Category</label>
+                    <select class="form-select" id="pe-category">
+                        <option>Every category</option>
+                        <option>Local travel</option>
+                        <option>Office supplies</option>
+                        <option>Packaging materials</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="pe-from">From</label>
+                    <input class="form-control" type="date" id="pe-from" value="2026-10-01">
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="pe-to">To</label>
+                    <input class="form-control" type="date" id="pe-to" value="2026-10-31">
+                </div>
+                <div class="erp-filterbar-actions">
+                    <button class="btn btn-link" type="button">Reset</button>
+                    <button class="btn btn-primary" type="button"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                </div>
+            </form>
+
+            <div class="erp-table-shell" data-erp-table>
+                <header class="erp-table-head">
+                    <div>
+                        <h2 class="erp-table-title">Vouchers paid out of the floats</h2>
+                        <p class="erp-table-count">4 voucher(s) shown</p>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Voucher</th>
+                                <th>Float</th>
+                                <th>Payee</th>
+                                <th>Spent on</th>
+                                <th class="erp-th-num">Amount</th>
+                                <th>Recorded by</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${vouchers.map((v) => `
+                            <tr>
+                                <td>${v.date}</td>
+                                <td>
+                                    <span class="erp-cell-strong">${v.no}</span>
+                                    <span class="d-block erp-td-muted">posted to the ledger</span>
+                                </td>
+                                <td>
+                                    ${v.fund}
+                                    <span class="d-block erp-td-muted"><a href="./cash-bank.html">the tin's ledger</a></span>
+                                </td>
+                                <td>
+                                    ${v.payee}
+                                    <span class="d-block erp-td-muted">${v.what}</span>
+                                </td>
+                                <td>
+                                    ${v.spent}
+                                    <span class="d-block erp-td-muted">${v.account}</span>
+                                </td>
+                                <td class="erp-td-num">৳ ${v.amount}</td>
+                                <td>
+                                    ${v.by}
+                                    <span class="d-block erp-td-muted">${v.note}</span>
+                                </td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <section class="erp-card mt-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Pay a voucher out of a float</h2>
+                        <p class="erp-card-sub">The float has to be holding the money — the desk checks the ledger before it lets the voucher through, because a custodian cannot hand over cash the tin does not have.</p>
+                    </div>
+                </header>
+                <form onsubmit="return false">
+                    <div class="erp-form-grid">
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pv-fund">Float</label>
+                            <select class="form-select" id="pv-fund">
+                                <option>PC-HEAD — Head office tin</option>
+                                <option>PC-DEPOT — Depot tin</option>
+                                <option>PC-CNTR — Counter till</option>
+                            </select>
+                            <small class="form-text">Holds 6,250.00 of a 10,000.00 level.</small>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pv-category">Spent on</label>
+                            <select class="form-select" id="pv-category">
+                                <option>Local travel (5220)</option>
+                                <option>Office supplies (5240)</option>
+                                <option>Packaging materials (5255)</option>
+                            </select>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pv-payee">Payee</label>
+                            <input class="form-control" type="text" id="pv-payee" placeholder="Who was handed the cash">
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pv-amount">Amount</label>
+                            <div class="erp-input-group">
+                                <span class="input-group-text">৳</span>
+                                <input class="form-control erp-num" type="number" step="0.01" id="pv-amount" placeholder="250.00">
+                            </div>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pv-date">Date paid</label>
+                            <input class="form-control" type="date" id="pv-date" value="2026-10-08">
+                        </div>
+                        <div class="erp-form-field erp-form-field-wide">
+                            <label class="form-label" for="pv-what">What it was for</label>
+                            <input class="form-control" type="text" id="pv-what" placeholder="Two rickshaws to the courier office">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary mt-2" type="button"><i class="bi bi-cash-coin" aria-hidden="true"></i> Pay and record the voucher</button>
+                </form>
+            </section>
+
+            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
+                <p class="erp-field-label">More in this module</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="erp-chip erp-chip-outline" href="./petty-cash.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Overview</a>
+                    <a class="erp-chip erp-chip-outline" href="./petty-cash-requests.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Requests</a>
+                    <a class="erp-chip erp-chip-outline" href="./petty-cash-replenishment.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Replenishment</a>
+                    <a class="erp-chip erp-chip-outline" href="./expenses.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>All Expenses</a>
+                </div>
+            </nav>
+        </main>
+${footer()}
+    </div>
+</div>
+<script>window.erpNavIndex = [];</script>`;
+}
+
+/* ---------------------------------------------- 19. petty cash replenishment */
+export function pettyCashReplenishment() {
+    const floats = [
+        { code: 'PC-HEAD', name: 'Head office tin', custodian: 'Rakib Hasan', holds: '6,250.00', level: '10,000.00', back: '3,750.00', state: 'active', label: 'Open' },
+        { code: 'PC-DEPOT', name: 'Depot tin', custodian: 'Sumaiya Akter', holds: '4,200.00', level: '8,000.00', back: '3,800.00', state: 'active', label: 'Open' },
+        { code: 'PC-CNTR', name: 'Counter till', custodian: 'Jamal Uddin', holds: '8,000.00', level: '7,000.00', back: '0.00', state: 'active', label: 'Open' },
+        { code: 'PC-OLD', name: 'Old warehouse tin', custodian: 'Nazmul Islam', holds: '0.00', level: '5,000.00', back: '5,000.00', state: 'closed', label: 'Closed' },
+    ];
+
+    const topUps = [
+        { date: '2026-10-06', no: 'CT-2026-00041', fund: 'Head office tin', from: '1120 — Islami Bank, current', amount: '3,750.00', note: 'October top-up of the head office tin', by: 'Md. Faruk' },
+        { date: '2026-10-02', no: 'CT-2026-00039', fund: 'Depot tin', from: '1110 — Cash in Hand', amount: '6,000.00', note: '', by: 'Md. Faruk' },
+        { date: '2026-09-30', no: 'CT-2026-00036', fund: 'Counter till', from: '1110 — Cash in Hand', amount: '2,250.00', note: 'Topped up for the weekend', by: 'Md. Faruk' },
+    ];
+
+    return `
+${previewBar('petty-cash-replenishment.html')}
+<div class="erp-app-body">
+    ${sidebar('cash_bank')}
+    <main class="erp-main">
+        ${topbar('Petty cash replenishment')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Cash &amp; bank · Petty cash · Replenishment</p>
+                    <h1 class="erp-page-title">Putting the float back</h1>
+                    <p class="erp-page-sub">A replenishment is a transfer, not an expense: the spending was recorded voucher by voucher, when each was paid, so recording it again here would count every rickshaw twice. This screen puts the float back to the level it is meant to hold — and nothing else.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./petty-cash.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> The floats</a>
+                    <a class="btn btn-primary" href="./petty-cash-expenses.html"><i class="bi bi-receipt" aria-hidden="true"></i> Vouchers</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Put back this month</p>
+                    <p class="erp-kpi-value">৳ 12,000.00</p>
+                    <p class="erp-kpi-foot">Transfers into the floats — each one a real move of money</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-cash-stack" aria-hidden="true"></i> In the tins now</p>
+                    <p class="erp-kpi-value">৳ 18,450.00</p>
+                    <p class="erp-kpi-foot">Across 3 open float(s)</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-bullseye" aria-hidden="true"></i> Meant to be there</p>
+                    <p class="erp-kpi-value">৳ 25,000.00</p>
+                    <p class="erp-kpi-foot">The levels the floats are replenished back to</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-exclamation-circle" aria-hidden="true"></i> Short of their level</p>
+                    <p class="erp-kpi-value">৳ 6,550.00</p>
+                    <p class="erp-kpi-foot">Put the whole of this back and every tin is level again</p>
+                </div>
+            </div>
+
+            <div class="erp-table-shell" data-erp-table>
+                <header class="erp-table-head">
+                    <div>
+                        <h2 class="erp-table-title">Where each float stands</h2>
+                        <p class="erp-table-count">4 float(s)</p>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack">
+                        <thead>
+                            <tr>
+                                <th>Float</th>
+                                <th>Custodian</th>
+                                <th class="erp-th-num">Holds</th>
+                                <th class="erp-th-num">Level</th>
+                                <th class="erp-th-num">To put back</th>
+                                <th>State</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${floats.map((f) => `
+                            <tr>
+                                <td>
+                                    <span class="erp-cell-strong">${f.code}</span>
+                                    <span class="d-block erp-td-muted">${f.name}</span>
+                                </td>
+                                <td>${f.custodian}</td>
+                                <td class="erp-td-num">৳ ${f.holds}</td>
+                                <td class="erp-td-num">৳ ${f.level}</td>
+                                <td class="erp-td-num"><span class="erp-cell-strong">৳ ${f.back}</span></td>
+                                <td>${statusChip(f.state, f.label)}</td>
+                                <td class="erp-td-actions">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button">Look at it</button>
+                                </td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <section class="erp-card mt-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Put money back into a float</h2>
+                        <p class="erp-card-sub">The money comes out of one of the company's own accounts and goes into the float's — a transfer between two accounts the company holds, which is why it never touches the expense reports.</p>
+                    </div>
+                </header>
+                <form onsubmit="return false">
+                    <div class="erp-form-grid">
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pt-fund">Float</label>
+                            <select class="form-select" id="pt-fund">
+                                <option>Head office tin — holds 6,250.00 of 10,000.00</option>
+                                <option>Depot tin — holds 4,200.00 of 8,000.00</option>
+                                <option>Counter till — holds 8,000.00 of 7,000.00</option>
+                            </select>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pt-source">Money comes from</label>
+                            <select class="form-select" id="pt-source">
+                                <option>1120 — Islami Bank, current</option>
+                                <option>1110 — Cash in Hand</option>
+                                <option>1115-PC-HEAD — Head office tin (petty cash) (this is a float's own account)</option>
+                            </select>
+                            <small class="form-text">A tin cannot top itself up: the money has to come from outside the float.</small>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pt-amount">Amount</label>
+                            <div class="erp-input-group">
+                                <span class="input-group-text">৳</span>
+                                <input class="form-control erp-num" type="number" step="0.01" id="pt-amount" placeholder="3,750.00">
+                            </div>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pt-date">Date</label>
+                            <input class="form-control" type="date" id="pt-date" value="2026-10-08">
+                        </div>
+                        <div class="erp-form-field erp-form-field-wide">
+                            <label class="form-label" for="pt-note">Note</label>
+                            <input class="form-control" type="text" id="pt-note" placeholder="October top-up of the head office tin">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary mt-2" type="button"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Put it back</button>
+                </form>
+            </section>
+
+            <div class="erp-table-shell mt-3" data-erp-table>
+                <header class="erp-table-head">
+                    <div>
+                        <h2 class="erp-table-title">Replenishments — Head office tin</h2>
+                        <p class="erp-table-count">3 top-up(s) shown</p>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Transfer</th>
+                                <th>Float</th>
+                                <th>From</th>
+                                <th class="erp-th-num">Amount</th>
+                                <th>Note</th>
+                                <th>Recorded by</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${topUps.map((t) => `
+                            <tr>
+                                <td>${t.date}</td>
+                                <td><span class="erp-cell-strong">${t.no}</span></td>
+                                <td>${t.fund}</td>
+                                <td>${t.from}</td>
+                                <td class="erp-td-num">৳ ${t.amount}</td>
+                                <td>${t.note || '—'}</td>
+                                <td>${t.by}</td>
+                            </tr>`).join('')}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7">
+                                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                        <span class="erp-td-muted">A top-up carries a transfer number of its own, so the move can be asked for by number like any other.</span>
+                                        <a class="btn btn-outline-secondary btn-sm" href="./cash-bank.html">The transfer desk</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
+                <p class="erp-field-label">More in this module</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="erp-chip erp-chip-outline" href="./petty-cash.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Overview</a>
+                    <a class="erp-chip erp-chip-outline" href="./petty-cash-requests.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Requests</a>
+                    <a class="erp-chip erp-chip-outline" href="./petty-cash-expenses.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Expenses</a>
+                    <a class="erp-chip erp-chip-outline" href="./cash-bank.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Cash Transfer</a>
+                </div>
+            </nav>
+        </main>
+${footer()}
+    </div>
+</div>
+<script>window.erpNavIndex = [];</script>`;
+}

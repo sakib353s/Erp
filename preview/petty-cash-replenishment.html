@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#ffffff">
-    <title>Packaging · BD ERP — UI redesign preview</title>
+    <title>Petty cash replenishment · BD ERP — UI redesign preview</title>
     <link rel="stylesheet" href="./assets/preview.css">
 </head>
 <body class="erp-body">
@@ -15,11 +15,11 @@
 <div class="erp-preview-bar">
     <i class="bi bi-easel2" aria-hidden="true"></i>
     <strong>UI redesign preview</strong>
-    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html" style="color:#fff;text-decoration:underline">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html">Labels</a><span style="opacity:.4">·</span><a href="./cash-bank.html">Cash & bank</a><span style="opacity:.4">·</span><a href="./bank-recon.html">Reconciliation</a><span style="opacity:.4">·</span><a href="./cheques.html">Cheques</a><span style="opacity:.4">·</span><a href="./expenses.html">Expenses</a><span style="opacity:.4">·</span><a href="./expense-recurring.html">Recurring</a><span style="opacity:.4">·</span><a href="./petty-cash.html">Petty cash</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
+    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html">Labels</a><span style="opacity:.4">·</span><a href="./cash-bank.html">Cash & bank</a><span style="opacity:.4">·</span><a href="./bank-recon.html">Reconciliation</a><span style="opacity:.4">·</span><a href="./cheques.html">Cheques</a><span style="opacity:.4">·</span><a href="./expenses.html">Expenses</a><span style="opacity:.4">·</span><a href="./expense-recurring.html">Recurring</a><span style="opacity:.4">·</span><a href="./petty-cash.html">Petty cash</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
     <span class="erp-preview-note">Static render of the new shell — same CSS + JS the Laravel app ships. Press ⌘K / Ctrl+K.</span>
 </div>
-<div class="erp-shell" data-rail="expanded">
-
+<div class="erp-app-body">
+    
 <aside class="erp-sidebar" id="erpSidebar" aria-label="Primary navigation">
     <div class="erp-sidebar-head">
         <a class="erp-brand" href="./dashboard.html">
@@ -571,26 +571,17 @@
         <span class="erp-version">Build 2026.10 · v2</span>
     </div>
 </aside>
-    <div class="erp-main">
-
+    <main class="erp-main">
+        
 <header class="erp-topbar">
     <button class="erp-icon-btn d-lg-none" type="button" data-erp-sidebar-open aria-label="Open navigation">
         <i class="bi bi-list" aria-hidden="true"></i>
     </button>
 
     <div class="erp-topbar-crumbs">
-        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb">
-        <li>
-            <span class="is-current" aria-current="page">Inventory &amp; warehouse</span>
-        </li>
-        <li>
-            <span class="is-current" aria-current="page">Packaging</span>
-        </li>
-        <li>
-            <span class="is-current" aria-current="page">Packaging types</span>
-        </li></ol></nav>
+        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb"></ol></nav>
         <div class="erp-topbar-title">
-            <strong class="d-none d-md-inline">Packaging types</strong>
+            <strong class="d-none d-md-inline">Dashboard</strong>
             <span class="erp-chip erp-chip-outline d-none d-xl-inline-flex" title="Current branch context">
                 <i class="bi bi-geo-alt" aria-hidden="true"></i>Dhaka HQ
             </span>
@@ -664,222 +655,243 @@
         </div>
     </div>
 </header>
-        <main class="erp-content" id="erpContent">
+        <div class="erp-content">
+
             <header class="erp-page-head">
-                <div class="erp-page-head-main">
-                    <p class="erp-eyebrow">Inventory &middot; Packaging</p>
-                    <h1 class="erp-h1">What the goods travel in</h1>
-                    <p class="erp-page-sub">A packaging type is not a price list — it is a promise that stock can be taken out of the warehouse under that name. So every type points at a real stock-managed product, its shelf comes from the ledger, and the money comes from the valuation layers that priced it.</p>
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Cash &amp; bank · Petty cash · Replenishment</p>
+                    <h1 class="erp-page-title">Putting the float back</h1>
+                    <p class="erp-page-sub">A replenishment is a transfer, not an expense: the spending was recorded voucher by voucher, when each was paid, so recording it again here would count every rickshaw twice. This screen puts the float back to the level it is meant to hold — and nothing else.</p>
                 </div>
                 <div class="erp-page-head-actions">
-                    <a class="btn btn-outline-secondary" href="./packaging.html"><i class="bi bi-boxes" aria-hidden="true"></i> Packaging stock</a>
-                    <a class="btn btn-outline-secondary" href="./packaging.html"><i class="bi bi-cash-stack" aria-hidden="true"></i> Packaging cost</a>
-                    <a class="btn btn-outline-secondary" href="./packaging.html"><i class="bi bi-clipboard-data" aria-hidden="true"></i> Monthly report</a>
-                    <button class="erp-icon-btn" type="button" title="Pin this page" aria-label="Pin this page"><i class="bi bi-star" aria-hidden="true"></i></button>
+                    <a class="btn btn-outline-secondary" href="./petty-cash.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> The floats</a>
+                    <a class="btn btn-primary" href="./petty-cash-expenses.html"><i class="bi bi-receipt" aria-hidden="true"></i> Vouchers</a>
                 </div>
             </header>
 
-            <section class="erp-kpi-grid mb-3">
-                <div class="erp-kpi" style="--hue: var(--c2)">
-                    <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>Types declared</p>
-                    <p class="erp-kpi-value">5</p>
-                    <p class="erp-kpi-foot">Products this company packs with</p>
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Put back this month</p>
+                    <p class="erp-kpi-value">৳ 12,000.00</p>
+                    <p class="erp-kpi-foot">Transfers into the floats — each one a real move of money</p>
                 </div>
-                <div class="erp-kpi" style="--hue: var(--c1)">
-                    <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>Usable</p>
-                    <p class="erp-kpi-value">3</p>
-                    <p class="erp-kpi-foot">Not retired, and their product still stocked</p>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-cash-stack" aria-hidden="true"></i> In the tins now</p>
+                    <p class="erp-kpi-value">৳ 18,450.00</p>
+                    <p class="erp-kpi-foot">Across 3 open float(s)</p>
                 </div>
-                <div class="erp-kpi" style="--hue: var(--c3)">
-                    <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>On the shelf</p>
-                    <p class="erp-kpi-value">1,412.0000</p>
-                    <p class="erp-kpi-foot">Summed across warehouses, from the ledger</p>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-bullseye" aria-hidden="true"></i> Meant to be there</p>
+                    <p class="erp-kpi-value">৳ 25,000.00</p>
+                    <p class="erp-kpi-foot">The levels the floats are replenished back to</p>
                 </div>
-                <div class="erp-kpi" style="--hue: var(--c4)">
-                    <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>Consumed, 30 days</p>
-                    <p class="erp-kpi-value">৳ 18,420.00</p>
-                    <p class="erp-kpi-foot">Layer-valued cost of what went out</p>
-                </div>
-            </section>
-
-            <div class="erp-note erp-note-info mb-3">
-                <i class="bi bi-info-circle" aria-hidden="true"></i>
-                <div>
-                    A used type is <strong>retired, never deleted</strong> — the movements that priced it would otherwise point at
-                    nothing — and once a type has consumed anything its code and product are <strong>frozen</strong>: the
-                    consumption already priced what it took.
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-exclamation-circle" aria-hidden="true"></i> Short of their level</p>
+                    <p class="erp-kpi-value">৳ 6,550.00</p>
+                    <p class="erp-kpi-foot">Put the whole of this back and every tin is level again</p>
                 </div>
             </div>
 
-            <form class="erp-filterbar" onsubmit="return false">
-                <div class="erp-filter erp-filter-wide">
-                    <label class="form-label" for="q">Search</label>
-                    <div class="erp-input-group">
-                        <i class="bi bi-search" aria-hidden="true"></i>
-                        <input class="form-control" type="search" id="q" placeholder="Code, name or the product behind it…">
-                    </div>
-                </div>
-                <div class="erp-filter">
-                    <label class="form-label" for="state">State</label>
-                    <select class="form-select" id="state"><option>Any state</option><option>Usable</option><option>Retired</option><option>Cannot be used</option></select>
-                </div>
-                <div class="erp-filterbar-actions">
-                    <button class="btn btn-primary" type="submit"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
-                </div>
-            </form>
-
             <div class="erp-table-shell" data-erp-table>
-                <div class="erp-card-head px-3 pt-3">
-                    <h2 class="erp-card-title">Declared types <span class="erp-chip erp-chip-outline">5 types</span></h2>
-                </div>
+                <header class="erp-table-head">
+                    <div>
+                        <h2 class="erp-table-title">Where each float stands</h2>
+                        <p class="erp-table-count">4 float(s)</p>
+                    </div>
+                </header>
                 <div class="erp-table-scroll">
-                    <table class="table erp-table erp-table-stack mb-0">
+                    <table class="table erp-table erp-table-stack">
                         <thead>
                             <tr>
-                                <th>Code</th>
-                                <th>Packaging</th>
-                                <th>Stock product</th>
-                                <th class="erp-th-num">On the shelf</th>
-                                <th class="erp-th-num">Value now</th>
-                                <th class="erp-th-num">Avg unit cost</th>
-                                <th class="erp-th-num">Used, 30 d</th>
-                                <th>Last used</th>
+                                <th>Float</th>
+                                <th>Custodian</th>
+                                <th class="erp-th-num">Holds</th>
+                                <th class="erp-th-num">Level</th>
+                                <th class="erp-th-num">To put back</th>
                                 <th>State</th>
-                                <th class="erp-th-actions">Manage</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                    <tr>
-                        <td data-label="Code" class="erp-cell-strong">BOX-12</td>
-                        <td data-label="Packaging">Corrugated box, 12 inch</td>
-                        <td data-label="Stock product"><span class="erp-cell-strong">Corrugated Box</span><span class="d-block erp-td-muted">BOX-SKU-1</span></td>
-                        <td data-label="On the shelf" class="erp-td-num">1,248.0000</td>
-                        <td data-label="Value now" class="erp-td-num">৳ 15,600.00</td>
-                        <td data-label="Avg unit cost" class="erp-td-num erp-td-muted">12.5000</td>
-                        <td data-label="Used, 30 d" class="erp-td-num erp-td-muted">420.0000</td>
-                        <td data-label="Last used" class="erp-td-muted">08 Oct 2026</td>
-                        <td data-label="State"><span class="erp-status erp-status-active">Usable</span></td>
-                        <td data-label="Manage" class="erp-td-actions">
-                            <div class="d-flex gap-1 justify-content-end">
-                                <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-pencil" aria-hidden="true"></i> Edit</button>
-                                <button class="btn btn-sm btn-outline-secondary" type="button">Retire</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td data-label="Code" class="erp-cell-strong">BAG-KR</td>
-                        <td data-label="Packaging">Kraft paper bag, large</td>
-                        <td data-label="Stock product"><span class="erp-cell-strong">Kraft bag</span><span class="d-block erp-td-muted">BAG-SKU-1</span></td>
-                        <td data-label="On the shelf" class="erp-td-num">86.0000</td>
-                        <td data-label="Value now" class="erp-td-num">৳ 2,408.00</td>
-                        <td data-label="Avg unit cost" class="erp-td-num erp-td-muted">28.0000</td>
-                        <td data-label="Used, 30 d" class="erp-td-num erp-td-muted">120.0000</td>
-                        <td data-label="Last used" class="erp-td-muted">07 Oct 2026</td>
-                        <td data-label="State"><span class="erp-status erp-status-active">Usable</span></td>
-                        <td data-label="Manage" class="erp-td-actions">
-                            <div class="d-flex gap-1 justify-content-end">
-                                <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-pencil" aria-hidden="true"></i> Edit</button>
-                                <button class="btn btn-sm btn-outline-secondary" type="button">Retire</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td data-label="Code" class="erp-cell-strong">TAPE-2</td>
-                        <td data-label="Packaging">Packing tape, 2 inch</td>
-                        <td data-label="Stock product"><span class="erp-cell-strong">Tape roll</span><span class="d-block erp-td-muted">TAPE-SKU-1</span></td>
-                        <td data-label="On the shelf" class="erp-td-num">14.0000</td>
-                        <td data-label="Value now" class="erp-td-num">৳ 322.00</td>
-                        <td data-label="Avg unit cost" class="erp-td-num erp-td-muted">23.0000</td>
-                        <td data-label="Used, 30 d" class="erp-td-num erp-td-muted">36.0000</td>
-                        <td data-label="Last used" class="erp-td-muted">08 Oct 2026</td>
-                        <td data-label="State"><span class="erp-status erp-status-active">Usable</span><span class="d-block erp-td-muted">Lasts about 12 d at the last 30 days’ rate</span></td>
-                        <td data-label="Manage" class="erp-td-actions">
-                            <div class="d-flex gap-1 justify-content-end">
-                                <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-pencil" aria-hidden="true"></i> Edit</button>
-                                <button class="btn btn-sm btn-outline-secondary" type="button">Retire</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td data-label="Code" class="erp-cell-strong">FOIL-500</td>
-                        <td data-label="Packaging">Aluminium foil roll, 500 m</td>
-                        <td data-label="Stock product"><span class="erp-cell-strong">Foil roll</span><span class="d-block erp-td-muted">FOIL-SKU-1</span></td>
-                        <td data-label="On the shelf" class="erp-td-num">0.0000</td>
-                        <td data-label="Value now" class="erp-td-num">৳ 0.00</td>
-                        <td data-label="Avg unit cost" class="erp-td-num erp-td-muted">—</td>
-                        <td data-label="Used, 30 d" class="erp-td-num erp-td-muted">0.0000</td>
-                        <td data-label="Last used" class="erp-td-muted">never</td>
-                        <td data-label="State"><span class="erp-status erp-status-suspended">Cannot be used</span><span class="d-block erp-td-muted">Its product is no longer stock-managed or active, so it cannot be consumed.</span></td>
-                        <td data-label="Manage" class="erp-td-actions">
-                            <div class="d-flex gap-1 justify-content-end">
-                                <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-pencil" aria-hidden="true"></i> Edit</button>
-                                <button class="btn btn-sm btn-outline-secondary" type="button">Retire</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td data-label="Code" class="erp-cell-strong">CRATE-W</td>
-                        <td data-label="Packaging">Wooden crate, wholesale</td>
-                        <td data-label="Stock product"><span class="erp-cell-strong">Crate</span><span class="d-block erp-td-muted">CRATE-SKU-1</span></td>
-                        <td data-label="On the shelf" class="erp-td-num">64.0000</td>
-                        <td data-label="Value now" class="erp-td-num">৳ 19,200.00</td>
-                        <td data-label="Avg unit cost" class="erp-td-num erp-td-muted">300.0000</td>
-                        <td data-label="Used, 30 d" class="erp-td-num erp-td-muted">0.0000</td>
-                        <td data-label="Last used" class="erp-td-muted">22 Sep 2026</td>
-                        <td data-label="State"><span class="erp-status erp-status-inactive">Retired</span><span class="d-block erp-td-muted">Retired — history kept, consumption refused</span></td>
-                        <td data-label="Manage" class="erp-td-actions">
-                            <div class="d-flex gap-1 justify-content-end">
-                                <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-pencil" aria-hidden="true"></i> Edit</button>
-                                <button class="btn btn-sm btn-outline-secondary" type="button">Bring back</button>
-                            </div>
-                        </td>
-                    </tr></tbody>
+                            
+                            <tr>
+                                <td>
+                                    <span class="erp-cell-strong">PC-HEAD</span>
+                                    <span class="d-block erp-td-muted">Head office tin</span>
+                                </td>
+                                <td>Rakib Hasan</td>
+                                <td class="erp-td-num">৳ 6,250.00</td>
+                                <td class="erp-td-num">৳ 10,000.00</td>
+                                <td class="erp-td-num"><span class="erp-cell-strong">৳ 3,750.00</span></td>
+                                <td><span class="erp-status erp-status-active">Open</span></td>
+                                <td class="erp-td-actions">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button">Look at it</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="erp-cell-strong">PC-DEPOT</span>
+                                    <span class="d-block erp-td-muted">Depot tin</span>
+                                </td>
+                                <td>Sumaiya Akter</td>
+                                <td class="erp-td-num">৳ 4,200.00</td>
+                                <td class="erp-td-num">৳ 8,000.00</td>
+                                <td class="erp-td-num"><span class="erp-cell-strong">৳ 3,800.00</span></td>
+                                <td><span class="erp-status erp-status-active">Open</span></td>
+                                <td class="erp-td-actions">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button">Look at it</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="erp-cell-strong">PC-CNTR</span>
+                                    <span class="d-block erp-td-muted">Counter till</span>
+                                </td>
+                                <td>Jamal Uddin</td>
+                                <td class="erp-td-num">৳ 8,000.00</td>
+                                <td class="erp-td-num">৳ 7,000.00</td>
+                                <td class="erp-td-num"><span class="erp-cell-strong">৳ 0.00</span></td>
+                                <td><span class="erp-status erp-status-active">Open</span></td>
+                                <td class="erp-td-actions">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button">Look at it</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="erp-cell-strong">PC-OLD</span>
+                                    <span class="d-block erp-td-muted">Old warehouse tin</span>
+                                </td>
+                                <td>Nazmul Islam</td>
+                                <td class="erp-td-num">৳ 0.00</td>
+                                <td class="erp-td-num">৳ 5,000.00</td>
+                                <td class="erp-td-num"><span class="erp-cell-strong">৳ 5,000.00</span></td>
+                                <td><span class="erp-status erp-status-closed">Closed</span></td>
+                                <td class="erp-td-actions">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button">Look at it</button>
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
-                </div>
-                <div class="erp-table-foot">
-                    <span class="erp-td-muted">Consumption is priced by the valuation layers at the moment it happens — never by a figure typed on the type.</span>
-                    <span class="erp-td-muted">Page 1 of 1</span>
                 </div>
             </div>
 
             <section class="erp-card mt-3">
                 <header class="erp-card-head">
-                    <h2 class="erp-card-title">Declare a packaging type</h2>
-                    <span class="erp-chip erp-chip-soft">stock-managed products only</span>
+                    <div>
+                        <h2 class="erp-card-title">Put money back into a float</h2>
+                        <p class="erp-card-sub">The money comes out of one of the company's own accounts and goes into the float's — a transfer between two accounts the company holds, which is why it never touches the expense reports.</p>
+                    </div>
                 </header>
                 <form onsubmit="return false">
-                    <div class="row g-3">
-                        <div class="col-md-3">
-                            <label class="form-label" for="new_code">Code</label>
-                            <input class="form-control" type="text" id="new_code" placeholder="BOX-12">
-                            <div class="form-text">What the floor calls it. Letters, digits, dot, dash and underscore.</div>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label" for="new_name">Name</label>
-                            <input class="form-control" type="text" id="new_name" placeholder="Corrugated box, 12 inch">
-                        </div>
-                        <div class="col-md-5">
-                            <label class="form-label" for="new_product">Stock product</label>
-                            <select class="form-select" id="new_product">
-                                <option>Choose the product this packaging is…</option>
-                                <option>BOX-SKU-1 — Corrugated Box</option>
-                                <option>BAG-SKU-1 — Kraft bag</option>
-                                <option>TAPE-SKU-1 — Tape roll</option>
+                    <div class="erp-form-grid">
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pt-fund">Float</label>
+                            <select class="form-select" id="pt-fund">
+                                <option>Head office tin — holds 6,250.00 of 10,000.00</option>
+                                <option>Depot tin — holds 4,200.00 of 8,000.00</option>
+                                <option>Counter till — holds 8,000.00 of 7,000.00</option>
                             </select>
-                            <div class="form-text">A product cannot be consumed as packaging unless it is stock-managed and active — the ledger refuses anything else.</div>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pt-source">Money comes from</label>
+                            <select class="form-select" id="pt-source">
+                                <option>1120 — Islami Bank, current</option>
+                                <option>1110 — Cash in Hand</option>
+                                <option>1115-PC-HEAD — Head office tin (petty cash) (this is a float's own account)</option>
+                            </select>
+                            <small class="form-text">A tin cannot top itself up: the money has to come from outside the float.</small>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pt-amount">Amount</label>
+                            <div class="erp-input-group">
+                                <span class="input-group-text">৳</span>
+                                <input class="form-control erp-num" type="number" step="0.01" id="pt-amount" placeholder="3,750.00">
+                            </div>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="pt-date">Date</label>
+                            <input class="form-control" type="date" id="pt-date" value="2026-10-08">
+                        </div>
+                        <div class="erp-form-field erp-form-field-wide">
+                            <label class="form-label" for="pt-note">Note</label>
+                            <input class="form-control" type="text" id="pt-note" placeholder="October top-up of the head office tin">
                         </div>
                     </div>
-                    <button class="btn btn-primary mt-3" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i> Declare type</button>
+                    <button class="btn btn-primary mt-2" type="button"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Put it back</button>
                 </form>
             </section>
+
+            <div class="erp-table-shell mt-3" data-erp-table>
+                <header class="erp-table-head">
+                    <div>
+                        <h2 class="erp-table-title">Replenishments — Head office tin</h2>
+                        <p class="erp-table-count">3 top-up(s) shown</p>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Transfer</th>
+                                <th>Float</th>
+                                <th>From</th>
+                                <th class="erp-th-num">Amount</th>
+                                <th>Note</th>
+                                <th>Recorded by</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr>
+                                <td>2026-10-06</td>
+                                <td><span class="erp-cell-strong">CT-2026-00041</span></td>
+                                <td>Head office tin</td>
+                                <td>1120 — Islami Bank, current</td>
+                                <td class="erp-td-num">৳ 3,750.00</td>
+                                <td>October top-up of the head office tin</td>
+                                <td>Md. Faruk</td>
+                            </tr>
+                            <tr>
+                                <td>2026-10-02</td>
+                                <td><span class="erp-cell-strong">CT-2026-00039</span></td>
+                                <td>Depot tin</td>
+                                <td>1110 — Cash in Hand</td>
+                                <td class="erp-td-num">৳ 6,000.00</td>
+                                <td>—</td>
+                                <td>Md. Faruk</td>
+                            </tr>
+                            <tr>
+                                <td>2026-09-30</td>
+                                <td><span class="erp-cell-strong">CT-2026-00036</span></td>
+                                <td>Counter till</td>
+                                <td>1110 — Cash in Hand</td>
+                                <td class="erp-td-num">৳ 2,250.00</td>
+                                <td>Topped up for the weekend</td>
+                                <td>Md. Faruk</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7">
+                                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                        <span class="erp-td-muted">A top-up carries a transfer number of its own, so the move can be asked for by number like any other.</span>
+                                        <a class="btn btn-outline-secondary btn-sm" href="./cash-bank.html">The transfer desk</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
 
             <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
                 <p class="erp-field-label">More in this module</p>
                 <div class="d-flex flex-wrap gap-2">
-                    <a class="erp-chip erp-chip-outline" href="./packaging.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Packaging stock</a>
-                    <a class="erp-chip erp-chip-outline" href="./packaging.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Packaging cost</a>
-                    <a class="erp-chip erp-chip-outline" href="./packaging.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Packaging report</a>
-                    <a class="erp-chip erp-chip-outline" href="./dashboard.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Stock overview</a>
+                    <a class="erp-chip erp-chip-outline" href="./petty-cash.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Overview</a>
+                    <a class="erp-chip erp-chip-outline" href="./petty-cash-requests.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Requests</a>
+                    <a class="erp-chip erp-chip-outline" href="./petty-cash-expenses.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Expenses</a>
+                    <a class="erp-chip erp-chip-outline" href="./cash-bank.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Cash Transfer</a>
                 </div>
             </nav>
         </main>
