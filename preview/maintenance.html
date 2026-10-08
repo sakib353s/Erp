@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#ffffff">
-    <title>Petty cash requests · BD ERP — UI redesign preview</title>
+    <title>System maintenance · BD ERP — UI redesign preview</title>
     <link rel="stylesheet" href="./assets/preview.css">
 </head>
 <body class="erp-body">
@@ -509,15 +509,15 @@
             </p>
             
     <div class="erp-nav-group">
-        <button class="erp-nav-group-btn" type="button"
-                data-bs-toggle="collapse" data-bs-target="#nav-configure-0" aria-expanded="false">
+        <button class="erp-nav-group-btn is-active has-active-trail" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-configure-0" aria-expanded="true">
             <i class="bi bi-sliders erp-nav-icon" aria-hidden="true"></i>
             <span>Settings</span>
             <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
         </button>
-        <div class="collapse" id="nav-configure-0">
+        <div class="collapse show" id="nav-configure-0">
             <div class="erp-nav-sub">
-        <a class="erp-nav-link" href="./settings.html">
+        <a class="erp-nav-link active" href="./settings.html" aria-current="page">
             <span>Settings Desk</span>
         </a>
         <a class="erp-nav-link" href="./settings.html">
@@ -592,9 +592,15 @@
     </button>
 
     <div class="erp-topbar-crumbs">
-        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb"></ol></nav>
+        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb">
+        <li>
+            <span class="is-current" aria-current="page">Settings &amp; masters</span>
+        </li>
+        <li>
+            <span class="is-current" aria-current="page">System maintenance</span>
+        </li></ol></nav>
         <div class="erp-topbar-title">
-            <strong class="d-none d-md-inline">Petty cash requests</strong>
+            <strong class="d-none d-md-inline">System maintenance</strong>
             <span class="erp-chip erp-chip-outline d-none d-xl-inline-flex" title="Current branch context">
                 <i class="bi bi-geo-alt" aria-hidden="true"></i>Dhaka HQ
             </span>
@@ -672,239 +678,383 @@
 
             <header class="erp-page-head">
                 <div>
-                    <p class="erp-eyebrow"><i class="bi bi-question-circle" aria-hidden="true"></i> Cash &amp; bank · Petty cash · Requests</p>
-                    <h1 class="erp-h1">Money asked for before it is spent</h1>
-                    <p class="erp-page-sub">Above the company's limit nothing comes out of a float until somebody asks and somebody else agrees. A request is not a voucher: while it waits there is no payment, no number and nothing in the ledger — so a waiting request can never be mistaken for money that has moved.</p>
+                    <p class="erp-eyebrow"><i class="bi bi-tools" aria-hidden="true"></i> Settings · System maintenance</p>
+                    <h1 class="erp-h1">System maintenance</h1>
+                    <p class="erp-page-sub">What this installation is, what may be done to it, and what will never be done to it automatically. Every operation records what it did — how many files, how many bytes, which tables — so “the system felt slower after maintenance” is a question with an answer.</p>
                 </div>
                 <div class="erp-page-head-actions">
-                    <a class="btn btn-outline-secondary" href="./petty-cash.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> The floats</a>
-                    <a class="btn btn-primary" href="./petty-cash-expenses.html"><i class="bi bi-receipt" aria-hidden="true"></i> Vouchers</a>
+                    <a class="btn btn-outline-secondary" href="./maintenance-log.html"><i class="bi bi-journal-code" aria-hidden="true"></i> Error log</a>
+                    <a class="btn btn-outline-secondary" href="./settings.html"><i class="bi bi-sliders" aria-hidden="true"></i> Settings</a>
                 </div>
             </header>
 
             <div class="erp-kpi-grid mb-3">
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Waiting for an answer</p>
-                    <p class="erp-kpi-value">৳ 2,000.00</p>
-                    <p class="erp-kpi-foot">1 request — none of them has reached the ledger yet</p>
+                    <p class="erp-kpi-label"><i class="bi bi-database" aria-hidden="true"></i> Database</p>
+                    <p class="erp-kpi-value">412 MB</p>
+                    <p class="erp-kpi-foot">mysql 8.0 · 142 tables</p>
                 </div>
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-receipt" aria-hidden="true"></i> Paid out of the floats this month</p>
-                    <p class="erp-kpi-value">৳ 14,240.00</p>
-                    <p class="erp-kpi-foot">9 voucher(s), each through the payment book</p>
+                    <p class="erp-kpi-label"><i class="bi bi-device-hdd" aria-hidden="true"></i> Storage free</p>
+                    <p class="erp-kpi-value">68 GB</p>
+                    <p class="erp-kpi-foot">of 120 GB on /var/www/erp</p>
                 </div>
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-sliders" aria-hidden="true"></i> Approval limit</p>
-                    <p class="erp-kpi-value">৳ 1,000.00</p>
-                    <p class="erp-kpi-foot">At or above this a voucher is asked for; below it the custodian pays it</p>
+                    <p class="erp-kpi-label"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Pending jobs</p>
+                    <p class="erp-kpi-value">3</p>
+                    <p class="erp-kpi-foot">database queue · oldest queued 4 minutes ago</p>
                 </div>
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-cash-stack" aria-hidden="true"></i> In the tins now</p>
-                    <p class="erp-kpi-value">৳ 18,450.00</p>
-                    <p class="erp-kpi-foot">3 open float(s); ৳ 6,550.00 short of their level</p>
+                    <p class="erp-kpi-label"><i class="bi bi-exclamation-octagon" aria-hidden="true"></i> Failed jobs</p>
+                    <p class="erp-kpi-value">0</p>
+                    <p class="erp-kpi-foot">Nothing has exhausted its retries</p>
                 </div>
             </div>
 
-            <div class="erp-table-shell" data-erp-table>
-                <div class="erp-card-head px-3 pt-3">
-                    <h2 class="erp-card-title">What people have asked for<span class="erp-chip erp-chip-outline">3 request(s) shown</span></h2>
-                    <div class="erp-card-actions">
-                        <select class="form-select form-select-sm" aria-label="Filter by state">
-                            <option>Everything</option>
-                            <option selected>Waiting for approval</option>
-                            <option>Approved and paid</option>
-                            <option>Rejected</option>
-                        </select>
+            <section class="erp-card mb-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">What this page does not claim</h2>
+                        <p class="erp-card-sub">A system information page is only worth reading if it says “unknown” where it cannot see.</p>
                     </div>
-                </div>
+                </header>
                 <div class="erp-table-scroll">
-                    <table class="table erp-table erp-table-stack">
-                        <thead>
-                            <tr>
-                                <th>Needed on</th>
-                                <th>Float</th>
-                                <th>Payee</th>
-                                <th>Category</th>
-                                <th class="erp-th-num">Amount</th>
-                                <th>Asked by</th>
-                                <th>State</th>
-                                <th></th>
-                            </tr>
-                        </thead>
+                    <table class="table erp-table">
+                        <thead><tr><th>Question</th><th>Answer</th><th>Why</th></tr></thead>
                         <tbody>
                             
                             <tr>
-                                <td>2026-10-08</td>
-                                <td>
-                                    <span class="erp-cell-strong">Head office tin</span>
-                                    <span class="d-block erp-td-muted">PC-HEAD</span>
-                                </td>
-                                <td>
-                                    Paper shop
-                                    <span class="d-block erp-td-muted">Reams of paper for the counter</span>
-                                </td>
-                                <td>
-                                    Office supplies
-                                    <span class="d-block erp-td-muted">5240 — Office Supplies</span>
-                                </td>
-                                <td class="erp-td-num">৳ 2,000.00</td>
-                                <td>
-                                    Rakib Hasan
-                                    <span class="d-block erp-td-muted">2026-10-08</span>
-                                </td>
-                                <td>
-                                    <span class="erp-status erp-status-pending_approval">Waiting for approval</span>
-                                    
-                                </td>
-                                <td class="erp-td-actions">
-                                    
-                                    <div class="d-flex flex-column gap-1">
-                                        <input class="form-control form-control-sm" type="text" placeholder="Why (kept with the decision)">
-                                        <div class="d-flex gap-2">
-                                            <button class="btn btn-sm btn-primary" type="button">Pay it</button>
-                                            <button class="btn btn-sm btn-outline-secondary" type="button">Refuse</button>
-                                        </div>
-                                    </div>
-                                </td>
+                                <td class="erp-cell-strong">High availability</td>
+                                <td><span class="erp-chip erp-chip-outline">single instance</span></td>
+                                <td class="erp-td-muted">One application server and one database. There is no replica, no failover and no load balancer.</td>
                             </tr>
                             <tr>
-                                <td>2026-10-05</td>
-                                <td>
-                                    <span class="erp-cell-strong">Depot tin</span>
-                                    <span class="d-block erp-td-muted">PC-DEPOT</span>
-                                </td>
-                                <td>
-                                    Shahin Store
-                                    <span class="d-block erp-td-muted">Packing tape, markers</span>
-                                </td>
-                                <td>
-                                    Packaging materials
-                                    <span class="d-block erp-td-muted">5255 — Packing Materials</span>
-                                </td>
-                                <td class="erp-td-num">৳ 1,450.00</td>
-                                <td>
-                                    Sumaiya Akter
-                                    <span class="d-block erp-td-muted">2026-10-05</span>
-                                </td>
-                                <td>
-                                    <span class="erp-status erp-status-approved">Approved and paid</span>
-                                    <span class="d-block erp-td-muted">paid out — EX-2026-00415</span>
-                                </td>
-                                <td class="erp-td-actions">
-                                    
-                                    <span class="erp-cell-strong">EX-2026-00415</span>
-                                    <span class="d-block erp-td-muted">paid out</span>
-                                </td>
+                                <td class="erp-cell-strong">Database integrity</td>
+                                <td><span class="erp-chip erp-chip-soft">ok · 2 days ago</span></td>
+                                <td class="erp-td-muted">142 tables checked — every one answered OK.</td>
                             </tr>
                             <tr>
-                                <td>2026-10-03</td>
-                                <td>
-                                    <span class="erp-cell-strong">Head office tin</span>
-                                    <span class="d-block erp-td-muted">PC-HEAD</span>
-                                </td>
-                                <td>
-                                    Furniture mart
-                                    <span class="d-block erp-td-muted">A chair for the counter</span>
-                                </td>
-                                <td>
-                                    Office supplies
-                                    <span class="d-block erp-td-muted">5240 — Office Supplies</span>
-                                </td>
-                                <td class="erp-td-num">৳ 9,800.00</td>
-                                <td>
-                                    Rakib Hasan
-                                    <span class="d-block erp-td-muted">2026-10-03</span>
-                                </td>
-                                <td>
-                                    <span class="erp-status erp-status-rejected">Rejected</span>
-                                    <span class="d-block erp-td-muted">Raise a purchase order for that</span>
-                                </td>
-                                <td class="erp-td-actions">
-                                    
-                                    <span class="erp-td-muted">Raise a purchase order for that</span>
-                                </td>
+                                <td class="erp-cell-strong">Self-healing</td>
+                                <td><span class="erp-chip erp-chip-outline">last run 3 days ago</span></td>
+                                <td class="erp-td-muted">Only derived state is healed: cache, temp files, sessions, search index.</td>
+                            </tr>
+                            <tr>
+                                <td class="erp-cell-strong">Backups</td>
+                                <td><span class="erp-chip erp-chip-warn">not built in this build</span></td>
+                                <td class="erp-td-muted">Backup and restore (§15-19) is not implemented, so this page will not report a backup as current.</td>
+                            </tr>
+                            <tr>
+                                <td class="erp-cell-strong">Queue worker</td>
+                                <td><span class="erp-chip erp-chip-outline">unknown from here</span></td>
+                                <td class="erp-td-muted">A web request cannot see whether a worker is running. The pending figure is real; the worker is not.</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <footer class="erp-table-foot">
-                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
-                        <span class="erp-td-muted">The person who asked for the money cannot be the person who answers — that rule lives in the service, not in a hidden button.</span>
-                        <span class="erp-chip erp-chip-outline">Maker ≠ checker</span>
-                    </div>
-                </footer>
-            </div>
-
-            <section class="erp-card mt-3">
-                <header class="erp-card-head">
-                    <div>
-                        <h2 class="erp-card-title">Ask for money out of a float</h2>
-                        <p class="erp-card-sub">At or above ৳ 1,000.00 this waits for somebody else's answer. Below it, the same form pays the money and records the voucher in one step.</p>
-                    </div>
-                </header>
-                <form onsubmit="return false">
-                    <div class="erp-form-grid">
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pr-fund">Float</label>
-                            <select class="form-select" id="pr-fund">
-                                <option>PC-HEAD — Head office tin</option>
-                                <option>PC-DEPOT — Depot tin</option>
-                                <option>PC-CNTR — Counter till</option>
-                            </select>
-                            <small class="form-text">The money leaves the float's own account, so the tin has to be holding it.</small>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pr-category">What it is for</label>
-                            <select class="form-select" id="pr-category">
-                                <option>Office supplies (5240)</option>
-                                <option>Local travel (5220)</option>
-                                <option>Packaging materials (5255)</option>
-                            </select>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pr-payee">Payee</label>
-                            <input class="form-control" type="text" id="pr-payee" placeholder="Who is to be paid">
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pr-amount">Amount</label>
-                            <div class="erp-input-group">
-                                <span class="input-group-text">৳</span>
-                                <input class="form-control erp-num" type="number" step="0.01" id="pr-amount" placeholder="2,000.00">
-                            </div>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pr-needed">Needed on</label>
-                            <input class="form-control" type="date" id="pr-needed" value="2026-10-08">
-                        </div>
-                        <div class="erp-form-field erp-form-field-wide">
-                            <label class="form-label" for="pr-what">What it is</label>
-                            <input class="form-control" type="text" id="pr-what" placeholder="Courier to Uttara — three parcels">
-                        </div>
-                    </div>
-                    <button class="btn btn-primary mt-2" type="button"><i class="bi bi-send" aria-hidden="true"></i> Send the request</button>
-                </form>
             </section>
 
-            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
-                <p class="erp-field-label">More in this module</p>
-                <div class="d-flex flex-wrap gap-2">
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Overview</a>
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash-expenses.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Expenses</a>
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash-replenishment.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Replenishment</a>
+            <div class="row row-cols-1 row-cols-xl-2 g-3 mb-3">
+                <div class="col">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head">
+                            <h2 class="erp-card-title">Application &amp; runtime</h2>
+                            <span class="erp-chip erp-chip-outline">measured now</span>
+                        </header>
+                        <div class="p-3">
+                            <dl class="erp-dl erp-dl-tight mb-0">
+                                <dt>Application</dt><dd>Erp · production</dd>
+                                <dt>Framework</dt><dd>Laravel 13.0 on PHP 8.3.14</dd>
+                                <dt>Host</dt><dd>Linux (6.8.0) · nginx/1.24.0</dd>
+                                <dt>Timezone &amp; locale</dt><dd>Asia/Dhaka · bn · amounts in BDT</dd>
+                                <dt>Memory limit</dt><dd>256M (peak this request: 18 MB)</dd>
+                                <dt>Request limits</dt><dd>30s · upload 20M · post 24M</dd>
+                            </dl>
+                            <p class="erp-filter-note mt-3 mb-1">Extensions this application uses:</p>
+                            <div class="d-flex flex-wrap gap-1">
+                                <span class="erp-chip erp-chip-soft">pdo</span><span class="erp-chip erp-chip-soft">mbstring</span><span class="erp-chip erp-chip-soft">openssl</span><span class="erp-chip erp-chip-soft">bcmath</span><span class="erp-chip erp-chip-soft">gd</span><span class="erp-chip erp-chip-soft">zip</span><span class="erp-chip erp-chip-soft">intl</span><span class="erp-chip erp-chip-soft">fileinfo</span>
+                            </div>
+                        </div>
+                    </section>
                 </div>
-            </nav>
-        </main>
+                <div class="col">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head"><h2 class="erp-card-title">Database, storage &amp; services</h2></header>
+                        <div class="p-3">
+                            <dl class="erp-dl erp-dl-tight">
+                                <dt>Database</dt><dd>mysql · erp @ 127.0.0.1 · 8.0.36</dd>
+                                <dt>Size</dt><dd>412 MB · 142 tables · 96 migrations run</dd>
+                                <dt>Cache &amp; sessions</dt><dd>database cache · database sessions (14 live)</dd>
+                                <dt>Queue &amp; mail</dt><dd>database queue · smtp mailer · local filesystem</dd>
+                                <dt>Newest log line</dt><dd>12 minutes ago</dd>
+                            </dl>
+                            <p class="erp-filter-note mt-3 mb-1">Storage on disk:</p>
+                            <table class="table erp-table mb-0">
+                                <tbody>
+                                    <tr><td class="font-monospace erp-td-muted">storage/app/private</td><td class="erp-td-muted">Uploads &amp; documents</td><td class="erp-td-num">2.4 GB</td><td class="erp-td-num erp-td-muted">3,188 file(s)</td></tr>
+                                    <tr><td class="font-monospace erp-td-muted">storage/logs</td><td class="erp-td-muted">Log files</td><td class="erp-td-num">18.2 MB</td><td class="erp-td-num erp-td-muted">6 file(s)</td></tr>
+                                    <tr><td class="font-monospace erp-td-muted">storage/framework/cache</td><td class="erp-td-muted">Derived cache</td><td class="erp-td-num">41.2 MB</td><td class="erp-td-num erp-td-muted">220 file(s)</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </div>
 
-<footer class="erp-footer">
-    <span>BD ERP · Rafshan Trading Ltd.</span>
-    <span class="erp-footer-meta">
-        <span>07 Oct 2026, 06:20 PM · Asia/Dhaka</span>
-        <span class="d-none d-md-inline">Press <kbd>⌘</kbd><kbd>K</kbd> to jump anywhere</span>
-    </span>
-</footer>
-    </div>
+            <section class="erp-card mb-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">What is in the database</h2>
+                        <p class="erp-card-sub">Counted in this request. After a restore, these are the first figures to compare — a count that came back as zero is how a silent failure is caught on the day it happens.</p>
+                    </div>
+                </header>
+                <div class="p-3">
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
+                        
+                        <div class="col">
+                            <p class="erp-filter-note mb-1">Access</p>
+                            <dl class="erp-dl erp-dl-tight mb-0">
+                                <dt>Users</dt><dd>12</dd><dt>Roles</dt><dd>5</dd><dt>Branches</dt><dd>3</dd>
+                            </dl>
+                        </div>
+                        <div class="col">
+                            <p class="erp-filter-note mb-1">Trading</p>
+                            <dl class="erp-dl erp-dl-tight mb-0">
+                                <dt>Customers</dt><dd>486</dd><dt>Suppliers</dt><dd>63</dd><dt>Products</dt><dd>1,240</dd><dt>Invoices</dt><dd>3,914</dd>
+                            </dl>
+                        </div>
+                        <div class="col">
+                            <p class="erp-filter-note mb-1">Stock</p>
+                            <dl class="erp-dl erp-dl-tight mb-0">
+                                <dt>Warehouses</dt><dd>2</dd><dt>Stock balances</dt><dd>2,517</dd><dt>Valuation layers</dt><dd>4,088</dd>
+                            </dl>
+                        </div>
+                        <div class="col">
+                            <p class="erp-filter-note mb-1">Books</p>
+                            <dl class="erp-dl erp-dl-tight mb-0">
+                                <dt>Accounts</dt><dd>142</dd><dt>Journal entries</dt><dd>6,201</dd><dt>Journal lines</dt><dd>18,442</dd>
+                            </dl>
+                        </div>
+                        <div class="col">
+                            <p class="erp-filter-note mb-1">System</p>
+                            <dl class="erp-dl erp-dl-tight mb-0">
+                                <dt>Audit events</dt><dd>41,908</dd><dt>Setting rows</dt><dd>38</dd><dt>Search index rows</dt><dd>1,338</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <h2 class="erp-h2 mb-2">Safe operations</h2>
+            <div class="row row-cols-1 row-cols-xl-2 g-3 mb-3">
+                
+                <div class="col">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head">
+                            <h2 class="erp-card-title">Clear cache</h2>
+                            <span class="erp-chip erp-chip-soft">Allowed self-heal</span>
+                        </header>
+                        <div class="p-3">
+                            <p class="text-body-secondary mb-2">Clears the application cache and compiled templates — both reproducible from the database.</p>
+                            <p class="erp-filter-note mb-3">Does not touch: uploads, backups, audit trail, log files, business rows.</p>
+                            <button class="btn btn-primary" type="button"><i class="bi bi-check-lg" aria-hidden="true"></i> Clear cache</button>
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head">
+                            <h2 class="erp-card-title">End other sessions</h2>
+                            <span class="erp-chip erp-chip-soft">Allowed self-heal</span>
+                        </header>
+                        <div class="p-3">
+                            <p class="text-body-secondary mb-2">Ends every session except the one you are using — a machine left signed in at a counter.</p>
+                            <p class="erp-filter-note mb-3">Your own session is kept: nothing escapes being the person who did it.</p>
+                            <button class="btn btn-primary" type="button"><i class="bi bi-check-lg" aria-hidden="true"></i> End other sessions</button>
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head">
+                            <h2 class="erp-card-title">Remove temporary files</h2>
+                            <span class="erp-chip erp-chip-soft">Allowed self-heal</span>
+                        </header>
+                        <div class="p-3">
+                            <p class="text-body-secondary mb-2">Sweeps storage/app/temp and the file-cache leftovers, skipping anything written in the last 24 hours.</p>
+                            <p class="erp-filter-note mb-3">Never follows a symlink out of the storage tree, never removes a directory.</p>
+                            <button class="btn btn-primary" type="button"><i class="bi bi-check-lg" aria-hidden="true"></i> Remove temporary files</button>
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head">
+                            <h2 class="erp-card-title">Rebuild the search index</h2>
+                            <span class="erp-chip erp-chip-soft">Allowed self-heal</span>
+                        </header>
+                        <div class="p-3">
+                            <p class="text-body-secondary mb-2">Rebuilds global search from source tables — users, branches, warehouses, roles, documents.</p>
+                            <p class="erp-filter-note mb-3">The index holds no fact the source tables do not.</p>
+                            <button class="btn btn-primary" type="button"><i class="bi bi-check-lg" aria-hidden="true"></i> Rebuild search index</button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <h2 class="erp-h2 mb-2">Database</h2>
+            <div class="row row-cols-1 row-cols-xl-2 g-3 mb-3">
+                <div class="col">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head"><h2 class="erp-card-title">Optimise &amp; check</h2></header>
+                        <div class="p-3">
+                            <p class="text-body-secondary mb-2"><strong>Optimise</strong> reclaims the space free inside the table files and reports how much moved. <strong>Check</strong> asks every table whether it is sound — it reads, it never writes, and its answer is what a repair is allowed to act on.</p>
+                            <p class="erp-filter-note mb-3">Last check 2 days ago: <strong>142 table(s) checked — every one answered OK.</strong></p>
+                            <div class="d-flex flex-wrap gap-2">
+                                <button class="btn btn-primary" type="button"><i class="bi bi-speedometer2" aria-hidden="true"></i> Optimise</button>
+                                <button class="btn btn-outline-secondary" type="button"><i class="bi bi-clipboard-check" aria-hidden="true"></i> Run integrity check</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head">
+                            <h2 class="erp-card-title">Repair</h2>
+                            <span class="erp-chip erp-chip-outline">nothing to repair</span>
+                        </header>
+                        <div class="p-3">
+                            <p class="text-body-secondary mb-2">Repair writes to table structure, so it stands on two things it will not assume: a check on file, and a table that check named. It acts on nothing else — a “quick fix” that touches a table nobody looked at is how data loss starts.</p>
+                            <p class="erp-filter-note mb-0">Run an integrity check first. When it finds problems, they appear here with the tables that reported them, and repair becomes available for exactly those.</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <section class="erp-card mb-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Self-healing</h2>
+                        <p class="erp-card-sub">The four safe operations above, in a fixed order, in one run. What is on this list is short on purpose — and the second list is why.</p>
+                    </div>
+                    <span class="erp-chip erp-chip-outline">last run 3 days ago</span>
+                </header>
+                <div class="p-3">
+                    <div class="row row-cols-1 row-cols-xl-2 g-3">
+                        <div class="col">
+                            <p class="erp-filter-note mb-2">Never performed automatically, whatever a heal is asked to do:</p>
+                            <table class="table erp-table mb-0">
+                                <tbody>
+                                    <tr><td class="erp-cell-strong">Schema changes</td><td class="erp-td-muted">A repair that alters structure has to be a migration somebody reviewed, with a rollback.</td></tr><tr><td class="erp-cell-strong">Posting or reversing entries</td><td class="erp-td-muted">Money moves through documents with an approver and an audit trail.</td></tr><tr><td class="erp-cell-strong">Editing or deleting audit rows</td><td class="erp-td-muted">The trail is the evidence that the rest of this list was followed.</td></tr><tr><td class="erp-cell-strong">Granting permissions</td><td class="erp-td-muted">A heal that widens access is privilege escalation with a friendly name.</td></tr><tr><td class="erp-cell-strong">Rewriting instance identity</td><td class="erp-td-muted">Company, currency and fiscal calendar are protected settings (§15-35).</td></tr><tr><td class="erp-cell-strong">Removing uploaded files</td><td class="erp-td-muted">A file a person uploaded is not garbage because the system cannot see who needs it.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col">
+                            <p class="erp-filter-note mb-2">What a heal will run, in order:</p>
+                            <ol class="mb-3">
+                                <li>Clear cache and compiled templates</li>
+                                <li>Remove temporary files older than 24 hours</li>
+                                <li>End other sessions</li>
+                                <li>Rebuild the search index</li>
+                            </ol>
+                            <button class="btn btn-primary" type="button"><i class="bi bi-heart-pulse" aria-hidden="true"></i> Run safe self-healing</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="erp-card mb-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Reset settings to their defaults</h2>
+                        <p class="erp-card-sub">Every group goes back to the declared default. Business data is not touched: invoices, payments, stock, the ledger and the audit trail are exactly where they were.</p>
+                    </div>
+                    <span class="erp-chip erp-chip-warn">irreversible</span>
+                </header>
+                <div class="p-3">
+                    <p class="text-body-secondary mb-2">Rows are deleted rather than rewritten with the default value. A row that says what the default already says is a decision nobody made — and it would hide the useful fact that this company has not chosen yet. The settings history and the audit trail are kept.</p>
+                    <label class="erp-field-label">Type <code>RESET SETTINGS</code> to confirm</label>
+                    <input class="form-control mb-2" type="text" placeholder="RESET SETTINGS">
+                    <button class="btn btn-danger" type="button"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Reset settings</button>
+                </div>
+            </section>
+
+            <div class="erp-table-shell mb-3" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">Maintenance history<span class="erp-chip erp-chip-outline">4 recent run(s)</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead><tr><th>When</th><th>Operation</th><th>Result</th><th>What it did</th><th class="erp-th-num">Freed</th><th>By</th></tr></thead>
+                        <tbody>
+                            
+                            <tr>
+                                <td class="erp-td-muted">07 Oct 2026 09:12</td>
+                                <td class="erp-cell-strong">Cache cleared</td>
+                                <td><span class="erp-chip erp-chip-soft">ok</span></td>
+                                <td class="erp-td-muted">Cache cleared: 41.2 MB of derived files removed; uploads, backups and the audit trail untouched.</td>
+                                <td class="erp-td-num">41.2 MB</td>
+                                <td class="erp-td-muted">Instance Owner</td>
+                            </tr>
+                            <tr>
+                                <td class="erp-td-muted">06 Oct 2026 22:40</td>
+                                <td class="erp-cell-strong">Integrity check</td>
+                                <td><span class="erp-chip erp-chip-soft">ok</span></td>
+                                <td class="erp-td-muted">142 table(s) checked — every one answered OK.</td>
+                                <td class="erp-td-num">—</td>
+                                <td class="erp-td-muted">Instance Owner</td>
+                            </tr>
+                            <tr>
+                                <td class="erp-td-muted">05 Oct 2026 08:02</td>
+                                <td class="erp-cell-strong">Self-healing run</td>
+                                <td><span class="erp-chip erp-chip-soft">ok</span></td>
+                                <td class="erp-td-muted">Self-healing run: 4 safe operation(s) executed, 63.8 MB freed.</td>
+                                <td class="erp-td-num">63.8 MB</td>
+                                <td class="erp-td-muted">Instance Owner</td>
+                            </tr>
+                            <tr>
+                                <td class="erp-td-muted">02 Oct 2026 11:15</td>
+                                <td class="erp-cell-strong">Database repaired</td>
+                                <td><span class="erp-chip erp-chip-outline">refused</span></td>
+                                <td class="erp-td-muted">No integrity check is on file for this company. Run the check first.</td>
+                                <td class="erp-td-num">—</td>
+                                <td class="erp-td-muted">Instance Owner</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row row-cols-1 row-cols-xl-2 g-3">
+                <div class="col">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head"><h2 class="erp-card-title">Scheduled work (CLI)</h2></header>
+                        <div class="p-3">
+                            <p class="text-body-secondary mb-2">These run from cron, not from a browser: their absence shows up as work that never happened rather than as an error here, which is why the list is on this page.</p>
+                            <pre class="erp-pre mb-0">php artisan erp:search:rebuild
+php artisan erp:chain-verify
+php artisan erp:expiry-alerts
+php artisan erp:generate-bank-charges</pre>
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head"><h2 class="erp-card-title">What is not built yet</h2></header>
+                        <div class="p-3">
+                            <dl class="erp-dl erp-dl-tight mb-0">
+                                <dt>Backup &amp; restore (§15-19)</dt>
+                                <dd>Not implemented. Take a database dump with your own tooling, and keep the restore steps written down outside the application.</dd>
+                                <dt>Image derivatives (§15-29)</dt>
+                                <dd>This build creates a document's image derivatives at upload time and stores them beside it. There is no separate thumbnail cache to regenerate.</dd>
+                            </dl>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+        </div>
+    </main>
 </div>
-<script>window.erpNavIndex = [];</script>
 
 <div class="erp-backdrop" data-erp-backdrop hidden></div>
 

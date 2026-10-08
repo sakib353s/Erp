@@ -194,7 +194,7 @@ export const SECTIONS = [
                     { label: 'Company profile', url: '#', icon: 'bi-building' },
                     { label: 'Users', url: '#', icon: 'bi-person-badge' },
                     { label: 'Roles & permissions', url: '#', icon: 'bi-shield-lock' },
-                    { label: 'System maintenance', url: '#', icon: 'bi-tools' },
+                    { label: 'System maintenance', url: './maintenance.html', icon: 'bi-tools' },
                 ],
                 overflow: 38,
             },
@@ -276,7 +276,7 @@ export const PALETTE = [
     { label: 'Users', url: '#', icon: 'bi-person-badge', section: 'Configuration', group: 'Settings' },
     { label: 'Roles & permissions', url: '#', icon: 'bi-shield-lock', section: 'Configuration', group: 'Settings' },
     { label: 'Appearance', url: '#', icon: 'bi-palette', section: 'Configuration', group: 'Settings' },
-    { label: 'System maintenance', url: '#', icon: 'bi-tools', section: 'Configuration', group: 'Settings' },
+    { label: 'System maintenance', url: './maintenance.html', icon: 'bi-tools', section: 'Configuration', group: 'Settings' },
 ];
 
 const esc = (value) => String(value)
@@ -399,7 +399,12 @@ export function sidebar(activeTarget = 'dashboard') {
 </aside>`;
 }
 
-export function topbar({ trail = [], title = 'Dashboard', branch = 'Dhaka HQ', warehouse = 'Main warehouse' } = {}) {
+export function topbar(args = {}) {
+    // Pages written before this signature passed the title as a plain string.
+    // Accepting both keeps nineteen pages' titles honest instead of silently
+    // rendering the default.
+    const { trail = [], title = 'Dashboard', branch = 'Dhaka HQ', warehouse = 'Main warehouse' } =
+        typeof args === 'string' ? { title: args } : args;
     const crumbs = trail.map((crumb) => `
         <li>
             ${crumb.url

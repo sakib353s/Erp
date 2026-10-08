@@ -5694,3 +5694,331 @@ ${previewBar('settings-branch.html')}
     </main>
 </div>`;
 }
+
+/**
+ * §15-23…§15-33 — the maintenance desk. The interesting thing about this page
+ * is what it refuses to claim: the first table is the questions an operator asks
+ * (high availability, backups, queue worker) answered honestly, and the
+ * self-healing block lists what the system will never do to itself.
+ */
+export function maintenanceDesk() {
+    const claims = [
+        { label: 'High availability', verdict: 'single instance', tone: 'erp-chip-outline', why: 'One application server and one database. There is no replica, no failover and no load balancer.' },
+        { label: 'Database integrity', verdict: 'ok · 2 days ago', tone: 'erp-chip-soft', why: '142 tables checked — every one answered OK.' },
+        { label: 'Self-healing', verdict: 'last run 3 days ago', tone: 'erp-chip-outline', why: 'Only derived state is healed: cache, temp files, sessions, search index.' },
+        { label: 'Backups', verdict: 'not built in this build', tone: 'erp-chip-warn', why: 'Backup and restore (§15-19) is not implemented, so this page will not report a backup as current.' },
+        { label: 'Queue worker', verdict: 'unknown from here', tone: 'erp-chip-outline', why: 'A web request cannot see whether a worker is running. The pending figure is real; the worker is not.' },
+    ];
+
+    const operations = [
+        { title: 'Clear cache', tone: 'erp-chip-soft', note: 'Allowed self-heal', body: 'Clears the application cache and compiled templates — both reproducible from the database.', does: 'Does not touch: uploads, backups, audit trail, log files, business rows.', button: 'Clear cache' },
+        { title: 'End other sessions', tone: 'erp-chip-soft', note: 'Allowed self-heal', body: 'Ends every session except the one you are using — a machine left signed in at a counter.', does: 'Your own session is kept: nothing escapes being the person who did it.', button: 'End other sessions' },
+        { title: 'Remove temporary files', tone: 'erp-chip-soft', note: 'Allowed self-heal', body: 'Sweeps storage/app/temp and the file-cache leftovers, skipping anything written in the last 24 hours.', does: 'Never follows a symlink out of the storage tree, never removes a directory.', button: 'Remove temporary files' },
+        { title: 'Rebuild the search index', tone: 'erp-chip-soft', note: 'Allowed self-heal', body: 'Rebuilds global search from source tables — users, branches, warehouses, roles, documents.', does: 'The index holds no fact the source tables do not.', button: 'Rebuild search index' },
+    ];
+
+    const never = [
+        { label: 'Schema changes', why: 'A repair that alters structure has to be a migration somebody reviewed, with a rollback.' },
+        { label: 'Posting or reversing entries', why: 'Money moves through documents with an approver and an audit trail.' },
+        { label: 'Editing or deleting audit rows', why: 'The trail is the evidence that the rest of this list was followed.' },
+        { label: 'Granting permissions', why: 'A heal that widens access is privilege escalation with a friendly name.' },
+        { label: 'Rewriting instance identity', why: 'Company, currency and fiscal calendar are protected settings (§15-35).' },
+        { label: 'Removing uploaded files', why: 'A file a person uploaded is not garbage because the system cannot see who needs it.' },
+    ];
+
+    const counts = [
+        { group: 'Access', rows: [['Users', '12'], ['Roles', '5'], ['Branches', '3']] },
+        { group: 'Trading', rows: [['Customers', '486'], ['Suppliers', '63'], ['Products', '1,240'], ['Invoices', '3,914']] },
+        { group: 'Stock', rows: [['Warehouses', '2'], ['Stock balances', '2,517'], ['Valuation layers', '4,088']] },
+        { group: 'Books', rows: [['Accounts', '142'], ['Journal entries', '6,201'], ['Journal lines', '18,442']] },
+        { group: 'System', rows: [['Audit events', '41,908'], ['Setting rows', '38'], ['Search index rows', '1,338']] },
+    ];
+
+    const history = [
+        { at: '07 Oct 2026 09:12', label: 'Cache cleared', status: 'ok', what: 'Cache cleared: 41.2 MB of derived files removed; uploads, backups and the audit trail untouched.', freed: '41.2 MB', by: 'Instance Owner' },
+        { at: '06 Oct 2026 22:40', label: 'Integrity check', status: 'ok', what: '142 table(s) checked — every one answered OK.', freed: '—', by: 'Instance Owner' },
+        { at: '05 Oct 2026 08:02', label: 'Self-healing run', status: 'ok', what: 'Self-healing run: 4 safe operation(s) executed, 63.8 MB freed.', freed: '63.8 MB', by: 'Instance Owner' },
+        { at: '02 Oct 2026 11:15', label: 'Database repaired', status: 'refused', what: 'No integrity check is on file for this company. Run the check first.', freed: '—', by: 'Instance Owner' },
+    ];
+
+    return `
+${previewBar('maintenance.html')}
+<div class="erp-shell">
+    ${sidebar('configure')}
+    <main class="erp-main">
+        ${topbar({ title: 'System maintenance', trail: [{ label: 'Settings & masters' }, { label: 'System maintenance' }] })}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-tools" aria-hidden="true"></i> Settings · System maintenance</p>
+                    <h1 class="erp-h1">System maintenance</h1>
+                    <p class="erp-page-sub">What this installation is, what may be done to it, and what will never be done to it automatically. Every operation records what it did — how many files, how many bytes, which tables — so “the system felt slower after maintenance” is a question with an answer.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./maintenance-log.html"><i class="bi bi-journal-code" aria-hidden="true"></i> Error log</a>
+                    <a class="btn btn-outline-secondary" href="./settings.html"><i class="bi bi-sliders" aria-hidden="true"></i> Settings</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-database" aria-hidden="true"></i> Database</p>
+                    <p class="erp-kpi-value">412 MB</p>
+                    <p class="erp-kpi-foot">mysql 8.0 · 142 tables</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-device-hdd" aria-hidden="true"></i> Storage free</p>
+                    <p class="erp-kpi-value">68 GB</p>
+                    <p class="erp-kpi-foot">of 120 GB on /var/www/erp</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Pending jobs</p>
+                    <p class="erp-kpi-value">3</p>
+                    <p class="erp-kpi-foot">database queue · oldest queued 4 minutes ago</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-exclamation-octagon" aria-hidden="true"></i> Failed jobs</p>
+                    <p class="erp-kpi-value">0</p>
+                    <p class="erp-kpi-foot">Nothing has exhausted its retries</p>
+                </div>
+            </div>
+
+            <section class="erp-card mb-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">What this page does not claim</h2>
+                        <p class="erp-card-sub">A system information page is only worth reading if it says “unknown” where it cannot see.</p>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead><tr><th>Question</th><th>Answer</th><th>Why</th></tr></thead>
+                        <tbody>
+                            ${claims.map((c) => `
+                            <tr>
+                                <td class="erp-cell-strong">${c.label}</td>
+                                <td><span class="erp-chip ${c.tone}">${c.verdict}</span></td>
+                                <td class="erp-td-muted">${c.why}</td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div class="row row-cols-1 row-cols-xl-2 g-3 mb-3">
+                <div class="col">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head">
+                            <h2 class="erp-card-title">Application &amp; runtime</h2>
+                            <span class="erp-chip erp-chip-outline">measured now</span>
+                        </header>
+                        <div class="p-3">
+                            <dl class="erp-dl erp-dl-tight mb-0">
+                                <dt>Application</dt><dd>Erp · production</dd>
+                                <dt>Framework</dt><dd>Laravel 13.0 on PHP 8.3.14</dd>
+                                <dt>Host</dt><dd>Linux (6.8.0) · nginx/1.24.0</dd>
+                                <dt>Timezone &amp; locale</dt><dd>Asia/Dhaka · bn · amounts in BDT</dd>
+                                <dt>Memory limit</dt><dd>256M (peak this request: 18 MB)</dd>
+                                <dt>Request limits</dt><dd>30s · upload 20M · post 24M</dd>
+                            </dl>
+                            <p class="erp-filter-note mt-3 mb-1">Extensions this application uses:</p>
+                            <div class="d-flex flex-wrap gap-1">
+                                ${['pdo', 'mbstring', 'openssl', 'bcmath', 'gd', 'zip', 'intl', 'fileinfo'].map((e) => `<span class="erp-chip erp-chip-soft">${e}</span>`).join('')}
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head"><h2 class="erp-card-title">Database, storage &amp; services</h2></header>
+                        <div class="p-3">
+                            <dl class="erp-dl erp-dl-tight">
+                                <dt>Database</dt><dd>mysql · erp @ 127.0.0.1 · 8.0.36</dd>
+                                <dt>Size</dt><dd>412 MB · 142 tables · 96 migrations run</dd>
+                                <dt>Cache &amp; sessions</dt><dd>database cache · database sessions (14 live)</dd>
+                                <dt>Queue &amp; mail</dt><dd>database queue · smtp mailer · local filesystem</dd>
+                                <dt>Newest log line</dt><dd>12 minutes ago</dd>
+                            </dl>
+                            <p class="erp-filter-note mt-3 mb-1">Storage on disk:</p>
+                            <table class="table erp-table mb-0">
+                                <tbody>
+                                    <tr><td class="font-monospace erp-td-muted">storage/app/private</td><td class="erp-td-muted">Uploads &amp; documents</td><td class="erp-td-num">2.4 GB</td><td class="erp-td-num erp-td-muted">3,188 file(s)</td></tr>
+                                    <tr><td class="font-monospace erp-td-muted">storage/logs</td><td class="erp-td-muted">Log files</td><td class="erp-td-num">18.2 MB</td><td class="erp-td-num erp-td-muted">6 file(s)</td></tr>
+                                    <tr><td class="font-monospace erp-td-muted">storage/framework/cache</td><td class="erp-td-muted">Derived cache</td><td class="erp-td-num">41.2 MB</td><td class="erp-td-num erp-td-muted">220 file(s)</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <section class="erp-card mb-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">What is in the database</h2>
+                        <p class="erp-card-sub">Counted in this request. After a restore, these are the first figures to compare — a count that came back as zero is how a silent failure is caught on the day it happens.</p>
+                    </div>
+                </header>
+                <div class="p-3">
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
+                        ${counts.map((c) => `
+                        <div class="col">
+                            <p class="erp-filter-note mb-1">${c.group}</p>
+                            <dl class="erp-dl erp-dl-tight mb-0">
+                                ${c.rows.map(([label, value]) => `<dt>${label}</dt><dd>${value}</dd>`).join('')}
+                            </dl>
+                        </div>`).join('')}
+                    </div>
+                </div>
+            </section>
+
+            <h2 class="erp-h2 mb-2">Safe operations</h2>
+            <div class="row row-cols-1 row-cols-xl-2 g-3 mb-3">
+                ${operations.map((op) => `
+                <div class="col">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head">
+                            <h2 class="erp-card-title">${op.title}</h2>
+                            <span class="erp-chip ${op.tone}">${op.note}</span>
+                        </header>
+                        <div class="p-3">
+                            <p class="text-body-secondary mb-2">${op.body}</p>
+                            <p class="erp-filter-note mb-3">${op.does}</p>
+                            <button class="btn btn-primary" type="button"><i class="bi bi-check-lg" aria-hidden="true"></i> ${op.button}</button>
+                        </div>
+                    </section>
+                </div>`).join('')}
+            </div>
+
+            <h2 class="erp-h2 mb-2">Database</h2>
+            <div class="row row-cols-1 row-cols-xl-2 g-3 mb-3">
+                <div class="col">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head"><h2 class="erp-card-title">Optimise &amp; check</h2></header>
+                        <div class="p-3">
+                            <p class="text-body-secondary mb-2"><strong>Optimise</strong> reclaims the space free inside the table files and reports how much moved. <strong>Check</strong> asks every table whether it is sound — it reads, it never writes, and its answer is what a repair is allowed to act on.</p>
+                            <p class="erp-filter-note mb-3">Last check 2 days ago: <strong>142 table(s) checked — every one answered OK.</strong></p>
+                            <div class="d-flex flex-wrap gap-2">
+                                <button class="btn btn-primary" type="button"><i class="bi bi-speedometer2" aria-hidden="true"></i> Optimise</button>
+                                <button class="btn btn-outline-secondary" type="button"><i class="bi bi-clipboard-check" aria-hidden="true"></i> Run integrity check</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head">
+                            <h2 class="erp-card-title">Repair</h2>
+                            <span class="erp-chip erp-chip-outline">nothing to repair</span>
+                        </header>
+                        <div class="p-3">
+                            <p class="text-body-secondary mb-2">Repair writes to table structure, so it stands on two things it will not assume: a check on file, and a table that check named. It acts on nothing else — a “quick fix” that touches a table nobody looked at is how data loss starts.</p>
+                            <p class="erp-filter-note mb-0">Run an integrity check first. When it finds problems, they appear here with the tables that reported them, and repair becomes available for exactly those.</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <section class="erp-card mb-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Self-healing</h2>
+                        <p class="erp-card-sub">The four safe operations above, in a fixed order, in one run. What is on this list is short on purpose — and the second list is why.</p>
+                    </div>
+                    <span class="erp-chip erp-chip-outline">last run 3 days ago</span>
+                </header>
+                <div class="p-3">
+                    <div class="row row-cols-1 row-cols-xl-2 g-3">
+                        <div class="col">
+                            <p class="erp-filter-note mb-2">Never performed automatically, whatever a heal is asked to do:</p>
+                            <table class="table erp-table mb-0">
+                                <tbody>
+                                    ${never.map((n) => `<tr><td class="erp-cell-strong">${n.label}</td><td class="erp-td-muted">${n.why}</td></tr>`).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col">
+                            <p class="erp-filter-note mb-2">What a heal will run, in order:</p>
+                            <ol class="mb-3">
+                                <li>Clear cache and compiled templates</li>
+                                <li>Remove temporary files older than 24 hours</li>
+                                <li>End other sessions</li>
+                                <li>Rebuild the search index</li>
+                            </ol>
+                            <button class="btn btn-primary" type="button"><i class="bi bi-heart-pulse" aria-hidden="true"></i> Run safe self-healing</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="erp-card mb-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Reset settings to their defaults</h2>
+                        <p class="erp-card-sub">Every group goes back to the declared default. Business data is not touched: invoices, payments, stock, the ledger and the audit trail are exactly where they were.</p>
+                    </div>
+                    <span class="erp-chip erp-chip-warn">irreversible</span>
+                </header>
+                <div class="p-3">
+                    <p class="text-body-secondary mb-2">Rows are deleted rather than rewritten with the default value. A row that says what the default already says is a decision nobody made — and it would hide the useful fact that this company has not chosen yet. The settings history and the audit trail are kept.</p>
+                    <label class="erp-field-label">Type <code>RESET SETTINGS</code> to confirm</label>
+                    <input class="form-control mb-2" type="text" placeholder="RESET SETTINGS">
+                    <button class="btn btn-danger" type="button"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Reset settings</button>
+                </div>
+            </section>
+
+            <div class="erp-table-shell mb-3" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">Maintenance history<span class="erp-chip erp-chip-outline">4 recent run(s)</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead><tr><th>When</th><th>Operation</th><th>Result</th><th>What it did</th><th class="erp-th-num">Freed</th><th>By</th></tr></thead>
+                        <tbody>
+                            ${history.map((h) => `
+                            <tr>
+                                <td class="erp-td-muted">${h.at}</td>
+                                <td class="erp-cell-strong">${h.label}</td>
+                                <td><span class="erp-chip ${h.status === 'ok' ? 'erp-chip-soft' : 'erp-chip-outline'}">${h.status}</span></td>
+                                <td class="erp-td-muted">${h.what}</td>
+                                <td class="erp-td-num">${h.freed}</td>
+                                <td class="erp-td-muted">${h.by}</td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row row-cols-1 row-cols-xl-2 g-3">
+                <div class="col">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head"><h2 class="erp-card-title">Scheduled work (CLI)</h2></header>
+                        <div class="p-3">
+                            <p class="text-body-secondary mb-2">These run from cron, not from a browser: their absence shows up as work that never happened rather than as an error here, which is why the list is on this page.</p>
+                            <pre class="erp-pre mb-0">php artisan erp:search:rebuild
+php artisan erp:chain-verify
+php artisan erp:expiry-alerts
+php artisan erp:generate-bank-charges</pre>
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head"><h2 class="erp-card-title">What is not built yet</h2></header>
+                        <div class="p-3">
+                            <dl class="erp-dl erp-dl-tight mb-0">
+                                <dt>Backup &amp; restore (§15-19)</dt>
+                                <dd>Not implemented. Take a database dump with your own tooling, and keep the restore steps written down outside the application.</dd>
+                                <dt>Image derivatives (§15-29)</dt>
+                                <dd>This build creates a document's image derivatives at upload time and stores them beside it. There is no separate thumbnail cache to regenerate.</dd>
+                            </dl>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>`;
+}

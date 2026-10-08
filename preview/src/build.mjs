@@ -9,7 +9,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { shellHeader, shellFooter } from './shell.mjs';
 import { designSystem, dashboard, orders, orderDetail, customers, customerProfile, pos, packaging, labels, cashBank, bankRecon, cheques, expenses, recurringExpenses, pettyCash, pettyCashExpenses, pettyCashRequests, pettyCashReplenishment, cashCounts, cashCountSheet, bankCharges, expenseReport, cashReports, reportCentre, reportFamily,
-    reportsCustom, reportsScheduled, settingsDesk, settingsBranch,
+    reportsCustom, reportsScheduled, settingsDesk, settingsBranch, maintenanceDesk,
     login, notFound } from './pages.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -41,6 +41,7 @@ const shellPages = [
     ['reports-scheduled.html', 'Scheduled reports', reportsScheduled],
     ['settings.html', 'Settings desk', settingsDesk],
     ['settings-branch.html', 'Branch settings', settingsBranch],
+    ['maintenance.html', 'System maintenance', maintenanceDesk],
     ['petty-cash.html', 'Petty cash', pettyCash],
     ['petty-cash-requests.html', 'Petty cash requests', pettyCashRequests],
     ['petty-cash-expenses.html', 'Petty cash expenses', pettyCashExpenses],
