@@ -169,6 +169,15 @@ class FoundationPermissionSeeder extends Seeder
             ['business', 'tasks', 'view_all', 'tasks.view_all', 'See everybody’s tasks'],
             ['business', 'tasks', 'manage', 'tasks.manage', 'Create, assign, move and comment on tasks and projects'],
 
+            // §12-03/04/09/10: the company's registers — licence, TIN & BIN,
+            // certificates, contracts, agreements, brand assets, insurance,
+            // RJSC filings and the statutory calendar. Reading them is an
+            // office job; writing one, renewing one or retiring one is the
+            // manager's, because a register is only evidence if the people
+            // who keep it are accountable for what it says.
+            ['business', 'records', 'view', 'business.records.view', 'Read the company registers — licences, contracts, insurance, compliance'],
+            ['business', 'records', 'manage', 'business.records.manage', 'Record, renew, file, attach and retire entries in the company registers'],
+
             ['settings', 'company', 'manage', 'settings.company', 'Edit company profile'],
 
             // Phase H — HRM (§10): attendance, leave, structure

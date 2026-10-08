@@ -163,6 +163,12 @@ class SystemRoleSeeder extends Seeder
                 // a project with nobody accountable is a folder.
                 'business.notices.view', 'business.notices.create',
                 'tasks.view_own', 'tasks.view_all', 'tasks.manage',
+                // §12-03/04/09/10: the registers are the office's memory —
+                // which licence runs out when, what was signed with whom, what
+                // cover is in force. A manager both reads and keeps them; the
+                // employee bundle deliberately does not, because a contract's
+                // value and a licence's number are not everybody's business.
+                'business.records.view', 'business.records.manage',
             ]],
             ['slug' => 'employee', 'name' => 'Employee', 'description' => 'Staff account: own portal access only — own leave, own payslips.', 'keys' => [
                 'dashboard.view', 'employees.view', 'documents.view', 'search.view',

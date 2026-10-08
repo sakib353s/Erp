@@ -9,6 +9,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BankChargeController;
 use App\Http\Controllers\BankReconciliationController;
 use App\Http\Controllers\BranchController;
+use App\Http\Controllers\BusinessRecordController;
 use App\Http\Controllers\BulkPriceUpdateController;
 use App\Http\Controllers\CashBankController;
 use App\Http\Controllers\CashReportController;
@@ -2175,6 +2176,55 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::put('/app/projects/{project}', [ProjectController::class, 'update'])
         ->middleware('permission:tasks.manage')
         ->name('projects.update');
+
+    /* ---- §12 Business Management: the company's registers (12-03, 12-04, 12-09, 12-10) ----
+     *
+     * Nine kinds of record — trade licence, TIN & BIN, certificates, contracts,
+     * agreements, brand assets, insurance, RJSC filings, statutory obligations —
+     * behind one register. `/app/records/{kind}` takes a slug (`brand-asset`)
+     * while `/app/records/{record}` takes an id, so the two cannot be confused;
+     * the letters-only constraint on the first is what keeps them apart.
+     */
+    Route::middleware('permission:business.records.view')->group(function () {
+        Route::get('/app/records', [BusinessRecordController::class, 'index'])
+            ->name('records.index');
+        Route::get('/app/records/{kind}', [BusinessRecordController::class, 'kind'])
+            ->where('kind', '[a-z][a-z-]*')
+            ->name('records.kind');
+        Route::get('/app/records/{record}', [BusinessRecordController::class, 'show'])
+            ->whereNumber('record')
+            ->name('records.show');
+
+        Route::get('/app/compliance/renewals', [BusinessRecordController::class, 'renewals'])
+            ->name('compliance.renewals');
+        Route::get('/app/compliance/calendar', [BusinessRecordController::class, 'calendar'])
+            ->name('compliance.calendar');
+        Route::get('/app/compliance/obligations', [BusinessRecordController::class, 'obligations'])
+            ->name('compliance.obligations');
+    });
+
+    Route::middleware('permission:business.records.manage')->group(function () {
+        Route::post('/app/records', [BusinessRecordController::class, 'store'])
+            ->name('records.store');
+        Route::put('/app/records/{record}', [BusinessRecordController::class, 'update'])
+            ->whereNumber('record')
+            ->name('records.update');
+        Route::post('/app/records/{record}/renew', [BusinessRecordController::class, 'renew'])
+            ->whereNumber('record')
+            ->name('records.renew');
+        Route::post('/app/records/{record}/complete', [BusinessRecordController::class, 'complete'])
+            ->whereNumber('record')
+            ->name('records.complete');
+        Route::post('/app/records/{record}/attach', [BusinessRecordController::class, 'attach'])
+            ->whereNumber('record')
+            ->name('records.attach');
+        Route::delete('/app/records/{record}/attach/{document}', [BusinessRecordController::class, 'detach'])
+            ->whereNumber('record')
+            ->name('records.detach');
+        Route::post('/app/records/{record}/retire', [BusinessRecordController::class, 'retire'])
+            ->whereNumber('record')
+            ->name('records.retire');
+    });
 
     /* ---- Audit trail ---- */
     Route::middleware('permission:audit.view')->group(function () {

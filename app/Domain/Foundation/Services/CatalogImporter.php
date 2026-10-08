@@ -550,6 +550,33 @@ class CatalogImporter
         'business management > tasks & projects > all tasks' => ['/app/tasks/all', 'tasks.view_all'],
         'business management > tasks & projects > kanban board' => ['/app/tasks/kanban', 'tasks.view_own'],
         'business management > tasks & projects > projects' => ['/app/projects', 'tasks.view_own'],
+
+        // §12-03/04: the company's own papers, and the two screens that already
+        // existed for its identity and its preferences.
+        'business management > company > company profile' => ['/app/settings/company', 'settings.company'],
+        'business management > company > company settings' => ['/app/settings', 'settings.view'],
+        'business management > company > trade license' => ['/app/records/licence', 'business.records.view'],
+        'business management > company > tin & bin' => ['/app/records/tax-id', 'business.records.view'],
+        'business management > company > company documents' => ['/app/documents', 'documents.view'],
+        'business management > company > company logo & seal' => ['/app/documents?purpose=logo', 'documents.view'],
+        'business management > company > company certificates' => ['/app/records/certificate', 'business.records.view'],
+
+        // §12-09: the compliance half of the same registers. Two of these are
+        // *lenses* rather than shelves — the renewals list and the statutory
+        // calendar read every register at once, which is the only way a licence
+        // and a filing can share one reminder.
+        'business management > compliance > trade license renewal' => ['/app/compliance/renewals?kind=licence', 'business.records.view'],
+        'business management > compliance > tin / bin tracking' => ['/app/records/tax-id', 'business.records.view'],
+        'business management > compliance > rjsc filings' => ['/app/records/filing', 'business.records.view'],
+        'business management > compliance > tax compliance calendar' => ['/app/compliance/calendar', 'business.records.view'],
+        'business management > compliance > labour law compliance' => ['/app/compliance/obligations', 'business.records.view'],
+        'business management > compliance > insurance register' => ['/app/records/insurance', 'business.records.view'],
+
+        // §12-10: the documents shelf, with the library itself overridden above.
+        'business management > documents > contracts' => ['/app/records/contract', 'business.records.view'],
+        'business management > documents > agreements' => ['/app/records/agreement', 'business.records.view'],
+        'business management > documents > certificates vault' => ['/app/records/certificate', 'business.records.view'],
+        'business management > documents > brand assets' => ['/app/records/brand-asset', 'business.records.view'],
     ];
 
     /** @return array{modules:int,items:int,active:int,planned:int,permissions:int} */

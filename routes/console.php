@@ -27,6 +27,19 @@ Artisan::command('reports:run-due', function () {
 Schedule::command('erp:inventory:expiry-alerts')->dailyAt('06:40');
 
 /*
+ | The company's own dates (§12-09). A trade licence, an insurance policy, a
+ | filing with the registrar and a monthly VAT return are the same animal — they
+ | stop being true on a date — and the register is only worth keeping if somebody
+ | is told before that happens. Two digests a morning: what has lapsed, and what
+ | lapses inside the next month. It notifies and changes nothing: renewing,
+ | filing and retiring are decisions a person takes, with a reason, on the record.
+ |
+ | Ten minutes after the stock expiry watch, so the two digests do not compete for
+ | the same morning's attention.
+ */
+Schedule::command('erp:business:compliance-alerts')->dailyAt('06:50');
+
+/*
  | The standing expenses (§08-19). Rent, salaries and the internet line do not
  | need discovering, and a desk that retypes them every month eventually forgets
  | one. The run generates what is due through the ordinary expense path, so the
