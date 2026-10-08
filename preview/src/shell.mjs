@@ -134,6 +134,7 @@ export const SECTIONS = [
                     { label: 'Expense Categories', url: './expenses.html', icon: 'bi-diagram-3' },
                     { label: 'Pending Approval', url: './expenses.html', icon: 'bi-hourglass-split' },
                     { label: 'Recurring Expenses', url: './expense-recurring.html', icon: 'bi-arrow-repeat' },
+                    { label: 'Expense Reports', url: './expense-report.html', icon: 'bi-bar-chart-line' },
                 ],
             },
             {
@@ -142,6 +143,11 @@ export const SECTIONS = [
                     { label: 'Petty Cash Requests', url: './petty-cash-requests.html', icon: 'bi-question-circle' },
                     { label: 'Petty Cash Expenses', url: './petty-cash-expenses.html', icon: 'bi-receipt' },
                     { label: 'Petty Cash Replenishment', url: './petty-cash-replenishment.html', icon: 'bi-arrow-down-up' },
+                ],
+            },
+            {
+                label: 'Cash Reports', icon: 'bi-list-columns', items: [
+                    { label: 'Cash Reports', url: './cash-reports.html', icon: 'bi-list-columns' },
                 ],
             },
             {
@@ -243,10 +249,12 @@ export const PALETTE = [
     { label: 'Expense Categories', url: './expenses.html', icon: 'bi-diagram-3', section: 'Cash & bank', group: 'Expenses' },
     { label: 'Pending Approval', url: './expenses.html', icon: 'bi-hourglass-split', section: 'Cash & bank', group: 'Expenses' },
     { label: 'Recurring Expenses', url: './expense-recurring.html', icon: 'bi-arrow-repeat', section: 'Cash & bank', group: 'Expenses' },
+    { label: 'Expense Reports', url: './expense-report.html', icon: 'bi-bar-chart-line', section: 'Cash & bank', group: 'Expenses' },
     { label: 'Petty Cash Overview', url: './petty-cash.html', icon: 'bi-cash-coin', section: 'Cash & bank', group: 'Petty Cash' },
     { label: 'Petty Cash Requests', url: './petty-cash-requests.html', icon: 'bi-question-circle', section: 'Cash & bank', group: 'Petty Cash' },
     { label: 'Petty Cash Expenses', url: './petty-cash-expenses.html', icon: 'bi-receipt', section: 'Cash & bank', group: 'Petty Cash' },
     { label: 'Petty Cash Replenishment', url: './petty-cash-replenishment.html', icon: 'bi-arrow-down-up', section: 'Cash & bank', group: 'Petty Cash' },
+    { label: 'Cash Reports', url: './cash-reports.html', icon: 'bi-list-columns', section: 'Cash & bank', group: 'Cash Reports' },
     { label: 'Print labels', url: './labels.html', icon: 'bi-printer', section: 'Inventory & warehouse', group: 'Barcode & QR' },
     { label: 'Generate barcode', url: './labels.html', icon: 'bi-upc-scan', section: 'Inventory & warehouse', group: 'Barcode & QR' },
     { label: 'Generate QR code', url: './labels.html', icon: 'bi-qr-code', section: 'Inventory & warehouse', group: 'Barcode & QR' },
@@ -556,6 +564,8 @@ export function previewBar(current) {
         ['bank-recon.html', 'Reconciliation'],
         ['cash-counts.html', 'Cash count'],
         ['bank-charges.html', 'Bank charges'],
+        ['expense-report.html', 'Expense report'],
+        ['cash-reports.html', 'Cash reports'],
         ['cheques.html', 'Cheques'],
         ['expenses.html', 'Expenses'],
         ['expense-recurring.html', 'Recurring'],

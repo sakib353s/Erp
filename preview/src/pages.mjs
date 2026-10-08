@@ -4310,3 +4310,534 @@ ${previewBar('bank-charges.html')}
     </main>
 </div>`;
 }
+
+/**
+ * §08-20 — the expense report.
+ *
+ * The screen whose whole job is to agree with the ledger: posted expenses only,
+ * grouped by the categories that *are* accounts, with the ledger check printed
+ * underneath rather than kept as an assertion in somebody's head.
+ */
+export function expenseReport() {
+    const byCategory = [
+        { category: 'Office rent', account: '5220 — Rent Expense', rows: 4, amount: '1,86,000.00', share: '38.6' },
+        { category: 'Utilities', account: '5230 — Utilities Expense', rows: 9, amount: '1,12,450.00', share: '23.4' },
+        { category: 'Transport & delivery', account: '5270 — Delivery Expense', rows: 22, amount: '94,300.00', share: '19.6' },
+        { category: 'Bank charges', account: '5280 — Bank Charges', rows: 4, amount: '88,432.00', share: '18.4' },
+    ];
+
+    const rows = [
+        { date: '2026-10-05', no: 'EXP-2026-00041', category: 'Office rent', account: '5220', branch: 'Head office', payee: 'Landlord', settled: 'Paid from an account', from: 'City Bank current', amount: '46,500.00', entry: 'JV-2026-004412', generated: true },
+        { date: '2026-10-05', no: 'EXP-2026-00042', category: 'Bank charges', account: '5280', branch: 'Head office', payee: 'City Bank', settled: 'Paid from an account', from: 'City Bank current', amount: '932.00', entry: 'BC-2026-00012', generated: true },
+        { date: '2026-10-04', no: 'EXP-2026-00040', category: 'Utilities', account: '5230', branch: 'Uttara depot', payee: 'DESCO', settled: 'Owed to a supplier', from: '—', amount: '38,900.00', entry: 'JV-2026-004401', generated: false },
+        { date: '2026-10-03', no: 'EXP-2026-00039', category: 'Transport & delivery', account: '5270', branch: 'Dhanmondi outlet', payee: 'Sundarban Courier', settled: 'Paid from an account', from: 'Cash in Hand', amount: '4,250.00', entry: 'JV-2026-004388', generated: false },
+    ];
+
+    const ledger = [
+        { account: '5220 — Rent Expense', category: 'Office rent', reported: '1,86,000.00', debit: '1,86,000.00', credit: '0.00', difference: 'agrees' },
+        { account: '5230 — Utilities Expense', category: 'Utilities', reported: '1,12,450.00', debit: '1,13,650.00', credit: '1,200.00', difference: '-1,200.00' },
+        { account: '5270 — Delivery Expense', category: 'Transport & delivery', reported: '94,300.00', debit: '94,300.00', credit: '0.00', difference: 'agrees' },
+        { account: '5280 — Bank Charges', category: 'Bank charges', reported: '88,432.00', debit: '88,432.00', credit: '0.00', difference: 'agrees' },
+    ];
+
+    return `
+${previewBar('expense-report.html')}
+<div class="erp-shell">
+    ${sidebar('cash_bank')}
+    <main class="erp-main">
+        ${topbar('Expense report')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-receipt" aria-hidden="true"></i> Cash &amp; bank · Expenses · Expense Reports</p>
+                    <h1 class="erp-h1">What the company spent</h1>
+                    <p class="erp-page-sub">Every figure here is a posted expense — a bill waiting for a signature is not in these totals, because it is not in the ledger yet. That is the test this report is built to pass: pick a category, look up the account it points at, and the ledger says the same number.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./expenses.html"><i class="bi bi-receipt" aria-hidden="true"></i> The register</a>
+                    <a class="btn btn-outline-secondary" href="./cash-flow.html"><i class="bi bi-arrow-left-right" aria-hidden="true"></i> Cash flow</a>
+                    <button class="btn btn-primary" type="button"><i class="bi bi-download" aria-hidden="true"></i> Export CSV</button>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-cash-stack" aria-hidden="true"></i> Posted in this window</p>
+                    <p class="erp-kpi-value">৳ 4,81,182.00</p>
+                    <p class="erp-kpi-foot">39 expense(s) between 2026-10-01 and 2026-10-08</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-box-arrow-up" aria-hidden="true"></i> Paid out of an account</p>
+                    <p class="erp-kpi-value">৳ 3,44,332.00</p>
+                    <p class="erp-kpi-foot">The rest was owed — ৳ 1,36,850.00 posted to payables</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-diagram-3" aria-hidden="true"></i> Where it goes</p>
+                    <p class="erp-kpi-value">Office rent</p>
+                    <p class="erp-kpi-foot">৳ 1,86,000.00 — 38.6% of the window</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Ledger check</p>
+                    <p class="erp-kpi-value">৳ -1,200.00</p>
+                    <p class="erp-kpi-foot">Posted expenses against the debit of every account the categories point at</p>
+                </div>
+            </div>
+
+            <div class="erp-note erp-note-warn mb-3">
+                <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+                <div>
+                    <strong class="d-block mb-1">The ledger carries ৳ 4,79,982.00 where this report counted ৳ 4,81,182.00</strong>
+                    The difference is ৳ -1,200.00. That is not a rounding artefact — something posted to one of these accounts that is not an expense on this
+                    register: a manual journal, or a credit line correcting one. The table at the bottom names which account it is on.
+                </div>
+            </div>
+
+            <form class="erp-filterbar" onsubmit="return false">
+                <div class="erp-filter">
+                    <label class="form-label" for="er-from">From</label>
+                    <input class="form-control" id="er-from" type="date" value="2026-10-01">
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="er-to">To</label>
+                    <input class="form-control" id="er-to" type="date" value="2026-10-08">
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="er-branch">Branch</label>
+                    <select class="form-select" id="er-branch">
+                        <option>Every branch</option>
+                        <option>Head office</option>
+                        <option>Uttara depot</option>
+                        <option>Dhanmondi outlet</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="er-category">Category</label>
+                    <select class="form-select" id="er-category">
+                        <option>Every category</option>
+                        <option>Office rent</option>
+                        <option>Utilities</option>
+                        <option>Transport &amp; delivery</option>
+                        <option>Bank charges</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="er-settled">Paid or owed</label>
+                    <select class="form-select" id="er-settled">
+                        <option>Both</option>
+                        <option>Paid from an account</option>
+                        <option>Owed to a supplier</option>
+                    </select>
+                </div>
+                <div class="erp-filter erp-filter-wide">
+                    <label class="form-label" for="er-q">Search</label>
+                    <div class="erp-input-group">
+                        <i class="bi bi-search" aria-hidden="true"></i>
+                        <input class="form-control" type="search" id="er-q" placeholder="Expense number, payee or what it was for…">
+                    </div>
+                </div>
+                <div class="erp-filterbar-actions">
+                    <a class="btn btn-link" href="./expense-report.html">Reset</a>
+                    <button class="btn btn-primary" type="button"><i class="bi bi-funnel" aria-hidden="true"></i> Run the report</button>
+                    <button class="btn btn-outline-secondary" type="button"><i class="bi bi-download" aria-hidden="true"></i> CSV</button>
+                </div>
+            </form>
+
+            <div class="erp-split mb-3">
+                <section class="erp-card">
+                    <div class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">By category</h2>
+                            <p class="erp-card-sub">A category <em>is</em> a ledger account, so this column can be walked straight to the general ledger.</p>
+                        </div>
+                    </div>
+                    <div class="erp-table-scroll">
+                        <table class="table erp-table">
+                            <thead>
+                                <tr><th>Category</th><th>Account</th><th class="erp-th-num">Expenses</th><th class="erp-th-num">Amount</th><th class="erp-th-num">Share</th></tr>
+                            </thead>
+                            <tbody>
+                                ${byCategory.map((row) => `
+                                <tr>
+                                    <td><span class="erp-cell-strong">${row.category}</span></td>
+                                    <td class="erp-td-muted">${row.account}</td>
+                                    <td class="erp-td-num">${row.rows}</td>
+                                    <td class="erp-td-num">৳ ${row.amount}</td>
+                                    <td class="erp-td-num">${row.share}%</td>
+                                </tr>`).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="erp-card">
+                    <div class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">By month</h2>
+                            <p class="erp-card-sub">The same money, read down the calendar — which is how a budget is compared.</p>
+                        </div>
+                    </div>
+                    <div class="erp-table-scroll">
+                        <table class="table erp-table">
+                            <thead>
+                                <tr><th>Month</th><th class="erp-th-num">Expenses</th><th class="erp-th-num">Amount</th><th class="erp-th-num">Share</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="erp-cell-strong">2026-10</span></td><td class="erp-td-num">39</td><td class="erp-td-num">৳ 4,81,182.00</td><td class="erp-td-num">100.0%</td></tr>
+                                <tr><td><span class="erp-cell-strong">2026-09</span></td><td class="erp-td-num">148</td><td class="erp-td-num">৳ 18,42,900.00</td><td class="erp-td-num">100.0%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <div class="erp-table-shell" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">The expenses behind the figures<span class="erp-chip erp-chip-outline">4 expense(s)</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack">
+                        <thead>
+                            <tr><th>Date</th><th>Expense</th><th>Category</th><th>Branch</th><th>Payee</th><th>Paid or owed</th><th class="erp-th-num">Amount</th><th>Entry</th></tr>
+                        </thead>
+                        <tbody>
+                            ${rows.map((row) => `
+                            <tr>
+                                <td>${row.date}</td>
+                                <td>
+                                    <span class="erp-cell-strong font-monospace">${row.no}</span>
+                                    ${row.generated ? '<span class="erp-chip erp-chip-outline">from a schedule</span>' : ''}
+                                </td>
+                                <td>${row.category}<div class="erp-td-muted">${row.account}</div></td>
+                                <td class="erp-td-muted">${row.branch}</td>
+                                <td>${row.payee}</td>
+                                <td>${row.settled}<div class="erp-td-muted">${row.from}</div></td>
+                                <td class="erp-td-num">৳ ${row.amount}</td>
+                                <td class="erp-td-muted font-monospace">${row.entry}</td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <section class="erp-card mt-3">
+                <div class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Does the ledger agree?</h2>
+                        <p class="erp-card-sub">The debit carried by every account the categories above point at, against what this report counted. An expense posts a debit; a credit on one of these accounts is something else — a reversal, a supplier credit, a hand-written journal — and it is why the two can differ.</p>
+                    </div>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead>
+                            <tr><th>Account</th><th>Category</th><th class="erp-th-num">Reported</th><th class="erp-th-num">Ledger debit</th><th class="erp-th-num">Ledger credit</th><th class="erp-th-num">Difference</th></tr>
+                        </thead>
+                        <tbody>
+                            ${ledger.map((row) => `
+                            <tr>
+                                <td><span class="erp-cell-strong">${row.account}</span></td>
+                                <td class="erp-td-muted">${row.category}</td>
+                                <td class="erp-td-num">৳ ${row.reported}</td>
+                                <td class="erp-td-num">৳ ${row.debit}</td>
+                                <td class="erp-td-num">৳ ${row.credit}</td>
+                                <td class="erp-td-num">
+                                    ${row.difference === 'agrees'
+                                        ? '<span class="erp-status erp-status-posted">agrees</span>'
+                                        : `<span class="erp-status erp-status-overdue">৳ ${row.difference}</span>`}
+                                </td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-3 pt-0">
+                    <p class="erp-filter-note mb-0">
+                        <i class="bi bi-info-circle" aria-hidden="true"></i>
+                        Not in these totals: <strong>3</strong> expense(s) worth ৳ 1,36,850.00 still waiting for a signature, and ৳ 4,250.00 that was reversed —
+                        a reversal has its own entry in the ledger, so subtracting it here would count it twice.
+                    </p>
+                </div>
+            </section>
+
+        </div>
+    </main>
+</div>`;
+}
+
+/**
+ * §08-22 — the cash reports: the bank book, the cash flow and what the tills
+ * counted. One page because the catalogue has one leaf for these.
+ */
+export function cashReports() {
+    const banks = [
+        { name: 'City Bank current', code: '1120', kind: 'Bank', opening: '4,12,300.00', inn: '3,86,940.00', out: '2,51,880.00', closing: '5,47,360.00', moves: 62, last: '2026-10-08' },
+        { name: 'Islami Bank savings', code: '1130', kind: 'Bank', opening: '1,20,000.00', inn: '12,000.00', out: '0.00', closing: '1,32,000.00', moves: 4, last: '2026-10-03' },
+        { name: 'bKash merchant', code: '1140', kind: 'bKash wallet', opening: '48,600.00', inn: '94,200.00', out: '61,450.00', closing: '81,350.00', moves: 38, last: '2026-10-08' },
+        { name: 'Nagad merchant', code: '1150', kind: 'Nagad wallet', opening: '9,800.00', inn: '25.00', out: '24,300.00', closing: '-14,475.00', moves: 11, last: '2026-10-07', negative: true },
+    ];
+
+    const inflows = [
+        { account: '4100 — Sales Revenue', type: 'revenue', rows: 34, amount: '4,18,640.00', share: '86.9' },
+        { account: '1210 — Accounts Receivable', type: 'asset', rows: 12, amount: '52,300.00', share: '10.9' },
+        { account: '4100 — Sales Revenue · counter', type: 'revenue', rows: 9, amount: '10,600.00', share: '2.2' },
+    ];
+
+    const outflows = [
+        { account: '5210 — Salary Expense', type: 'expense', rows: 6, amount: '1,84,000.00', share: '42.4' },
+        { account: '2110 — Accounts Payable', type: 'liability', rows: 41, amount: '1,32,480.00', share: '30.5' },
+        { account: '5220 — Rent Expense', type: 'expense', rows: 3, amount: '93,000.00', share: '21.4' },
+        { account: '5280 — Bank Charges', type: 'expense', rows: 4, amount: '24,730.00', share: '5.7' },
+    ];
+
+    const sessions = [
+        { no: 'POS-2026-01187', branch: 'Dhanmondi outlet', opened: '08 Oct 09:12', float: '10,000.00', sales: '38,940.00', inn: '5,000.00', out: '12,000.00', expected: '41,940.00', counted: '41,940.00', state: 'agreed' },
+        { no: 'POS-2026-01186', branch: 'Uttara depot', opened: '07 Oct 09:04', float: '8,000.00', sales: '21,300.00', inn: '0.00', out: '2,000.00', expected: '27,300.00', counted: '26,880.00', state: 'short', difference: '-420.00' },
+        { no: 'POS-2026-01185', branch: 'Head office counter', opened: '07 Oct 09:31', float: '12,000.00', sales: '54,120.00', inn: '10,000.00', out: '0.00', expected: '76,120.00', counted: '76,450.00', state: 'over', difference: '+330.00' },
+        { no: 'POS-2026-01188', branch: 'Dhanmondi outlet', opened: '08 Oct 16:40', float: '10,000.00', sales: '6,150.00', inn: '0.00', out: '0.00', expected: '16,150.00', counted: null, state: 'open' },
+    ];
+
+    return `
+${previewBar('cash-reports.html')}
+<div class="erp-shell">
+    ${sidebar('cash_bank')}
+    <main class="erp-main">
+        ${topbar('Cash reports')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-list-columns" aria-hidden="true"></i> Cash &amp; bank · Cash Reports</p>
+                    <h1 class="erp-h1">Where the money is, came from and went</h1>
+                    <p class="erp-page-sub">Every figure on this page is a posted journal line. The bank book opens where each account opened and closes at the account's own ledger balance; the cash flow names each movement by the <em>other</em> side of its posting, so a receipt is a sale however the clerk filed it; and moving money between two of our own accounts is reported apart, because it is a change of address rather than income.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./expense-report.html"><i class="bi bi-receipt" aria-hidden="true"></i> Expense report</a>
+                    <button class="btn btn-primary" type="button"><i class="bi bi-download" aria-hidden="true"></i> Export CSV</button>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-bank" aria-hidden="true"></i> Accounts</p>
+                    <p class="erp-kpi-value">4</p>
+                    <p class="erp-kpi-foot">Banks and wallets this company holds money in</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i> Opened with</p>
+                    <p class="erp-kpi-value">৳ 5,90,700.00</p>
+                    <p class="erp-kpi-foot">Everything posted before this window</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-arrow-left-right" aria-hidden="true"></i> Moved in the window</p>
+                    <p class="erp-kpi-value">৳ 1,56,055.00</p>
+                    <p class="erp-kpi-foot">In ৳ 5,18,765.00 · out ৳ 3,62,710.00</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-safe" aria-hidden="true"></i> Closing</p>
+                    <p class="erp-kpi-value">৳ 7,46,235.00</p>
+                    <p class="erp-kpi-foot">What the ledger says the banks and wallets hold</p>
+                </div>
+            </div>
+
+            <form class="erp-filterbar" onsubmit="return false">
+                <div class="erp-filter">
+                    <label class="form-label" for="cr-from">From</label>
+                    <input class="form-control" id="cr-from" type="date" value="2026-10-01">
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="cr-to">To</label>
+                    <input class="form-control" id="cr-to" type="date" value="2026-10-08">
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="cr-branch">Branch</label>
+                    <select class="form-select" id="cr-branch">
+                        <option>Every branch</option>
+                        <option>Head office</option>
+                        <option>Uttara depot</option>
+                        <option>Dhanmondi outlet</option>
+                    </select>
+                </div>
+                <div class="erp-filterbar-actions">
+                    <a class="btn btn-link" href="./cash-reports.html">Reset</a>
+                    <button class="btn btn-primary" type="button"><i class="bi bi-funnel" aria-hidden="true"></i> Run the report</button>
+                    <button class="btn btn-outline-secondary" type="button"><i class="bi bi-download" aria-hidden="true"></i> CSV</button>
+                </div>
+            </form>
+
+            <div class="erp-table-shell mb-3" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">The accounts<span class="erp-chip erp-chip-outline">4 account(s)</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack">
+                        <thead>
+                            <tr>
+                                <th>Account</th><th>Kind</th><th class="erp-th-num">Opening</th><th class="erp-th-num">In</th>
+                                <th class="erp-th-num">Out</th><th class="erp-th-num">Closing</th><th class="erp-th-num">Movements</th><th>Last movement</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${banks.map((row) => `
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="./cash-bank.html">${row.name}</a>
+                                    <div class="erp-td-muted">${row.code}</div>
+                                </td>
+                                <td><span class="erp-status erp-status-${row.kind === 'Bank' ? 'active' : 'cleared'}">${row.kind}</span></td>
+                                <td class="erp-td-num">৳ ${row.opening}</td>
+                                <td class="erp-td-num erp-money-in">৳ ${row.inn}</td>
+                                <td class="erp-td-num erp-money-out">৳ ${row.out}</td>
+                                <td class="erp-td-num">
+                                    <span class="${row.negative ? 'erp-money-out' : 'erp-cell-strong'}">৳ ${row.closing}</span>
+                                    ${row.negative ? '<div class="erp-td-muted">a wallet cannot be overdrawn — a reconciliation is owed</div>' : ''}
+                                </td>
+                                <td class="erp-td-num">${row.moves}</td>
+                                <td class="erp-td-muted">${row.last}</td>
+                            </tr>`).join('')}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="2">Added up</th>
+                                <th class="erp-th-num">5,90,700.00</th>
+                                <th class="erp-th-num">5,18,765.00</th>
+                                <th class="erp-th-num">3,62,710.00</th>
+                                <th class="erp-th-num">7,46,235.00</th>
+                                <th class="erp-th-num" colspan="2"></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="erp-split mb-3">
+                <section class="erp-card">
+                    <div class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">Money in</h2>
+                            <p class="erp-card-sub">Named by the account on the other side of the posting.</p>
+                        </div>
+                        <div class="erp-card-actions"><span class="erp-chip erp-chip-ok">৳ 4,81,540.00</span></div>
+                    </div>
+                    <div class="erp-table-scroll">
+                        <table class="table erp-table">
+                            <thead><tr><th>Came from</th><th class="erp-th-num">Postings</th><th class="erp-th-num">Amount</th><th class="erp-th-num">Share</th></tr></thead>
+                            <tbody>
+                                ${inflows.map((row) => `
+                                <tr>
+                                    <td><span class="erp-cell-strong">${row.account}</span><div class="erp-td-muted">${row.type}</div></td>
+                                    <td class="erp-td-num">${row.rows}</td>
+                                    <td class="erp-td-num erp-money-in">৳ ${row.amount}</td>
+                                    <td class="erp-td-num">${row.share}%</td>
+                                </tr>`).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="erp-card">
+                    <div class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">Money out</h2>
+                            <p class="erp-card-sub">The same reading, on the way out.</p>
+                        </div>
+                        <div class="erp-card-actions"><span class="erp-chip erp-chip-danger">৳ 4,34,210.00</span></div>
+                    </div>
+                    <div class="erp-table-scroll">
+                        <table class="table erp-table">
+                            <thead><tr><th>Went to</th><th class="erp-th-num">Postings</th><th class="erp-th-num">Amount</th><th class="erp-th-num">Share</th></tr></thead>
+                            <tbody>
+                                ${outflows.map((row) => `
+                                <tr>
+                                    <td><span class="erp-cell-strong">${row.account}</span><div class="erp-td-muted">${row.type}</div></td>
+                                    <td class="erp-td-num">${row.rows}</td>
+                                    <td class="erp-td-num erp-money-out">৳ ${row.amount}</td>
+                                    <td class="erp-td-num">${row.share}%</td>
+                                </tr>`).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <section class="erp-card mb-3">
+                <div class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Between our own accounts</h2>
+                        <p class="erp-card-sub">A transfer has a money account on both sides, so it is not cash flow — the company is no richer for moving cash from the tin to the bank. It is listed because leaving it out entirely would make the books look like they moved less money than they did.</p>
+                    </div>
+                    <div class="erp-card-actions"><span class="erp-chip erp-chip-outline">৳ 44,225.00 moved</span></div>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead><tr><th>Pair</th><th class="erp-th-num">Postings</th><th class="erp-th-num">Moved</th></tr></thead>
+                        <tbody>
+                            <tr><td><span class="erp-cell-strong">Between our own accounts · 1120 — City Bank current</span></td><td class="erp-td-num">3</td><td class="erp-td-num">৳ 37,225.00</td></tr>
+                            <tr><td><span class="erp-cell-strong">Between our own accounts · 1140 — bKash merchant</span></td><td class="erp-td-num">2</td><td class="erp-td-num">৳ 7,000.00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="erp-table-shell" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">What the tills counted<span class="erp-chip erp-chip-outline">4 session(s)</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack">
+                        <thead>
+                            <tr>
+                                <th>Session</th><th>Branch</th><th>Opened</th><th class="erp-th-num">Float</th><th class="erp-th-num">Cash sales</th>
+                                <th class="erp-th-num">Cash in</th><th class="erp-th-num">Cash out</th><th class="erp-th-num">Expected</th>
+                                <th class="erp-th-num">Counted</th><th class="erp-th-num">Difference</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${sessions.map((row) => `
+                            <tr>
+                                <td><span class="erp-cell-strong font-monospace">${row.no}</span></td>
+                                <td class="erp-td-muted">${row.branch}</td>
+                                <td>
+                                    ${row.opened}
+                                    ${row.state === 'open'
+                                        ? '<span class="erp-status erp-status-active ms-1">open</span>'
+                                        : '<div class="erp-td-muted">closed 21:40</div>'}
+                                </td>
+                                <td class="erp-td-num">${row.float}</td>
+                                <td class="erp-td-num">${row.sales}</td>
+                                <td class="erp-td-num">${row.inn}</td>
+                                <td class="erp-td-num">${row.out}</td>
+                                <td class="erp-td-num">${row.expected}</td>
+                                <td class="erp-td-num">${row.counted ?? '—'}</td>
+                                <td class="erp-td-num">
+                                    ${row.state === 'agreed' ? '<span class="erp-status erp-status-posted">agreed</span>' : ''}
+                                    ${row.state === 'short' ? `<span class="erp-money-out">${row.difference}</span>` : ''}
+                                    ${row.state === 'over' ? `<span class="erp-money-in">${row.difference}</span>` : ''}
+                                    ${row.state === 'open' ? '<span class="erp-td-muted">not counted yet</span>' : ''}
+                                </td>
+                            </tr>`).join('')}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="3">Added up</th>
+                                <th class="erp-th-num"></th>
+                                <th class="erp-th-num">1,20,510.00</th>
+                                <th class="erp-th-num">15,000.00</th>
+                                <th class="erp-th-num">14,000.00</th>
+                                <th class="erp-th-num" colspan="2"></th>
+                                <th class="erp-th-num">-90.00</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </section>
+
+            <p class="erp-filter-note mt-3">
+                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                The one block above that is not the ledger's is the till variance, and it does not pretend to be: expected cash is the till's own arithmetic
+                (float + cash sales + cash in − cash out) frozen on the session when it closed, and a session still open shows no counted figure at all rather than a
+                zero that would read as a perfect count. A difference against the <em>books</em> is answered on the count desk, where it posts.
+            </p>
+
+        </div>
+    </main>
+</div>`;
+}

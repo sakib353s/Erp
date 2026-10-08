@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#ffffff">
-    <title>POS terminal · BD ERP — UI redesign preview</title>
+    <title>Cash reports · BD ERP — UI redesign preview</title>
     <link rel="stylesheet" href="./assets/preview.css">
 </head>
 <body class="erp-body">
@@ -15,11 +15,11 @@
 <div class="erp-preview-bar">
     <i class="bi bi-easel2" aria-hidden="true"></i>
     <strong>UI redesign preview</strong>
-    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html" style="color:#fff;text-decoration:underline">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html">Labels</a><span style="opacity:.4">·</span><a href="./cash-bank.html">Cash & bank</a><span style="opacity:.4">·</span><a href="./bank-recon.html">Reconciliation</a><span style="opacity:.4">·</span><a href="./cash-counts.html">Cash count</a><span style="opacity:.4">·</span><a href="./bank-charges.html">Bank charges</a><span style="opacity:.4">·</span><a href="./expense-report.html">Expense report</a><span style="opacity:.4">·</span><a href="./cash-reports.html">Cash reports</a><span style="opacity:.4">·</span><a href="./cheques.html">Cheques</a><span style="opacity:.4">·</span><a href="./expenses.html">Expenses</a><span style="opacity:.4">·</span><a href="./expense-recurring.html">Recurring</a><span style="opacity:.4">·</span><a href="./petty-cash.html">Petty cash</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
+    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html">Labels</a><span style="opacity:.4">·</span><a href="./cash-bank.html">Cash & bank</a><span style="opacity:.4">·</span><a href="./bank-recon.html">Reconciliation</a><span style="opacity:.4">·</span><a href="./cash-counts.html">Cash count</a><span style="opacity:.4">·</span><a href="./bank-charges.html">Bank charges</a><span style="opacity:.4">·</span><a href="./expense-report.html">Expense report</a><span style="opacity:.4">·</span><a href="./cash-reports.html" style="color:#fff;text-decoration:underline">Cash reports</a><span style="opacity:.4">·</span><a href="./cheques.html">Cheques</a><span style="opacity:.4">·</span><a href="./expenses.html">Expenses</a><span style="opacity:.4">·</span><a href="./expense-recurring.html">Recurring</a><span style="opacity:.4">·</span><a href="./petty-cash.html">Petty cash</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
     <span class="erp-preview-note">Static render of the new shell — same CSS + JS the Laravel app ships. Press ⌘K / Ctrl+K.</span>
 </div>
-<div class="erp-shell" data-rail="expanded">
-
+<div class="erp-shell">
+    
 <aside class="erp-sidebar" id="erpSidebar" aria-label="Primary navigation">
     <div class="erp-sidebar-head">
         <a class="erp-brand" href="./dashboard.html">
@@ -145,15 +145,15 @@
         </div>
     </div>
     <div class="erp-nav-group">
-        <button class="erp-nav-group-btn is-active has-active-trail" type="button"
-                data-bs-toggle="collapse" data-bs-target="#nav-crm-1" aria-expanded="true">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-crm-1" aria-expanded="false">
             <i class="bi bi-upc-scan erp-nav-icon" aria-hidden="true"></i>
             <span>Counter (POS)</span>
             <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
         </button>
-        <div class="collapse show" id="nav-crm-1">
+        <div class="collapse" id="nav-crm-1">
             <div class="erp-nav-sub">
-        <a class="erp-nav-link active" href="./pos.html" aria-current="page">
+        <a class="erp-nav-link" href="./pos.html">
             <span>Terminal</span>
         </a>
         <a class="erp-nav-link" href="#">
@@ -584,26 +584,17 @@
         <span class="erp-version">Build 2026.10 · v2</span>
     </div>
 </aside>
-    <div class="erp-main">
-
+    <main class="erp-main">
+        
 <header class="erp-topbar">
     <button class="erp-icon-btn d-lg-none" type="button" data-erp-sidebar-open aria-label="Open navigation">
         <i class="bi bi-list" aria-hidden="true"></i>
     </button>
 
     <div class="erp-topbar-crumbs">
-        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb">
-        <li>
-            <span class="is-current" aria-current="page">Sell</span>
-        </li>
-        <li>
-            <span class="is-current" aria-current="page">Counter (POS)</span>
-        </li>
-        <li>
-            <span class="is-current" aria-current="page">Terminal</span>
-        </li></ol></nav>
+        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb"></ol></nav>
         <div class="erp-topbar-title">
-            <strong class="d-none d-md-inline">POS terminal</strong>
+            <strong class="d-none d-md-inline">Dashboard</strong>
             <span class="erp-chip erp-chip-outline d-none d-xl-inline-flex" title="Current branch context">
                 <i class="bi bi-geo-alt" aria-hidden="true"></i>Dhaka HQ
             </span>
@@ -677,147 +668,380 @@
         </div>
     </div>
 </header>
-        <main class="erp-content erp-content-fluid" id="erpContent">
+        <div class="erp-content">
+
             <header class="erp-page-head">
-                <div class="erp-page-head-main">
-                    <p class="erp-eyebrow">Counter · Session CS-00091</p>
-                    <h1 class="erp-h1">POS terminal <span class="erp-status erp-status-open">open</span></h1>
-                    <p class="erp-page-sub">Cashier: Rakib · Dhaka HQ counter 2 · opened 09:58 AM with ৳ 5,000 float. Keyboard-first: F2 product, F4 payment, F8 hold, F9 complete.</p>
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-list-columns" aria-hidden="true"></i> Cash &amp; bank · Cash Reports</p>
+                    <h1 class="erp-h1">Where the money is, came from and went</h1>
+                    <p class="erp-page-sub">Every figure on this page is a posted journal line. The bank book opens where each account opened and closes at the account's own ledger balance; the cash flow names each movement by the <em>other</em> side of its posting, so a receipt is a sale however the clerk filed it; and moving money between two of our own accounts is reported apart, because it is a change of address rather than income.</p>
                 </div>
                 <div class="erp-page-head-actions">
-                    <span class="erp-chip erp-chip-outline"><i class="bi bi-clock" aria-hidden="true"></i>Shift 4h 12m</span>
-                    <button class="btn btn-outline-secondary" type="button">X-report</button>
-                    <button class="btn btn-outline-secondary" type="button">Hold order</button>
-                    <button class="btn btn-primary" type="button">Close session</button>
+                    <a class="btn btn-outline-secondary" href="./expense-report.html"><i class="bi bi-receipt" aria-hidden="true"></i> Expense report</a>
+                    <button class="btn btn-primary" type="button"><i class="bi bi-download" aria-hidden="true"></i> Export CSV</button>
                 </div>
             </header>
 
-            <div class="row g-3">
-                <div class="col-lg-7">
-                    <div class="erp-toolbar">
-                        <div class="erp-toolbar-start">
-                            <div class="erp-input-group" style="flex:1">
-                                <i class="bi bi-upc-scan" aria-hidden="true"></i>
-                                <input class="form-control" placeholder="Scan barcode or type SKU / name…" autofocus>
-                            </div>
-                            <span class="erp-chip erp-chip-soft"><i class="bi bi-wifi" aria-hidden="true"></i>Online · offline queue empty</span>
-                        </div>
-                        <div class="erp-toolbar-end">
-                            <button class="btn btn-outline-secondary btn-sm" type="button">Price check</button>
-                            <button class="btn btn-outline-secondary btn-sm" type="button">Customers</button>
-                        </div>
-                    </div>
-
-                    <div class="row g-2">
-                        
-                        <div class="col-sm-6 col-xl-4">
-                            <button class="erp-card erp-card-tight w-100 text-start h-100" type="button">
-                                <span class="erp-chip erp-chip-outline mb-2">RM-5KG · rack A3</span>
-                                <strong class="d-block mb-1">Rice — Miniket 5kg</strong>
-                                <span class="erp-amount">৳ 1,180</span>
-                                <span class="erp-chip erp-chip-ok ms-2">in stock</span>
-                            </button>
-                        </div>
-                        <div class="col-sm-6 col-xl-4">
-                            <button class="erp-card erp-card-tight w-100 text-start h-100" type="button">
-                                <span class="erp-chip erp-chip-outline mb-2">SO-2L · rack B1</span>
-                                <strong class="d-block mb-1">Soybean oil 2L</strong>
-                                <span class="erp-amount">৳ 335</span>
-                                <span class="erp-chip erp-chip-ok ms-2">in stock</span>
-                            </button>
-                        </div>
-                        <div class="col-sm-6 col-xl-4">
-                            <button class="erp-card erp-card-tight w-100 text-start h-100" type="button">
-                                <span class="erp-chip erp-chip-outline mb-2">SG-1KG · rack B2</span>
-                                <strong class="d-block mb-1">Sugar — fresh 1kg</strong>
-                                <span class="erp-amount">৳ 128</span>
-                                <span class="erp-chip erp-chip-ok ms-2">in stock</span>
-                            </button>
-                        </div>
-                        <div class="col-sm-6 col-xl-4">
-                            <button class="erp-card erp-card-tight w-100 text-start h-100" type="button">
-                                <span class="erp-chip erp-chip-outline mb-2">ML-1L · rack C4</span>
-                                <strong class="d-block mb-1">Milk powder 1kg</strong>
-                                <span class="erp-amount">৳ 880</span>
-                                <span class="erp-chip erp-chip-ok ms-2">in stock</span>
-                            </button>
-                        </div>
-                        <div class="col-sm-6 col-xl-4">
-                            <button class="erp-card erp-card-tight w-100 text-start h-100" type="button">
-                                <span class="erp-chip erp-chip-outline mb-2">TZ-500 · rack A1</span>
-                                <strong class="d-block mb-1">Tea — premium 500g</strong>
-                                <span class="erp-amount">৳ 410</span>
-                                <span class="erp-chip erp-chip-ok ms-2">in stock</span>
-                            </button>
-                        </div>
-                        <div class="col-sm-6 col-xl-4">
-                            <button class="erp-card erp-card-tight w-100 text-start h-100" type="button">
-                                <span class="erp-chip erp-chip-outline mb-2">LT-200 · rack C2</span>
-                                <strong class="d-block mb-1">Lentil — masoor 1kg</strong>
-                                <span class="erp-amount">৳ 145</span>
-                                <span class="erp-chip erp-chip-ok ms-2">in stock</span>
-                            </button>
-                        </div>
-                    </div>
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-bank" aria-hidden="true"></i> Accounts</p>
+                    <p class="erp-kpi-value">4</p>
+                    <p class="erp-kpi-foot">Banks and wallets this company holds money in</p>
                 </div>
-
-                <div class="col-lg-5">
-                    <section class="erp-table-shell h-100">
-                        <div class="erp-card-head px-3 pt-3">
-                            <h2 class="erp-card-title"><i class="bi bi-basket" aria-hidden="true"></i> Current sale</h2>
-                            <button class="btn btn-sm btn-outline-danger" type="button">Void</button>
-                        </div>
-                        <div class="erp-table-scroll">
-                            <table class="table erp-table">
-                                <thead>
-                                    <tr><th>Item</th><th class="erp-th-num">Qty</th><th class="erp-th-num">Total</th></tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Rice — Miniket 5kg<div class="erp-td-muted small">৳1,180 × 12</div></td>
-                                        <td class="erp-td-num">12</td>
-                                        <td class="erp-td-num">৳14,160</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Soybean oil 2L<div class="erp-td-muted small">৳335 × 24</div></td>
-                                        <td class="erp-td-num">24</td>
-                                        <td class="erp-td-num">৳8,040</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr><td colspan="2" class="text-end">Subtotal</td><td class="erp-td-num">৳22,200</td></tr>
-                                    <tr><td colspan="2" class="text-end">Discount (retailer)</td><td class="erp-td-num erp-amount-neg">− ৳1,460</td></tr>
-                                    <tr><td colspan="2" class="text-end">VAT 5%</td><td class="erp-td-num">৳1,137</td></tr>
-                                    <tr><td colspan="2" class="text-end">Grand total</td><td class="erp-td-num erp-amount-lg">৳21,877</td></tr>
-                                </tfoot>
-                            </table>
-                        </div>
-
-                        <div class="p-3 border-top" style="border-color:var(--line-soft) !important">
-                            <div class="erp-segmented w-100 mb-2">
-                                <button class="active flex-fill" type="button">Cash</button>
-                                <button class="flex-fill" type="button">bKash</button>
-                                <button class="flex-fill" type="button">Card</button>
-                                <button class="flex-fill" type="button">Split</button>
-                            </div>
-                            <button class="btn btn-primary w-100 btn-lg" type="button">
-                                <i class="bi bi-check2-circle" aria-hidden="true"></i> Complete sale · ৳ 21,877
-                            </button>
-                            <p class="erp-widget-note mt-2 mb-0">Offline sales are queued with an idempotency key and reconciled on reconnect; the server stays authoritative.</p>
-                        </div>
-                    </section>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i> Opened with</p>
+                    <p class="erp-kpi-value">৳ 5,90,700.00</p>
+                    <p class="erp-kpi-foot">Everything posted before this window</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-arrow-left-right" aria-hidden="true"></i> Moved in the window</p>
+                    <p class="erp-kpi-value">৳ 1,56,055.00</p>
+                    <p class="erp-kpi-foot">In ৳ 5,18,765.00 · out ৳ 3,62,710.00</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-safe" aria-hidden="true"></i> Closing</p>
+                    <p class="erp-kpi-value">৳ 7,46,235.00</p>
+                    <p class="erp-kpi-foot">What the ledger says the banks and wallets hold</p>
                 </div>
             </div>
-        </main>
 
-<footer class="erp-footer">
-    <span>BD ERP · Rafshan Trading Ltd.</span>
-    <span class="erp-footer-meta">
-        <span>07 Oct 2026, 06:20 PM · Asia/Dhaka</span>
-        <span class="d-none d-md-inline">Press <kbd>⌘</kbd><kbd>K</kbd> to jump anywhere</span>
-    </span>
-</footer>
-    </div>
+            <form class="erp-filterbar" onsubmit="return false">
+                <div class="erp-filter">
+                    <label class="form-label" for="cr-from">From</label>
+                    <input class="form-control" id="cr-from" type="date" value="2026-10-01">
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="cr-to">To</label>
+                    <input class="form-control" id="cr-to" type="date" value="2026-10-08">
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="cr-branch">Branch</label>
+                    <select class="form-select" id="cr-branch">
+                        <option>Every branch</option>
+                        <option>Head office</option>
+                        <option>Uttara depot</option>
+                        <option>Dhanmondi outlet</option>
+                    </select>
+                </div>
+                <div class="erp-filterbar-actions">
+                    <a class="btn btn-link" href="./cash-reports.html">Reset</a>
+                    <button class="btn btn-primary" type="button"><i class="bi bi-funnel" aria-hidden="true"></i> Run the report</button>
+                    <button class="btn btn-outline-secondary" type="button"><i class="bi bi-download" aria-hidden="true"></i> CSV</button>
+                </div>
+            </form>
+
+            <div class="erp-table-shell mb-3" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">The accounts<span class="erp-chip erp-chip-outline">4 account(s)</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack">
+                        <thead>
+                            <tr>
+                                <th>Account</th><th>Kind</th><th class="erp-th-num">Opening</th><th class="erp-th-num">In</th>
+                                <th class="erp-th-num">Out</th><th class="erp-th-num">Closing</th><th class="erp-th-num">Movements</th><th>Last movement</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="./cash-bank.html">City Bank current</a>
+                                    <div class="erp-td-muted">1120</div>
+                                </td>
+                                <td><span class="erp-status erp-status-active">Bank</span></td>
+                                <td class="erp-td-num">৳ 4,12,300.00</td>
+                                <td class="erp-td-num erp-money-in">৳ 3,86,940.00</td>
+                                <td class="erp-td-num erp-money-out">৳ 2,51,880.00</td>
+                                <td class="erp-td-num">
+                                    <span class="erp-cell-strong">৳ 5,47,360.00</span>
+                                    
+                                </td>
+                                <td class="erp-td-num">62</td>
+                                <td class="erp-td-muted">2026-10-08</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="./cash-bank.html">Islami Bank savings</a>
+                                    <div class="erp-td-muted">1130</div>
+                                </td>
+                                <td><span class="erp-status erp-status-active">Bank</span></td>
+                                <td class="erp-td-num">৳ 1,20,000.00</td>
+                                <td class="erp-td-num erp-money-in">৳ 12,000.00</td>
+                                <td class="erp-td-num erp-money-out">৳ 0.00</td>
+                                <td class="erp-td-num">
+                                    <span class="erp-cell-strong">৳ 1,32,000.00</span>
+                                    
+                                </td>
+                                <td class="erp-td-num">4</td>
+                                <td class="erp-td-muted">2026-10-03</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="./cash-bank.html">bKash merchant</a>
+                                    <div class="erp-td-muted">1140</div>
+                                </td>
+                                <td><span class="erp-status erp-status-cleared">bKash wallet</span></td>
+                                <td class="erp-td-num">৳ 48,600.00</td>
+                                <td class="erp-td-num erp-money-in">৳ 94,200.00</td>
+                                <td class="erp-td-num erp-money-out">৳ 61,450.00</td>
+                                <td class="erp-td-num">
+                                    <span class="erp-cell-strong">৳ 81,350.00</span>
+                                    
+                                </td>
+                                <td class="erp-td-num">38</td>
+                                <td class="erp-td-muted">2026-10-08</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="./cash-bank.html">Nagad merchant</a>
+                                    <div class="erp-td-muted">1150</div>
+                                </td>
+                                <td><span class="erp-status erp-status-cleared">Nagad wallet</span></td>
+                                <td class="erp-td-num">৳ 9,800.00</td>
+                                <td class="erp-td-num erp-money-in">৳ 25.00</td>
+                                <td class="erp-td-num erp-money-out">৳ 24,300.00</td>
+                                <td class="erp-td-num">
+                                    <span class="erp-money-out">৳ -14,475.00</span>
+                                    <div class="erp-td-muted">a wallet cannot be overdrawn — a reconciliation is owed</div>
+                                </td>
+                                <td class="erp-td-num">11</td>
+                                <td class="erp-td-muted">2026-10-07</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="2">Added up</th>
+                                <th class="erp-th-num">5,90,700.00</th>
+                                <th class="erp-th-num">5,18,765.00</th>
+                                <th class="erp-th-num">3,62,710.00</th>
+                                <th class="erp-th-num">7,46,235.00</th>
+                                <th class="erp-th-num" colspan="2"></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="erp-split mb-3">
+                <section class="erp-card">
+                    <div class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">Money in</h2>
+                            <p class="erp-card-sub">Named by the account on the other side of the posting.</p>
+                        </div>
+                        <div class="erp-card-actions"><span class="erp-chip erp-chip-ok">৳ 4,81,540.00</span></div>
+                    </div>
+                    <div class="erp-table-scroll">
+                        <table class="table erp-table">
+                            <thead><tr><th>Came from</th><th class="erp-th-num">Postings</th><th class="erp-th-num">Amount</th><th class="erp-th-num">Share</th></tr></thead>
+                            <tbody>
+                                
+                                <tr>
+                                    <td><span class="erp-cell-strong">4100 — Sales Revenue</span><div class="erp-td-muted">revenue</div></td>
+                                    <td class="erp-td-num">34</td>
+                                    <td class="erp-td-num erp-money-in">৳ 4,18,640.00</td>
+                                    <td class="erp-td-num">86.9%</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="erp-cell-strong">1210 — Accounts Receivable</span><div class="erp-td-muted">asset</div></td>
+                                    <td class="erp-td-num">12</td>
+                                    <td class="erp-td-num erp-money-in">৳ 52,300.00</td>
+                                    <td class="erp-td-num">10.9%</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="erp-cell-strong">4100 — Sales Revenue · counter</span><div class="erp-td-muted">revenue</div></td>
+                                    <td class="erp-td-num">9</td>
+                                    <td class="erp-td-num erp-money-in">৳ 10,600.00</td>
+                                    <td class="erp-td-num">2.2%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="erp-card">
+                    <div class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">Money out</h2>
+                            <p class="erp-card-sub">The same reading, on the way out.</p>
+                        </div>
+                        <div class="erp-card-actions"><span class="erp-chip erp-chip-danger">৳ 4,34,210.00</span></div>
+                    </div>
+                    <div class="erp-table-scroll">
+                        <table class="table erp-table">
+                            <thead><tr><th>Went to</th><th class="erp-th-num">Postings</th><th class="erp-th-num">Amount</th><th class="erp-th-num">Share</th></tr></thead>
+                            <tbody>
+                                
+                                <tr>
+                                    <td><span class="erp-cell-strong">5210 — Salary Expense</span><div class="erp-td-muted">expense</div></td>
+                                    <td class="erp-td-num">6</td>
+                                    <td class="erp-td-num erp-money-out">৳ 1,84,000.00</td>
+                                    <td class="erp-td-num">42.4%</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="erp-cell-strong">2110 — Accounts Payable</span><div class="erp-td-muted">liability</div></td>
+                                    <td class="erp-td-num">41</td>
+                                    <td class="erp-td-num erp-money-out">৳ 1,32,480.00</td>
+                                    <td class="erp-td-num">30.5%</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="erp-cell-strong">5220 — Rent Expense</span><div class="erp-td-muted">expense</div></td>
+                                    <td class="erp-td-num">3</td>
+                                    <td class="erp-td-num erp-money-out">৳ 93,000.00</td>
+                                    <td class="erp-td-num">21.4%</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="erp-cell-strong">5280 — Bank Charges</span><div class="erp-td-muted">expense</div></td>
+                                    <td class="erp-td-num">4</td>
+                                    <td class="erp-td-num erp-money-out">৳ 24,730.00</td>
+                                    <td class="erp-td-num">5.7%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <section class="erp-card mb-3">
+                <div class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Between our own accounts</h2>
+                        <p class="erp-card-sub">A transfer has a money account on both sides, so it is not cash flow — the company is no richer for moving cash from the tin to the bank. It is listed because leaving it out entirely would make the books look like they moved less money than they did.</p>
+                    </div>
+                    <div class="erp-card-actions"><span class="erp-chip erp-chip-outline">৳ 44,225.00 moved</span></div>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead><tr><th>Pair</th><th class="erp-th-num">Postings</th><th class="erp-th-num">Moved</th></tr></thead>
+                        <tbody>
+                            <tr><td><span class="erp-cell-strong">Between our own accounts · 1120 — City Bank current</span></td><td class="erp-td-num">3</td><td class="erp-td-num">৳ 37,225.00</td></tr>
+                            <tr><td><span class="erp-cell-strong">Between our own accounts · 1140 — bKash merchant</span></td><td class="erp-td-num">2</td><td class="erp-td-num">৳ 7,000.00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="erp-table-shell" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">What the tills counted<span class="erp-chip erp-chip-outline">4 session(s)</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack">
+                        <thead>
+                            <tr>
+                                <th>Session</th><th>Branch</th><th>Opened</th><th class="erp-th-num">Float</th><th class="erp-th-num">Cash sales</th>
+                                <th class="erp-th-num">Cash in</th><th class="erp-th-num">Cash out</th><th class="erp-th-num">Expected</th>
+                                <th class="erp-th-num">Counted</th><th class="erp-th-num">Difference</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr>
+                                <td><span class="erp-cell-strong font-monospace">POS-2026-01187</span></td>
+                                <td class="erp-td-muted">Dhanmondi outlet</td>
+                                <td>
+                                    08 Oct 09:12
+                                    <div class="erp-td-muted">closed 21:40</div>
+                                </td>
+                                <td class="erp-td-num">10,000.00</td>
+                                <td class="erp-td-num">38,940.00</td>
+                                <td class="erp-td-num">5,000.00</td>
+                                <td class="erp-td-num">12,000.00</td>
+                                <td class="erp-td-num">41,940.00</td>
+                                <td class="erp-td-num">41,940.00</td>
+                                <td class="erp-td-num">
+                                    <span class="erp-status erp-status-posted">agreed</span>
+                                    
+                                    
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="erp-cell-strong font-monospace">POS-2026-01186</span></td>
+                                <td class="erp-td-muted">Uttara depot</td>
+                                <td>
+                                    07 Oct 09:04
+                                    <div class="erp-td-muted">closed 21:40</div>
+                                </td>
+                                <td class="erp-td-num">8,000.00</td>
+                                <td class="erp-td-num">21,300.00</td>
+                                <td class="erp-td-num">0.00</td>
+                                <td class="erp-td-num">2,000.00</td>
+                                <td class="erp-td-num">27,300.00</td>
+                                <td class="erp-td-num">26,880.00</td>
+                                <td class="erp-td-num">
+                                    
+                                    <span class="erp-money-out">-420.00</span>
+                                    
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="erp-cell-strong font-monospace">POS-2026-01185</span></td>
+                                <td class="erp-td-muted">Head office counter</td>
+                                <td>
+                                    07 Oct 09:31
+                                    <div class="erp-td-muted">closed 21:40</div>
+                                </td>
+                                <td class="erp-td-num">12,000.00</td>
+                                <td class="erp-td-num">54,120.00</td>
+                                <td class="erp-td-num">10,000.00</td>
+                                <td class="erp-td-num">0.00</td>
+                                <td class="erp-td-num">76,120.00</td>
+                                <td class="erp-td-num">76,450.00</td>
+                                <td class="erp-td-num">
+                                    
+                                    
+                                    <span class="erp-money-in">+330.00</span>
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="erp-cell-strong font-monospace">POS-2026-01188</span></td>
+                                <td class="erp-td-muted">Dhanmondi outlet</td>
+                                <td>
+                                    08 Oct 16:40
+                                    <span class="erp-status erp-status-active ms-1">open</span>
+                                </td>
+                                <td class="erp-td-num">10,000.00</td>
+                                <td class="erp-td-num">6,150.00</td>
+                                <td class="erp-td-num">0.00</td>
+                                <td class="erp-td-num">0.00</td>
+                                <td class="erp-td-num">16,150.00</td>
+                                <td class="erp-td-num">—</td>
+                                <td class="erp-td-num">
+                                    
+                                    
+                                    
+                                    <span class="erp-td-muted">not counted yet</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="3">Added up</th>
+                                <th class="erp-th-num"></th>
+                                <th class="erp-th-num">1,20,510.00</th>
+                                <th class="erp-th-num">15,000.00</th>
+                                <th class="erp-th-num">14,000.00</th>
+                                <th class="erp-th-num" colspan="2"></th>
+                                <th class="erp-th-num">-90.00</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </section>
+
+            <p class="erp-filter-note mt-3">
+                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                The one block above that is not the ledger's is the till variance, and it does not pretend to be: expected cash is the till's own arithmetic
+                (float + cash sales + cash in − cash out) frozen on the session when it closed, and a session still open shows no counted figure at all rather than a
+                zero that would read as a perfect count. A difference against the <em>books</em> is answered on the count desk, where it posts.
+            </p>
+
+        </div>
+    </main>
 </div>
 
 <div class="erp-backdrop" data-erp-backdrop hidden></div>
