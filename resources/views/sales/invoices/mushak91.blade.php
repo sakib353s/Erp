@@ -23,6 +23,11 @@
 </head>
 <body>
 @php
+    // §15-07: the document's own localization — numerals, lakh/crore grouping and
+    // whether the amount is spelled out. Renderable on its own, so the switches
+    // are resolved from the container when the caller did not pass them.
+    $loc = $localization ?? app(\App\Domain\Settings\Services\LocalizationService::class);
+
     $company = $invoice->company;
     $taxableSum = $invoice->lines->sum(fn ($line) => max(0, (float) $line->line_total - (float) $line->tax));
     $ratePercent = $rate !== null
@@ -100,22 +105,30 @@
             <td>{{ $line->line_no }}</td>
             <td>{{ $line->product?->name ?? $line->description ?? '—' }}</td>
             <td class="num">{{ $line->qty }}</td>
-            <td class="num">{{ number_format((float) $line->unit_price, 2) }}</td>
-            <td class="num">{{ number_format(max(0, (float) $line->line_total - (float) $line->tax), 2) }}</td>
+            <td class="num">{{ $loc->number((float) $line->unit_price) }}</td>
+            <td class="num">{{ $loc->number(max(0, (float) $line->line_total - (float) $line->tax)) }}</td>
             <td class="num">{{ $ratePercent ?? '—' }}</td>
-            <td class="num">{{ number_format((float) $line->tax, 2) }}</td>
+            <td class="num">{{ $loc->number((float) $line->tax) }}</td>
         </tr>
     @endforeach
     </tbody>
 </table>
 
 <div class="totals">
-    <div><span>Taxable value</span><span>{{ number_format((float) ($invoice->taxable_base ?: $taxableSum), 2) }}</span></div>
-    <div><span>VAT</span><span>{{ number_format((float) $invoice->tax, 2) }}</span></div>
+    <div><span>Taxable value</span><span>{{ $loc->number((float) ($invoice->taxable_base ?: $taxableSum)) }}</span></div>
+    <div><span>VAT</span><span>{{ $loc->number((float) $invoice->tax) }}</span></div>
     @if ((float) $invoice->shipping > 0)
-        <div><span>Shipping</span><span>{{ number_format((float) $invoice->shipping, 2) }}</span></div>
+        <div><span>Shipping</span><span>{{ $loc->number((float) $invoice->shipping) }}</span></div>
     @endif
-    <div class="grand"><span>Grand total</span><span>{{ number_format((float) $invoice->grand_total, 2) }}</span></div>
+    <div class="grand"><span>Grand total</span><span>{{ $loc->number((float) $invoice->grand_total) }}</span></div>
+    @if ($loc->amountWordsEnabled())
+        <div class="muted" style="display:block;padding:.35rem .4rem;">
+            In words: {{ $loc->words((float) $invoice->grand_total) }}
+            @if (($loc->locale() === 'bn'))
+                <br>{{ $loc->words((float) $invoice->grand_total, 'bn') }}
+            @endif
+        </div>
+    @endif
 </div>
 </body>
 </html>

@@ -3,12 +3,14 @@
 namespace Tests\Feature;
 
 use App\Domain\Foundation\Branch;
+use App\Domain\Foundation\MenuItem;
 use App\Domain\Foundation\User;
 use App\Domain\Security\Services\PasswordPolicy;
 use App\Domain\Settings\Services\InvariantGuard;
 use App\Domain\Settings\Services\SettingService;
 use App\Domain\Settings\Setting;
 use Database\Seeders\DocumentTypeSeeder;
+use Database\Seeders\NavigationSeeder;
 use Database\Seeders\FoundationPermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -351,6 +353,39 @@ class SettingsDeskTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($scoped)->get(route('settings.branch.show', $other))->assertForbidden();
+    }
+
+    /**
+     * The catalogue's settings leaves deep-link into a single field
+     * (`/app/settings/localization#bengali_numerals`) and into the maintenance
+     * page's sections. An anchor that does not exist is a menu item that is
+     * "active" in the registry and does nothing when a person clicks it, so this
+     * walks every seeded deep link and looks for the id on the page it lands on.
+     */
+    public function test_every_catalogue_deep_link_lands_on_an_anchor_that_exists(): void
+    {
+        $this->seed(NavigationSeeder::class);
+
+        $leaves = MenuItem::query()
+            ->where('is_active', true)
+            ->whereNotNull('route')
+            ->where('route', 'like', '%#%')
+            ->get();
+
+        $this->assertNotEmpty($leaves, 'the catalogue carries deep links, and none of them were seeded as active');
+
+        foreach ($leaves as $leaf) {
+            [$path, $fragment] = explode('#', (string) $leaf->route, 2);
+
+            $response = $this->actingAs($this->admin)->get($path);
+            $response->assertOk();
+
+            $this->assertStringContainsString(
+                'id="'.$fragment.'"',
+                (string) $response->getContent(),
+                "the menu entry {$leaf->code} points at {$leaf->route}, but no element on that page carries id=\"{$fragment}\"",
+            );
+        }
     }
 
     public function test_the_guard_is_the_one_place_that_knows_the_floors(): void

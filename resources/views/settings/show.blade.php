@@ -44,7 +44,12 @@
                     @php($stored = is_array($entry) ? ($entry['value'] ?? null) : $entry)
                     @php($value = old("settings.$key", $stored !== null ? $stored : ($meta['default'] ?? null)))
                     @php($label = ($meta['label'] ?? ucfirst(str_replace('_', ' ', $key))))
-                    <div class="{{ $type === 'boolean' ? 'col-12' : 'col-md-6' }}">
+                    {{-- Every field row carries its key as an anchor: the catalogue's
+                         settings leaves deep-link to a single switch (e.g.
+                         /app/settings/localization#bengali_numerals), and an anchor
+                         that does not exist is a link that silently does nothing.
+                         The input keeps its own `setting_<key>` id for the label. --}}
+                    <div id="{{ $key }}" class="{{ $type === 'boolean' ? 'col-12' : 'col-md-6' }}">
                         @if ($type === 'boolean')
                             {{-- An unchecked box sends nothing, and a setting that is
                                  never sent is never written: the hidden twin carries the
@@ -91,6 +96,33 @@
             </div>
         </section>
     </form>
+
+    @if ($group === 'localization')
+        @php($loc = app(\App\Domain\Settings\Services\LocalizationService::class))
+        {{-- §15-07: the switches above are only real if the documents obey them,
+             so the screen shows what they do by rendering through the same service
+             the invoices, the statutory tax invoice and the POS receipt use. This
+             is the output, not an illustration of it. --}}
+        <section class="erp-card erp-card-max mt-3">
+            <header class="erp-card-head">
+                <div>
+                    <h2 class="erp-card-title">What these switches change</h2>
+                    <p class="erp-card-sub">Rendered by the service the invoices and the POS receipt render through — save, and the documents change with this sample.</p>
+                </div>
+                <span class="erp-chip erp-chip-soft">{{ $loc->locale() === 'bn' ? 'বাংলা' : 'English' }}</span>
+            </header>
+            <dl class="erp-dl erp-dl-tight">
+                <dt>Figures</dt>
+                <dd class="font-monospace">{{ $loc->number(1234567.5) }}</dd>
+                <dt>Quantity</dt>
+                <dd class="font-monospace">{{ $loc->qty(12.5) }}</dd>
+                <dt>Amount in words</dt>
+                <dd>{{ $loc->amountWordsEnabled() ? $loc->words(1234567.5) : 'not printed — the switch is off' }}</dd>
+                <dt>বাংলায়</dt>
+                <dd>{{ $loc->words(1234567.5, 'bn') }}</dd>
+            </dl>
+        </section>
+    @endif
 
     @if (! empty($floors))
         <div class="erp-note mt-3">

@@ -104,9 +104,9 @@ class CatalogImporter
         'settings > branch settings' => ['/app/settings/branches', 'settings.branch'],
         'settings > invoice settings > invoice number format' => ['/app/settings/numbering', 'settings.numbering'],
         'settings > bengali settings > bengali language toggle' => ['/app/settings/localization', 'settings.localization'],
-        'settings > bengali settings > bengali numerals' => ['/app/settings/localization#numerals', 'settings.localization'],
-        'settings > bengali settings > amount in words (bengali)' => ['/app/settings/localization#amount-words', 'settings.localization'],
-        'settings > bengali settings > lakh / crore format' => ['/app/settings/localization#lakh-crore', 'settings.localization'],
+        'settings > bengali settings > bengali numerals' => ['/app/settings/localization#bengali_numerals', 'settings.localization'],
+        'settings > bengali settings > amount in words (bengali)' => ['/app/settings/localization#amount_words_bn', 'settings.localization'],
+        'settings > bengali settings > lakh / crore format' => ['/app/settings/localization#lakh_crore_format', 'settings.localization'],
         'employee > employees > all employees' => ['/app/employees', 'employees.view'],
 
         // §03 purchase + §06 suppliers — the pages that now exist

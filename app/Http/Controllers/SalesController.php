@@ -82,6 +82,7 @@ use App\Domain\Sales\SalesTarget;
 use App\Domain\Sales\Services\SuspiciousOrderFlagger;
 use App\Domain\Sales\SuspiciousOrderFlag;
 use App\Domain\Sales\Territory;
+use App\Domain\Settings\Services\LocalizationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -149,6 +150,7 @@ class SalesController extends Controller
         protected SuspiciousOrderFlagger $flagger,
         protected DocumentRenderer $renderer,
         protected TaxService $taxService,
+        protected LocalizationService $localization,
     ) {}
 
     /**
@@ -896,6 +898,7 @@ class SalesController extends Controller
             'invoice' => $invoice,
             'type' => $type,
             'rate' => $rate,
+            'localization' => $this->localization,
         ])->render();
 
         $document = $this->renderer->storeGenerated(

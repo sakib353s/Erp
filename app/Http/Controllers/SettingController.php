@@ -11,6 +11,7 @@ use App\Http\Requests\UpdateSettingsRequest;
 use App\Domain\Audit\Services\AuditRecorder;
 use App\Domain\Settings\Setting;
 use App\Domain\Settings\Support\GroupRules;
+use App\Domain\Foundation\Services\Translator;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -138,6 +139,14 @@ class SettingController extends Controller
         $status = $result['saved'] === []
             ? 'No changes to save.'
             : 'Saved '.count($result['saved']).' setting(s).';
+
+        // §15-07: the localization group decides the interface language, and the
+        // translator memoises its answer for the request. A write flushes it, so
+        // “default language” takes effect on the next render rather than on the
+        // next deploy.
+        if ($group === 'localization') {
+            app(Translator::class)->flushLocale();
+        }
 
         $redirect = back()->with('status', $status);
 
@@ -284,6 +293,10 @@ class SettingController extends Controller
 
             $saved += count($result['saved']);
             $refused = array_merge($refused, $result['rejected']);
+
+            if ($group === 'localization') {
+                app(Translator::class)->flushLocale();
+            }
         }
 
         $redirect = back()->with('status', $saved === 0

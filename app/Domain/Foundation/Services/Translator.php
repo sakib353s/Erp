@@ -2,8 +2,8 @@
 
 namespace App\Domain\Foundation\Services;
 
-use App\Domain\Foundation\Company;
 use App\Domain\Foundation\Translation;
+use App\Domain\Settings\Services\LocalizationService;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -21,7 +21,18 @@ class Translator
 
     protected ?string $locale = null;
 
-    /** Current UI locale: session override → company default → 'en'. */
+    public function __construct(protected ?LocalizationService $localization = null) {}
+
+    /**
+     * Current UI locale: the reader's own choice → **the localization
+     * settings group** (§15-07) → the company's stored locale → 'en'.
+     *
+     * The settings group is the authority because it is the one a person can
+     * change without a developer: “Default language” on the localization
+     * screen is what the *next* request is rendered in, not a wish. The
+     * company column stays as the fallback for an installation that has never
+     * opened that screen.
+     */
     public function locale(): string
     {
         if ($this->locale !== null) {
@@ -34,9 +45,19 @@ class Translator
             return $this->locale = $session;
         }
 
-        $companyLocale = Company::current()->locale ?? null;
+        $configured = ($this->localization ?? app(LocalizationService::class))->locale();
 
-        return $this->locale = in_array($companyLocale, ['en', 'bn'], true) ? $companyLocale : 'en';
+        return $this->locale = in_array($configured, ['en', 'bn'], true) ? $configured : 'en';
+    }
+
+    /**
+     * Forget the memoised locale. A settings write calls this so that changing
+     * the default language takes effect on the next render rather than on the
+     * next deploy.
+     */
+    public function flushLocale(): void
+    {
+        $this->locale = null;
     }
 
     public function setLocale(string $locale): void

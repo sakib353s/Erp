@@ -24,6 +24,7 @@ use App\Domain\Sales\PosSession;
 use App\Domain\Sales\PosTransaction;
 use App\Domain\Sales\Services\PosReportService;
 use App\Domain\Sales\Services\PricingService;
+use App\Domain\Settings\Services\LocalizationService;
 use App\Domain\Settings\Services\SettingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -53,6 +54,7 @@ class PosController extends Controller
         protected CreateQuotation $createQuotation,
         protected CreateLayaway $createLayaway,
         protected SettingService $settings,
+        protected LocalizationService $localization,
     ) {}
 
     public function terminal(Request $request): View
@@ -285,6 +287,9 @@ class PosController extends Controller
             'lines' => $invoice?->lines ?? collect(),
             'paperWidth' => in_array($paper, ['58', '80'], true) ? $paper : '80',
             'footer' => trim((string) $this->settings->effective('pos', 'receipt_footer')),
+            // §15-07: the slip is a document, so it obeys the same switches the
+            // invoices do — grouping, numerals and amount in words.
+            'localization' => $this->localization,
         ]);
     }
 

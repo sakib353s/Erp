@@ -17,6 +17,10 @@
 </head>
 <body>
 @php
+    // §15-07: the commercial print obeys the same switches as the statutory one.
+    $loc = $localization ?? app(\App\Domain\Settings\Services\LocalizationService::class);
+@endphp
+@php
     $company = $invoice->company;
     $showTax = (float) $invoice->tax > 0
         || $invoice->lines->contains(fn ($line) => (float) $line->tax > 0);
@@ -56,25 +60,28 @@
             <td>{{ $line->line_no }}</td>
             <td>{{ $line->product?->name ?? $line->description ?? '—' }}</td>
             <td class="num">{{ $line->qty }}</td>
-            <td class="num">{{ number_format((float) $line->unit_price, 2) }}</td>
+            <td class="num">{{ $loc->number((float) $line->unit_price) }}</td>
             @if ($showTax)
-                <td class="num">{{ number_format((float) $line->tax, 2) }}</td>
+                <td class="num">{{ $loc->number((float) $line->tax) }}</td>
             @endif
-            <td class="num">{{ number_format((float) $line->line_total, 2) }}</td>
+            <td class="num">{{ $loc->number((float) $line->line_total) }}</td>
         </tr>
     @endforeach
     </tbody>
 </table>
 
 <div class="totals">
-    <div><span>Subtotal</span><span>{{ number_format((float) $invoice->subtotal, 2) }}</span></div>
+    <div><span>Subtotal</span><span>{{ $loc->number((float) $invoice->subtotal) }}</span></div>
     @if ($showTax)
         <div><span>Tax</span><span>{{ number_format((float) $invoice->tax, 2) }}</span></div>
     @endif
     @if ((float) $invoice->shipping > 0)
-        <div><span>Shipping</span><span>{{ number_format((float) $invoice->shipping, 2) }}</span></div>
+        <div><span>Shipping</span><span>{{ $loc->number((float) $invoice->shipping) }}</span></div>
     @endif
-    <div class="grand"><span>Grand total</span><span>{{ number_format((float) $invoice->grand_total, 2) }}</span></div>
+    <div class="grand"><span>Grand total</span><span>{{ $loc->number((float) $invoice->grand_total) }}</span></div>
+    @if ($loc->amountWordsEnabled())
+        <div class="muted" style="display:block;padding:.2rem .4rem;">In words: {{ $loc->words((float) $invoice->grand_total) }}</div>
+    @endif
 </div>
 </body>
 </html>

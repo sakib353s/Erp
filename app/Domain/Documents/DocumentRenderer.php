@@ -6,6 +6,7 @@ use App\Domain\Delivery\ShippingLabel;
 use App\Domain\Foundation\User;
 use App\Domain\Sales\Invoice;
 use App\Domain\Sales\SalesOrder;
+use App\Domain\Settings\Services\LocalizationService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -20,11 +21,18 @@ use Illuminate\Support\Str;
  */
 class DocumentRenderer
 {
+    public function __construct(protected LocalizationService $localization) {}
+
     public function renderInvoice(Invoice $invoice, User $user): Document
     {
         $invoice->loadMissing(['lines.product', 'customer', 'company']);
 
-        $html = view('sales.invoices.print', ['invoice' => $invoice])->render();
+        // §15-07: the print obeys the company's (or the branch's) localization
+        // switches — grouping, numerals and whether the amount is spelled out.
+        $html = view('sales.invoices.print', [
+            'invoice' => $invoice,
+            'localization' => $this->localization,
+        ])->render();
 
         return $this->storeGenerated(
             $html,

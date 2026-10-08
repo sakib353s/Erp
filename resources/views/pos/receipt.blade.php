@@ -3,6 +3,10 @@
 @section('page_title', 'POS Receipt')
 
 @section('content')
+    @php
+        // §15-07: the slip obeys the same localization switches as the invoices.
+        $loc = $localization ?? app(\App\Domain\Settings\Services\LocalizationService::class);
+    @endphp
     <div class="erp-page-head">
         <div>
             <h1 class="erp-h1">POS Receipt</h1>
@@ -29,15 +33,15 @@
         <div class="border-top border-bottom py-1 small">
             <div class="d-flex justify-content-between"><span>Sold at</span><span>{{ optional($txn->sold_at)->format('Y-m-d H:i') }}</span></div>
             <div class="d-flex justify-content-between"><span>Payment</span><span>{{ ucfirst($txn->payment_method) }}</span></div>
-            <div class="d-flex justify-content-between"><span>Tendered</span><span>{{ number_format((float) $txn->tendered, 2) }}</span></div>
-            <div class="d-flex justify-content-between"><span>Change</span><span>{{ number_format((float) $txn->change_due, 2) }}</span></div>
+            <div class="d-flex justify-content-between"><span>Tendered</span><span>{{ $loc->number((float) $txn->tendered) }}</span></div>
+            <div class="d-flex justify-content-between"><span>Change</span><span>{{ $loc->number((float) $txn->change_due) }}</span></div>
         </div>
 
         <div class="my-2">
             @forelse ($lines as $line)
                 <div class="d-flex justify-content-between">
-                    <span>{{ $line->description ?? $line->product?->name ?? 'Item' }} × {{ rtrim(rtrim(number_format((float) $line->qty, 4), '0'), '.') }}</span>
-                    <span>{{ number_format((float) $line->line_total, 2) }}</span>
+                    <span>{{ $line->description ?? $line->product?->name ?? 'Item' }} × {{ $loc->qty((float) $line->qty) }}</span>
+                    <span>{{ $loc->number((float) $line->line_total) }}</span>
                 </div>
             @empty
                 <div class="text-muted small">No line detail recorded for this transaction.</div>
@@ -46,15 +50,18 @@
 
         <div class="border-top pt-1">
             @if ($invoice)
-                <div class="d-flex justify-content-between"><span>Subtotal</span><span>{{ number_format((float) $invoice->subtotal, 2) }}</span></div>
+                <div class="d-flex justify-content-between"><span>Subtotal</span><span>{{ $loc->number((float) $invoice->subtotal) }}</span></div>
                 @if ((float) $invoice->tax > 0)
-                    <div class="d-flex justify-content-between"><span>Tax</span><span>{{ number_format((float) $invoice->tax, 2) }}</span></div>
+                    <div class="d-flex justify-content-between"><span>Tax</span><span>{{ $loc->number((float) $invoice->tax) }}</span></div>
                 @endif
                 @if ((float) $invoice->rounding != 0.0)
-                    <div class="d-flex justify-content-between"><span>Rounding</span><span>{{ number_format((float) $invoice->rounding, 2) }}</span></div>
+                    <div class="d-flex justify-content-between"><span>Rounding</span><span>{{ $loc->number((float) $invoice->rounding) }}</span></div>
                 @endif
             @endif
-            <div class="d-flex justify-content-between fw-bold fs-5"><span>Total</span><span>{{ number_format((float) $txn->total, 2) }}</span></div>
+            <div class="d-flex justify-content-between fw-bold fs-5"><span>Total</span><span>{{ $loc->number((float) $txn->total) }}</span></div>
+            @if ($loc->amountWordsEnabled())
+                <div class="small text-center">{{ $loc->words((float) $txn->total) }}</div>
+            @endif
         </div>
 
         @if ($footer !== '')
