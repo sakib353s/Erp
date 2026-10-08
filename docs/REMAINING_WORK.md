@@ -6,7 +6,7 @@ a module is only "done" when persistence + validation + authorization + branch
 scope + business logic + workflow + effects + notifications + audit + UI + error
 handling and its tests are all connected (see `TRACEABILITY/README.md`).
 
-_Last updated: 2026-10-08, after the asset register and its depreciation desk (§12-14 — assets, vehicles, equipment and the vehicle trip log, one register with four views, and a monthly depreciation run that posts what it charges), on top of the meeting desk (§12-11), the company registers and compliance watch (§12-03/04/09/10 — the licence, TIN & BIN, certificate, contract, agreement, brand-asset, insurance, RJSC-filing and statutory-duty registers, their renewals lens, compliance calendar and the 06:50 digest), on top of the notice board and task board (§12-12/12-13), the report centre (§13), the settings desk including the VAT (§15-14) and Bengali/localization (§15-07) groups, on top of the label cluster (§04-13/04-52/04-53/04-54) — the barcodes and QR codes this application encodes itself and the sheets it files, on top of the batch/expiry/FEFO slice (§04-37…04-41), the transfer approval slice (§04-28), the adjustment approval slice (§04-26), the warehousing slice (§04-42/43/45), the stock count slice (§04-31), the damage & loss slice (§04-46…§04-51), the dashboard slice (§01) and the inventory alert/reorder, reservations and report-family slices (§04)_
+_Last updated: 2026-10-08, after the first suites were actually executed under PHPUnit (see the note on test execution in *Known deviations*: the run found, among others, that a fresh instance could not post a single journal entry and that the cheque register answered 500), on top of the asset register and its depreciation desk (§12-14 — assets, vehicles, equipment and the vehicle trip log, one register with four views, and a monthly depreciation run that posts what it charges), on top of the meeting desk (§12-11), the company registers and compliance watch (§12-03/04/09/10 — the licence, TIN & BIN, certificate, contract, agreement, brand-asset, insurance, RJSC-filing and statutory-duty registers, their renewals lens, compliance calendar and the 06:50 digest), on top of the notice board and task board (§12-12/12-13), the report centre (§13), the settings desk including the VAT (§15-14) and Bengali/localization (§15-07) groups, on top of the label cluster (§04-13/04-52/04-53/04-54) — the barcodes and QR codes this application encodes itself and the sheets it files, on top of the batch/expiry/FEFO slice (§04-37…04-41), the transfer approval slice (§04-28), the adjustment approval slice (§04-26), the warehousing slice (§04-42/43/45), the stock count slice (§04-31), the damage & loss slice (§04-46…§04-51), the dashboard slice (§01) and the inventory alert/reorder, reservations and report-family slices (§04)_
 
 ## Where the product stands
 
@@ -54,6 +54,27 @@ HRM 17, Masters 15, CRM 14, Business Management 8, Cash & Bank 22, Accounting 8,
    panels up without touching the dashboard.
 
 ## Known deviations inside what *is* built (documented, not hidden)
+
+* **The test suites have now been run — not all of them yet, and the ones that have were run for the first
+  time.** Until this pass only a static harness ran over the tree (lint, Blade extraction, class references,
+  route names); it proves syntax and wiring, and nothing about behaviour. Executing the suites under a real
+  PHP 8.5 / Laravel 13.32 / PHPUnit 12 runtime found defects the harness structurally cannot see, and fixed
+  them: the **cheque register answered 500** because `Cheque::STATUSES` referenced a `STATUS_ISSUED` constant
+  that was never declared (the model had `DIRECTION_ISSUED`); **a fresh instance could not post a single
+  journal entry**, because `ReferenceDataSeeder` — the seeder that creates the current fiscal year — was
+  missing from the list of company-scoped seeders the first boot re-runs, so the chart of accounts existed
+  with no open period, and the system roles were built before the permission catalogue existed, leaving them
+  with no keys; **business permissions were never registered with the Gate**, so the twenty-nine form requests
+  that ask `$user->can('…')` refused everybody but a super admin; `counterparty` was missing from
+  `BusinessRecord`'s fillable list, so every contract and agreement lost the other party; `NoticeService`
+  counted a notice's author as outstanding on their own acknowledgement ledger, making 100% unreachable; a
+  payment could name another cash or bank account as its other side, which is a transfer wearing the wrong
+  form; and `where('trip_date', '<=', $date)` silently dropped the **last day of every date range**, because
+  Eloquent writes a `date` cast as `Y-m-d 00:00:00` and that string sorts after `Y-m-d` — the trip log's own
+  page could not show today's trips. Suites passing today: Unit 14, CashCountDeskTest 13, CashBankDeskTest 9,
+  ChequeDeskTest 10, AssetRegisterTest 36, BusinessRecordTest 23, MeetingBoardTest 18, NoticeBoardTest 13,
+  TaskBoardTest 15. The remaining feature suites have the same treatment waiting for them, and it is the
+  highest-value work left in the repository.
 
 * **Dashboard containers** are answered by one read service (`App\Domain\Dashboard\Services\DashboardMetrics`)
   rather than the planned per-widget classes and per-widget `dashboard.widget.*` keys: a container is visible

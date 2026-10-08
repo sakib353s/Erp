@@ -169,7 +169,15 @@ class ExpenseReport
         return Expense::query()
             ->where('expenses.company_id', $companyId)
             ->where('expenses.status', Expense::STATUS_POSTED)
-            ->whereBetween('expenses.expense_date', [$from, $to])
+            /*
+             * `whereDate`, not `whereBetween`: `expense_date` is a date column
+             * and a stored day reads back as `2026-10-08 00:00:00`, so a window
+             * ending `'2026-10-08'` would sort *before* today's own row and
+             * quietly drop the last day of every range — including "today" on a
+             * report whose window usually ends today.
+             */
+            ->whereDate('expenses.expense_date', '>=', $from)
+            ->whereDate('expenses.expense_date', '<=', $to)
             ->when($categoryId !== null, fn ($query) => $query->where('expenses.category_id', $categoryId))
             ->when($branchId !== null, fn ($query) => $query->where('expenses.branch_id', $branchId))
             ->when($settledWith !== null, fn ($query) => $query->where('expenses.settled_with', $settledWith))
@@ -194,7 +202,8 @@ class ExpenseReport
         $query = Expense::query()
             ->where('expenses.company_id', $companyId)
             ->where('expenses.status', Expense::STATUS_PENDING)
-            ->whereBetween('expenses.expense_date', [$from, $to])
+            ->whereDate('expenses.expense_date', '>=', $from)
+            ->whereDate('expenses.expense_date', '<=', $to)
             ->when($categoryId !== null, fn ($query) => $query->where('expenses.category_id', $categoryId))
             ->when($branchId !== null, fn ($query) => $query->where('expenses.branch_id', $branchId))
             ->when($search !== null, fn ($query) => $query->where(function ($inner) use ($search) {
@@ -208,7 +217,8 @@ class ExpenseReport
             'reversed' => round((float) Expense::query()
                 ->where('company_id', $companyId)
                 ->where('status', Expense::STATUS_REVERSED)
-                ->whereBetween('expense_date', [$from, $to])
+                ->whereDate('expense_date', '>=', $from)
+                ->whereDate('expense_date', '<=', $to)
                 ->sum('amount'), 4),
         ];
     }
@@ -235,7 +245,8 @@ class ExpenseReport
             ->where('l.company_id', $companyId)
             ->whereIn('l.account_id', $accountIds)
             ->where('e.posting_state', 'posted')
-            ->whereBetween('e.entry_date', [$from, $to])
+            ->whereDate('e.entry_date', '>=', $from)
+            ->whereDate('e.entry_date', '<=', $to)
             ->when($branchId !== null, fn ($query) => $query->where('e.branch_id', $branchId))
             ->groupBy('l.account_id')
             ->selectRaw("l.account_id,

@@ -472,13 +472,21 @@ class ReferenceDataSeeder extends Seeder
         $startsOn = sprintf('%04d-%02d-01', $fyStart, $startMonth);
         $endsOn = (new \DateTime($startsOn))->modify('+1 year -1 day')->format('Y-m-d');
 
+        /*
+         * Matched on the code, not on the starting date: `starts_on` is a date
+         * column, so a stored row reads back as `2026-07-01 00:00:00` and a
+         * where-clause of `2026-07-01` never finds it — the seeder would try to
+         * insert the year it had just written, and `(company_id, code)` would
+         * refuse. A seeder that cannot be run twice is a seeder that cannot be
+         * re-run after a restore, which is most of when anybody runs it.
+         */
         FiscalYear::updateOrCreate(
             [
                 'company_id' => $company->id,
-                'starts_on' => $startsOn,
+                'code' => 'FY'.sprintf('%04d', $fyStart),
             ],
             [
-                'code' => 'FY'.sprintf('%04d', $fyStart),
+                'starts_on' => $startsOn,
                 'name' => 'FY '.sprintf('%04d', $fyStart).'-'.sprintf('%04d', $fyStart + 1),
                 'ends_on' => $endsOn,
                 'status' => 'open',

@@ -88,9 +88,12 @@ class CashReportController extends Controller
                 $row['entry_date'],
                 $row['entry_no'],
                 $row['description'],
-                (float) $row['debit'],
-                (float) $row['credit'],
-                $row['running_balance'],
+                // Two decimals on every money column: a spreadsheet that reads
+                // 4000 in one row and 29000.0000 in the next is a spreadsheet
+                // somebody has to reformat before it can be added up.
+                number_format((float) $row['debit'], 2, '.', ''),
+                number_format((float) $row['credit'], 2, '.', ''),
+                number_format((float) $row['running_balance'], 2, '.', ''),
             ], [
                 'Account' => $book['label'],
                 'Opening' => $book['opening'],

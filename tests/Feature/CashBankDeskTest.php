@@ -238,6 +238,8 @@ class CashBankDeskTest extends TestCase
         $cash = $this->account('1110');
         $bank = $this->account('1120');
 
+        // The cashier's submit carries the key that says "this is the same
+        // request" — a banking run they press twice is one banking run.
         $payload = [
             'from_account_id' => $cash->id,
             'to_account_id' => $bank->id,
@@ -245,6 +247,7 @@ class CashBankDeskTest extends TestCase
             'transferred_on' => now()->toDateString(),
             'reference' => 'PAYIN-771',
             'narration' => 'End of day banking',
+            'idempotency_key' => 'banking-2026-10-08',
         ];
 
         $this->actingAs($this->admin)
@@ -263,11 +266,11 @@ class CashBankDeskTest extends TestCase
 
         // The desk's answer to a double submit is the same document, not a second move.
         $this->actingAs($this->admin)
-            ->post(route('cash-bank.transfer.store'), $payload + ['idempotency_key' => 'banking-2026-10-08'])
+            ->post(route('cash-bank.transfer.store'), $payload)
             ->assertSessionHasNoErrors();
 
         $this->actingAs($this->admin)
-            ->post(route('cash-bank.transfer.store'), $payload + ['idempotency_key' => 'banking-2026-10-08'])
+            ->post(route('cash-bank.transfer.store'), $payload)
             ->assertSessionHasNoErrors();
 
         $this->assertSame(1, CashTransfer::query()->count(), 'a retried transfer moves the money once');

@@ -104,10 +104,20 @@ trait CreatesERPInstance
         return $user;
     }
 
-    /** A non-system role holding the given permission keys (seed first). */
+    /**
+     * A non-system role holding the given permission keys (seed first).
+     *
+     * `portal.erp.access` is always included: it is what lets a person through
+     * the door of the application at all, every seeded system role carries it,
+     * and a test that grants somebody "read the asset register" and forgets it
+     * would be testing the doorway rather than the register. A test that wants
+     * to watch the door refuse somebody builds the role without this helper.
+     */
     protected function roleWith(array $permissionKeys, array $attributes = []): Role
     {
         static::$roleSeq++;
+
+        $permissionKeys = array_unique(['portal.erp.access', ...$permissionKeys]);
 
         $role = Role::create([
             'company_id' => Company::current()?->id,

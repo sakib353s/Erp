@@ -486,6 +486,18 @@ class MoneyMovementService
             throw new RuntimeException("{$account->name} is inactive.");
         }
 
+        /*
+         * A receipt or a payment has money on ONE side and the thing it was for
+         * on the other — an income, a party, a liability. Pointing the other
+         * side at another cash or bank account would move money between two of
+         * the company's own pockets through the wrong door: the ledger would
+         * show a purchase that never happened, and the transfer desk — the desk
+         * that knows both sides are ours — would never see it.
+         */
+        if ($this->accounts->isMoney($account)) {
+            throw new RuntimeException("{$account->name} holds money of its own — money moving between our own accounts is a transfer, not a receipt or a payment.");
+        }
+
         return $account;
     }
 

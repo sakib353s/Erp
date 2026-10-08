@@ -191,7 +191,11 @@ class CashReportDeskTest extends TestCase
     {
         $category = $this->category();
 
-        $this->limit(5000);
+        // The desk's own limit sits between the two bills: 6,400 is under it and
+        // posts, 9,000 is at or above it and waits. (With the limit at 5,000 the
+        // 6,400 bill would wait too — the report would then have nothing posted
+        // to show, which is the opposite of what this screen is for.)
+        $this->limit(8000);
 
         $posted = $this->expense($category, '6400.00');
 
@@ -401,7 +405,7 @@ class CashReportDeskTest extends TestCase
         $body = $csv->streamedContent();
 
         $this->assertStringContainsString('Particulars', $body);
-        $this->assertStringContainsString('Opening balance', $body);
+        $this->assertStringContainsString('Brought forward', $body, 'the CSV uses the desk\'s own words for the row');
         $this->assertStringContainsString('4000.00', $body);
         $this->assertStringContainsString('Closing', $body);
     }
@@ -491,13 +495,29 @@ class CashReportDeskTest extends TestCase
         $this->assertStringContainsString('Rent', $result['outflows']->first()['counter_account']);
 
         // And the totals are the money accounts' own debit and credit totals:
-        // the report cannot say the company moved money it did not move.
-        $ledger = app(LedgerService::class)->accountLedger($this->account('1120'), now()->startOfMonth()->startOfDay(), now()->endOfDay());
-        $debit = (float) $ledger['debit_total'];
-        $credit = (float) $ledger['credit_total'];
+        // the report cannot say the company moved money it did not move. Both
+        // money accounts count, because the report's figures are the company's,
+        // not one account's — the transfer leaves the bank and lands in the till,
+        // so it is a debit on one and a credit on the other.
+        $ledger = app(LedgerService::class);
+        $debit = 0.0;
+        $credit = 0.0;
 
-        $this->assertEqualsWithDelta($debit, (float) $result['totals']['in'] + (float) $result['totals']['transfer_out'], 0.0001);
-        $this->assertEqualsWithDelta($credit, (float) $result['totals']['out'] + (float) $result['totals']['transfer_in'], 0.0001);
+        foreach (['1110', '1120'] as $code) {
+            $account = $ledger->accountLedger($this->account($code), now()->startOfMonth()->startOfDay(), now()->endOfDay());
+            $debit += (float) $account['debit_total'];
+            $credit += (float) $account['credit_total'];
+        }
+
+        $this->assertEqualsWithDelta(70000.0, $debit, 0.0001, '60,000 in and the 10,000 the till received');
+        $this->assertEqualsWithDelta(25000.0, $credit, 0.0001, '15,000 out and the 10,000 the bank sent');
+
+        // Money arriving in one of our own accounts is transfer_in, money leaving
+        // one is transfer_out — the pair is reported apart and in neither total.
+        $this->assertEqualsWithDelta(10000.0, (float) $result['totals']['transfer_in'], 0.0001);
+        $this->assertEqualsWithDelta(10000.0, (float) $result['totals']['transfer_out'], 0.0001);
+        $this->assertEqualsWithDelta($debit, (float) $result['totals']['in'] + (float) $result['totals']['transfer_in'], 0.0001);
+        $this->assertEqualsWithDelta($credit, (float) $result['totals']['out'] + (float) $result['totals']['transfer_out'], 0.0001);
 
         $this->actingAs($this->admin)
             ->get(route('cash.reports.flow'))

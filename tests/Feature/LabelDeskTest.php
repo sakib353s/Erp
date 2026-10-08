@@ -225,8 +225,13 @@ class LabelDeskTest extends TestCase
 
     public function test_a_row_from_another_company_cannot_be_labelled(): void
     {
+        // `companies.singleton` is the schema's own guard that an instance holds
+        // one company; a rival row has to say so explicitly (0), the way the
+        // other cross-company tests in this suite do.
         $otherCompanyId = (int) DB::table('companies')->insertGetId([
+            'singleton' => 0,
             'name' => 'Other Traders',
+            'is_active' => true,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
