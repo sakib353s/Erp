@@ -209,6 +209,12 @@ class FoundationPermissionSeeder extends Seeder
             ['expenses', 'register', 'create', 'expenses.create', 'Record an expense'],
             ['expenses', 'approval', 'decide', 'expenses.approve', 'Approve, refuse or reverse an expense — the moments the ledger moves'],
             ['expenses', 'categories', 'manage', 'expenses.categories', 'Decide which ledger account an expense category books to'],
+            // §08-19: a schedule is a standing instruction to spend, so it is
+            // its own key rather than part of recording one expense. Generating
+            // what is due additionally needs expenses.create (the route says so),
+            // because automation must not be able to record what its operator
+            // could not type.
+            ['expenses', 'recurring', 'manage', 'expenses.recurring', 'Schedule the expenses that come round again and generate what is due'],
             ['accounting', 'opening', 'create', 'accounting.opening.create', 'Post opening balances'],
             ['accounting', 'receipts', 'view', 'accounting.receipts.view', 'View receipts'],
             ['accounting', 'receipts', 'create', 'accounting.receipts.create', 'Record receipts'],

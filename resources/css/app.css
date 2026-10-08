@@ -1374,7 +1374,10 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
 /* §04-46: stock is held damaged — not gone, but not sellable either */
 .erp-status-damage,
 /* §04-39: still sellable, but the date is close enough to act on */
-.erp-status-expiring {
+.erp-status-expiring,
+/* §08-19: a paused schedule is waiting on a person to resume it — it will
+   generate nothing until they do, and the date it owes stays where it is */
+.erp-status-paused {
     background: var(--warn-soft);
     color: var(--warn);
 }

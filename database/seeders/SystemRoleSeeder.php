@@ -111,7 +111,7 @@ class SystemRoleSeeder extends Seeder
                 // maker-checker rule is in ExpenseService, so holding the
                 // approval key still cannot approve their own entry — and the
                 // category mapping stays with whoever configures the books.
-                'expenses.view', 'expenses.create', 'expenses.approve',
+                'expenses.view', 'expenses.create', 'expenses.approve', 'expenses.recurring',
                 // §04-28: stock leaving the building on a transfer is the same
                 // kind of decision as stock being written off, so it is the same
                 // desk that signs it off — and never the person who raised it.

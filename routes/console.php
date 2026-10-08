@@ -25,3 +25,15 @@ Artisan::command('reports:run-due', function () {
  | after the scheduled run is a no-op rather than a second bell.
  */
 Schedule::command('erp:inventory:expiry-alerts')->dailyAt('06:40');
+
+/*
+ | The standing expenses (§08-19). Rent, salaries and the internet line do not
+ | need discovering, and a desk that retypes them every month eventually forgets
+ | one. The run generates what is due through the ordinary expense path, so the
+ | approval limit applies to a generated bill exactly as it applies to a typed
+ | one, and a refusal leaves the date where it was rather than skipping a month.
+ |
+ | Early, before the working day: whatever needs a signature should be waiting on
+ | somebody's desk when they sit down, not appearing at lunchtime.
+ */
+Schedule::command('erp:cash:recurring-expenses')->dailyAt('06:20');

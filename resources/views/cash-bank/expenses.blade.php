@@ -14,6 +14,14 @@
                     <i class="bi bi-plus-lg" aria-hidden="true"></i> Add expense
                 </a>
             @endif
+            @if ($perm('expenses.recurring'))
+                <a class="btn btn-outline-secondary" href="{{ route('cash-bank.expenses.recurring') }}">
+                    <i class="bi bi-arrow-repeat" aria-hidden="true"></i> Recurring
+                    @if ($recurringDue > 0)
+                        <span class="erp-chip erp-chip-warn ms-1">{{ $recurringDue }} due</span>
+                    @endif
+                </a>
+            @endif
             @if ($perm('expenses.categories'))
                 <a class="btn btn-outline-secondary" href="{{ route('cash-bank.expense-categories') }}">
                     <i class="bi bi-diagram-3" aria-hidden="true"></i> Categories
@@ -65,6 +73,20 @@
             <div>
                 <strong class="d-block mb-1">{{ $summary['pending_count'] }} expense(s) are waiting on this desk</strong>
                 They are worth ৳ {{ $summary['pending'] }} and none of it is in the books. The person who recorded an expense cannot approve it, so somebody else has to look at it.
+            </div>
+        </div>
+    @endif
+
+    @if ($recurringDue > 0 && $perm('expenses.recurring'))
+        <div class="erp-note erp-note-info mb-3">
+            <i class="bi bi-arrow-repeat" aria-hidden="true"></i>
+            <div>
+                <strong class="d-block mb-1">{{ $recurringDue }} standing expense(s) are due</strong>
+                @if ($perm('expenses.create'))
+                    The daily run turns them into ordinary expenses on their own day — or say so now on the <a href="{{ route('cash-bank.expenses.recurring') }}">recurring desk</a>. Nothing has been generated for them yet.
+                @else
+                    They will be generated on their own day and then wait for a signature like any other expense.
+                @endif
             </div>
         </div>
     @endif
@@ -143,6 +165,9 @@
                         <td>
                             <span class="erp-cell-strong font-monospace">{{ $expense->expense_no }}</span>
                             <span class="d-block erp-td-muted">{{ $expense->expense_date?->toDateString() }}</span>
+                            @if ($expense->isGenerated())
+                                <span class="erp-chip erp-chip-outline" title="Generated from a recurring schedule on its due date">scheduled</span>
+                            @endif
                         </td>
                         <td>
                             {{ $expense->category?->name }}

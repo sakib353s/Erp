@@ -284,12 +284,15 @@ class CatalogImporter
         // register — "All Expenses" and "Pending Approval" are the same list asked
         // two questions — so each one opens the register already filtered. The
         // sixth (Expense Categories) is the mapping screen and opens itself.
-        // Recurring Expenses and Expense Reports are still PLANNED and stay
-        // unmapped on purpose: a leaf must never point at a screen nobody built.
+        // Expense Reports is still PLANNED and stays unmapped on purpose: a leaf
+        // must never point at a screen nobody built.
         'cash & bank > expenses > all expenses' => ['/app/cash-bank/expenses', 'expenses.view'],
         'cash & bank > expenses > add expense' => ['/app/cash-bank/expenses/create', 'expenses.create'],
         'cash & bank > expenses > expense categories' => ['/app/cash-bank/expense-categories', 'expenses.categories'],
         'cash & bank > expenses > pending approval' => ['/app/cash-bank/expenses?status=pending_approval', 'expenses.view'],
+        // §08-19: the recurring desk is its own screen because it is not a list of
+        // expenses at all — it is the schedules that will produce them.
+        'cash & bank > expenses > recurring expenses' => ['/app/cash-bank/expenses/recurring', 'expenses.recurring'],
         'accounting > chart of accounts > coa tree' => ['/app/accounting/coa', 'accounting.coa.view'],
         'accounting > chart of accounts > account groups' => ['/app/accounting/account-groups', 'accounting.coa.view'],
         'accounting > chart of accounts > add account' => ['/app/accounting/accounts/create', 'accounting.coa.manage'],

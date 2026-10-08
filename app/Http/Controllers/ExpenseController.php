@@ -6,8 +6,10 @@ use App\Domain\Accounting\Account;
 use App\Domain\Audit\Services\AuditRecorder;
 use App\Domain\CashBank\Expense;
 use App\Domain\CashBank\ExpenseCategory;
+use App\Domain\CashBank\RecurringExpense;
 use App\Domain\CashBank\Services\ExpenseService;
 use App\Domain\CashBank\Services\MoneyAccountService;
+use App\Domain\CashBank\Services\RecurringExpenseService;
 use App\Domain\CashBank\Support\AmountInWords;
 use App\Domain\Documents\Services\FileUploadService;
 use App\Domain\Foundation\Services\TenantContext;
@@ -15,13 +17,14 @@ use App\Domain\Purchase\Supplier;
 use App\Http\Requests\ExpenseDecisionRequest;
 use App\Http\Requests\StoreExpenseCategoryRequest;
 use App\Http\Requests\StoreExpenseRequest;
+use App\Http\Requests\StoreRecurringExpenseRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use RuntimeException;
 
 /**
- * The expense desk (§08-15…§08-18).
+ * The expense desk (§08-15…§08-19).
  *
  * One register with filters, one form, one decision panel and one configuration
  * screen — because "All Expenses" and "Pending Approval" are the same list asked
@@ -32,6 +35,7 @@ class ExpenseController extends Controller
 {
     public function __construct(
         protected ExpenseService $expenses,
+        protected RecurringExpenseService $recurring,
         protected MoneyAccountService $money,
         protected FileUploadService $uploads,
         protected AuditRecorder $audit,
@@ -64,6 +68,10 @@ class ExpenseController extends Controller
             'unpaid' => $this->expenses->unpaid(),
             'statuses' => Expense::STATUSES,
             'settledWith' => Expense::SETTLED_WITH,
+            // §08-19: the register is where the standing expenses announce
+            // themselves, because this is the screen somebody opens when a bill
+            // is due and they cannot remember whether it was ever recorded.
+            'recurringDue' => $this->recurring->dueCount(),
         ]);
     }
 
@@ -166,6 +174,105 @@ class ExpenseController extends Controller
             ->with('status', $this->narrate($expense, $data['action']));
     }
 
+    /** §08-19 — the schedules, and what is due today. */
+    public function recurring(Request $request): View
+    {
+        return view('cash-bank.expense-recurring', [
+            'schedules' => $this->recurring->schedules(),
+            'summary' => $this->recurring->summary(),
+            'categories' => $this->expenses->categories(true),
+            'moneyAccounts' => $this->money->accounts()->where('is_active', true)->values(),
+            'suppliers' => Supplier::query()
+                ->where('company_id', $request->user()->company_id)
+                ->orderBy('name')
+                ->limit(300)
+                ->get(['id', 'name', 'code']),
+            'frequencies' => RecurringExpense::FREQUENCIES,
+            'settledWith' => Expense::SETTLED_WITH,
+            'mayGenerate' => (bool) $request->user()->can('expenses.create'),
+        ]);
+    }
+
+    public function storeRecurring(StoreRecurringExpenseRequest $request): RedirectResponse
+    {
+        try {
+            $schedule = $this->recurring->save($request->validated(), null, $request->user());
+        } catch (RuntimeException $error) {
+            return back()->withErrors(['recurring' => $error->getMessage()])->withInput();
+        }
+
+        return redirect()
+            ->route('cash-bank.expenses.recurring')
+            ->with('status', $schedule->payee.' is scheduled — '.$schedule->rhythm()
+                .', next on '.$schedule->next_due_on?->toDateString().'. Nothing is posted until that day, and the approval limit applies to a generated expense exactly as it applies to a typed one.');
+    }
+
+    public function updateRecurring(StoreRecurringExpenseRequest $request, RecurringExpense $schedule): RedirectResponse
+    {
+        $this->assertOwned($request, $schedule);
+
+        try {
+            $schedule = $this->recurring->save($request->validated(), $schedule, $request->user());
+        } catch (RuntimeException $error) {
+            return back()->withErrors(['recurring' => $error->getMessage()])->withInput();
+        }
+
+        return redirect()
+            ->route('cash-bank.expenses.recurring')
+            ->with('status', $schedule->payee.' updated — '.$schedule->rhythm()
+                .'. Expenses already generated from it are untouched: they happened.');
+    }
+
+    /** Pause or resume a schedule. Paused keeps its date; it simply stops firing. */
+    public function toggleRecurring(Request $request, RecurringExpense $schedule): RedirectResponse
+    {
+        $this->assertOwned($request, $schedule);
+
+        $resumed = ! $schedule->isActive();
+
+        $this->recurring->setActive($schedule, $resumed, $request->user());
+
+        return redirect()
+            ->route('cash-bank.expenses.recurring')
+            ->with('status', $resumed
+                ? $schedule->payee.' resumed — next on '.$schedule->next_due_on?->toDateString().'.'
+                : $schedule->payee.' paused. Nothing will be generated for it until somebody resumes it.');
+    }
+
+    /**
+     * Generate what is due, now. The scheduled command does the same thing every
+     * morning; this button exists because a desk should not have to wait for
+     * tomorrow to record today's rent.
+     */
+    public function runRecurring(Request $request): RedirectResponse
+    {
+        $result = $this->recurring->generateDue(200, null, $request->user());
+
+        if ($result['generated'] === 0 && $result['refused'] === 0 && $result['skipped'] === 0) {
+            return redirect()
+                ->route('cash-bank.expenses.recurring')
+                ->with('status', 'Nothing is due. Every schedule is waiting for its own date.');
+        }
+
+        $message = $result['generated'].' expense(s) generated'.($result['refused'] > 0 ? ', '.$result['refused'].' refused' : '').'.';
+
+        $refusals = collect($result['details'])
+            ->filter(fn (array $detail) => isset($detail['refused']))
+            ->map(fn (array $detail) => $detail['payee'].' — '.$detail['refused'])
+            ->take(3)
+            ->implode(' · ');
+
+        if ($refusals !== '') {
+            // The schedule keeps its date, so this is not an error to retype: it
+            // is a thing for a person to fix, and the desk says which.
+            return redirect()
+                ->route('cash-bank.expenses.recurring')
+                ->with('status', $message.' A refused schedule keeps its date until it is put right: '.$refusals);
+        }
+
+        return redirect()->route('cash-bank.expenses.recurring')->with('status', $message);
+    }
+
     /** §08-17 — what each category books to, and what it has cost so far. */
     public function categories(Request $request): View
     {
@@ -220,9 +327,9 @@ class ExpenseController extends Controller
         };
     }
 
-    protected function assertOwned(Request $request, Expense $expense): void
+    protected function assertOwned(Request $request, Expense|RecurringExpense $record): void
     {
-        abort_unless((int) $expense->company_id === (int) $request->user()->company_id, 404);
+        abort_unless((int) $record->company_id === (int) $request->user()->company_id, 404);
     }
 
     /** A filter that is not one of the states is not a filter — it is a typo. */

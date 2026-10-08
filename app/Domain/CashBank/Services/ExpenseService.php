@@ -157,7 +157,8 @@ class ExpenseService
      *
      * @param  array{category_id:int, expense_date:string, payee:string, amount:string|float,
      *               settled_with:string, money_account_id?:int|null, supplier_id?:int|null,
-     *               narration?:string|null, branch_id?:int|null, currency?:string|null}  $data
+     *               narration?:string|null, branch_id?:int|null, currency?:string|null,
+     *               recurring_expense_id?:int|null}  $data
      */
     public function create(array $data, User $actor): Expense
     {
@@ -202,6 +203,7 @@ class ExpenseService
                 'status' => $gate ? Expense::STATUS_PENDING : Expense::STATUS_POSTED,
                 'approval_gate' => $gate,
                 'approval_threshold' => $gate ? $this->threshold() : null,
+                'recurring_expense_id' => $data['recurring_expense_id'] ?? null,
                 'created_by' => $actor->id,
             ]);
 

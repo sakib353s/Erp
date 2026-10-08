@@ -987,6 +987,29 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::post('/app/cash-bank/expenses', [ExpenseController::class, 'store'])
         ->middleware('permission:expenses.create')
         ->name('cash-bank.expenses.store');
+    /*
+     * §08-19 — the expenses that come round again. Registered before the {expense}
+     * route on purpose: "/expenses/recurring" is a screen, not an expense id.
+     * Generating needs `expenses.create` as well as `expenses.recurring`, because
+     * a generator that could record expenses its operator could not type would be
+     * a way round the expense desk altogether.
+     */
+    Route::get('/app/cash-bank/expenses/recurring', [ExpenseController::class, 'recurring'])
+        ->middleware('permission:expenses.recurring')
+        ->name('cash-bank.expenses.recurring');
+    Route::post('/app/cash-bank/expenses/recurring', [ExpenseController::class, 'storeRecurring'])
+        ->middleware('permission:expenses.recurring')
+        ->name('cash-bank.expenses.recurring.store');
+    Route::put('/app/cash-bank/expenses/recurring/{schedule}', [ExpenseController::class, 'updateRecurring'])
+        ->middleware('permission:expenses.recurring')
+        ->name('cash-bank.expenses.recurring.update');
+    Route::post('/app/cash-bank/expenses/recurring/{schedule}/toggle', [ExpenseController::class, 'toggleRecurring'])
+        ->middleware('permission:expenses.recurring')
+        ->name('cash-bank.expenses.recurring.toggle');
+    Route::post('/app/cash-bank/expenses/recurring-run', [ExpenseController::class, 'runRecurring'])
+        ->middleware('permission:expenses.recurring,expenses.create')
+        ->name('cash-bank.expenses.recurring.run');
+
     Route::get('/app/cash-bank/expenses/{expense}', [ExpenseController::class, 'show'])
         ->middleware('permission:expenses.view')
         ->name('cash-bank.expenses.show');

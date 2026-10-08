@@ -74,9 +74,29 @@ who recorded an expense can never decide it — the rule is in `ExpenseService`,
 not in a hidden button — and undoing a posted expense writes the answering
 reversal rather than editing the original, because the money really did leave.
 
-Still PLANNED here, and why: **recurring expenses (08-19)** need the scheduler
-that drafts a period's expense and puts it through the same approval gate rather
-than posting it silently; **petty cash (08-21)** needs the fund and its
+The fifth slice is the expense that comes back every month: **recurring expenses
+(08-19)**. It is a schedule and never a posting — `recurring_expenses` records
+what recurs, when it next falls due and what it has produced, and nothing in the
+desk touches the ledger at the moment a plan is agreed. On the day, the generator
+writes an ordinary expense through `ExpenseService`, which is the whole design: a
+generated rent bill meets the same approval gate, the same category-is-an-account
+rule and the same reversal path as one somebody typed, and automation is never a
+way round a signature. The actor is the person who created the schedule, so they
+are structurally the one person who cannot approve what it produced. Two smaller
+decisions carry most of the value. A monthly schedule keeps its day and clamps to
+the end of a short month — the 31st is the 28th in February and the 31st again in
+March — because a rent day is a day in a contract, not a rounding artefact. And a
+refusal (a category that has been switched off, say) leaves the date exactly where
+it was: the month stays visibly unpaid until a person puts it right, instead of
+being skipped silently by a generator that moved on. A second run is a no-op
+rather than a second month of rent — `expenses_recurring_unique` on (schedule,
+date) is the referee, the date only moves once, and a schedule whose last date has
+passed stops itself rather than generating into a period nobody agreed to. The
+daily command (`erp:cash:recurring-expenses`, scheduled before the working day)
+does the same thing without a browser and reports what it generated and what it
+refused; the desk's own button is for when today's rent cannot wait for tomorrow.
+
+Still PLANNED here, and why: **petty cash (08-21)** needs the fund and its
 replenishment journal; **cash count and session variance (08-05)** needs the
 count sheet; **cash/bank/expense reports (08-20, 08-22)** are the reporting family
 on top of what is now posted — the per-account book exists already (08-07), the
@@ -103,7 +123,7 @@ report centre family does not.
 | 08-16 | Cash & Bank › Expenses › Add Expense | `GET /app/cash-bank/expenses/create`, `POST /app/cash-bank/expenses` | `expenses.create` | `ExpenseService::create()` — the category *is* the GL account, so nothing is guessed; `settled_with` says paid (an account money left) or owed (a supplier), and a receipt is uploaded when there is one | `expenses`, `expense_categories`, `accounts`, `documents` | WF by amount threshold (`cash.expense_approval_above`; the number judged against is stored on the row); ACCT: Dr the category's account, Cr the account the money left or payables resolved through the `expense_posted` posting rule — one transaction, so a refused posting stores no expense; DOC receipt; AUD | `ExpenseDeskTest` (balanced entry once, the gate, the missing-rule refusal) | DONE |
 | 08-17 | Cash & Bank › Expenses › Expense Categories | `GET|POST /app/cash-bank/expense-categories`, `PUT /app/cash-bank/expense-categories/{id}` | `expenses.categories` | category ↔ GL account mapping, created and re-pointed in place: an expense account of this company only, never a group, never a switched-off leaf; a category is deactivated rather than deleted | `expense_categories`, `accounts` | AUD config; changing the account moves future expenses only — what is posted stays where it was posted | `ExpenseDeskTest` (a liability or group account refused, code upper-cased, switching off) | DONE |
 | 08-18 | Cash & Bank › Expenses › Pending Approval | `GET /app/cash-bank/expenses?status=pending_approval`, `POST /app/cash-bank/expenses/{id}/decide` | `expenses.approve` | the decision panel: approve, refuse — or reverse a posted expense, which writes the answering entry instead of editing the original | `expenses`, `journal_entries` | WF maker-checker/SoD: the person who recorded an expense can never decide it, and the rule lives in `ExpenseService`, not in a hidden button; a waiting expense carries no entry at all; AUD | `ExpenseDeskTest` (self-approval refused, approve posts once, refuse posts nothing, reverse answers the entry) | DONE |
-| 08-19 | Cash & Bank › Expenses › Recurring Expenses | `GET|POST /expenses/recurring` | `expenses.recurring` | scheduler generates draft expenses per period → approval per rule (never silent GL) | `recurring_journals`, `settings` | WF at generation; ACCT after approval; AUD | `RecurringExpenseGenerationTest` | PLANNED |
+| 08-19 | Cash & Bank › Expenses › Recurring Expenses | `GET|POST /app/cash-bank/expenses/recurring` + `PUT .../{schedule}`, `POST .../{schedule}/toggle`, `POST /app/cash-bank/expenses/recurring-run` | `expenses.recurring` (generating also needs `expenses.create`) | `RecurringExpenseService` — a schedule is a plan, never a posting: on its due date it writes an ordinary expense through `ExpenseService` (same category-is-an-account rule, same approval gate, same reversal path), the date advances exactly once, and the actor is the schedule's author, who therefore can never approve what it produced | `recurring_expenses` (day_of_month + frequency + next_due_on/last_generated_on/generated_count; `expenses.recurring_expense_id` + unique `expenses_recurring_unique` on the pair) | WF unchanged from 08-16 — generation is subject to the same threshold, never a silent posting; a refusal (an inactive category, a missing posting rule) keeps the date where it was so the month stays visibly unpaid rather than skipped; month-end clamps (31st → 28th in February) and returns to the 31st in March; a last date stops the schedule itself; a second run is a no-op because the (schedule, date) index refuses it; AUD saved/paused/resumed/generated/refused | `RecurringExpenseDeskTest` (a schedule posts nothing by itself, a due schedule generates exactly one ordinary expense, a second run adopts rather than pays twice, the approval gate and maker≠checker still apply, a refusal keeps the date, a last date stops it, pausing keeps the date, the daily command runs it headless, another company's schedule 404s, month-end clamps) | DONE |
 | 08-20 | Cash & Bank › Expenses › Expense Reports | `GET /reports/cash/expenses` | `expenses.reports` | `Reporting\ExpenseReport` (category/branch/period) | `journal_entries` | DOC export; AUD | `ExpenseReportTest` (totals=GL) | PLANNED |
 | 08-21 | Cash & Bank › Petty Cash › Overview / Requests / Expenses / Replenishment | `GET|POST /petty-cash/*` | `pettycash.view/request/approve` | `PettyCashService` (fund per branch, requests→WF→disbursement, expenses, replenishment journal) | `petty_cash_funds`, `petty_cash_transactions`, `approval_requests`, `journal_entries` | WF requests; ACCT fund movements; DOC vouchers; AUD | `PettyCashLifecycleTest`, `PettyCashRequestApprovalTest`, `PettyCashReplenishmentTest` | PLANNED |
 | 08-22 | Cash & Bank › Cash Reports | `GET /reports/cash/*` (cash book, bank book, cash flow, session variance) | `cash.reports` | `Reporting\CashReports` | `journal_lines`, `cash_sessions` | DOC print/PDF; totals from GL; AUD | `CashReportsTest` (3 families), `CashBookPrintTest` | PLANNED |
