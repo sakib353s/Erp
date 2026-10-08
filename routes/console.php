@@ -40,6 +40,15 @@ Schedule::command('erp:inventory:expiry-alerts')->dailyAt('06:40');
 Schedule::command('erp:business:compliance-alerts')->dailyAt('06:50');
 
 /*
+ | The bell before the meeting (§12-11). Every quarter of an hour, because a
+ | reminder that arrives an hour late is not a reminder — and once per meeting per
+ | person, ever, because one that rings again five minutes later is one people
+ | learn to ignore. Cancelled and held meetings are skipped; a meeting that was
+ | moved has already told everybody its new time.
+ */
+Schedule::command('erp:business:meeting-reminders')->everyFifteenMinutes();
+
+/*
  | The standing expenses (§08-19). Rent, salaries and the internet line do not
  | need discovering, and a desk that retypes them every month eventually forgets
  | one. The run generates what is due through the ordinary expense path, so the

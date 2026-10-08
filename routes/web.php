@@ -54,6 +54,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PackagingController;
 use App\Http\Controllers\NoticeController;
+use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\PosController;
@@ -2176,6 +2177,59 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::put('/app/projects/{project}', [ProjectController::class, 'update'])
         ->middleware('permission:tasks.manage')
         ->name('projects.update');
+
+    /* ---- §12 Business Management: meetings, minutes and action items (12-11) ----
+     *
+     * Reading is for anybody on the list — the diary of your own meetings, the
+     * minutes of meetings that have been held, and the action items you owe.
+     * Running the diary (calling one, moving it, cancelling it, minuting it,
+     * raising work out of it) is `business.meetings.manage`.
+     *
+     * The literal segments come first: `/app/meetings/minutes` and
+     * `/app/meetings/action-items` are pages, not meetings called “minutes”.
+     */
+    Route::middleware('permission:business.meetings.view')->group(function () {
+        Route::get('/app/meetings', [MeetingController::class, 'index'])
+            ->name('meetings.index');
+        Route::get('/app/meetings/minutes', [MeetingController::class, 'minutes'])
+            ->name('meetings.minutes');
+        Route::get('/app/meetings/action-items', [MeetingController::class, 'actionItems'])
+            ->name('meetings.actionItems');
+        Route::get('/app/meetings/{meeting}', [MeetingController::class, 'show'])
+            ->whereNumber('meeting')
+            ->name('meetings.show');
+        Route::post('/app/meetings/{meeting}/respond', [MeetingController::class, 'respond'])
+            ->whereNumber('meeting')
+            ->name('meetings.respond');
+    });
+
+    Route::middleware('permission:business.meetings.manage')->group(function () {
+        Route::get('/app/meetings/create', [MeetingController::class, 'create'])
+            ->name('meetings.create');
+        Route::post('/app/meetings', [MeetingController::class, 'store'])
+            ->name('meetings.store');
+        Route::post('/app/meetings/{meeting}/hold', [MeetingController::class, 'hold'])
+            ->whereNumber('meeting')
+            ->name('meetings.hold');
+        Route::post('/app/meetings/{meeting}/reschedule', [MeetingController::class, 'reschedule'])
+            ->whereNumber('meeting')
+            ->name('meetings.reschedule');
+        Route::post('/app/meetings/{meeting}/cancel', [MeetingController::class, 'cancel'])
+            ->whereNumber('meeting')
+            ->name('meetings.cancel');
+        Route::post('/app/meetings/{meeting}/attendance', [MeetingController::class, 'attendance'])
+            ->whereNumber('meeting')
+            ->name('meetings.attendance');
+        Route::post('/app/meetings/{meeting}/minutes', [MeetingController::class, 'recordMinutes'])
+            ->whereNumber('meeting')
+            ->name('meetings.recordMinutes');
+        Route::post('/app/meetings/{meeting}/attendees', [MeetingController::class, 'attendee'])
+            ->whereNumber('meeting')
+            ->name('meetings.attendee');
+        Route::post('/app/meetings/{meeting}/action-items', [MeetingController::class, 'actionItem'])
+            ->whereNumber('meeting')
+            ->name('meetings.actionItem');
+    });
 
     /* ---- §12 Business Management: the company's registers (12-03, 12-04, 12-09, 12-10) ----
      *

@@ -169,6 +169,10 @@ class SystemRoleSeeder extends Seeder
                 // employee bundle deliberately does not, because a contract's
                 // value and a licence's number are not everybody's business.
                 'business.records.view', 'business.records.manage',
+                // §12-11: the diary is a manager's as well — calling a meeting,
+                // minuting it and turning what was decided into work somebody
+                // owns. The employee bundle gets the reading half only.
+                'business.meetings.view', 'business.meetings.manage',
             ]],
             ['slug' => 'employee', 'name' => 'Employee', 'description' => 'Staff account: own portal access only — own leave, own payslips.', 'keys' => [
                 'dashboard.view', 'employees.view', 'documents.view', 'search.view',
@@ -179,6 +183,9 @@ class SystemRoleSeeder extends Seeder
                 // their own tasks. Not `tasks.view_all` — that is the line
                 // between “my work” and “the company's work”.
                 'business.notices.view', 'tasks.view_own',
+                // §12-11: your own meetings, their minutes, and the action
+                // items you owe — not the office's diary.
+                'business.meetings.view',
             ]],
             ['slug' => 'technician', 'name' => 'Technician', 'description' => 'Service technician (portal-capable).', 'keys' => [
                 'dashboard.view', 'documents.view', 'documents.upload', 'search.view',

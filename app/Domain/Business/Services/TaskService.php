@@ -59,6 +59,10 @@ class TaskService
         $task = Task::create([
             'company_id' => $companyId,
             'project_id' => $data['project_id'] ?? null,
+            // §12-11: an action item from a meeting arrives as a task with the
+            // meeting it came out of, so the minutes page and the board show the
+            // same piece of work rather than two copies of it.
+            'meeting_id' => $data['meeting_id'] ?? null,
             'title' => $data['title'],
             'description' => $data['description'] ?? null,
             'status' => Task::STATUS_TODO,
@@ -82,6 +86,7 @@ class TaskService
                 'priority' => $task->priority,
                 'assigned_to' => $task->assigned_to,
                 'due_at' => $task->due_at?->toDateTimeString(),
+                'meeting_id' => $task->meeting_id,
             ],
         ]);
 

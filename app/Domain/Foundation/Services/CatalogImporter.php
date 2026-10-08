@@ -347,7 +347,7 @@ class CatalogImporter
         'accounting > chart of accounts > coa tree' => ['/app/accounting/coa', 'accounting.coa.view'],
         'accounting > chart of accounts > account groups' => ['/app/accounting/account-groups', 'accounting.coa.view'],
         'accounting > chart of accounts > add account' => ['/app/accounting/accounts/create', 'accounting.coa.manage'],
-        'accounting > chart of accounts > edit account' => ['/app/accounting/accounts', 'accounting.coa.manage'],
+        'accounting > chart of accounts > edit account' => ['/app/accounting/coa', 'accounting.coa.manage'],
         'accounting > journal entries > all entries' => ['/app/accounting/journals', 'accounting.journals.view'],
         'accounting > journal entries > create entry' => ['/app/accounting/journals/create', 'accounting.journals.create'],
         'accounting > journal entries > manual journal' => ['/app/accounting/journals/create', 'accounting.journals.create'],
@@ -550,6 +550,13 @@ class CatalogImporter
         'business management > tasks & projects > all tasks' => ['/app/tasks/all', 'tasks.view_all'],
         'business management > tasks & projects > kanban board' => ['/app/tasks/kanban', 'tasks.view_own'],
         'business management > tasks & projects > projects' => ['/app/projects', 'tasks.view_own'],
+
+        // §12-11: the meeting desk. The minutes and action-items leaves are the two
+        // registers the module keeps: what was written up, and what was decided.
+        'business management > meetings > all meetings' => ['/app/meetings', 'business.meetings.view'],
+        'business management > meetings > schedule meeting' => ['/app/meetings/create', 'business.meetings.manage'],
+        'business management > meetings > meeting minutes' => ['/app/meetings/minutes', 'business.meetings.view'],
+        'business management > meetings > action items' => ['/app/meetings/action-items', 'business.meetings.view'],
 
         // §12-03/04: the company's own papers, and the two screens that already
         // existed for its identity and its preferences.

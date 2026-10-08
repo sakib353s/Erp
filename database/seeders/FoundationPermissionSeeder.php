@@ -178,6 +178,13 @@ class FoundationPermissionSeeder extends Seeder
             ['business', 'records', 'view', 'business.records.view', 'Read the company registers — licences, contracts, insurance, compliance'],
             ['business', 'records', 'manage', 'business.records.manage', 'Record, renew, file, attach and retire entries in the company registers'],
 
+            // §12-11: a meeting is the office talking to itself, and the minutes
+            // are the only part of it that survives. Reading your own meetings is
+            // everybody's; calling one, minuting it and raising work out of it is
+            // the person who runs the diary.
+            ['business', 'meetings', 'view', 'business.meetings.view', 'See the meetings you are on, their minutes and your action items'],
+            ['business', 'meetings', 'manage', 'business.meetings.manage', 'Call, move, cancel, hold and minute meetings, and raise action items from them'],
+
             ['settings', 'company', 'manage', 'settings.company', 'Edit company profile'],
 
             // Phase H — HRM (§10): attendance, leave, structure

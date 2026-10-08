@@ -70,7 +70,7 @@ class Task extends Model
     ];
 
     protected $fillable = [
-        'company_id', 'project_id', 'title', 'description', 'status', 'priority',
+        'company_id', 'project_id', 'meeting_id', 'title', 'description', 'status', 'priority',
         'assigned_to', 'created_by', 'branch_id', 'due_at', 'completed_at', 'position',
     ];
 
@@ -83,6 +83,12 @@ class Task extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    /** §12-11: an action item remembers the meeting that produced it. */
+    public function meeting(): BelongsTo
+    {
+        return $this->belongsTo(Meeting::class);
     }
 
     public function assignee(): BelongsTo
