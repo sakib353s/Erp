@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#ffffff">
-    <title>System maintenance · BD ERP — UI redesign preview</title>
+    <title>Business registers · BD ERP — UI redesign preview</title>
     <link rel="stylesheet" href="./assets/preview.css">
 </head>
 <body class="erp-body">
@@ -527,15 +527,15 @@
             </p>
             
     <div class="erp-nav-group">
-        <button class="erp-nav-group-btn is-active has-active-trail" type="button"
-                data-bs-toggle="collapse" data-bs-target="#nav-configure-0" aria-expanded="true">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-configure-0" aria-expanded="false">
             <i class="bi bi-sliders erp-nav-icon" aria-hidden="true"></i>
             <span>Settings</span>
             <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
         </button>
-        <div class="collapse show" id="nav-configure-0">
+        <div class="collapse" id="nav-configure-0">
             <div class="erp-nav-sub">
-        <a class="erp-nav-link active" href="./settings.html" aria-current="page">
+        <a class="erp-nav-link" href="./settings.html">
             <span>Settings Desk</span>
         </a>
         <a class="erp-nav-link" href="./settings.html">
@@ -616,15 +616,9 @@
     </button>
 
     <div class="erp-topbar-crumbs">
-        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb">
-        <li>
-            <span class="is-current" aria-current="page">Settings &amp; masters</span>
-        </li>
-        <li>
-            <span class="is-current" aria-current="page">System maintenance</span>
-        </li></ol></nav>
+        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb"></ol></nav>
         <div class="erp-topbar-title">
-            <strong class="d-none d-md-inline">System maintenance</strong>
+            <strong class="d-none d-md-inline">Business records</strong>
             <span class="erp-chip erp-chip-outline d-none d-xl-inline-flex" title="Current branch context">
                 <i class="bi bi-geo-alt" aria-hidden="true"></i>Dhaka HQ
             </span>
@@ -702,375 +696,559 @@
 
             <header class="erp-page-head">
                 <div>
-                    <p class="erp-eyebrow"><i class="bi bi-tools" aria-hidden="true"></i> Settings · System maintenance</p>
-                    <h1 class="erp-h1">System maintenance</h1>
-                    <p class="erp-page-sub">What this installation is, what may be done to it, and what will never be done to it automatically. Every operation records what it did — how many files, how many bytes, which tables — so “the system felt slower after maintenance” is a question with an answer.</p>
+                    <p class="erp-eyebrow"><i class="bi bi-journal-text" aria-hidden="true"></i> Business Management · Registers</p>
+                    <h1 class="erp-h1">What the company is, and the day each of it runs out</h1>
+                    <p class="erp-page-sub">A licence, a policy, a contract and a filing are the same animal: somebody issued it, it carries a number, and it stops being true on a date. One register for all of them is what makes “what runs out this quarter?” a question with an answer. States are read from the clock — nothing here waits for a nightly job to be true.</p>
                 </div>
                 <div class="erp-page-head-actions">
-                    <a class="btn btn-outline-secondary" href="./maintenance-log.html"><i class="bi bi-journal-code" aria-hidden="true"></i> Error log</a>
-                    <a class="btn btn-outline-secondary" href="./settings.html"><i class="bi bi-sliders" aria-hidden="true"></i> Settings</a>
+                    <a class="btn btn-outline-secondary" href="./compliance.html"><i class="bi bi-hourglass-split" aria-hidden="true"></i> What is running out</a>
+                    <a class="btn btn-outline-secondary" href="./compliance.html#calendar"><i class="bi bi-calendar-event" aria-hidden="true"></i> Compliance calendar</a>
+                    <a class="btn btn-outline-secondary" href="./compliance.html#obligations"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Recurring duties</a>
                 </div>
             </header>
 
-            <div class="erp-kpi-grid mb-3">
+            <div class="erp-kpi-grid">
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-database" aria-hidden="true"></i> Database</p>
-                    <p class="erp-kpi-value">412 MB</p>
-                    <p class="erp-kpi-foot">mysql 8.0 · 142 tables</p>
+                    <p class="erp-kpi-label"><i class="bi bi-journal-text" aria-hidden="true"></i> Live records</p>
+                    <p class="erp-kpi-value">39</p>
+                    <p class="erp-kpi-foot">Everything on the registers that has not been retired</p>
                 </div>
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-device-hdd" aria-hidden="true"></i> Storage free</p>
-                    <p class="erp-kpi-value">68 GB</p>
-                    <p class="erp-kpi-foot">of 120 GB on /var/www/erp</p>
-                </div>
-                <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Pending jobs</p>
+                    <p class="erp-kpi-label"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Expiring within 30 days</p>
                     <p class="erp-kpi-value">3</p>
-                    <p class="erp-kpi-foot">database queue · oldest queued 4 minutes ago</p>
+                    <p class="erp-kpi-foot">Renew these before they lapse — the month is where renewing is cheap</p>
                 </div>
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-exclamation-octagon" aria-hidden="true"></i> Failed jobs</p>
-                    <p class="erp-kpi-value">0</p>
-                    <p class="erp-kpi-foot">Nothing has exhausted its retries</p>
+                    <p class="erp-kpi-label"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Already expired</p>
+                    <p class="erp-kpi-value">1</p>
+                    <p class="erp-kpi-foot">A lapsed licence is a decision somebody has to take, not a paperwork problem</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-calendar-check" aria-hidden="true"></i> Due within 30 days</p>
+                    <p class="erp-kpi-value">2</p>
+                    <p class="erp-kpi-foot">Filings and duties with a deadline this month</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-alarm" aria-hidden="true"></i> Overdue</p>
+                    <p class="erp-kpi-value">1</p>
+                    <p class="erp-kpi-foot">Past the deadline and not filed</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-question-circle" aria-hidden="true"></i> No date on file</p>
+                    <p class="erp-kpi-value">5</p>
+                    <p class="erp-kpi-foot">Registrations and assets with no term — worth a look, not a panic</p>
                 </div>
             </div>
 
-            <section class="erp-card mb-3">
-                <header class="erp-card-head">
-                    <div>
-                        <h2 class="erp-card-title">What this page does not claim</h2>
-                        <p class="erp-card-sub">A system information page is only worth reading if it says “unknown” where it cannot see.</p>
-                    </div>
-                </header>
-                <div class="erp-table-scroll">
-                    <table class="table erp-table">
-                        <thead><tr><th>Question</th><th>Answer</th><th>Why</th></tr></thead>
-                        <tbody>
-                            
-                            <tr>
-                                <td class="erp-cell-strong">High availability</td>
-                                <td><span class="erp-chip erp-chip-outline">single instance</span></td>
-                                <td class="erp-td-muted">One application server and one database. There is no replica, no failover and no load balancer.</td>
-                            </tr>
-                            <tr>
-                                <td class="erp-cell-strong">Database integrity</td>
-                                <td><span class="erp-chip erp-chip-soft">ok · 2 days ago</span></td>
-                                <td class="erp-td-muted">142 tables checked — every one answered OK.</td>
-                            </tr>
-                            <tr>
-                                <td class="erp-cell-strong">Self-healing</td>
-                                <td><span class="erp-chip erp-chip-outline">last run 3 days ago</span></td>
-                                <td class="erp-td-muted">Only derived state is healed: cache, temp files, sessions, search index.</td>
-                            </tr>
-                            <tr>
-                                <td class="erp-cell-strong">Backups</td>
-                                <td><span class="erp-chip erp-chip-warn">not built in this build</span></td>
-                                <td class="erp-td-muted">Backup and restore (§15-19) is not implemented, so this page will not report a backup as current.</td>
-                            </tr>
-                            <tr>
-                                <td class="erp-cell-strong">Queue worker</td>
-                                <td><span class="erp-chip erp-chip-outline">unknown from here</span></td>
-                                <td class="erp-td-muted">A web request cannot see whether a worker is running. The pending figure is real; the worker is not.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <div class="row row-cols-1 row-cols-xl-2 g-3 mb-3">
-                <div class="col">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head">
-                            <h2 class="erp-card-title">Application &amp; runtime</h2>
-                            <span class="erp-chip erp-chip-outline">measured now</span>
-                        </header>
-                        <div class="p-3">
-                            <dl class="erp-dl erp-dl-tight mb-0">
-                                <dt>Application</dt><dd>Erp · production</dd>
-                                <dt>Framework</dt><dd>Laravel 13.0 on PHP 8.3.14</dd>
-                                <dt>Host</dt><dd>Linux (6.8.0) · nginx/1.24.0</dd>
-                                <dt>Timezone &amp; locale</dt><dd>Asia/Dhaka · bn · amounts in BDT</dd>
-                                <dt>Memory limit</dt><dd>256M (peak this request: 18 MB)</dd>
-                                <dt>Request limits</dt><dd>30s · upload 20M · post 24M</dd>
-                            </dl>
-                            <p class="erp-filter-note mt-3 mb-1">Extensions this application uses:</p>
-                            <div class="d-flex flex-wrap gap-1">
-                                <span class="erp-chip erp-chip-soft">pdo</span><span class="erp-chip erp-chip-soft">mbstring</span><span class="erp-chip erp-chip-soft">openssl</span><span class="erp-chip erp-chip-soft">bcmath</span><span class="erp-chip erp-chip-soft">gd</span><span class="erp-chip erp-chip-soft">zip</span><span class="erp-chip erp-chip-soft">intl</span><span class="erp-chip erp-chip-soft">fileinfo</span>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-                <div class="col">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head"><h2 class="erp-card-title">Database, storage &amp; services</h2></header>
-                        <div class="p-3">
-                            <dl class="erp-dl erp-dl-tight">
-                                <dt>Database</dt><dd>mysql · erp @ 127.0.0.1 · 8.0.36</dd>
-                                <dt>Size</dt><dd>412 MB · 142 tables · 96 migrations run</dd>
-                                <dt>Cache &amp; sessions</dt><dd>database cache · database sessions (14 live)</dd>
-                                <dt>Queue &amp; mail</dt><dd>database queue · smtp mailer · local filesystem</dd>
-                                <dt>Newest log line</dt><dd>12 minutes ago</dd>
-                            </dl>
-                            <p class="erp-filter-note mt-3 mb-1">Storage on disk:</p>
-                            <table class="table erp-table mb-0">
-                                <tbody>
-                                    <tr><td class="font-monospace erp-td-muted">storage/app/private</td><td class="erp-td-muted">Uploads &amp; documents</td><td class="erp-td-num">2.4 GB</td><td class="erp-td-num erp-td-muted">3,188 file(s)</td></tr>
-                                    <tr><td class="font-monospace erp-td-muted">storage/logs</td><td class="erp-td-muted">Log files</td><td class="erp-td-num">18.2 MB</td><td class="erp-td-num erp-td-muted">6 file(s)</td></tr>
-                                    <tr><td class="font-monospace erp-td-muted">storage/framework/cache</td><td class="erp-td-muted">Derived cache</td><td class="erp-td-num">41.2 MB</td><td class="erp-td-num erp-td-muted">220 file(s)</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
-                </div>
-            </div>
-
-            <section class="erp-card mb-3">
-                <header class="erp-card-head">
-                    <div>
-                        <h2 class="erp-card-title">What is in the database</h2>
-                        <p class="erp-card-sub">Counted in this request. After a restore, these are the first figures to compare — a count that came back as zero is how a silent failure is caught on the day it happens.</p>
-                    </div>
-                </header>
-                <div class="p-3">
-                    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
-                        
-                        <div class="col">
-                            <p class="erp-filter-note mb-1">Access</p>
-                            <dl class="erp-dl erp-dl-tight mb-0">
-                                <dt>Users</dt><dd>12</dd><dt>Roles</dt><dd>5</dd><dt>Branches</dt><dd>3</dd>
-                            </dl>
-                        </div>
-                        <div class="col">
-                            <p class="erp-filter-note mb-1">Trading</p>
-                            <dl class="erp-dl erp-dl-tight mb-0">
-                                <dt>Customers</dt><dd>486</dd><dt>Suppliers</dt><dd>63</dd><dt>Products</dt><dd>1,240</dd><dt>Invoices</dt><dd>3,914</dd>
-                            </dl>
-                        </div>
-                        <div class="col">
-                            <p class="erp-filter-note mb-1">Stock</p>
-                            <dl class="erp-dl erp-dl-tight mb-0">
-                                <dt>Warehouses</dt><dd>2</dd><dt>Stock balances</dt><dd>2,517</dd><dt>Valuation layers</dt><dd>4,088</dd>
-                            </dl>
-                        </div>
-                        <div class="col">
-                            <p class="erp-filter-note mb-1">Books</p>
-                            <dl class="erp-dl erp-dl-tight mb-0">
-                                <dt>Accounts</dt><dd>142</dd><dt>Journal entries</dt><dd>6,201</dd><dt>Journal lines</dt><dd>18,442</dd>
-                            </dl>
-                        </div>
-                        <div class="col">
-                            <p class="erp-filter-note mb-1">System</p>
-                            <dl class="erp-dl erp-dl-tight mb-0">
-                                <dt>Audit events</dt><dd>41,908</dd><dt>Setting rows</dt><dd>38</dd><dt>Search index rows</dt><dd>1,338</dd>
-                            </dl>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <h2 class="erp-h2 mb-2">Safe operations</h2>
-            <div class="row row-cols-1 row-cols-xl-2 g-3 mb-3">
+            <div class="row g-3 mb-3">
                 
-                <div class="col">
+                <div class="col-lg-4">
                     <section class="erp-card h-100">
                         <header class="erp-card-head">
-                            <h2 class="erp-card-title">Clear cache</h2>
-                            <span class="erp-chip erp-chip-soft">Allowed self-heal</span>
+                            <div>
+                                <h2 class="erp-card-title">Company identity</h2>
+                                <p class="erp-card-sub">What the company is: its licence to trade, its tax numbers, the certificates that say it exists.</p>
+                            </div>
                         </header>
-                        <div class="p-3">
-                            <p class="text-body-secondary mb-2">Clears the application cache and compiled templates — both reproducible from the database.</p>
-                            <p class="erp-filter-note mb-3">Does not touch: uploads, backups, audit trail, log files, business rows.</p>
-                            <button class="btn btn-primary" type="button"><i class="bi bi-check-lg" aria-hidden="true"></i> Clear cache</button>
-                        </div>
-                    </section>
-                </div>
-                <div class="col">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head">
-                            <h2 class="erp-card-title">End other sessions</h2>
-                            <span class="erp-chip erp-chip-soft">Allowed self-heal</span>
-                        </header>
-                        <div class="p-3">
-                            <p class="text-body-secondary mb-2">Ends every session except the one you are using — a machine left signed in at a counter.</p>
-                            <p class="erp-filter-note mb-3">Your own session is kept: nothing escapes being the person who did it.</p>
-                            <button class="btn btn-primary" type="button"><i class="bi bi-check-lg" aria-hidden="true"></i> End other sessions</button>
-                        </div>
-                    </section>
-                </div>
-                <div class="col">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head">
-                            <h2 class="erp-card-title">Remove temporary files</h2>
-                            <span class="erp-chip erp-chip-soft">Allowed self-heal</span>
-                        </header>
-                        <div class="p-3">
-                            <p class="text-body-secondary mb-2">Sweeps storage/app/temp and the file-cache leftovers, skipping anything written in the last 24 hours.</p>
-                            <p class="erp-filter-note mb-3">Never follows a symlink out of the storage tree, never removes a directory.</p>
-                            <button class="btn btn-primary" type="button"><i class="bi bi-check-lg" aria-hidden="true"></i> Remove temporary files</button>
-                        </div>
-                    </section>
-                </div>
-                <div class="col">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head">
-                            <h2 class="erp-card-title">Rebuild the search index</h2>
-                            <span class="erp-chip erp-chip-soft">Allowed self-heal</span>
-                        </header>
-                        <div class="p-3">
-                            <p class="text-body-secondary mb-2">Rebuilds global search from source tables — users, branches, warehouses, roles, documents.</p>
-                            <p class="erp-filter-note mb-3">The index holds no fact the source tables do not.</p>
-                            <button class="btn btn-primary" type="button"><i class="bi bi-check-lg" aria-hidden="true"></i> Rebuild search index</button>
-                        </div>
-                    </section>
-                </div>
-            </div>
-
-            <h2 class="erp-h2 mb-2">Database</h2>
-            <div class="row row-cols-1 row-cols-xl-2 g-3 mb-3">
-                <div class="col">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head"><h2 class="erp-card-title">Optimise &amp; check</h2></header>
-                        <div class="p-3">
-                            <p class="text-body-secondary mb-2"><strong>Optimise</strong> reclaims the space free inside the table files and reports how much moved. <strong>Check</strong> asks every table whether it is sound — it reads, it never writes, and its answer is what a repair is allowed to act on.</p>
-                            <p class="erp-filter-note mb-3">Last check 2 days ago: <strong>142 table(s) checked — every one answered OK.</strong></p>
-                            <div class="d-flex flex-wrap gap-2">
-                                <button class="btn btn-primary" type="button"><i class="bi bi-speedometer2" aria-hidden="true"></i> Optimise</button>
-                                <button class="btn btn-outline-secondary" type="button"><i class="bi bi-clipboard-check" aria-hidden="true"></i> Run integrity check</button>
+                        <div class="px-3 pb-2">
+                            
+                            <div class="erp-list-row">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-cell-strong"><i class="bi bi-patch-check me-1" aria-hidden="true"></i>Trade licences</span>
+                                    <div class="erp-td-muted">A licence is only real while it is unexpired; renewals are logged against the record.</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="erp-chip erp-chip-soft">4 live</span>
+                                    <a class="btn btn-sm btn-outline-secondary" href="#register">Open</a>
+                                </div>
+                            </div>
+                            <div class="erp-list-row">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-cell-strong"><i class="bi bi-upc-scan me-1" aria-hidden="true"></i>TIN &amp; BIN registrations</span>
+                                    <div class="erp-td-muted">TIN and BIN do not expire — what matters is that a changed number is a recorded event.</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="erp-chip erp-chip-soft">2 live</span>
+                                    <a class="btn btn-sm btn-outline-secondary" href="#register">Open</a>
+                                </div>
+                            </div>
+                            <div class="erp-list-row">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-cell-strong"><i class="bi bi-award me-1" aria-hidden="true"></i>Company certificates</span>
+                                    <div class="erp-td-muted">Incorporation, commencement, share allotment: the number, the issuer, the term.</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="erp-chip erp-chip-soft">3 live</span>
+                                    <a class="btn btn-sm btn-outline-secondary" href="#register">Open</a>
+                                </div>
                             </div>
                         </div>
                     </section>
                 </div>
-                <div class="col">
+                <div class="col-lg-4">
                     <section class="erp-card h-100">
                         <header class="erp-card-head">
-                            <h2 class="erp-card-title">Repair</h2>
-                            <span class="erp-chip erp-chip-outline">nothing to repair</span>
+                            <div>
+                                <h2 class="erp-card-title">Compliance</h2>
+                                <p class="erp-card-sub">What the company owes somebody by a date: filings with the registrar, statutory duties, insurance cover.</p>
+                            </div>
                         </header>
-                        <div class="p-3">
-                            <p class="text-body-secondary mb-2">Repair writes to table structure, so it stands on two things it will not assume: a check on file, and a table that check named. It acts on nothing else — a “quick fix” that touches a table nobody looked at is how data loss starts.</p>
-                            <p class="erp-filter-note mb-0">Run an integrity check first. When it finds problems, they appear here with the tables that reported them, and repair becomes available for exactly those.</p>
+                        <div class="px-3 pb-2">
+                            
+                            <div class="erp-list-row">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-cell-strong"><i class="bi bi-shield-check me-1" aria-hidden="true"></i>Insurance policies</span>
+                                    <div class="erp-td-muted">Fire, stock, vehicle and employee cover: the policy number, the sum insured, the day it stops.</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="erp-chip erp-chip-soft">4 live</span>
+                                    <a class="btn btn-sm btn-outline-secondary" href="#register">Open</a>
+                                </div>
+                            </div>
+                            <div class="erp-list-row">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-cell-strong"><i class="bi bi-building-gear me-1" aria-hidden="true"></i>RJSC filings</span>
+                                    <div class="erp-td-muted">Returns with the registrar; completing one rolls the next due date forward.</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="erp-chip erp-chip-soft">5 live</span>
+                                    <a class="btn btn-sm btn-outline-secondary" href="#register">Open</a>
+                                </div>
+                            </div>
+                            <div class="erp-list-row">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-cell-strong"><i class="bi bi-calendar-check me-1" aria-hidden="true"></i>Statutory obligations</span>
+                                    <div class="erp-td-muted">VAT returns, TDS deposits, labour-law duties — each with its own cadence.</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="erp-chip erp-chip-soft">6 live</span>
+                                    <a class="btn btn-sm btn-outline-secondary" href="#register">Open</a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="col-lg-4">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Documents &amp; papers</h2>
+                                <p class="erp-card-sub">What the company has signed and what it prints: contracts, agreements, the vault, the brand.</p>
+                            </div>
+                        </header>
+                        <div class="px-3 pb-2">
+                            
+                            <div class="erp-list-row">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-cell-strong"><i class="bi bi-file-earmark-text me-1" aria-hidden="true"></i>Contracts</span>
+                                    <div class="erp-td-muted">A counterparty, a value and an end date. The register notices before the other side does.</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="erp-chip erp-chip-soft">7 live</span>
+                                    <a class="btn btn-sm btn-outline-secondary" href="#register">Open</a>
+                                </div>
+                            </div>
+                            <div class="erp-list-row">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-cell-strong"><i class="bi bi-file-earmark-check me-1" aria-hidden="true"></i>Agreements</span>
+                                    <div class="erp-td-muted">Distribution, tenancy and service terms that are not orders.</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="erp-chip erp-chip-soft">5 live</span>
+                                    <a class="btn btn-sm btn-outline-secondary" href="#register">Open</a>
+                                </div>
+                            </div>
+                            <div class="erp-list-row">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-cell-strong"><i class="bi bi-palette me-1" aria-hidden="true"></i>Brand assets</span>
+                                    <div class="erp-td-muted">The master logo, the seal, signboard artwork — which version is current and who keeps it.</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="erp-chip erp-chip-soft">3 live</span>
+                                    <a class="btn btn-sm btn-outline-secondary" href="#register">Open</a>
+                                </div>
+                            </div>
                         </div>
                     </section>
                 </div>
             </div>
 
-            <section class="erp-card mb-3">
-                <header class="erp-card-head">
-                    <div>
-                        <h2 class="erp-card-title">Self-healing</h2>
-                        <p class="erp-card-sub">The four safe operations above, in a fixed order, in one run. What is on this list is short on purpose — and the second list is why.</p>
-                    </div>
-                    <span class="erp-chip erp-chip-outline">last run 3 days ago</span>
-                </header>
-                <div class="p-3">
-                    <div class="row row-cols-1 row-cols-xl-2 g-3">
-                        <div class="col">
-                            <p class="erp-filter-note mb-2">Never performed automatically, whatever a heal is asked to do:</p>
-                            <table class="table erp-table mb-0">
-                                <tbody>
-                                    <tr><td class="erp-cell-strong">Schema changes</td><td class="erp-td-muted">A repair that alters structure has to be a migration somebody reviewed, with a rollback.</td></tr><tr><td class="erp-cell-strong">Posting or reversing entries</td><td class="erp-td-muted">Money moves through documents with an approver and an audit trail.</td></tr><tr><td class="erp-cell-strong">Editing or deleting audit rows</td><td class="erp-td-muted">The trail is the evidence that the rest of this list was followed.</td></tr><tr><td class="erp-cell-strong">Granting permissions</td><td class="erp-td-muted">A heal that widens access is privilege escalation with a friendly name.</td></tr><tr><td class="erp-cell-strong">Rewriting instance identity</td><td class="erp-td-muted">Company, currency and fiscal calendar are protected settings (§15-35).</td></tr><tr><td class="erp-cell-strong">Removing uploaded files</td><td class="erp-td-muted">A file a person uploaded is not garbage because the system cannot see who needs it.</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col">
-                            <p class="erp-filter-note mb-2">What a heal will run, in order:</p>
-                            <ol class="mb-3">
-                                <li>Clear cache and compiled templates</li>
-                                <li>Remove temporary files older than 24 hours</li>
-                                <li>End other sessions</li>
-                                <li>Rebuild the search index</li>
-                            </ol>
-                            <button class="btn btn-primary" type="button"><i class="bi bi-heart-pulse" aria-hidden="true"></i> Run safe self-healing</button>
-                        </div>
-                    </div>
+            <form class="erp-filterbar" method="GET" action="#">
+                <div class="erp-filter">
+                    <label class="form-label" for="kind">Kind</label>
+                    <select class="form-select" name="kind" id="kind">
+                        <option value="">Every kind</option>
+                        <option>Trade licences</option>
+                        <option>TIN &amp; BIN registrations</option>
+                        <option>Company certificates</option>
+                        <option>Contracts</option>
+                        <option>Agreements</option>
+                        <option>Brand assets</option>
+                        <option>Insurance policies</option>
+                        <option>RJSC filings</option>
+                        <option>Statutory obligations</option>
+                    </select>
                 </div>
-            </section>
-
-            <section class="erp-card mb-3">
-                <header class="erp-card-head">
-                    <div>
-                        <h2 class="erp-card-title">Reset settings to their defaults</h2>
-                        <p class="erp-card-sub">Every group goes back to the declared default. Business data is not touched: invoices, payments, stock, the ledger and the audit trail are exactly where they were.</p>
-                    </div>
-                    <span class="erp-chip erp-chip-warn">irreversible</span>
-                </header>
-                <div class="p-3">
-                    <p class="text-body-secondary mb-2">Rows are deleted rather than rewritten with the default value. A row that says what the default already says is a decision nobody made — and it would hide the useful fact that this company has not chosen yet. The settings history and the audit trail are kept.</p>
-                    <label class="erp-field-label">Type <code>RESET SETTINGS</code> to confirm</label>
-                    <input class="form-control mb-2" type="text" placeholder="RESET SETTINGS">
-                    <button class="btn btn-danger" type="button"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Reset settings</button>
+                <div class="erp-filter">
+                    <label class="form-label" for="state">State</label>
+                    <select class="form-select" name="state" id="state">
+                        <option value="">Live only</option>
+                        <option>Expired</option>
+                        <option>Expiring</option>
+                        <option>Due soon</option>
+                        <option>Overdue</option>
+                        <option>No date on file</option>
+                        <option>Retired</option>
+                    </select>
                 </div>
-            </section>
+                <div class="erp-filter">
+                    <label class="form-label" for="branch">Branch</label>
+                    <select class="form-select" name="branch" id="branch">
+                        <option value="">Every branch</option>
+                        <option>Company-wide only</option>
+                        <option>Head office</option>
+                        <option>Dhanmondi counter</option>
+                        <option>Narayanganj outlet</option>
+                    </select>
+                </div>
+                <div class="erp-filter erp-filter-wide">
+                    <label class="form-label" for="q">Search</label>
+                    <input class="form-control" type="search" name="q" id="q" placeholder="Title, number, issuer or counterparty">
+                </div>
+                <div class="erp-filterbar-actions">
+                    <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                    <a class="btn btn-link" href="#">Reset</a>
+                </div>
+            </form>
 
-            <div class="erp-table-shell mb-3" data-erp-table>
+            <section class="erp-table-shell" id="register" data-erp-table>
                 <div class="erp-card-head px-3 pt-3">
-                    <h2 class="erp-card-title">Maintenance history<span class="erp-chip erp-chip-outline">4 recent run(s)</span></h2>
+                    <h2 class="erp-card-title">The register <span class="erp-chip erp-chip-outline">39 record(s)</span></h2>
                 </div>
                 <div class="erp-table-scroll">
                     <table class="table erp-table">
-                        <thead><tr><th>When</th><th>Operation</th><th>Result</th><th>What it did</th><th class="erp-th-num">Freed</th><th>By</th></tr></thead>
+                        <thead>
+                            <tr>
+                                <th>Record</th>
+                                <th>Kind</th>
+                                <th>Issued by / other party</th>
+                                <th>Value</th>
+                                <th>Tracked date</th>
+                                <th>State</th>
+                                <th>Branch</th>
+                                <th></th>
+                            </tr>
+                        </thead>
                         <tbody>
                             
                             <tr>
-                                <td class="erp-td-muted">07 Oct 2026 09:12</td>
-                                <td class="erp-cell-strong">Cache cleared</td>
-                                <td><span class="erp-chip erp-chip-soft">ok</span></td>
-                                <td class="erp-td-muted">Cache cleared: 41.2 MB of derived files removed; uploads, backups and the audit trail untouched.</td>
-                                <td class="erp-td-num">41.2 MB</td>
-                                <td class="erp-td-muted">Instance Owner</td>
+                                <td>
+                                    <a class="erp-cell-strong" href="#detail">Trade licence — Dhanmondi counter</a>
+                                    <div class="erp-td-muted">TRAD/DHN/2026/118</div>
+                                </td>
+                                <td class="erp-td-muted">Trade licence</td>
+                                <td class="erp-td-muted">Dhaka South City Corporation</td>
+                                <td class="erp-td-num">৳ 6,000.00</td>
+                                <td class="erp-td-muted">
+                                    30 Nov 2026
+                                    <div class="erp-td-muted">53 days left</div>
+                                </td>
+                                <td><span class="erp-status erp-status-valid">In force</span></td>
+                                <td class="erp-td-muted">Dhanmondi counter</td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="#detail">Open</a></td>
                             </tr>
                             <tr>
-                                <td class="erp-td-muted">06 Oct 2026 22:40</td>
-                                <td class="erp-cell-strong">Integrity check</td>
-                                <td><span class="erp-chip erp-chip-soft">ok</span></td>
-                                <td class="erp-td-muted">142 table(s) checked — every one answered OK.</td>
+                                <td>
+                                    <a class="erp-cell-strong" href="#detail">Fire safety licence — head office</a>
+                                    <div class="erp-td-muted">FSC/2025/4471</div>
+                                </td>
+                                <td class="erp-td-muted">Trade licence</td>
+                                <td class="erp-td-muted">Fire Service &amp; Civil Defence</td>
+                                <td class="erp-td-num">৳ 3,500.00</td>
+                                <td class="erp-td-muted">
+                                    02 Oct 2026
+                                    <div class="erp-td-muted">6 days ago</div>
+                                </td>
+                                <td><span class="erp-status erp-status-expired">Expired</span></td>
+                                <td class="erp-td-muted">Head office</td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="#detail">Open</a></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="#detail">Stock insurance policy 2026-27</a>
+                                    <div class="erp-td-muted">GD-STK-88 21 447</div>
+                                </td>
+                                <td class="erp-td-muted">Insurance policy</td>
+                                <td class="erp-td-muted">Green Delta Insurance</td>
+                                <td class="erp-td-num">৳ 42,00,000.00</td>
+                                <td class="erp-td-muted">
+                                    18 Oct 2026
+                                    <div class="erp-td-muted">10 days left</div>
+                                </td>
+                                <td><span class="erp-status erp-status-expiring">Expiring</span></td>
+                                <td class="erp-td-muted">Company-wide</td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="#detail">Open</a></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="#detail">Supply agreement — Meghna Traders</a>
+                                    <div class="erp-td-muted">CT/2027/01</div>
+                                </td>
+                                <td class="erp-td-muted">Contract</td>
+                                <td class="erp-td-muted">Meghna Traders</td>
+                                <td class="erp-td-num">৳ 2,50,000.00</td>
+                                <td class="erp-td-muted">
+                                    31 Mar 2027
+                                    <div class="erp-td-muted">174 days left</div>
+                                </td>
+                                <td><span class="erp-status erp-status-valid">In force</span></td>
+                                <td class="erp-td-muted">Company-wide</td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="#detail">Open</a></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="#detail">Monthly VAT return (Mushak 9.1)</a>
+                                    
+                                </td>
+                                <td class="erp-td-muted">Statutory obligation</td>
+                                <td class="erp-td-muted">National Board of Revenue</td>
                                 <td class="erp-td-num">—</td>
-                                <td class="erp-td-muted">Instance Owner</td>
+                                <td class="erp-td-muted">
+                                    14 Oct 2026
+                                    <div class="erp-td-muted">6 days left</div>
+                                </td>
+                                <td><span class="erp-status erp-status-due_soon">Due soon</span></td>
+                                <td class="erp-td-muted">Company-wide</td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="#detail">Open</a></td>
                             </tr>
                             <tr>
-                                <td class="erp-td-muted">05 Oct 2026 08:02</td>
-                                <td class="erp-cell-strong">Self-healing run</td>
-                                <td><span class="erp-chip erp-chip-soft">ok</span></td>
-                                <td class="erp-td-muted">Self-healing run: 4 safe operation(s) executed, 63.8 MB freed.</td>
-                                <td class="erp-td-num">63.8 MB</td>
-                                <td class="erp-td-muted">Instance Owner</td>
-                            </tr>
-                            <tr>
-                                <td class="erp-td-muted">02 Oct 2026 11:15</td>
-                                <td class="erp-cell-strong">Database repaired</td>
-                                <td><span class="erp-chip erp-chip-outline">refused</span></td>
-                                <td class="erp-td-muted">No integrity check is on file for this company. Run the check first.</td>
+                                <td>
+                                    <a class="erp-cell-strong" href="#detail">Annual return to the registrar</a>
+                                    <div class="erp-td-muted">RJSC/AR/2026</div>
+                                </td>
+                                <td class="erp-td-muted">RJSC filing</td>
+                                <td class="erp-td-muted">RJSC</td>
                                 <td class="erp-td-num">—</td>
-                                <td class="erp-td-muted">Instance Owner</td>
+                                <td class="erp-td-muted">
+                                    05 Oct 2026
+                                    <div class="erp-td-muted">3 days late</div>
+                                </td>
+                                <td><span class="erp-status erp-status-overdue">Overdue</span></td>
+                                <td class="erp-td-muted">Company-wide</td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="#detail">Open</a></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="#detail">TIN certificate</a>
+                                    <div class="erp-td-muted">TIN 452 118 907</div>
+                                </td>
+                                <td class="erp-td-muted">TIN / BIN</td>
+                                <td class="erp-td-muted">National Board of Revenue</td>
+                                <td class="erp-td-num">—</td>
+                                <td class="erp-td-muted">
+                                    —
+                                    <div class="erp-td-muted">no term</div>
+                                </td>
+                                <td><span class="erp-status erp-status-undated">No date on file</span></td>
+                                <td class="erp-td-muted">Company-wide</td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="#detail">Open</a></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="#detail">Certificate of incorporation</a>
+                                    <div class="erp-td-muted">C-88214/2019</div>
+                                </td>
+                                <td class="erp-td-muted">Company certificate</td>
+                                <td class="erp-td-muted">RJSC</td>
+                                <td class="erp-td-num">—</td>
+                                <td class="erp-td-muted">
+                                    —
+                                    <div class="erp-td-muted">no term</div>
+                                </td>
+                                <td><span class="erp-status erp-status-undated">No date on file</span></td>
+                                <td class="erp-td-muted">Company-wide</td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="#detail">Open</a></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+            </section>
+
+            <div class="erp-note erp-note-warn mt-3">
+                <i class="bi bi-hourglass-split" aria-hidden="true"></i>
+                <div>
+                    <div class="mb-1"><span class="erp-status erp-status-expiring">Expiring</span></div>
+                    <div>Runs out on 18 Oct 2026 — 10 day(s) left. Renew it while the register still has time to be useful.</div>
+                </div>
             </div>
 
-            <div class="row row-cols-1 row-cols-xl-2 g-3">
-                <div class="col">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head"><h2 class="erp-card-title">Scheduled work (CLI)</h2></header>
-                        <div class="p-3">
-                            <p class="text-body-secondary mb-2">These run from cron, not from a browser: their absence shows up as work that never happened rather than as an error here, which is why the list is on this page.</p>
-                            <pre class="erp-pre mb-0">php artisan erp:search:rebuild
-php artisan erp:chain-verify
-php artisan erp:expiry-alerts
-php artisan erp:generate-bank-charges</pre>
+            <div class="erp-split mt-3" id="detail">
+                <div class="erp-split-main">
+                    <section class="erp-card">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Stock insurance policy 2026-27</h2>
+                                <p class="erp-card-sub">GD-STK-88 21 447 · Green Delta Insurance</p>
+                            </div>
+                        </header>
+                        <div class="px-3 pb-3">
+                            <dl class="erp-dl erp-dl-tight">
+                                <dt>Kind</dt><dd>Insurance policy</dd>
+                                <dt>Policy number</dt><dd>GD-STK-88 21 447</dd>
+                                <dt>Insurer</dt><dd>Green Delta Insurance</dd>
+                                <dt>Sum insured</dt><dd>৳ 42,00,000.00</dd>
+                                <dt>Issued on</dt><dd>18 Oct 2025</dd>
+                                <dt>Runs from</dt><dd>18 Oct 2025</dd>
+                                <dt>Expires on</dt><dd>18 Oct 2026</dd>
+                                <dt>Branch</dt><dd>Company-wide</dd>
+                                <dt>Recorded by</dt><dd>Head of Accounts on 20 Oct 2025</dd>
+                                <dt>Notes</dt><dd>Cover note on file; the endorsement for the Narayanganj store is attached separately.</dd>
+                            </dl>
+                        </div>
+                    </section>
+
+                    <section class="erp-card mt-3">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Papers filed against this record</h2>
+                                <p class="erp-card-sub">The file itself lives in the document library — sniffed, checksummed and audited. This is what it is filed under.</p>
+                            </div>
+                            <div class="erp-card-actions"><span class="erp-chip erp-chip-outline">2 file(s)</span></div>
+                        </header>
+                        <div class="px-3 pb-3">
+                            <div class="erp-list-row">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-cell-strong">Signed policy schedule</span>
+                                    <div class="erp-td-muted">application/pdf · filed by Head of Accounts on 20 Oct 2025</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-download" aria-hidden="true"></i> Download</a>
+                                    <button class="btn btn-sm btn-outline-danger" type="button"><i class="bi bi-x-lg" aria-hidden="true"></i> Unfile</button>
+                                </div>
+                            </div>
+                            <div class="erp-list-row">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-cell-strong">Dhanmondi endorsement 2026</span>
+                                    <div class="erp-td-muted">application/pdf · filed by Counter Manager on 04 Feb 2026</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-download" aria-hidden="true"></i> Download</a>
+                                    <button class="btn btn-sm btn-outline-danger" type="button"><i class="bi bi-x-lg" aria-hidden="true"></i> Unfile</button>
+                                </div>
+                            </div>
+
+                            <form class="erp-inline-form mt-3" method="POST" action="#">
+                                <div class="row g-2 align-items-end">
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="document_id">File it from the library</label>
+                                        <select class="form-select" name="document_id" id="document_id">
+                                            <option>stock-policy-2026-renewal.pdf (attachment, pdf)</option>
+                                            <option>green-delta-endorsement.pdf (attachment, pdf)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="label">What is it?</label>
+                                        <input class="form-control" type="text" id="label" placeholder="Signed copy, 2026 renewal…">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-outline-secondary w-100" type="submit"><i class="bi bi-paperclip" aria-hidden="true"></i> File</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+
+                    <section class="erp-card mt-3">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">What has happened to it</h2>
+                                <p class="erp-card-sub">Renewals keep the date that was true before, so the register can still say what it said last year.</p>
+                            </div>
+                        </header>
+                        <div class="px-3 pb-3">
+                            
+                            <div class="erp-list-row erp-list-row-top">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-chip erp-chip-soft">Renewed</span>
+                                    <div>Renewed to 30 Nov 2026 (was 30 Nov 2025).</div>
+                                    <div class="erp-td-muted">“Paid at the counter, receipt 4412”</div>
+                                </div>
+                                <div class="erp-td-muted text-nowrap">12 Nov 2025<div>Head of Accounts</div></div>
+                            </div>
+                            <div class="erp-list-row erp-list-row-top">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-chip erp-chip-soft">File attached</span>
+                                    <div>Filed “2026 renewal scan”.</div>
+                                    
+                                </div>
+                                <div class="erp-td-muted text-nowrap">12 Nov 2025<div>Counter Manager</div></div>
+                            </div>
+                            <div class="erp-list-row erp-list-row-top">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-chip erp-chip-outline">Created</span>
+                                    <div>Trade licence recorded under TRAD/DHN/2024/087.</div>
+                                    
+                                </div>
+                                <div class="erp-td-muted text-nowrap">04 Nov 2024<div>Head of Accounts</div></div>
+                            </div>
                         </div>
                     </section>
                 </div>
-                <div class="col">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head"><h2 class="erp-card-title">What is not built yet</h2></header>
-                        <div class="p-3">
-                            <dl class="erp-dl erp-dl-tight mb-0">
-                                <dt>Backup &amp; restore (§15-19)</dt>
-                                <dd>Not implemented. Take a database dump with your own tooling, and keep the restore steps written down outside the application.</dd>
-                                <dt>Image derivatives (§15-29)</dt>
-                                <dd>This build creates a document's image derivatives at upload time and stores them beside it. There is no separate thumbnail cache to regenerate.</dd>
-                            </dl>
+
+                <div class="erp-split-side">
+                    <section class="erp-card">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Renew it</h2>
+                                <p class="erp-card-sub">The previous expiry stays in the history — the number that was true last year is still a fact.</p>
+                            </div>
+                        </header>
+                        <form class="p-3 pt-0" method="POST" action="#">
+                            <div class="mb-3">
+                                <label class="form-label" for="renew_expires_on">New expiry date <span class="text-danger">*</span></label>
+                                <input class="form-control" type="date" id="renew_expires_on" value="2027-10-18">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="renewed_on">Renewed on</label>
+                                <input class="form-control" type="date" id="renewed_on" value="2026-10-14">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="renew_reference_no">New policy number</label>
+                                <input class="form-control" type="text" id="renew_reference_no" placeholder="Leave empty to keep GD-STK-88 21 447">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="renew_value_amount">Renewal sum insured</label>
+                                <input class="form-control" type="number" id="renew_value_amount" placeholder="4600000">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="renew_note">Note</label>
+                                <input class="form-control" type="text" id="renew_note" placeholder="Premium paid by bank transfer, ref 8871">
+                            </div>
+                            <button class="btn btn-primary" type="submit"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Renew</button>
+                        </form>
+                    </section>
+
+                    <section class="erp-card mt-3">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Retire it</h2>
+                                <p class="erp-card-sub">Surrendered, replaced or torn up. The row stays; the working lists let it go.</p>
+                            </div>
+                        </header>
+                        <form class="p-3 pt-0" method="POST" action="#">
+                            <div class="mb-3">
+                                <label class="form-label" for="reason">Why</label>
+                                <input class="form-control" type="text" id="reason" placeholder="Superseded by the 2027 policy">
+                            </div>
+                            <button class="btn btn-outline-danger" type="submit"><i class="bi bi-archive" aria-hidden="true"></i> Retire</button>
+                        </form>
+                    </section>
+
+                    <section class="erp-card mt-3">
+                        <header class="erp-card-head"><h2 class="erp-card-title">Where these come from</h2></header>
+                        <div class="px-3 pb-3">
+                            <p class="erp-td-muted mb-2">Nine menu leaves — trade licence, TIN &amp; BIN, certificates, company documents, logo &amp; seal, contracts, agreements, certificates vault, brand assets — are one table with a kind, so a licence and a policy cannot drift apart.</p>
+                            <p class="erp-td-muted mb-0"><code>erp:business:compliance-alerts</code> runs every morning at 06:50: two digests, what has lapsed and what lapses inside the month, deduped per state, company and day.</p>
                         </div>
                     </section>
                 </div>

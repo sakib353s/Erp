@@ -45,3 +45,132 @@
     background: var(--ok-soft);
     color: var(--ok);
 }
+
+/* §12-03/09: a register row that is simply true — in force, or waiting for a
+   date that is still far enough away to need no decision */
+.erp-status-valid,
+.erp-status-in_force,
+.erp-status-in-force {
+    background: var(--ok-soft);
+    color: var(--ok);
+}
+
+/* §12-09: a deadline inside the next month — note it now, act soon */
+.erp-status-due_soon,
+.erp-status-due-soon {
+    background: var(--warn-soft);
+    color: var(--warn);
+}
+
+/* §12: a record taken off the working list on purpose. Quiet, because it was a
+   decision, not a problem. */
+.erp-status-retired {
+    background: var(--surface-3);
+    color: var(--ink-3);
+}
+
+/* §12-09: the compliance calendar. Seven equal columns of real weeks — the one
+   place in this application where a table would be the wrong shape, because a
+   month is a grid and the Friday column has to line up. */
+.erp-cal-head {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.erp-cal-head span {
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--ink-4);
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.erp-cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 6px;
+}
+
+.erp-cal-cell {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface-1);
+    min-height: 104px;
+    padding: 7px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.erp-cal-cell-muted {
+    background: var(--surface-2);
+    color: var(--ink-4);
+}
+
+.erp-cal-cell-today {
+    border-color: var(--accent);
+    box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.erp-cal-day {
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+}
+
+.erp-cal-cell-muted .erp-cal-day {
+    color: var(--ink-4);
+    font-weight: 600;
+}
+
+.erp-cal-entry {
+    border-left: 3px solid var(--ink-4);
+    background: var(--surface-2);
+    border-radius: 6px;
+    color: var(--ink-2);
+    padding: 3px 6px;
+    font-size: 11.5px;
+    line-height: 1.35;
+    display: block;
+}
+
+.erp-cal-entry:hover {
+    color: var(--ink);
+    text-decoration: none;
+}
+
+.erp-cal-entry-ok {
+    border-left-color: var(--ok);
+}
+
+.erp-cal-entry-warn {
+    border-left-color: var(--warn);
+}
+
+.erp-cal-entry-danger {
+    border-left-color: var(--danger);
+}
+
+.erp-cal-entry-muted {
+    border-left-color: var(--line-strong);
+    color: var(--ink-3);
+}
+
+@media (max-width: 767.98px) {
+    .erp-cal-grid,
+    .erp-cal-head {
+        grid-template-columns: repeat(7, minmax(58px, 1fr));
+        overflow-x: auto;
+    }
+
+    .erp-cal-cell {
+        min-height: 78px;
+    }
+}

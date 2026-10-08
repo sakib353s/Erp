@@ -181,6 +181,8 @@ export const SECTIONS = [
             label: 'Business management', icon: 'bi-building', items: [
                 { label: 'Notice board', url: './notices.html', icon: 'bi-megaphone' },
                 { label: 'Tasks & projects', url: './tasks.html', icon: 'bi-kanban' },
+                { label: 'Business registers', url: './records.html', icon: 'bi-journal-text' },
+                { label: 'Compliance calendar', url: './compliance.html', icon: 'bi-calendar-event' },
                 { label: 'Workflows', url: '#', icon: 'bi-diagram-3' },
                 { label: 'Documents', url: '#', icon: 'bi-folder2-open' },
             ],
@@ -286,6 +288,8 @@ export const PALETTE = [
     { label: 'Appearance', url: '#', icon: 'bi-palette', section: 'Configuration', group: 'Settings' },
     { label: 'Notice board', url: './notices.html', icon: 'bi-megaphone', section: 'Governance', group: 'Business management' },
     { label: 'Tasks & projects', url: './tasks.html', icon: 'bi-kanban', section: 'Governance', group: 'Business management' },
+    { label: 'Business registers', url: './records.html', icon: 'bi-journal-text', section: 'Governance', group: 'Business management' },
+    { label: 'Compliance calendar', url: './compliance.html', icon: 'bi-calendar-event', section: 'Governance', group: 'Business management' },
     { label: 'System maintenance', url: './maintenance.html', icon: 'bi-tools', section: 'Configuration', group: 'Settings' },
 ];
 

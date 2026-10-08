@@ -6687,3 +6687,682 @@ ${previewBar('tasks.html')}
 </div>`;
 }
 
+/* ------------------------------------- 12-03/04/09/10. the company registers */
+
+export function registerDesk() {
+    const shelves = [
+        {
+            group: 'Company identity',
+            note: 'What the company is: its licence to trade, its tax numbers, the certificates that say it exists.',
+            kinds: [
+                { label: 'Trade licences', icon: 'bi-patch-check', count: 4, hint: 'A licence is only real while it is unexpired; renewals are logged against the record.' },
+                { label: 'TIN &amp; BIN registrations', icon: 'bi-upc-scan', count: 2, hint: 'TIN and BIN do not expire — what matters is that a changed number is a recorded event.' },
+                { label: 'Company certificates', icon: 'bi-award', count: 3, hint: 'Incorporation, commencement, share allotment: the number, the issuer, the term.' },
+            ],
+        },
+        {
+            group: 'Compliance',
+            note: 'What the company owes somebody by a date: filings with the registrar, statutory duties, insurance cover.',
+            kinds: [
+                { label: 'Insurance policies', icon: 'bi-shield-check', count: 4, hint: 'Fire, stock, vehicle and employee cover: the policy number, the sum insured, the day it stops.' },
+                { label: 'RJSC filings', icon: 'bi-building-gear', count: 5, hint: 'Returns with the registrar; completing one rolls the next due date forward.' },
+                { label: 'Statutory obligations', icon: 'bi-calendar-check', count: 6, hint: 'VAT returns, TDS deposits, labour-law duties — each with its own cadence.' },
+            ],
+        },
+        {
+            group: 'Documents &amp; papers',
+            note: 'What the company has signed and what it prints: contracts, agreements, the vault, the brand.',
+            kinds: [
+                { label: 'Contracts', icon: 'bi-file-earmark-text', count: 7, hint: 'A counterparty, a value and an end date. The register notices before the other side does.' },
+                { label: 'Agreements', icon: 'bi-file-earmark-check', count: 5, hint: 'Distribution, tenancy and service terms that are not orders.' },
+                { label: 'Brand assets', icon: 'bi-palette', count: 3, hint: 'The master logo, the seal, signboard artwork — which version is current and who keeps it.' },
+            ],
+        },
+    ];
+
+    const rows = [
+        {
+            title: 'Trade licence — Dhanmondi counter',
+            kind: 'Trade licence', reference: 'TRAD/DHN/2026/118',
+            party: 'Dhaka South City Corporation', value: '৳ 6,000.00',
+            tracked: '30 Nov 2026', days: '53 days left', state: 'valid', stateLabel: 'In force',
+            branch: 'Dhanmondi counter',
+        },
+        {
+            title: 'Fire safety licence — head office',
+            kind: 'Trade licence', reference: 'FSC/2025/4471',
+            party: 'Fire Service &amp; Civil Defence', value: '৳ 3,500.00',
+            tracked: '02 Oct 2026', days: '6 days ago', state: 'expired', stateLabel: 'Expired',
+            branch: 'Head office',
+        },
+        {
+            title: 'Stock insurance policy 2026-27',
+            kind: 'Insurance policy', reference: 'GD-STK-88 21 447',
+            party: 'Green Delta Insurance', value: '৳ 42,00,000.00',
+            tracked: '18 Oct 2026', days: '10 days left', state: 'expiring', stateLabel: 'Expiring',
+            branch: 'Company-wide',
+        },
+        {
+            title: 'Supply agreement — Meghna Traders',
+            kind: 'Contract', reference: 'CT/2027/01',
+            party: 'Meghna Traders', value: '৳ 2,50,000.00',
+            tracked: '31 Mar 2027', days: '174 days left', state: 'valid', stateLabel: 'In force',
+            branch: 'Company-wide',
+        },
+        {
+            title: 'Monthly VAT return (Mushak 9.1)',
+            kind: 'Statutory obligation', reference: '—',
+            party: 'National Board of Revenue', value: '—',
+            tracked: '14 Oct 2026', days: '6 days left', state: 'due_soon', stateLabel: 'Due soon',
+            branch: 'Company-wide',
+        },
+        {
+            title: 'Annual return to the registrar',
+            kind: 'RJSC filing', reference: 'RJSC/AR/2026',
+            party: 'RJSC', value: '—',
+            tracked: '05 Oct 2026', days: '3 days late', state: 'overdue', stateLabel: 'Overdue',
+            branch: 'Company-wide',
+        },
+        {
+            title: 'TIN certificate',
+            kind: 'TIN / BIN', reference: 'TIN 452 118 907',
+            party: 'National Board of Revenue', value: '—',
+            tracked: '—', days: 'no term', state: 'undated', stateLabel: 'No date on file',
+            branch: 'Company-wide',
+        },
+        {
+            title: 'Certificate of incorporation',
+            kind: 'Company certificate', reference: 'C-88214/2019',
+            party: 'RJSC', value: '—',
+            tracked: '—', days: 'no term', state: 'undated', stateLabel: 'No date on file',
+            branch: 'Company-wide',
+        },
+    ];
+
+    const history = [
+        { action: 'Renewed', tone: 'erp-chip-soft', note: 'Renewed to 30 Nov 2026 (was 30 Nov 2025).', said: 'Paid at the counter, receipt 4412', when: '12 Nov 2025', who: 'Head of Accounts' },
+        { action: 'File attached', tone: 'erp-chip-soft', note: 'Filed “2026 renewal scan”.', said: null, when: '12 Nov 2025', who: 'Counter Manager' },
+        { action: 'Created', tone: 'erp-chip-outline', note: 'Trade licence recorded under TRAD/DHN/2024/087.', said: null, when: '04 Nov 2024', who: 'Head of Accounts' },
+    ];
+
+    return `
+${previewBar('records.html')}
+<div class="erp-shell">
+    ${sidebar('govern')}
+    <main class="erp-main">
+        ${topbar('Business records')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-journal-text" aria-hidden="true"></i> Business Management · Registers</p>
+                    <h1 class="erp-h1">What the company is, and the day each of it runs out</h1>
+                    <p class="erp-page-sub">A licence, a policy, a contract and a filing are the same animal: somebody issued it, it carries a number, and it stops being true on a date. One register for all of them is what makes “what runs out this quarter?” a question with an answer. States are read from the clock — nothing here waits for a nightly job to be true.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./compliance.html"><i class="bi bi-hourglass-split" aria-hidden="true"></i> What is running out</a>
+                    <a class="btn btn-outline-secondary" href="./compliance.html#calendar"><i class="bi bi-calendar-event" aria-hidden="true"></i> Compliance calendar</a>
+                    <a class="btn btn-outline-secondary" href="./compliance.html#obligations"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Recurring duties</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-journal-text" aria-hidden="true"></i> Live records</p>
+                    <p class="erp-kpi-value">39</p>
+                    <p class="erp-kpi-foot">Everything on the registers that has not been retired</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Expiring within 30 days</p>
+                    <p class="erp-kpi-value">3</p>
+                    <p class="erp-kpi-foot">Renew these before they lapse — the month is where renewing is cheap</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Already expired</p>
+                    <p class="erp-kpi-value">1</p>
+                    <p class="erp-kpi-foot">A lapsed licence is a decision somebody has to take, not a paperwork problem</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-calendar-check" aria-hidden="true"></i> Due within 30 days</p>
+                    <p class="erp-kpi-value">2</p>
+                    <p class="erp-kpi-foot">Filings and duties with a deadline this month</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-alarm" aria-hidden="true"></i> Overdue</p>
+                    <p class="erp-kpi-value">1</p>
+                    <p class="erp-kpi-foot">Past the deadline and not filed</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-question-circle" aria-hidden="true"></i> No date on file</p>
+                    <p class="erp-kpi-value">5</p>
+                    <p class="erp-kpi-foot">Registrations and assets with no term — worth a look, not a panic</p>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                ${shelves.map((shelf) => `
+                <div class="col-lg-4">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">${shelf.group}</h2>
+                                <p class="erp-card-sub">${shelf.note}</p>
+                            </div>
+                        </header>
+                        <div class="px-3 pb-2">
+                            ${shelf.kinds.map((kind) => `
+                            <div class="erp-list-row">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-cell-strong"><i class="bi ${kind.icon} me-1" aria-hidden="true"></i>${kind.label}</span>
+                                    <div class="erp-td-muted">${kind.hint}</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="erp-chip erp-chip-soft">${kind.count} live</span>
+                                    <a class="btn btn-sm btn-outline-secondary" href="#register">Open</a>
+                                </div>
+                            </div>`).join('')}
+                        </div>
+                    </section>
+                </div>`).join('')}
+            </div>
+
+            <form class="erp-filterbar" method="GET" action="#">
+                <div class="erp-filter">
+                    <label class="form-label" for="kind">Kind</label>
+                    <select class="form-select" name="kind" id="kind">
+                        <option value="">Every kind</option>
+                        <option>Trade licences</option>
+                        <option>TIN &amp; BIN registrations</option>
+                        <option>Company certificates</option>
+                        <option>Contracts</option>
+                        <option>Agreements</option>
+                        <option>Brand assets</option>
+                        <option>Insurance policies</option>
+                        <option>RJSC filings</option>
+                        <option>Statutory obligations</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="state">State</label>
+                    <select class="form-select" name="state" id="state">
+                        <option value="">Live only</option>
+                        <option>Expired</option>
+                        <option>Expiring</option>
+                        <option>Due soon</option>
+                        <option>Overdue</option>
+                        <option>No date on file</option>
+                        <option>Retired</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="branch">Branch</label>
+                    <select class="form-select" name="branch" id="branch">
+                        <option value="">Every branch</option>
+                        <option>Company-wide only</option>
+                        <option>Head office</option>
+                        <option>Dhanmondi counter</option>
+                        <option>Narayanganj outlet</option>
+                    </select>
+                </div>
+                <div class="erp-filter erp-filter-wide">
+                    <label class="form-label" for="q">Search</label>
+                    <input class="form-control" type="search" name="q" id="q" placeholder="Title, number, issuer or counterparty">
+                </div>
+                <div class="erp-filterbar-actions">
+                    <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                    <a class="btn btn-link" href="#">Reset</a>
+                </div>
+            </form>
+
+            <section class="erp-table-shell" id="register" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">The register <span class="erp-chip erp-chip-outline">39 record(s)</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead>
+                            <tr>
+                                <th>Record</th>
+                                <th>Kind</th>
+                                <th>Issued by / other party</th>
+                                <th>Value</th>
+                                <th>Tracked date</th>
+                                <th>State</th>
+                                <th>Branch</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rows.map((row) => `
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="#detail">${row.title}</a>
+                                    ${row.reference !== '—' ? `<div class="erp-td-muted">${row.reference}</div>` : ''}
+                                </td>
+                                <td class="erp-td-muted">${row.kind}</td>
+                                <td class="erp-td-muted">${row.party}</td>
+                                <td class="erp-td-num">${row.value}</td>
+                                <td class="erp-td-muted">
+                                    ${row.tracked}
+                                    <div class="erp-td-muted">${row.days}</div>
+                                </td>
+                                <td>${statusChip(row.state, row.stateLabel)}</td>
+                                <td class="erp-td-muted">${row.branch}</td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="#detail">Open</a></td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div class="erp-note erp-note-warn mt-3">
+                <i class="bi bi-hourglass-split" aria-hidden="true"></i>
+                <div>
+                    <div class="mb-1">${statusChip('expiring', 'Expiring')}</div>
+                    <div>Runs out on 18 Oct 2026 — 10 day(s) left. Renew it while the register still has time to be useful.</div>
+                </div>
+            </div>
+
+            <div class="erp-split mt-3" id="detail">
+                <div class="erp-split-main">
+                    <section class="erp-card">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Stock insurance policy 2026-27</h2>
+                                <p class="erp-card-sub">GD-STK-88 21 447 · Green Delta Insurance</p>
+                            </div>
+                        </header>
+                        <div class="px-3 pb-3">
+                            <dl class="erp-dl erp-dl-tight">
+                                <dt>Kind</dt><dd>Insurance policy</dd>
+                                <dt>Policy number</dt><dd>GD-STK-88 21 447</dd>
+                                <dt>Insurer</dt><dd>Green Delta Insurance</dd>
+                                <dt>Sum insured</dt><dd>৳ 42,00,000.00</dd>
+                                <dt>Issued on</dt><dd>18 Oct 2025</dd>
+                                <dt>Runs from</dt><dd>18 Oct 2025</dd>
+                                <dt>Expires on</dt><dd>18 Oct 2026</dd>
+                                <dt>Branch</dt><dd>Company-wide</dd>
+                                <dt>Recorded by</dt><dd>Head of Accounts on 20 Oct 2025</dd>
+                                <dt>Notes</dt><dd>Cover note on file; the endorsement for the Narayanganj store is attached separately.</dd>
+                            </dl>
+                        </div>
+                    </section>
+
+                    <section class="erp-card mt-3">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Papers filed against this record</h2>
+                                <p class="erp-card-sub">The file itself lives in the document library — sniffed, checksummed and audited. This is what it is filed under.</p>
+                            </div>
+                            <div class="erp-card-actions"><span class="erp-chip erp-chip-outline">2 file(s)</span></div>
+                        </header>
+                        <div class="px-3 pb-3">
+                            <div class="erp-list-row">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-cell-strong">Signed policy schedule</span>
+                                    <div class="erp-td-muted">application/pdf · filed by Head of Accounts on 20 Oct 2025</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-download" aria-hidden="true"></i> Download</a>
+                                    <button class="btn btn-sm btn-outline-danger" type="button"><i class="bi bi-x-lg" aria-hidden="true"></i> Unfile</button>
+                                </div>
+                            </div>
+                            <div class="erp-list-row">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-cell-strong">Dhanmondi endorsement 2026</span>
+                                    <div class="erp-td-muted">application/pdf · filed by Counter Manager on 04 Feb 2026</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-download" aria-hidden="true"></i> Download</a>
+                                    <button class="btn btn-sm btn-outline-danger" type="button"><i class="bi bi-x-lg" aria-hidden="true"></i> Unfile</button>
+                                </div>
+                            </div>
+
+                            <form class="erp-inline-form mt-3" method="POST" action="#">
+                                <div class="row g-2 align-items-end">
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="document_id">File it from the library</label>
+                                        <select class="form-select" name="document_id" id="document_id">
+                                            <option>stock-policy-2026-renewal.pdf (attachment, pdf)</option>
+                                            <option>green-delta-endorsement.pdf (attachment, pdf)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="label">What is it?</label>
+                                        <input class="form-control" type="text" id="label" placeholder="Signed copy, 2026 renewal…">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-outline-secondary w-100" type="submit"><i class="bi bi-paperclip" aria-hidden="true"></i> File</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+
+                    <section class="erp-card mt-3">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">What has happened to it</h2>
+                                <p class="erp-card-sub">Renewals keep the date that was true before, so the register can still say what it said last year.</p>
+                            </div>
+                        </header>
+                        <div class="px-3 pb-3">
+                            ${history.map((event) => `
+                            <div class="erp-list-row erp-list-row-top">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-chip ${event.tone}">${event.action}</span>
+                                    <div>${event.note}</div>
+                                    ${event.said ? `<div class="erp-td-muted">“${event.said}”</div>` : ''}
+                                </div>
+                                <div class="erp-td-muted text-nowrap">${event.when}<div>${event.who}</div></div>
+                            </div>`).join('')}
+                        </div>
+                    </section>
+                </div>
+
+                <div class="erp-split-side">
+                    <section class="erp-card">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Renew it</h2>
+                                <p class="erp-card-sub">The previous expiry stays in the history — the number that was true last year is still a fact.</p>
+                            </div>
+                        </header>
+                        <form class="p-3 pt-0" method="POST" action="#">
+                            <div class="mb-3">
+                                <label class="form-label" for="renew_expires_on">New expiry date <span class="text-danger">*</span></label>
+                                <input class="form-control" type="date" id="renew_expires_on" value="2027-10-18">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="renewed_on">Renewed on</label>
+                                <input class="form-control" type="date" id="renewed_on" value="2026-10-14">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="renew_reference_no">New policy number</label>
+                                <input class="form-control" type="text" id="renew_reference_no" placeholder="Leave empty to keep GD-STK-88 21 447">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="renew_value_amount">Renewal sum insured</label>
+                                <input class="form-control" type="number" id="renew_value_amount" placeholder="4600000">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="renew_note">Note</label>
+                                <input class="form-control" type="text" id="renew_note" placeholder="Premium paid by bank transfer, ref 8871">
+                            </div>
+                            <button class="btn btn-primary" type="submit"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Renew</button>
+                        </form>
+                    </section>
+
+                    <section class="erp-card mt-3">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Retire it</h2>
+                                <p class="erp-card-sub">Surrendered, replaced or torn up. The row stays; the working lists let it go.</p>
+                            </div>
+                        </header>
+                        <form class="p-3 pt-0" method="POST" action="#">
+                            <div class="mb-3">
+                                <label class="form-label" for="reason">Why</label>
+                                <input class="form-control" type="text" id="reason" placeholder="Superseded by the 2027 policy">
+                            </div>
+                            <button class="btn btn-outline-danger" type="submit"><i class="bi bi-archive" aria-hidden="true"></i> Retire</button>
+                        </form>
+                    </section>
+
+                    <section class="erp-card mt-3">
+                        <header class="erp-card-head"><h2 class="erp-card-title">Where these come from</h2></header>
+                        <div class="px-3 pb-3">
+                            <p class="erp-td-muted mb-2">Nine menu leaves — trade licence, TIN &amp; BIN, certificates, company documents, logo &amp; seal, contracts, agreements, certificates vault, brand assets — are one table with a kind, so a licence and a policy cannot drift apart.</p>
+                            <p class="erp-td-muted mb-0"><code>erp:business:compliance-alerts</code> runs every morning at 06:50: two digests, what has lapsed and what lapses inside the month, deduped per state, company and day.</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>`;
+}
+
+/* -------------------------------- 12-09. the compliance lenses and calendar */
+
+export function complianceDesk() {
+    const lenses = [
+        {
+            title: 'Already lapsed',
+            note: 'These were true once. Renew, complete or retire them — a lapsed row left alone is how a register stops being trusted.',
+            rows: [
+                { title: 'Fire safety licence — head office', reference: 'FSC/2025/4471', shelf: 'Trade licence', tracked: '02 Oct 2026', days: '6 ago', state: 'expired', stateLabel: 'Expired' },
+                { title: 'Annual return to the registrar', reference: 'RJSC/AR/2026', shelf: 'RJSC filing', tracked: '05 Oct 2026', days: '3 late', state: 'overdue', stateLabel: 'Overdue' },
+            ],
+        },
+        {
+            title: 'Inside the next 30 days',
+            note: 'The month is where renewals are cheap and late fees are not.',
+            rows: [
+                { title: 'Stock insurance policy 2026-27', reference: 'GD-STK-88 21 447', shelf: 'Insurance policy', tracked: '18 Oct 2026', days: '10 left', state: 'expiring', stateLabel: 'Expiring' },
+                { title: 'Monthly VAT return (Mushak 9.1)', reference: '—', shelf: 'Statutory obligation', tracked: '14 Oct 2026', days: '6 left', state: 'due_soon', stateLabel: 'Due soon' },
+                { title: 'Vehicle fitness certificate — Dha 11-4471', reference: 'BRTA/FIT/2026/7741', shelf: 'Company certificate', tracked: '22 Oct 2026', days: '14 left', state: 'expiring', stateLabel: 'Expiring' },
+            ],
+        },
+        {
+            title: 'Between 31 and 90 days',
+            note: 'Long enough to plan, close enough to see.',
+            rows: [
+                { title: 'Trade licence — Dhanmondi counter', reference: 'TRAD/DHN/2026/118', shelf: 'Trade licence', tracked: '30 Nov 2026', days: '53 left', state: 'valid', stateLabel: 'In force' },
+                { title: 'Trademark registration — “Nirjhor”', reference: 'TM/2019/118842', shelf: 'Company certificate', tracked: '04 Dec 2026', days: '57 left', state: 'valid', stateLabel: 'In force' },
+            ],
+        },
+    ];
+
+    const undated = [
+        { title: 'TIN certificate', shelf: 'TIN / BIN', reference: 'TIN 452 118 907', recorded: '12 Mar 2024' },
+        { title: 'BIN/VAT registration', shelf: 'TIN / BIN', reference: 'BIN 002345671-0101', recorded: '12 Mar 2024' },
+        { title: 'Certificate of incorporation', shelf: 'Company certificate', reference: 'C-88214/2019', recorded: '04 Jan 2024' },
+        { title: 'Master logo (current)', shelf: 'Brand asset', reference: 'BRAND/LOGO/v3', recorded: '18 Aug 2025' },
+        { title: 'Company seal — impression', shelf: 'Brand asset', reference: 'BRAND/SEAL/v1', recorded: '18 Aug 2025' },
+    ];
+
+    const calendarEntries = {
+        2: [{ title: 'Fire safety licence (lapsed)', tone: 'erp-cal-entry-danger' }],
+        5: [{ title: 'Annual return (3 days late)', tone: 'erp-cal-entry-danger' }],
+        14: [{ title: 'Monthly VAT return (Mushak 9.1)', tone: 'erp-cal-entry-warn' }],
+        18: [{ title: 'Stock insurance policy', tone: 'erp-cal-entry-warn' }],
+        22: [{ title: 'Vehicle fitness certificate', tone: 'erp-cal-entry-warn' }],
+        27: [{ title: 'TDS deposit — September', tone: 'erp-cal-entry-warn' }],
+       30: [{ title: 'Trade licence — Dhanmondi', tone: 'erp-cal-entry-ok' }],
+    };
+
+    const obligations = [
+        {
+            label: 'Monthly',
+            rows: [
+                { title: 'Monthly VAT return (Mushak 9.1)', authority: 'National Board of Revenue', due: '14 Oct 2026', days: '6 days left', last: '12 Sep 2026', state: 'due_soon', stateLabel: 'Due soon' },
+                { title: 'Monthly TDS deposit (challan 91)', authority: 'National Board of Revenue', due: '27 Oct 2026', days: '19 days left', last: '25 Sep 2026', state: 'valid', stateLabel: 'In force' },
+                { title: 'Monthly PF deposit', authority: 'Directorate of Labour', due: '20 Oct 2026', days: '12 days left', last: '18 Sep 2026', state: 'due_soon', stateLabel: 'Due soon' },
+            ],
+        },
+        {
+            label: 'Quarterly',
+            rows: [
+                { title: 'Quarterly VAT return (Mushak 9.2)', authority: 'National Board of Revenue', due: '31 Oct 2026', days: '23 days left', last: '31 Jul 2026', state: 'due_soon', stateLabel: 'Due soon' },
+                { title: 'Quarterly labour-law compliance note', authority: 'Directorate of Labour', due: '31 Dec 2026', days: '84 days left', last: '30 Sep 2026', state: 'valid', stateLabel: 'In force' },
+            ],
+        },
+        {
+            label: 'Yearly',
+            rows: [
+                { title: 'Annual return to the registrar', authority: 'RJSC', due: '05 Oct 2026', days: '3 days late', last: '30 Sep 2025', state: 'overdue', stateLabel: 'Overdue' },
+                { title: 'Trade licence renewal — head office', authority: 'Dhaka South City Corporation', due: '30 Nov 2026', days: '53 days left', last: '30 Nov 2025', state: 'valid', stateLabel: 'In force' },
+            ],
+        },
+    ];
+
+    // October 2026 starts on a Thursday, so the grid opens on Sunday 27 September
+    // and closes on Saturday 31 October: five whole weeks, exactly 35 cells.
+    const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    return `
+${previewBar('compliance.html')}
+<div class="erp-shell">
+    ${sidebar('govern')}
+    <main class="erp-main">
+        ${topbar('Compliance')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Business Management · Compliance</p>
+                    <h1 class="erp-h1">What is running out</h1>
+                    <p class="erp-page-sub">Lapsed first, then the next thirty days, then the rest of the quarter — every expiry and every deadline from every register on one list. The undated shelf is separate, because “no expiry on file” is not the same as “safe”.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./records.html"><i class="bi bi-journal-text" aria-hidden="true"></i> All registers</a>
+                    <a class="btn btn-outline-secondary" href="#calendar"><i class="bi bi-calendar-event" aria-hidden="true"></i> Calendar</a>
+                    <a class="btn btn-outline-secondary" href="#obligations"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Recurring duties</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Already lapsed</p>
+                    <p class="erp-kpi-value">2</p>
+                    <p class="erp-kpi-foot">Expired or past the deadline — act, or retire with a reason</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Next 30 days</p>
+                    <p class="erp-kpi-value">3</p>
+                    <p class="erp-kpi-foot">Renew or file before the date passes</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-calendar-check" aria-hidden="true"></i> 31–90 days</p>
+                    <p class="erp-kpi-value">2</p>
+                    <p class="erp-kpi-foot">Visible now so it is never a surprise later</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-question-circle" aria-hidden="true"></i> No date on file</p>
+                    <p class="erp-kpi-value">5</p>
+                    <p class="erp-kpi-foot">Registrations and assets with no term at all</p>
+                </div>
+            </div>
+
+            ${lenses.map((lens) => `
+            <section class="erp-table-shell">
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">${lens.title} <span class="erp-chip erp-chip-outline">${lens.rows.length} record(s)</span></h2>
+                    <div class="erp-card-actions"><span class="erp-chip erp-chip-outline">${lens.note}</span></div>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead>
+                            <tr><th>Record</th><th>Shelf</th><th>Tracked date</th><th>Days</th><th>State</th><th></th></tr>
+                        </thead>
+                        <tbody>
+                            ${lens.rows.map((row) => `
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="./records.html#detail">${row.title}</a>
+                                    ${row.reference !== '—' ? `<div class="erp-td-muted">${row.reference}</div>` : ''}
+                                </td>
+                                <td class="erp-td-muted">${row.shelf}</td>
+                                <td class="erp-td-muted">${row.tracked}</td>
+                                <td class="erp-td-num">${row.days}</td>
+                                <td>${statusChip(row.state, row.stateLabel)}</td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="./records.html#detail">Open</a></td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </section>`).join('')}
+
+            <section class="erp-table-shell">
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">Carrying no date at all <span class="erp-chip erp-chip-outline">5 record(s)</span></h2>
+                    <div class="erp-card-actions"><span class="erp-chip erp-chip-outline">A TIN, a number, a logo — nothing to track. And any licence that should have had a term.</span></div>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead><tr><th>Record</th><th>Shelf</th><th>Reference</th><th>Recorded</th><th></th></tr></thead>
+                        <tbody>
+                            ${undated.map((row) => `
+                            <tr>
+                                <td><a class="erp-cell-strong" href="./records.html#detail">${row.title}</a></td>
+                                <td class="erp-td-muted">${row.shelf}</td>
+                                <td class="erp-td-muted">${row.reference}</td>
+                                <td class="erp-td-muted">${row.recorded}</td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="./records.html#detail">Open</a></td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="erp-card mt-3" id="calendar">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">October 2026</h2>
+                        <p class="erp-card-sub">Sunday to Saturday, whole weeks, so the first and last days are never orphaned. Each entry wears the colour of its own state — the same licence reads the same way here as on its own page.</p>
+                    </div>
+                    <div class="erp-card-actions">
+                        <span class="erp-chip erp-chip-soft">7 entries</span>
+                    </div>
+                </header>
+                <div class="p-3">
+                    <div class="erp-cal-head">${weekdays.map((weekday) => `<span>${weekday}</span>`).join('')}</div>
+                    <div class="erp-cal-grid">
+                        ${Array.from({ length: 5 }).map((_, week) => Array.from({ length: 7 }).map((__, weekday) => {
+                            const index = week * 7 + weekday;
+                            const inMonth = index >= 4 && index <= 34;
+                            const dayNumber = index - 3;
+                            const entries = inMonth ? (calendarEntries[dayNumber] ?? []) : [];
+                            const label = inMonth ? String(dayNumber) : String(27 + index);
+                            return `
+                            <div class="erp-cal-cell ${inMonth ? '' : 'erp-cal-cell-muted'}">
+                                <div class="erp-cal-day">
+                                    <span>${label}</span>
+                                    ${dayNumber === 8 && inMonth ? '<span class="erp-chip erp-chip-soft">today</span>' : (!inMonth ? '<span class="erp-td-muted">Sep</span>' : '')}
+                                </div>
+                                ${entries.map((entry) => `<a class="erp-cal-entry ${entry.tone}" href="./records.html#detail">${entry.title}</a>`).join('')}
+                            </div>`;
+                        }).join('')).join('')}
+                    </div>
+                </div>
+            </section>
+
+            <section class="mt-3" id="obligations">
+                ${obligations.map((group) => `
+                <div class="erp-table-shell">
+                    <div class="erp-card-head px-3 pt-3">
+                        <h2 class="erp-card-title">${group.label} <span class="erp-chip erp-chip-outline">${group.rows.length} duty(ies)</span></h2>
+                    </div>
+                    <div class="erp-table-scroll">
+                        <table class="table erp-table">
+                            <thead><tr><th>Duty</th><th>Authority</th><th>Next due</th><th>Last done</th><th>State</th><th></th></tr></thead>
+                            <tbody>
+                                ${group.rows.map((row) => `
+                                <tr>
+                                    <td><a class="erp-cell-strong" href="./records.html#detail">${row.title}</a></td>
+                                    <td class="erp-td-muted">${row.authority}</td>
+                                    <td class="erp-td-muted">${row.due}<div class="erp-td-muted">${row.days}</div></td>
+                                    <td class="erp-td-muted">${row.last}</td>
+                                    <td>${statusChip(row.state, row.stateLabel)}</td>
+                                    <td class="erp-td-actions">
+                                        <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-check2" aria-hidden="true"></i> Done</button>
+                                        <a class="btn btn-sm btn-outline-secondary" href="./records.html#detail">Open</a>
+                                    </td>
+                                </tr>`).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>`).join('')}
+            </section>
+
+            <div class="erp-note erp-note-info mt-3">
+                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                <div>Marking a duty done does not clear the row — it sets the next date from the <strong>deadline</strong>, not from the day the work was done, so a return filed three days late is still due the same day next month. The morning digest (<code>erp:business:compliance-alerts</code>, 06:50) says what has lapsed and what lapses inside the month, once per state per company per day.</div>
+            </div>
+
+        </div>
+    </main>
+</div>`;
+}
