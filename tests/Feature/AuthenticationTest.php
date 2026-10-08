@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use App\Domain\Security\AuthEvent;
+use Carbon\CarbonInterval;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Sleep;
 use Tests\Concerns\CreatesERPInstance;
 use Tests\TestCase;
 
@@ -27,6 +29,12 @@ class AuthenticationTest extends TestCase
         $this->post('/login', ['email' => 'nobody@instance.test', 'password' => 'WrongPass9!xx'])
             ->assertSessionHasErrors(['email' => 'Invalid e-mail address or password.']);
         $this->assertGuest();
+
+        // Identical words are not enough on their own: an attacker can tell the
+        // two answers apart by the clock unless every attempt is padded to the
+        // same floor. The guard asks for that padding on both of these, and the
+        // suite fakes the wait rather than sitting through it (see TestCase).
+        Sleep::assertSlept(fn (CarbonInterval $slept) => $slept->totalMicroseconds >= 190000, 2);
     }
 
     public function test_inactive_account_cannot_sign_in(): void
