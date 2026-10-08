@@ -163,7 +163,8 @@ export const SECTIONS = [
         code: 'insight', label: 'Reports & insight', icon: 'bi-graph-up-arrow', hue: 3,
         groups: [{
             label: 'Reports', icon: 'bi-graph-up-arrow', target: 'insight', items: [
-                { label: 'Report Centre', url: './reports.html', icon: 'bi-grid', target: 'insight' },
+                { label: 'Bengali Settings', url: './settings-localization.html', icon: 'bi-translate', section: 'Configuration', group: 'Settings' },
+    { label: 'Report Centre', url: './reports.html', icon: 'bi-grid', target: 'insight' },
                 { label: 'Sales Reports', url: './reports-family.html', icon: 'bi-cart3' },
                 { label: 'Finance Reports', url: './reports-family.html', icon: 'bi-journal-text' },
                 { label: 'Inventory Reports', url: './reports-family.html', icon: 'bi-boxes' },
@@ -189,6 +190,7 @@ export const SECTIONS = [
                 label: 'Settings', icon: 'bi-sliders', target: 'configure', items: [
                     { label: 'Settings Desk', url: './settings.html', icon: 'bi-sliders', target: 'configure' },
                     { label: 'General Settings', url: './settings.html', icon: 'bi-sliders2' },
+                    { label: 'Bengali Settings', url: './settings-localization.html', icon: 'bi-translate' },
                     { label: 'Security Settings', url: './settings.html', icon: 'bi-shield-lock' },
                     { label: 'Branch Settings', url: './settings-branch.html', icon: 'bi-diagram-3' },
                     { label: 'Company profile', url: '#', icon: 'bi-building' },
@@ -275,6 +277,7 @@ export const PALETTE = [
     { label: 'Workflows', url: '#', icon: 'bi-diagram-3', section: 'Governance', group: 'Business management' },
     { label: 'Users', url: '#', icon: 'bi-person-badge', section: 'Configuration', group: 'Settings' },
     { label: 'Roles & permissions', url: '#', icon: 'bi-shield-lock', section: 'Configuration', group: 'Settings' },
+    { label: 'Bengali Settings', url: './settings-localization.html', icon: 'bi-translate', section: 'Configuration', group: 'Settings' },
     { label: 'Appearance', url: '#', icon: 'bi-palette', section: 'Configuration', group: 'Settings' },
     { label: 'System maintenance', url: './maintenance.html', icon: 'bi-tools', section: 'Configuration', group: 'Settings' },
 ];

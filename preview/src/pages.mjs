@@ -5391,7 +5391,7 @@ ${previewBar('reports-scheduled.html')}
 export function settingsDesk() {
     const groups = [
         { key: 'general', label: 'General Settings', what: 'Company-wide display and formatting defaults.', fields: 5, set: 3, scope: 'per branch', changed: '2026-10-06 09:14', who: 'Instance Owner', permission: 'settings.general' },
-        { key: 'localization', label: 'Bengali / Localization Settings', what: 'Language toggle, Bengali numerals and amount-in-words behaviour.', fields: 4, set: 2, scope: 'per branch', changed: '2026-09-30 17:02', who: 'Instance Owner', permission: 'settings.localization' },
+        { key: 'localization', label: 'Bengali / Localization Settings', what: 'Language toggle, Bengali numerals and amount-in-words behaviour.', fields: 4, set: 2, scope: 'per branch', changed: '2026-09-30 17:02', who: 'Instance Owner', permission: 'settings.localization', href: './settings-localization.html' },
         { key: 'security', label: 'Security Settings', what: 'Password policy, lockout policy and session policy.', fields: 10, set: 10, scope: 'company policy', changed: '2026-10-04 11:20', who: 'Instance Owner', permission: 'settings.security' },
         { key: 'notifications', label: 'Notification Settings', what: 'Channel defaults. External channels stay disabled until a real provider is configured.', fields: 5, set: 2, scope: 'company policy', changed: '2026-09-28 08:41', who: 'Instance Owner', permission: 'settings.notifications' },
         { key: 'workflow', label: 'Workflow & Approval Settings', what: 'Defaults for the generic database-driven approval engine.', fields: 3, set: 3, scope: 'company policy', changed: '2026-10-01 15:08', who: 'Instance Owner', permission: 'settings.workflow' },
@@ -5485,7 +5485,7 @@ ${previewBar('settings.html')}
                                 </td>
                                 <td class="font-monospace erp-td-muted">${g.permission}</td>
                                 <td class="text-end">
-                                    <a class="btn btn-outline-secondary btn-sm" href="./settings.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                                    <a class="btn btn-outline-secondary btn-sm" href="${g.href ?? './settings.html'}">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
                                 </td>
                             </tr>`).join('')}
                         </tbody>
@@ -6017,6 +6017,167 @@ php artisan erp:generate-bank-charges</pre>
                     </section>
                 </div>
             </div>
+
+        </div>
+    </main>
+</div>`;
+}
+
+/**
+ * §15-07 — one settings group, opened: Bengali / Localization.
+ *
+ * The screen exists to show that the four switches are consumed rather than
+ * decorative, so the page carries the group's real layout (tabs, switches,
+ * branch note) *and* the sample strip the application renders from the same
+ * service the invoices print through — lakh/crore grouping, বাংলা numerals
+ * applied after grouping, and the amount in words taken from the figure the
+ * totals were computed from.
+ *
+ * The four field rows carry the ids the catalogue deep-links to
+ * (`#bengali_numerals`, `#amount_words_bn`, `#lakh_crore_format`), so the
+ * sidebar's Bengali leaves land where they say they will.
+ */
+export function settingsLocalization() {
+    const tabs = [
+        'General', 'Bengali / Localization', 'Security', 'Notifications', 'Workflow',
+        'Numbering', 'Audit', 'POS', 'Labels', 'Appearance',
+    ];
+
+    const switches = [
+        {
+            id: 'default_locale',
+            label: 'Default language',
+            control: `<select class="form-select" id="setting_default_locale"><option value="en">English</option><option value="bn" selected>বাংলা</option></select>`,
+            help: 'What the interface and the documents are rendered in for everyone who has not chosen a language of their own.',
+            scope: 'per branch',
+        },
+        {
+            id: 'bengali_numerals',
+            label: 'Show Bengali numerals in print',
+            control: `<div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="setting_bengali_numerals" checked><label class="form-check-label" for="setting_bengali_numerals">০–৯ on documents</label></div>`,
+            help: 'The glyphs change, the figures do not: grouping separators stay in the lakh-wise places they were already in.',
+            scope: 'per branch',
+        },
+        {
+            id: 'amount_words_bn',
+            label: 'Amount in words in Bengali on documents',
+            control: `<div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="setting_amount_words_bn" checked><label class="form-check-label" for="setting_amount_words_bn">print the words line</label></div>`,
+            help: 'Taken from the same number the totals were computed from — never from a formatted string that may already have lost a paisa.',
+            scope: 'per branch',
+        },
+        {
+            id: 'lakh_crore_format',
+            label: 'Use Lakh / Crore grouping (৳1,25,000)',
+            control: `<div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="setting_lakh_crore_format" checked><label class="form-check-label" for="setting_lakh_crore_format">12,34,567 — not 1,234,567</label></div>`,
+            help: 'The subcontinent reads its own grouping. A company that trades the other way can turn it off and still keep the Bengali digits.',
+            scope: 'per branch',
+        },
+    ];
+
+    return `
+${previewBar('settings-localization.html')}
+<div class="erp-shell">
+    ${sidebar('configure')}
+    <main class="erp-main">
+        ${topbar('Bengali / Localization Settings')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-translate" aria-hidden="true"></i> Settings</p>
+                    <h1 class="erp-h1">Bengali / Localization Settings</h1>
+                    <p class="erp-page-sub">Language toggle, Bengali numerals and amount-in-words behaviour.</p>
+                </div>
+            </header>
+
+            <ul class="nav erp-settings-tabs mb-3">
+                ${tabs.map((label) => `<li class="nav-item"><a class="nav-link${label === 'Bengali / Localization' ? ' active' : ''}" href="./settings-localization.html">${label}</a></li>`).join('')}
+            </ul>
+
+            <form method="POST" action="#" onsubmit="return false">
+                <section class="erp-card erp-card-max">
+                    <header class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">Bengali / Localization Settings</h2>
+                            <p class="erp-card-sub">
+                                Scope: <strong>per branch may differ</strong>
+                                · this group needs <span class="font-monospace">settings.localization</span> to read it,
+                                <span class="font-monospace">settings.update</span> to change it.
+                            </p>
+                        </div>
+                        <span class="erp-chip erp-chip-soft">stored in <code>settings</code> table</span>
+                    </header>
+
+                    <div class="row g-3">
+                        ${switches.map((field) => `
+                            <div id="${field.id}" class="col-12">
+                                <label class="form-label" for="setting_${field.id}">${field.label}</label>
+                                ${field.control}
+                                <div class="form-text">${field.help}</div>
+                            </div>`).join('')}
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button class="btn btn-primary" type="submit"><i class="bi bi-check-lg" aria-hidden="true"></i> Save settings</button>
+                        <a class="btn btn-outline-secondary" href="./settings-localization.html">Reset changes</a>
+                    </div>
+                </section>
+            </form>
+
+            <section class="erp-card erp-card-max mt-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">What these switches change</h2>
+                        <p class="erp-card-sub">Rendered by the service the invoices and the POS receipt render through — save, and the documents change with this sample.</p>
+                    </div>
+                    <span class="erp-chip erp-chip-soft">বাংলা</span>
+                </header>
+                <dl class="erp-dl erp-dl-tight">
+                    <dt>Figures</dt>
+                    <dd class="font-monospace">১২,৩৪,৫৬৭.৫০</dd>
+                    <dt>Quantity</dt>
+                    <dd class="font-monospace">১২.৫</dd>
+                    <dt>Amount in words</dt>
+                    <dd>Taka twelve lakh thirty-four thousand five hundred and sixty-seven and fifty paisa only</dd>
+                    <dt>বাংলায়</dt>
+                    <dd>টাকা বারো লাখ চৌত্রিশ হাজার পাঁচশ সাতষট্টি এবং পঞ্চাশ পয়সা মাত্র</dd>
+                </dl>
+            </section>
+
+            <section class="erp-card erp-card-max mt-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Branches that differ</h2>
+                        <p class="erp-card-sub">An outlet may set its own value for this group. The company value stays as it is everywhere else — and a branch can be put back on the company's value at any time.</p>
+                    </div>
+                    <div class="erp-card-actions">
+                        <a class="erp-chip erp-chip-outline" href="./settings-branch.html"><i class="bi bi-diagram-3" aria-hidden="true"></i> Branch settings</a>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="erp-table erp-table-compact">
+                        <thead>
+                            <tr><th>Branch</th><th>Keys set there</th><th>Company value it replaces</th><th>Changed</th><th></th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="erp-cell-strong">Dhanmondi outlet</span><div class="erp-td-muted">DHK2</div></td>
+                                <td class="erp-td-muted font-monospace">bengali_numerals, amount_words_bn</td>
+                                <td class="erp-td-muted">off → printed in বাংলা numerals and words</td>
+                                <td class="erp-td-muted">2026-10-06 09:14</td>
+                                <td class="text-end"><a class="btn btn-outline-secondary btn-sm" href="./settings-branch.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="erp-cell-strong">Head office</span><div class="erp-td-muted">MAIN</div></td>
+                                <td class="erp-td-muted">— follows the company value</td>
+                                <td class="erp-td-muted">12,34,567.50 in western digits</td>
+                                <td class="erp-td-muted">—</td>
+                                <td class="text-end"><a class="btn btn-outline-secondary btn-sm" href="./settings-branch.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
         </div>
     </main>

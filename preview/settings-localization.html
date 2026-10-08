@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#ffffff">
-    <title>Petty cash replenishment · BD ERP — UI redesign preview</title>
+    <title>Bengali settings · BD ERP — UI redesign preview</title>
     <link rel="stylesheet" href="./assets/preview.css">
 </head>
 <body class="erp-body">
@@ -512,15 +512,15 @@
             </p>
             
     <div class="erp-nav-group">
-        <button class="erp-nav-group-btn" type="button"
-                data-bs-toggle="collapse" data-bs-target="#nav-configure-0" aria-expanded="false">
+        <button class="erp-nav-group-btn is-active has-active-trail" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-configure-0" aria-expanded="true">
             <i class="bi bi-sliders erp-nav-icon" aria-hidden="true"></i>
             <span>Settings</span>
             <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
         </button>
-        <div class="collapse" id="nav-configure-0">
+        <div class="collapse show" id="nav-configure-0">
             <div class="erp-nav-sub">
-        <a class="erp-nav-link" href="./settings.html">
+        <a class="erp-nav-link active" href="./settings.html" aria-current="page">
             <span>Settings Desk</span>
         </a>
         <a class="erp-nav-link" href="./settings.html">
@@ -600,7 +600,7 @@
     <div class="erp-topbar-crumbs">
         <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb"></ol></nav>
         <div class="erp-topbar-title">
-            <strong class="d-none d-md-inline">Petty cash replenishment</strong>
+            <strong class="d-none d-md-inline">Bengali / Localization Settings</strong>
             <span class="erp-chip erp-chip-outline d-none d-xl-inline-flex" title="Current branch context">
                 <i class="bi bi-geo-alt" aria-hidden="true"></i>Dhaka HQ
             </span>
@@ -678,247 +678,119 @@
 
             <header class="erp-page-head">
                 <div>
-                    <p class="erp-eyebrow"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Cash &amp; bank · Petty cash · Replenishment</p>
-                    <h1 class="erp-h1">Putting the float back</h1>
-                    <p class="erp-page-sub">A replenishment is a transfer, not an expense: the spending was recorded voucher by voucher, when each was paid, so recording it again here would count every rickshaw twice. This screen puts the float back to the level it is meant to hold — and nothing else.</p>
-                </div>
-                <div class="erp-page-head-actions">
-                    <a class="btn btn-outline-secondary" href="./petty-cash.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> The floats</a>
-                    <a class="btn btn-primary" href="./petty-cash-expenses.html"><i class="bi bi-receipt" aria-hidden="true"></i> Vouchers</a>
+                    <p class="erp-eyebrow"><i class="bi bi-translate" aria-hidden="true"></i> Settings</p>
+                    <h1 class="erp-h1">Bengali / Localization Settings</h1>
+                    <p class="erp-page-sub">Language toggle, Bengali numerals and amount-in-words behaviour.</p>
                 </div>
             </header>
 
-            <div class="erp-kpi-grid mb-3">
-                <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Put back this month</p>
-                    <p class="erp-kpi-value">৳ 12,000.00</p>
-                    <p class="erp-kpi-foot">Transfers into the floats — each one a real move of money</p>
-                </div>
-                <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-cash-stack" aria-hidden="true"></i> In the tins now</p>
-                    <p class="erp-kpi-value">৳ 18,450.00</p>
-                    <p class="erp-kpi-foot">Across 3 open float(s)</p>
-                </div>
-                <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-bullseye" aria-hidden="true"></i> Meant to be there</p>
-                    <p class="erp-kpi-value">৳ 25,000.00</p>
-                    <p class="erp-kpi-foot">The levels the floats are replenished back to</p>
-                </div>
-                <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-exclamation-circle" aria-hidden="true"></i> Short of their level</p>
-                    <p class="erp-kpi-value">৳ 6,550.00</p>
-                    <p class="erp-kpi-foot">Put the whole of this back and every tin is level again</p>
-                </div>
-            </div>
+            <ul class="nav erp-settings-tabs mb-3">
+                <li class="nav-item"><a class="nav-link" href="./settings-localization.html">General</a></li><li class="nav-item"><a class="nav-link active" href="./settings-localization.html">Bengali / Localization</a></li><li class="nav-item"><a class="nav-link" href="./settings-localization.html">Security</a></li><li class="nav-item"><a class="nav-link" href="./settings-localization.html">Notifications</a></li><li class="nav-item"><a class="nav-link" href="./settings-localization.html">Workflow</a></li><li class="nav-item"><a class="nav-link" href="./settings-localization.html">Numbering</a></li><li class="nav-item"><a class="nav-link" href="./settings-localization.html">Audit</a></li><li class="nav-item"><a class="nav-link" href="./settings-localization.html">POS</a></li><li class="nav-item"><a class="nav-link" href="./settings-localization.html">Labels</a></li><li class="nav-item"><a class="nav-link" href="./settings-localization.html">Appearance</a></li>
+            </ul>
 
-            <div class="erp-table-shell" data-erp-table>
-                <div class="erp-card-head px-3 pt-3">
-                    <h2 class="erp-card-title">Where each float stands<span class="erp-chip erp-chip-outline">4 float(s)</span></h2>
-                </div>
-                <div class="erp-table-scroll">
-                    <table class="table erp-table erp-table-stack">
-                        <thead>
-                            <tr>
-                                <th>Float</th>
-                                <th>Custodian</th>
-                                <th class="erp-th-num">Holds</th>
-                                <th class="erp-th-num">Level</th>
-                                <th class="erp-th-num">To put back</th>
-                                <th>State</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                            <tr>
-                                <td>
-                                    <span class="erp-cell-strong">PC-HEAD</span>
-                                    <span class="d-block erp-td-muted">Head office tin</span>
-                                </td>
-                                <td>Rakib Hasan</td>
-                                <td class="erp-td-num">৳ 6,250.00</td>
-                                <td class="erp-td-num">৳ 10,000.00</td>
-                                <td class="erp-td-num"><span class="erp-cell-strong">৳ 3,750.00</span></td>
-                                <td><span class="erp-status erp-status-active">Open</span></td>
-                                <td class="erp-td-actions">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Look at it</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <span class="erp-cell-strong">PC-DEPOT</span>
-                                    <span class="d-block erp-td-muted">Depot tin</span>
-                                </td>
-                                <td>Sumaiya Akter</td>
-                                <td class="erp-td-num">৳ 4,200.00</td>
-                                <td class="erp-td-num">৳ 8,000.00</td>
-                                <td class="erp-td-num"><span class="erp-cell-strong">৳ 3,800.00</span></td>
-                                <td><span class="erp-status erp-status-active">Open</span></td>
-                                <td class="erp-td-actions">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Look at it</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <span class="erp-cell-strong">PC-CNTR</span>
-                                    <span class="d-block erp-td-muted">Counter till</span>
-                                </td>
-                                <td>Jamal Uddin</td>
-                                <td class="erp-td-num">৳ 8,000.00</td>
-                                <td class="erp-td-num">৳ 7,000.00</td>
-                                <td class="erp-td-num"><span class="erp-cell-strong">৳ 0.00</span></td>
-                                <td><span class="erp-status erp-status-active">Open</span></td>
-                                <td class="erp-td-actions">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Look at it</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <span class="erp-cell-strong">PC-OLD</span>
-                                    <span class="d-block erp-td-muted">Old warehouse tin</span>
-                                </td>
-                                <td>Nazmul Islam</td>
-                                <td class="erp-td-num">৳ 0.00</td>
-                                <td class="erp-td-num">৳ 5,000.00</td>
-                                <td class="erp-td-num"><span class="erp-cell-strong">৳ 5,000.00</span></td>
-                                <td><span class="erp-status erp-status-closed">Closed</span></td>
-                                <td class="erp-td-actions">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Look at it</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <form method="POST" action="#" onsubmit="return false">
+                <section class="erp-card erp-card-max">
+                    <header class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">Bengali / Localization Settings</h2>
+                            <p class="erp-card-sub">
+                                Scope: <strong>per branch may differ</strong>
+                                · this group needs <span class="font-monospace">settings.localization</span> to read it,
+                                <span class="font-monospace">settings.update</span> to change it.
+                            </p>
+                        </div>
+                        <span class="erp-chip erp-chip-soft">stored in <code>settings</code> table</span>
+                    </header>
 
-            <section class="erp-card mt-3">
+                    <div class="row g-3">
+                        
+                            <div id="default_locale" class="col-12">
+                                <label class="form-label" for="setting_default_locale">Default language</label>
+                                <select class="form-select" id="setting_default_locale"><option value="en">English</option><option value="bn" selected>বাংলা</option></select>
+                                <div class="form-text">What the interface and the documents are rendered in for everyone who has not chosen a language of their own.</div>
+                            </div>
+                            <div id="bengali_numerals" class="col-12">
+                                <label class="form-label" for="setting_bengali_numerals">Show Bengali numerals in print</label>
+                                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="setting_bengali_numerals" checked><label class="form-check-label" for="setting_bengali_numerals">০–৯ on documents</label></div>
+                                <div class="form-text">The glyphs change, the figures do not: grouping separators stay in the lakh-wise places they were already in.</div>
+                            </div>
+                            <div id="amount_words_bn" class="col-12">
+                                <label class="form-label" for="setting_amount_words_bn">Amount in words in Bengali on documents</label>
+                                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="setting_amount_words_bn" checked><label class="form-check-label" for="setting_amount_words_bn">print the words line</label></div>
+                                <div class="form-text">Taken from the same number the totals were computed from — never from a formatted string that may already have lost a paisa.</div>
+                            </div>
+                            <div id="lakh_crore_format" class="col-12">
+                                <label class="form-label" for="setting_lakh_crore_format">Use Lakh / Crore grouping (৳1,25,000)</label>
+                                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="setting_lakh_crore_format" checked><label class="form-check-label" for="setting_lakh_crore_format">12,34,567 — not 1,234,567</label></div>
+                                <div class="form-text">The subcontinent reads its own grouping. A company that trades the other way can turn it off and still keep the Bengali digits.</div>
+                            </div>
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button class="btn btn-primary" type="submit"><i class="bi bi-check-lg" aria-hidden="true"></i> Save settings</button>
+                        <a class="btn btn-outline-secondary" href="./settings-localization.html">Reset changes</a>
+                    </div>
+                </section>
+            </form>
+
+            <section class="erp-card erp-card-max mt-3">
                 <header class="erp-card-head">
                     <div>
-                        <h2 class="erp-card-title">Put money back into a float</h2>
-                        <p class="erp-card-sub">The money comes out of one of the company's own accounts and goes into the float's — a transfer between two accounts the company holds, which is why it never touches the expense reports.</p>
+                        <h2 class="erp-card-title">What these switches change</h2>
+                        <p class="erp-card-sub">Rendered by the service the invoices and the POS receipt render through — save, and the documents change with this sample.</p>
                     </div>
+                    <span class="erp-chip erp-chip-soft">বাংলা</span>
                 </header>
-                <form onsubmit="return false">
-                    <div class="erp-form-grid">
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pt-fund">Float</label>
-                            <select class="form-select" id="pt-fund">
-                                <option>Head office tin — holds 6,250.00 of 10,000.00</option>
-                                <option>Depot tin — holds 4,200.00 of 8,000.00</option>
-                                <option>Counter till — holds 8,000.00 of 7,000.00</option>
-                            </select>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pt-source">Money comes from</label>
-                            <select class="form-select" id="pt-source">
-                                <option>1120 — Islami Bank, current</option>
-                                <option>1110 — Cash in Hand</option>
-                                <option>1115-PC-HEAD — Head office tin (petty cash) (this is a float's own account)</option>
-                            </select>
-                            <small class="form-text">A tin cannot top itself up: the money has to come from outside the float.</small>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pt-amount">Amount</label>
-                            <div class="erp-input-group">
-                                <span class="input-group-text">৳</span>
-                                <input class="form-control erp-num" type="number" step="0.01" id="pt-amount" placeholder="3,750.00">
-                            </div>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pt-date">Date</label>
-                            <input class="form-control" type="date" id="pt-date" value="2026-10-08">
-                        </div>
-                        <div class="erp-form-field erp-form-field-wide">
-                            <label class="form-label" for="pt-note">Note</label>
-                            <input class="form-control" type="text" id="pt-note" placeholder="October top-up of the head office tin">
-                        </div>
-                    </div>
-                    <button class="btn btn-primary mt-2" type="button"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Put it back</button>
-                </form>
+                <dl class="erp-dl erp-dl-tight">
+                    <dt>Figures</dt>
+                    <dd class="font-monospace">১২,৩৪,৫৬৭.৫০</dd>
+                    <dt>Quantity</dt>
+                    <dd class="font-monospace">১২.৫</dd>
+                    <dt>Amount in words</dt>
+                    <dd>Taka twelve lakh thirty-four thousand five hundred and sixty-seven and fifty paisa only</dd>
+                    <dt>বাংলায়</dt>
+                    <dd>টাকা বারো লাখ চৌত্রিশ হাজার পাঁচশ সাতষট্টি এবং পঞ্চাশ পয়সা মাত্র</dd>
+                </dl>
             </section>
 
-            <div class="erp-table-shell mt-3" data-erp-table>
-                <div class="erp-card-head px-3 pt-3">
-                    <h2 class="erp-card-title">Replenishments — Head office tin<span class="erp-chip erp-chip-outline">3 top-up(s) shown</span></h2>
-                </div>
+            <section class="erp-card erp-card-max mt-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Branches that differ</h2>
+                        <p class="erp-card-sub">An outlet may set its own value for this group. The company value stays as it is everywhere else — and a branch can be put back on the company's value at any time.</p>
+                    </div>
+                    <div class="erp-card-actions">
+                        <a class="erp-chip erp-chip-outline" href="./settings-branch.html"><i class="bi bi-diagram-3" aria-hidden="true"></i> Branch settings</a>
+                    </div>
+                </header>
                 <div class="erp-table-scroll">
-                    <table class="table erp-table erp-table-stack">
+                    <table class="erp-table erp-table-compact">
                         <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Transfer</th>
-                                <th>Float</th>
-                                <th>From</th>
-                                <th class="erp-th-num">Amount</th>
-                                <th>Note</th>
-                                <th>Recorded by</th>
-                            </tr>
+                            <tr><th>Branch</th><th>Keys set there</th><th>Company value it replaces</th><th>Changed</th><th></th></tr>
                         </thead>
                         <tbody>
-                            
                             <tr>
-                                <td>2026-10-06</td>
-                                <td><span class="erp-cell-strong">CT-2026-00041</span></td>
-                                <td>Head office tin</td>
-                                <td>1120 — Islami Bank, current</td>
-                                <td class="erp-td-num">৳ 3,750.00</td>
-                                <td>October top-up of the head office tin</td>
-                                <td>Md. Faruk</td>
+                                <td><span class="erp-cell-strong">Dhanmondi outlet</span><div class="erp-td-muted">DHK2</div></td>
+                                <td class="erp-td-muted font-monospace">bengali_numerals, amount_words_bn</td>
+                                <td class="erp-td-muted">off → printed in বাংলা numerals and words</td>
+                                <td class="erp-td-muted">2026-10-06 09:14</td>
+                                <td class="text-end"><a class="btn btn-outline-secondary btn-sm" href="./settings-branch.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a></td>
                             </tr>
                             <tr>
-                                <td>2026-10-02</td>
-                                <td><span class="erp-cell-strong">CT-2026-00039</span></td>
-                                <td>Depot tin</td>
-                                <td>1110 — Cash in Hand</td>
-                                <td class="erp-td-num">৳ 6,000.00</td>
-                                <td>—</td>
-                                <td>Md. Faruk</td>
-                            </tr>
-                            <tr>
-                                <td>2026-09-30</td>
-                                <td><span class="erp-cell-strong">CT-2026-00036</span></td>
-                                <td>Counter till</td>
-                                <td>1110 — Cash in Hand</td>
-                                <td class="erp-td-num">৳ 2,250.00</td>
-                                <td>Topped up for the weekend</td>
-                                <td>Md. Faruk</td>
+                                <td><span class="erp-cell-strong">Head office</span><div class="erp-td-muted">MAIN</div></td>
+                                <td class="erp-td-muted">— follows the company value</td>
+                                <td class="erp-td-muted">12,34,567.50 in western digits</td>
+                                <td class="erp-td-muted">—</td>
+                                <td class="text-end"><a class="btn btn-outline-secondary btn-sm" href="./settings-branch.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a></td>
                             </tr>
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="7">
-                                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
-                                        <span class="erp-td-muted">A top-up carries a transfer number of its own, so the move can be asked for by number like any other.</span>
-                                        <a class="btn btn-outline-secondary btn-sm" href="./cash-bank.html">The transfer desk</a>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
-            </div>
+            </section>
 
-            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
-                <p class="erp-field-label">More in this module</p>
-                <div class="d-flex flex-wrap gap-2">
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Overview</a>
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash-requests.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Requests</a>
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash-expenses.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Expenses</a>
-                    <a class="erp-chip erp-chip-outline" href="./cash-bank.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Cash Transfer</a>
-                </div>
-            </nav>
-        </main>
-
-<footer class="erp-footer">
-    <span>BD ERP · Rafshan Trading Ltd.</span>
-    <span class="erp-footer-meta">
-        <span>07 Oct 2026, 06:20 PM · Asia/Dhaka</span>
-        <span class="d-none d-md-inline">Press <kbd>⌘</kbd><kbd>K</kbd> to jump anywhere</span>
-    </span>
-</footer>
-    </div>
+        </div>
+    </main>
 </div>
-<script>window.erpNavIndex = [];</script>
 
 <div class="erp-backdrop" data-erp-backdrop hidden></div>
 
