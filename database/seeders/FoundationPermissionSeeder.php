@@ -175,6 +175,17 @@ class FoundationPermissionSeeder extends Seeder
             ['accounting', 'journals', 'reverse', 'accounting.journals.reverse', 'Reverse journal entries'],
             ['accounting', 'journals', 'approve', 'accounting.journals.approve', 'Approve journal entries'],
             ['accounting', 'reports', 'view', 'accounting.reports.view', 'View financial reports'],
+            // ---- Cash & bank (§08): the desk where money the ledger has to see is
+            // entered. Reading a position and moving money are different powers on
+            // purpose — a cashier who may take money in does not thereby get to
+            // pay it out, and neither of them may open a bank account.
+            ['cash', 'position', 'view', 'cash.view', 'See where the money is: cash, bank and wallet positions'],
+            ['cash', 'receipts', 'create', 'cash.receipts.create', 'Record money received'],
+            ['cash', 'payments', 'create', 'cash.payments.create', 'Record money paid out'],
+            ['cash', 'transfers', 'create', 'cash.transfers', "Move money between the company's own accounts"],
+            ['bank', 'accounts', 'manage', 'bank.accounts', 'Declare, rename and close cash and bank accounts'],
+            ['bank', 'books', 'view', 'bank.view', "Read an account's book, the way a statement is read"],
+            ['wallets', 'accounts', 'manage', 'wallets.accounts', 'Open and configure mobile wallets'],
             ['accounting', 'opening', 'create', 'accounting.opening.create', 'Post opening balances'],
             ['accounting', 'receipts', 'view', 'accounting.receipts.view', 'View receipts'],
             ['accounting', 'receipts', 'create', 'accounting.receipts.create', 'Record receipts'],

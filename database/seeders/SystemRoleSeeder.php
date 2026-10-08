@@ -90,6 +90,11 @@ class SystemRoleSeeder extends Seeder
                 // §04-13/52/53: printing a shelf label is part of maintaining the
                 // catalogue the labels point at, and the sheet desk is the same job.
                 'inventory.products.print', 'inventory.labels',
+                // §08: a manager sees where the money is and may record what
+                // moved through it — receipts, payments, transfers — but opening
+                // or closing a bank account is a decision above a department.
+                'cash.view', 'cash.receipts.create', 'cash.payments.create',
+                'cash.transfers', 'bank.view',
                 // §04-28: stock leaving the building on a transfer is the same
                 // kind of decision as stock being written off, so it is the same
                 // desk that signs it off — and never the person who raised it.

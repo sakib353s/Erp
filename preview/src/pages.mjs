@@ -1499,3 +1499,183 @@ ${footer()}
 </div>
 <script>window.erpNavIndex = [];</script>`;
 }
+
+/* ------------------------------------------------ 12. cash & bank: the money desk */
+export function cashBank() {
+    const positions = [
+        ['1110', 'Cash in Hand', 'Cash · the drawer in the office', '318,450.00', '412 lines', '08 Oct 2026', true],
+        ['1121', 'Islami Bank — current account', 'Bank · Islami Bank Bangladesh', '1,246,800.50', '188 lines', '08 Oct 2026', true],
+        ['1122', 'City Bank — collection account', 'Bank · City Bank', '96,120.00', '64 lines', '07 Oct 2026', false],
+        ['1123', 'bKash merchant float', 'Mobile wallet · bKash', '42,780.00', '310 lines', '08 Oct 2026', false],
+        ['1124', 'Nagad float — counter 2', 'Mobile wallet · Nagad', '8,940.00', '96 lines', '06 Oct 2026', false],
+    ];
+
+    const rows = positions.map(([code, name, kind, balance, lines, last]) => `
+                    <tr>
+                        <td data-label="Account"><span class="erp-cell-strong">${name}</span><span class="d-block erp-td-muted" style="font-family:var(--font-mono,monospace)">${code}</span></td>
+                        <td data-label="Kind">${kind}</td>
+                        <td data-label="Balance" class="erp-td-num"><span class="erp-cell-strong">৳ ${balance}</span></td>
+                        <td data-label="Last movement" class="erp-td-muted">${last}<span class="d-block erp-td-muted">${lines} in the ledger</span></td>
+                        <td data-label="" class="erp-td-actions"><button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-journal-text" aria-hidden="true"></i> Book</button></td>
+                    </tr>`).join('');
+
+    const day = [
+        ['08 Oct', '86,400.00', '41,250.00'], ['07 Oct', '124,900.00', '96,300.00'],
+        ['06 Oct', '18,240.00', '22,480.00'], ['05 Oct', '240,000.00', '188,600.00'],
+    ].map(([d, moneyIn, moneyOut]) => {
+        const net = Number(moneyIn.replace(/,/g, '')) - Number(moneyOut.replace(/,/g, ''));
+        return `
+                            <tr>
+                                <td data-label="Day" class="erp-td-muted">${d}</td>
+                                <td data-label="In" class="erp-td-num">${moneyIn}</td>
+                                <td data-label="Out" class="erp-td-num">${moneyOut}</td>
+                                <td data-label="Net" class="erp-td-num"><span class="erp-cell-strong${net < 0 ? ' erp-money-out' : ''}">${net.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span></td>
+                            </tr>`;
+    }).join('');
+
+    const book = [
+        ['01 Oct 2026', 'CT-2026-00031', 'Opening balance', '', '', '286,700.00'],
+        ['02 Oct 2026', 'MR-2026-00418', 'Deposit — Rahmania Store, order 4412', '42,000.00', '', '328,700.00'],
+        ['03 Oct 2026', 'EX-2026-00214', 'October rent', '', '96,000.00', '232,700.00'],
+        ['04 Oct 2026', 'CT-2026-00032', 'Transfer to City Bank collection', '', '50,000.00', '182,700.00'],
+        ['06 Oct 2026', 'MR-2026-00419', 'Courier COD settlement', '135,750.00', '', '318,450.00'],
+    ].map(([d, entry, what, moneyIn, moneyOut, balance]) => `
+                            <tr>
+                                <td data-label="Date" class="erp-td-muted">${d}</td>
+                                <td data-label="Entry" class="font-monospace">${entry}</td>
+                                <td data-label="What it was">${what}</td>
+                                <td data-label="In" class="erp-td-num">${moneyIn ? `<span class="erp-money-in">${moneyIn}</span>` : '<span class="erp-td-muted">—</span>'}</td>
+                                <td data-label="Out" class="erp-td-num">${moneyOut ? `<span class="erp-money-out">${moneyOut}</span>` : '<span class="erp-td-muted">—</span>'}</td>
+                                <td data-label="Balance" class="erp-td-num"><span class="erp-cell-strong">${balance}</span></td>
+                            </tr>`).join('');
+
+    return `
+${previewBar('cash-bank.html')}
+<div class="erp-shell" data-rail="expanded">
+${sidebar('cash_bank')}
+    <div class="erp-main">
+${topbar({ title: 'Cash & bank', trail: [{ label: 'Cash & Bank' }, { label: 'Cash Management' }, { label: 'Cash in Hand' }] })}
+        <main class="erp-content" id="erpContent">
+            <header class="erp-page-head">
+                <div class="erp-page-head-main">
+                    <p class="erp-eyebrow">Cash &amp; Bank &middot; Cash Management</p>
+                    <h1 class="erp-h1">Where the money is</h1>
+                    <p class="erp-page-sub">Every figure on this page is the sum of posted journal lines on the account — a drawer is not a spreadsheet of its own, it is an account in the books that money can sit in. Count the till, call the bank, and if the two disagree the disagreement is a movement nobody has entered here yet.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./labels.html"><i class="bi bi-box-arrow-in-down" aria-hidden="true"></i> Record a receipt</a>
+                    <a class="btn btn-outline-secondary" href="./labels.html"><i class="bi bi-box-arrow-up" aria-hidden="true"></i> Record a payment</a>
+                    <a class="btn btn-outline-secondary" href="./labels.html"><i class="bi bi-arrow-left-right" aria-hidden="true"></i> Move money</a>
+                    <a class="btn btn-outline-secondary" href="./labels.html"><i class="bi bi-bank" aria-hidden="true"></i> Money accounts</a>
+                    <button class="erp-icon-btn" type="button" title="Pin this page" aria-label="Pin this page"><i class="bi bi-star" aria-hidden="true"></i></button>
+                </div>
+            </header>
+
+            <div class="erp-note erp-note-info mb-3">
+                <i class="bi bi-check2-circle" aria-hidden="true"></i>
+                <div>Transfer CT-2026-00033 posted — 50,000.00 from Cash in Hand to City Bank — collection account.</div>
+            </div>
+
+            <section class="erp-kpi-grid mb-3">
+                <div class="erp-kpi"><span class="erp-kpi-label">Cash in hand</span><span class="erp-kpi-value">৳ 318,450.00</span><span class="erp-kpi-hint">Tills and cash drawers, from the books</span></div>
+                <div class="erp-kpi"><span class="erp-kpi-label">In the bank</span><span class="erp-kpi-value">৳ 1,342,920.50</span><span class="erp-kpi-hint">Every bank account added up</span></div>
+                <div class="erp-kpi"><span class="erp-kpi-label">Mobile wallets</span><span class="erp-kpi-value">৳ 51,720.00</span><span class="erp-kpi-hint">bKash, Nagad, Rocket and Upay balances</span></div>
+                <div class="erp-kpi"><span class="erp-kpi-label">Money in the company</span><span class="erp-kpi-value">৳ 1,713,090.50</span><span class="erp-kpi-hint">The three totals above, added up</span></div>
+            </section>
+
+            <form class="erp-filterbar" method="GET" action="./cash-bank.html">
+                <div class="erp-filter">
+                    <label class="form-label" for="branch">Branch</label>
+                    <select class="form-select" id="branch" name="branch">
+                        <option>Every branch</option>
+                        <option>Dhaka HQ (head office)</option>
+                        <option>Chattogram depot</option>
+                    </select>
+                </div>
+                <div class="erp-filter-note">
+                    <i class="bi bi-info-circle" aria-hidden="true"></i>
+                    A branch sees the accounts its movements were posted in. Money entered at head office and spent at a counter is one position until somebody says otherwise.
+                </div>
+            </form>
+
+            <div class="erp-table-shell" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">Money accounts <span class="erp-chip erp-chip-outline">5 account(s)</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="erp-table">
+                        <thead>
+                            <tr><th>Account</th><th>Kind</th><th class="erp-th-num">Balance</th><th>Last movement</th><th></th></tr>
+                        </thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="erp-split mt-3">
+                <section class="erp-card">
+                    <header class="erp-card-head">
+                        <h2 class="erp-card-title">Money in and out, last 14 days</h2>
+                        <div class="erp-card-actions"><span class="erp-chip erp-chip-outline">taken from the movement documents</span></div>
+                    </header>
+                    <div class="erp-table-scroll">
+                        <table class="erp-table erp-table-compact">
+                            <thead><tr><th>Day</th><th class="erp-th-num">In</th><th class="erp-th-num">Out</th><th class="erp-th-num">Net</th></tr></thead>
+                            <tbody>${day}</tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <aside>
+                    <div class="erp-card">
+                        <header class="erp-card-head"><h2 class="erp-card-title">Latest movements</h2></header>
+                        <div class="erp-dl erp-dl-tight erp-dl-striped">
+                            <dt>MR-2026-00419</dt>
+                            <dd><span class="erp-money-in">+ 135,750.00</span> into Cash in Hand<span class="d-block erp-td-muted">06 Oct 2026 · Courier COD settlement</span></dd>
+                            <dt>EX-2026-00215</dt>
+                            <dd><span class="erp-money-out">− 12,480.00</span> from bKash merchant float<span class="d-block erp-td-muted">06 Oct 2026 · Packaging supplier, no bill</span></dd>
+                            <dt>CT-2026-00032</dt>
+                            <dd>50,000.00 moved<span class="d-block erp-td-muted">04 Oct 2026 · Cash in Hand → City Bank — collection account</span></dd>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+
+            <section class="erp-card mt-3">
+                <header class="erp-card-head">
+                    <h2 class="erp-card-title">Cash in Hand — the book</h2>
+                    <div class="erp-card-actions">
+                        <span class="erp-chip erp-chip-outline">opening brought forward, running balance per row</span>
+                        <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-download" aria-hidden="true"></i> CSV</button>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="erp-table erp-table-compact">
+                        <thead><tr><th>Date</th><th>Entry</th><th>What it was</th><th class="erp-th-num">In</th><th class="erp-th-num">Out</th><th class="erp-th-num">Balance</th></tr></thead>
+                        <tbody>${book}</tbody>
+                    </table>
+                </div>
+                <div class="erp-note erp-note-info m-3">
+                    <i class="bi bi-bank" aria-hidden="true"></i>
+                    <div>
+                        <strong class="d-block mb-1">Matching this against a statement</strong>
+                        Tick the lines the bank also shows. What is left on this page is money recorded here that has not cleared yet. What is on the statement and not here is a movement nobody has entered — that is the number to hunt, because the books are only as good as the movements they were told about.
+                    </div>
+                </div>
+            </section>
+
+            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
+                <p class="erp-field-label">More in this module</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="erp-chip erp-chip-outline" href="./cash-bank.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Cash Receipts</a>
+                    <a class="erp-chip erp-chip-outline" href="./cash-bank.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Cash Payments</a>
+                    <a class="erp-chip erp-chip-outline" href="./cash-bank.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Cash Transfer</a>
+                    <a class="erp-chip erp-chip-outline" href="./cash-bank.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>All Bank Accounts</a>
+                </div>
+            </nav>
+        </main>
+${footer()}
+    </div>
+</div>
+<script>window.erpNavIndex = [];</script>`;
+}

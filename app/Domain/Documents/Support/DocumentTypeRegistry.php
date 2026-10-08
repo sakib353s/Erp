@@ -60,6 +60,10 @@ final class DocumentTypeRegistry
         ['code' => 'expense_voucher', 'type_group' => 'accounting', 'name' => 'Expense Voucher', 'printed_title' => 'EXPENSE VOUCHER'],
         ['code' => 'payment_voucher', 'type_group' => 'accounting', 'name' => 'Payment Voucher', 'printed_title' => 'PAYMENT VOUCHER'],
         ['code' => 'receipt_voucher', 'type_group' => 'accounting', 'name' => 'Receipt Voucher', 'printed_title' => 'RECEIPT VOUCHER'],
+        // §08-04: a transfer between two of the company's own accounts is asked
+        // for by its number — "show me the 40,000 that moved on the 3rd" — so it
+        // is a numbered document, not two loose journal lines.
+        ['code' => 'cash_transfer', 'type_group' => 'accounting', 'name' => 'Cash Transfer', 'printed_title' => 'CASH TRANSFER'],
 
         // ---- HR
         ['code' => 'payroll', 'type_group' => 'hr', 'name' => 'Payroll Sheet', 'printed_title' => 'PAYROLL', 'tax_applicable' => true],
@@ -84,6 +88,7 @@ final class DocumentTypeRegistry
         'purchase_order' => 'PO',
         'journal_voucher' => 'JV',
         'expense_voucher' => 'EX',
+        'cash_transfer' => 'CT',
         'stock_adjustment' => 'ADJ',
         'stock_transfer' => 'TRF',
         'stock_damage_entry' => 'DL',

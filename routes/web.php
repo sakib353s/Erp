@@ -7,6 +7,7 @@ use App\Http\Controllers\AuditController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BulkPriceUpdateController;
+use App\Http\Controllers\CashBankController;
 use App\Http\Controllers\CodController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CompanyController;
@@ -835,6 +836,54 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::get('/app/accounting/ledger/{account}', [JournalController::class, 'ledger'])
         ->middleware('permission:accounting.journals.view')
         ->name('accounting.ledger');
+
+    /* ---- Cash & bank (§08-01 … §08-07, §08-11) ----
+     *
+     * Money the ledger has to see, entered where it can be seen: which account it
+     * moved through, which account it is against, and — because a bank statement
+     * arrives days later and a drawer is counted at night — who told the system
+     * and when. Reading a book is `bank.view`; each kind of movement has its own
+     * key, so a cashier who may take money in does not thereby get to pay it out.
+     */
+    Route::get('/app/cash-bank', [CashBankController::class, 'index'])
+        ->middleware('permission:cash.view')
+        ->name('cash-bank.index');
+    Route::get('/app/cash-bank/accounts', [CashBankController::class, 'accounts'])
+        ->middleware('permission:bank.accounts')
+        ->name('cash-bank.accounts');
+    Route::post('/app/cash-bank/accounts', [CashBankController::class, 'storeAccount'])
+        ->middleware('permission:bank.accounts')
+        ->name('cash-bank.accounts.store');
+    Route::get('/app/cash-bank/accounts/{account}/edit', [CashBankController::class, 'editAccount'])
+        ->middleware('permission:bank.accounts')
+        ->name('cash-bank.accounts.edit');
+    Route::put('/app/cash-bank/accounts/{account}', [CashBankController::class, 'updateAccount'])
+        ->middleware('permission:bank.accounts')
+        ->name('cash-bank.accounts.update');
+    Route::post('/app/cash-bank/accounts/{account}/close', [CashBankController::class, 'closeAccount'])
+        ->middleware('permission:bank.accounts')
+        ->name('cash-bank.accounts.close');
+    Route::get('/app/cash-bank/books/{account}', [CashBankController::class, 'book'])
+        ->middleware('permission:bank.view')
+        ->name('cash-bank.book');
+    Route::get('/app/cash-bank/receipts', [CashBankController::class, 'receipts'])
+        ->middleware('permission:cash.view')
+        ->name('cash-bank.receipts');
+    Route::post('/app/cash-bank/receipts', [CashBankController::class, 'storeReceipt'])
+        ->middleware('permission:cash.receipts.create')
+        ->name('cash-bank.receipts.store');
+    Route::get('/app/cash-bank/payments', [CashBankController::class, 'payments'])
+        ->middleware('permission:cash.view')
+        ->name('cash-bank.payments');
+    Route::post('/app/cash-bank/payments', [CashBankController::class, 'storePayment'])
+        ->middleware('permission:cash.payments.create')
+        ->name('cash-bank.payments.store');
+    Route::get('/app/cash-bank/transfer', [CashBankController::class, 'transfer'])
+        ->middleware('permission:cash.view')
+        ->name('cash-bank.transfer');
+    Route::post('/app/cash-bank/transfer', [CashBankController::class, 'storeTransfer'])
+        ->middleware('permission:cash.transfers')
+        ->name('cash-bank.transfer.store');
 
     Route::get('/app/accounting/opening-trial-balance', [FinancialReportController::class, 'openingTrialBalance'])
         ->middleware('permission:accounting.reports.view')

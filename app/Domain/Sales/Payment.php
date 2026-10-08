@@ -3,6 +3,7 @@
 namespace App\Domain\Sales;
 
 use App\Domain\Accounting\Account;
+use App\Domain\Accounting\JournalEntry;
 use App\Domain\Accounting\PaymentAllocation;
 use App\Domain\Foundation\Company;
 use App\Domain\Foundation\Concerns\Auditable;
@@ -57,5 +58,11 @@ class Payment extends Model
     public function allocations(): HasMany
     {
         return $this->hasMany(PaymentAllocation::class);
+    }
+
+    /** The entry that moved this money — the cash book and the ledger are one story. */
+    public function journalEntry(): BelongsTo
+    {
+        return $this->belongsTo(JournalEntry::class);
     }
 }

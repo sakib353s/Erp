@@ -97,6 +97,31 @@ export const SECTIONS = [
         groups: [{ label: 'Employee', icon: 'bi-person-badge', url: '#', items: [] }],
     },
     {
+        code: 'cash', label: 'Cash & bank', icon: 'bi-bank', hue: 2,
+        groups: [
+            {
+                label: 'Cash Management', icon: 'bi-cash-stack', items: [
+                    { label: 'Cash in Hand', url: './cash-bank.html', icon: 'bi-wallet2', target: 'cash' },
+                    { label: 'Cash Receipts', url: './cash-bank.html', icon: 'bi-box-arrow-in-down' },
+                    { label: 'Cash Payments', url: './cash-bank.html', icon: 'bi-box-arrow-up' },
+                    { label: 'Cash Transfer', url: './cash-bank.html', icon: 'bi-arrow-left-right' },
+                ],
+            },
+            {
+                label: 'Bank Accounts', icon: 'bi-bank', items: [
+                    { label: 'All Bank Accounts', url: './cash-bank.html', icon: 'bi-bank' },
+                    { label: 'Bank Transactions', url: './cash-bank.html', icon: 'bi-journal-text' },
+                ],
+            },
+            {
+                label: 'Mobile Banking', icon: 'bi-phone', items: [
+                    { label: 'bKash Account', url: './cash-bank.html', icon: 'bi-phone' },
+                    { label: 'Nagad Account', url: './cash-bank.html', icon: 'bi-phone' },
+                ],
+            },
+        ],
+    },
+    {
         code: 'insight', label: 'Reports & insight', icon: 'bi-graph-up-arrow', hue: 3,
         groups: [{
             label: 'Reports', icon: 'bi-graph-up-arrow', items: [
@@ -165,6 +190,11 @@ export const PALETTE = [
     { label: 'Stock overview', url: '#', icon: 'bi-clipboard-check', section: 'Inventory & warehouse', group: 'Inventory' },
     { label: 'Stock movement ledger', url: '#', icon: 'bi-list-columns', section: 'Inventory & warehouse', group: 'Inventory' },
     { label: 'Packaging types', url: './packaging.html', icon: 'bi-box-seam', section: 'Inventory & warehouse', group: 'Packaging' },
+    { label: 'Cash in Hand', url: './cash-bank.html', icon: 'bi-wallet2', section: 'Cash & bank', group: 'Cash Management' },
+    { label: 'Cash Receipts', url: './cash-bank.html', icon: 'bi-box-arrow-in-down', section: 'Cash & bank', group: 'Cash Management' },
+    { label: 'Cash Payments', url: './cash-bank.html', icon: 'bi-box-arrow-up', section: 'Cash & bank', group: 'Cash Management' },
+    { label: 'Cash Transfer', url: './cash-bank.html', icon: 'bi-arrow-left-right', section: 'Cash & bank', group: 'Cash Management' },
+    { label: 'All Bank Accounts', url: './cash-bank.html', icon: 'bi-bank', section: 'Cash & bank', group: 'Bank Accounts' },
     { label: 'Print labels', url: './labels.html', icon: 'bi-printer', section: 'Inventory & warehouse', group: 'Barcode & QR' },
     { label: 'Generate barcode', url: './labels.html', icon: 'bi-upc-scan', section: 'Inventory & warehouse', group: 'Barcode & QR' },
     { label: 'Generate QR code', url: './labels.html', icon: 'bi-qr-code', section: 'Inventory & warehouse', group: 'Barcode & QR' },
@@ -470,6 +500,7 @@ export function previewBar(current) {
         ['pos.html', 'POS terminal'],
         ['packaging.html', 'Packaging'],
         ['labels.html', 'Labels'],
+        ['cash-bank.html', 'Cash & bank'],
         ['login.html', 'Sign in'],
     ];
 

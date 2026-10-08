@@ -23,8 +23,9 @@ class Account extends Model
     protected $fillable = [
         'company_id', 'account_group_id', 'parent_id', 'code', 'name',
         'type', 'sub_type', 'is_group', 'is_system', 'is_active',
-        'is_control_account', 'is_cash', 'is_bank', 'currency',
-        'description', 'sort',
+        'is_control_account', 'is_cash', 'is_bank', 'instrument',
+        'bank_name', 'account_number', 'wallet_provider',
+        'currency', 'description', 'sort',
     ];
 
     protected $casts = [
@@ -36,6 +37,29 @@ class Account extends Model
         'is_bank' => 'boolean',
         'sort' => 'integer',
     ];
+
+    /**
+     * Which instrument the money sitting in this account is held in — the
+     * vocabulary CashBank owns (cash|bank|wallet). Kept on the row rather than
+     * derived on read so a query can filter on it, but never left to disagree
+     * with the is_cash / is_bank flags the chart of accounts has always carried:
+     * a flagged account filled in here is the same account the money desk means,
+     * whether it was seeded, imported or typed by hand. Only a blank is filled —
+     * an instrument a screen set explicitly (a wallet, or a bank account on a
+     * till's code) is a decision, not a default.
+     */
+    protected static function booted(): void
+    {
+        static::saving(function (Account $account): void {
+            if (filled($account->instrument) || $account->is_group) {
+                return;
+            }
+
+            $account->instrument = $account->is_cash
+                ? 'cash'
+                : ($account->is_bank ? 'bank' : null);
+        });
+    }
 
     public function company(): BelongsTo
     {

@@ -240,6 +240,27 @@ class CatalogImporter
         'settings > system maintenance > rebuild search index' => ['/app/maintenance', 'maintenance.index'],
 
         // Phase D accounting (09-03…09-10, 09-32)
+        /* §08 — cash & bank. The catalogue's leaves are the four things the desk
+         * actually does (read a position, take money in, pay money out, move it
+         * between accounts) plus the registry those accounts live in. The
+         * reconciliation, statement-import and petty-cash leaves stay PLANNED:
+         * a link to a screen that does not exist is worse than no link, and the
+         * menu builder refuses to render one.
+         */
+        'cash & bank > cash management > cash in hand' => ['/app/cash-bank', 'cash.view'],
+        'cash & bank > cash management > cash receipts' => ['/app/cash-bank/receipts', 'cash.view'],
+        'cash & bank > cash management > cash payments' => ['/app/cash-bank/payments', 'cash.view'],
+        'cash & bank > cash management > cash transfer' => ['/app/cash-bank/transfer', 'cash.view'],
+        'cash & bank > bank accounts > all bank accounts' => ['/app/cash-bank/accounts', 'bank.accounts'],
+        'cash & bank > bank accounts > add bank account' => ['/app/cash-bank/accounts', 'bank.accounts'],
+        'cash & bank > bank accounts > bank transactions' => ['/app/cash-bank', 'cash.view'],
+        // A wallet is an account money sits in, so the leaves that name one point
+        // at the registry that opens it — four providers, one screen, because the
+        // only thing that differs between them is a name in a list.
+        'cash & bank > mobile banking > bkash account' => ['/app/cash-bank/accounts', 'wallets.accounts'],
+        'cash & bank > mobile banking > nagad account' => ['/app/cash-bank/accounts', 'wallets.accounts'],
+        'cash & bank > mobile banking > rocket account' => ['/app/cash-bank/accounts', 'wallets.accounts'],
+        'cash & bank > mobile banking > upay account' => ['/app/cash-bank/accounts', 'wallets.accounts'],
         'accounting > chart of accounts > coa tree' => ['/app/accounting/coa', 'accounting.coa.view'],
         'accounting > chart of accounts > account groups' => ['/app/accounting/account-groups', 'accounting.coa.view'],
         'accounting > chart of accounts > add account' => ['/app/accounting/accounts/create', 'accounting.coa.manage'],
