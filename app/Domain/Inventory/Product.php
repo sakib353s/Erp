@@ -7,6 +7,7 @@ use App\Domain\Foundation\Concerns\Auditable;
 use App\Domain\Masters\Brand;
 use App\Domain\Masters\ProductCategory;
 use App\Domain\Masters\Unit;
+use App\Domain\Sales\ProductWarranty;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -87,6 +88,18 @@ class Product extends Model
     public function reorderPolicy(): HasOne
     {
         return $this->hasOne(ReorderPolicy::class);
+    }
+
+    /**
+     * §16-16 — the warranty promised about this product, if any.
+     *
+     * One policy per product, and a product with none is a product nobody
+     * promised anything about: the relation is nullable on purpose, and the
+     * warranty desk says "no policy" rather than inventing a default.
+     */
+    public function warrantyPolicy(): HasOne
+    {
+        return $this->hasOne(ProductWarranty::class);
     }
 
     public function scopeActive(Builder $query): Builder

@@ -88,6 +88,7 @@ use App\Http\Controllers\RiderController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RouteOptimizerController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\WarrantyController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SetupController;
@@ -2076,6 +2077,31 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::post('/app/sales/returns/{salesReturn}/refund', [SalesController::class, 'refundReturn'])
         ->middleware('permission:returns.refunds.create')
         ->name('sales.returns.refund');
+
+    /* ---- §16-16/§16-17/§16-18 — the warranty desk ----
+     *
+     * Three lenses over one register. Every span the engine creates carries the
+     * dates it was created with, so these screens never recompute cover: they
+     * read it and show the clock beside it.
+     *
+     * Literal segments are declared before `{warranty}` on purpose: `/policies`
+     * and `/claims` are pages, and a warranty code is never a page name.
+     */
+    Route::middleware('permission:sales.warranties.view')->group(function () {
+        Route::get('/app/sales/warranties', [WarrantyController::class, 'index'])->name('sales.warranties.index');
+        Route::get('/app/sales/warranties/policies', [WarrantyController::class, 'policies'])->name('sales.warranties.policies');
+        Route::get('/app/sales/warranties/claims', [WarrantyController::class, 'claims'])->name('sales.warranties.claims');
+        Route::get('/app/sales/warranties/{warranty}', [WarrantyController::class, 'show'])->name('sales.warranties.show');
+    });
+
+    Route::middleware('permission:sales.warranties.manage')->group(function () {
+        Route::get('/app/sales/warranties/create', [WarrantyController::class, 'create'])->name('sales.warranties.create');
+        Route::post('/app/sales/warranties', [WarrantyController::class, 'store'])->name('sales.warranties.store');
+        Route::post('/app/sales/warranties/policies', [WarrantyController::class, 'storePolicy'])->name('sales.warranties.policies.store');
+        Route::post('/app/sales/warranties/{warranty}/claims', [WarrantyController::class, 'storeClaim'])->name('sales.warranties.claims.store');
+        Route::post('/app/sales/warranties/{warranty}/void', [WarrantyController::class, 'void'])->name('sales.warranties.void');
+        Route::post('/app/sales/warranties/claims/{claim}/decide', [WarrantyController::class, 'decideClaim'])->name('sales.warranties.claims.decide');
+    });
 
     /* ---- POS (Phase G — 02-30…02-42) ---- */
     Route::get('/pos', [PosController::class, 'terminal'])

@@ -6,7 +6,9 @@ use App\Domain\Audit\Services\AuditRecorder;
 use App\Domain\Foundation\Services\TenantContext;
 use App\Domain\Sales\DeliveryChallan;
 use App\Domain\Sales\SalesOrder;
+use App\Domain\Sales\Warranty;
 use App\Domain\Sales\Services\OrderStateMachine;
+use App\Domain\Sales\Services\WarrantyService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
@@ -16,6 +18,13 @@ use RuntimeException;
  * dispatched → delivered; advances order to delivered via the
  * validated state machine. DOC lifecycle only — stock/GL already
  * posted at InvoiceIssue (or remain pending until then).
+ *
+ * §16-16 — this is also the moment a warranty begins, because this is the
+ * moment the goods reached the customer. Activation happens inside the same
+ * transaction as the state change: a warranty for goods that were never
+ * delivered, or a delivery whose cover was lost because the request died
+ * halfway, are both wrong, and the one place that can prevent both is here.
+ * A product with no policy is skipped without comment — see WarrantyService.
  */
 class MarkDeliveryChallanDelivered
 {
@@ -23,6 +32,7 @@ class MarkDeliveryChallanDelivered
         protected TenantContext $context,
         protected AuditRecorder $audit,
         protected OrderStateMachine $stateMachine,
+        protected WarrantyService $warranties,
     ) {}
 
     public function handle(DeliveryChallan $challan, Request $request): DeliveryChallan
@@ -44,6 +54,11 @@ class MarkDeliveryChallanDelivered
             $fresh->delivered_at = now();
             $fresh->save();
 
+            // §16-16: the cover on these goods starts now, on the delivery
+            // date — not on the invoice date and not on the day somebody
+            // remembered to raise it.
+            $activated = $this->warranties->activateForChallan($fresh, $request->user());
+
             if ($fresh->sales_order_id !== null) {
                 $order = SalesOrder::query()->whereKey($fresh->sales_order_id)->lockForUpdate()->first();
                 if ($order !== null) {
@@ -60,6 +75,7 @@ class MarkDeliveryChallanDelivered
                     'challan_no' => $fresh->challan_no,
                     'status' => 'delivered',
                     'delivered_at' => $fresh->delivered_at?->toIso8601String(),
+                    'warranties_activated' => array_map(fn (Warranty $w) => $w->code, $activated),
                 ],
             ]);
 

@@ -5,6 +5,7 @@ namespace App\Domain\Sales\Services;
 use App\Domain\Audit\Services\AuditRecorder;
 use App\Domain\Foundation\User;
 use App\Domain\Sales\Invoice;
+use App\Domain\Sales\Warranty;
 use App\Domain\Sales\PublicAccessLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -235,14 +236,47 @@ class InvoiceVerificationService
 
             'raised_by' => $this->raisedBy($invoice),
 
-            // Warranty terms are not registered in this application (16-16), so
-            // the page names the flag it does have and says what it does not.
-            'warranty_note' => $invoice->lines->contains(fn ($line) => (bool) $line->warranty_flag)
-                ? 'Warranty was noted on a line of this invoice. Warranty periods are not registered in this system, so no end date is shown.'
-                : null,
+            // §16-16 changed what this page can honestly say. Cover is now a row
+            // with dates on it, so where goods were covered the page names the
+            // date the cover runs to — it is the customer's own document and the
+            // date is the customer's own promise. Where a line says warranty and
+            // no cover was registered against it, the page says exactly that
+            // instead of inventing a period or denying the note.
+            'warranty_note' => $this->warrantyNote($invoice),
 
             'privacy_note' => 'This page shows the document itself: its identity, its lines and its totals. Internal notes, the accounting entry, the audit trail and every other document in the company are not published here.',
         ];
+    }
+
+    /**
+     * §16-16 — what the verified page may say about cover.
+     *
+     * Three honest answers, in order of how much is actually known:
+     *  · cover exists and is still running → the date it runs to;
+     *  · cover exists but has ended → the date it ended;
+     *  · a line was flagged warranty and no cover row exists → say so.
+     * A page that claimed a period nobody promised would be worse than silence.
+     */
+    protected function warrantyNote(Invoice $invoice): ?string
+    {
+        $covers = Warranty::query()
+            ->where('invoice_id', $invoice->id)
+            ->orderByDesc('ends_on')
+            ->get(['code', 'ends_on']);
+
+        if ($covers->isNotEmpty()) {
+            $latest = $covers->first();
+
+            $stillRunning = $covers->contains(fn (Warranty $cover) => $cover->daysRemaining() >= 0);
+
+            return ($stillRunning ? 'Warranty cover on these goods runs to ' : 'Warranty cover on these goods ended on ')
+                .$latest->ends_on?->format('d M Y')
+                .' — recorded in this system, so the date is the one the company is held to.';
+        }
+
+        return $invoice->lines->contains(fn ($line) => (bool) $line->warranty_flag)
+            ? 'Warranty was noted on a line of this invoice, but no cover period is registered against it in this system.'
+            : null;
     }
 
     /**

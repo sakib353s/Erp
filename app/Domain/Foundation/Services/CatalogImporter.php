@@ -157,6 +157,15 @@ class CatalogImporter
         'purchase > supplier returns > return history' => ['/app/purchase/returns?status=approved', 'purchase.returns.view'],
         'purchase > supplier returns > supplier ledger credit' => ['/app/purchase/returns', 'purchase.returns.view'],
 
+        // §16-16/§16-17/§16-18: the §07 warranty leaves are the warranty desk's
+        // three lenses over one register — the covers still running, the claims
+        // being worked, and the ones that were honoured. They get the register's
+        // own screens rather than a placeholder, because the register is real.
+        'returns > warranty claims' => ['/app/sales/warranties/claims', 'sales.warranties.view'],
+        'returns > warranty claims > warranty returns' => ['/app/sales/warranties?state=claimed', 'sales.warranties.view'],
+        'returns > warranty claims > warranty processing' => ['/app/sales/warranties/claims?status=working', 'sales.warranties.view'],
+        'returns > warranty claims > warranty completed' => ['/app/sales/warranties/claims?status=completed', 'sales.warranties.view'],
+
         // §10 HRM — attendance, leave, structure (pages that really exist)
         'employee > attendance > attendance list' => ['/app/hr/attendance', 'attendance.view'],
         'employee > attendance > live attendance' => ['/app/hr/attendance', 'attendance.view'],
@@ -396,6 +405,9 @@ class CatalogImporter
         // the same page the FEFO switch lives on, reached from the products it
         // governs rather than only from the settings menu.
         'inventory > products > product settings' => ['/app/settings/inventory', 'settings.view'],
+        // §16-16: the promise made about a product is set from the product it is
+        // made about, rather than only from the warranty desk's own index.
+        'inventory > products > product warranty config' => ['/app/sales/warranties/policies', 'sales.warranties.manage'],
         'inventory > products > product import' => ['/app/inventory/products/import', 'inventory.products.import'],
         'inventory > products > product export' => ['/app/inventory/products/export', 'inventory.products.export'],
         'inventory > products > import history' => ['/app/inventory/products/import/history', 'inventory.products.import'],

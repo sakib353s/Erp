@@ -1562,6 +1562,17 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
     color: var(--warn);
 }
 
+/* §16-16/§16-17: the warranty register. A cover that is still running reads as
+   live information; one that has already had something honoured against it is
+   marked as such — the promise was kept, which is a fact about the past rather
+   than a warning about the future. Expired and voided covers are in the groups
+   above: expired is a cover that ran out (a fact worth noticing at a counter),
+   voided is a document that was withdrawn (deliberately quiet). */
+.erp-status-claimed {
+    background: var(--info-soft);
+    color: var(--info);
+}
+
 /* Terminal / void / archived — deliberately quiet */
 .erp-status-cancelled,
 .erp-status-released,

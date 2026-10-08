@@ -47,12 +47,17 @@ use Tests\TestCase;
  * cancelled), a delivered tracking event + truthful in-app
  * notification to the order creator, linked delivery challans follow.
  *
- * Stock/GL/warranty stay at their configured stages (dispatch
- * TRANSIT_OUT, invoice issue TRANSIT_CLEAR/SALES_OUT + COGS; warranty
- * activation remains Phase L): POD itself posts zero movements and
- * zero journal entries — delivery-stage STK/ACCT is never
- * fabricated — and the invoice-after-delivery flow still clears
- * transit exactly once.
+ * Stock/GL stay at their configured stages (dispatch TRANSIT_OUT,
+ * invoice issue TRANSIT_CLEAR/SALES_OUT + COGS): POD itself posts zero
+ * movements and zero journal entries — delivery-stage STK/ACCT is never
+ * fabricated — and the invoice-after-delivery flow still clears transit
+ * exactly once.
+ *
+ * Warranty cover is the one thing POD does create: since §16-16 the
+ * delivery event is where a product's policy is applied to the goods that
+ * reached the customer (see WarrantyDeskTest). POD itself writes no cover
+ * row — it records the proof of delivery — and the invoice that follows
+ * finds the goods already covered and declines to promise them twice.
  */
 class PodTriggersDeliveredStateTest extends TestCase
 {
@@ -278,7 +283,11 @@ class PodTriggersDeliveredStateTest extends TestCase
 
         $fresh = $invoice->fresh();
         $this->assertSame('issued', $fresh->status);
-        $this->assertFalse((bool) $fresh->warranty_flag); // warranty activation remains Phase L
+        // The invoice header flag is a note somebody typed on the document; cover
+        // itself is now a register row (§16-16), and this path carries none
+        // because the goods went out on a challan that already carried it.
+        $this->assertFalse((bool) $fresh->warranty_flag);
+        $this->assertSame(0, \App\Domain\Sales\Warranty::query()->count());
         $this->assertSame('completed', $order->fresh()->status);
     }
 

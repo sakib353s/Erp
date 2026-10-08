@@ -459,6 +459,12 @@ class FoundationPermissionSeeder extends Seeder
             ['returns', 'sales', 'create', 'returns.create', 'Create sales returns'],
             ['returns', 'sales', 'receive', 'returns.receive', 'Receive sales returns'],
             ['returns', 'sales', 'credit', 'returns.credit', 'Issue credit notes'],
+            // §16-16/§16-17/§16-18 — the promise, the register, and the claims.
+            // `view` reads what the company promised; `manage` sets the promise
+            // and decides what is done about it, which is the half that costs
+            // money and therefore the half worth separating.
+            ['sales', 'warranties', 'view', 'sales.warranties.view', 'View warranties and claims'],
+            ['sales', 'warranties', 'manage', 'sales.warranties.manage', 'Set warranty cover and decide claims'],
             ['returns', 'refunds', 'view', 'returns.refunds.view', 'View refunds'],
             ['returns', 'refunds', 'create', 'returns.refunds.create', 'Process refunds'],
             ['pos', 'sell', 'sell', 'pos.sell', 'Use POS terminal'],

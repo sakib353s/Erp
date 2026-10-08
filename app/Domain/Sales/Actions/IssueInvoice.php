@@ -13,6 +13,8 @@ use App\Domain\Inventory\StockMovement;
 use App\Domain\Sales\Invoice;
 use App\Domain\Sales\SalesOrder;
 use App\Domain\Sales\Services\ReservationService;
+use App\Domain\Sales\Services\WarrantyService;
+use App\Domain\Sales\Warranty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
@@ -30,6 +32,7 @@ class IssueInvoice
         protected ReservationService $reservations,
         protected TenantContext $context,
         protected AuditRecorder $audit,
+        protected WarrantyService $warranties,
     ) {}
 
     public function handle(Invoice $invoice, Request $request): Invoice
@@ -196,6 +199,13 @@ class IssueInvoice
             $fresh->posting_state = 'posted';
             $fresh->save();
 
+            // §16-16: for goods no delivered challan carried — a counter sale, a
+            // service invoice — the invoice itself is the moment the customer
+            // received them, so the cover starts on the invoice date. Where the
+            // goods already went out on a challan the warranty exists and this
+            // writes nothing (WarrantyService refuses to promise twice).
+            $activated = $this->warranties->activateForInvoice($fresh, $request->user());
+
             $this->audit->record([
                 'action' => 'sales.invoice_issued',
                 'entity_type' => 'invoice',
@@ -207,6 +217,7 @@ class IssueInvoice
                     'posting_state' => 'posted',
                     'printed_title' => $fresh->printed_title,
                     'journal_entry_id' => $fresh->journal_entry_id,
+                    'warranties_activated' => array_map(fn (Warranty $w) => $w->code, $activated),
                 ],
             ]);
 

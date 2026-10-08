@@ -204,6 +204,11 @@ class InvoiceVerificationTest extends TestCase
         $response->assertSeeText('not published here');
     }
 
+    /**
+     * §16-16 changed the second half of this: cover is a row with dates now, so
+     * a line flagged warranty with no cover registered against it gets told the
+     * truth rather than a denial or an invented date.
+     */
     public function test_the_page_carries_a_warranty_note_without_inventing_a_date(): void
     {
         $invoice = $this->invoice();
@@ -212,7 +217,7 @@ class InvoiceVerificationTest extends TestCase
         $this->get(route('public.invoice.verify', $token))
             ->assertOk()
             ->assertSeeText('Warranty was noted on a line of this invoice')
-            ->assertSeeText('Warranty periods are not registered in this system');
+            ->assertSeeText('no cover period is registered against it');
     }
 
     public function test_every_visit_is_logged_with_the_hash_and_never_the_token(): void
