@@ -97,6 +97,15 @@ class SystemRoleSeeder extends Seeder
                 'cash.transfers', 'bank.view',
                 // §08-08: checking the bank is what a manager's signature is for.
                 'bank.reconcile', 'wallets.reconcile',
+                // §08-13/14: the cheque register is money in the same sense the
+                // cash book is — a manager records cheques taken and written, and
+                // says which ones a bank has honoured, because that is the moment
+                // the ledger moves; printing the record of one we issued is part
+                // of writing it. The keys stay three separate jobs; the
+                // maker-checker rule lives in ChequeService, not in a hidden
+                // button, so a manager holding all of them still answers for what
+                // they cleared.
+                'cheques.view', 'cheques.manage', 'cheques.clear', 'cheques.print',
                 // §04-28: stock leaving the building on a transfer is the same
                 // kind of decision as stock being written off, so it is the same
                 // desk that signs it off — and never the person who raised it.
