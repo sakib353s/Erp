@@ -74,6 +74,12 @@ class AccountingCoreSeeder extends Seeder
         // than riders recorded as collected.
         ['5250', 'Cash Over & Short', 'expense', 'EXPENSE', ['parent' => '5200', 'is_system' => true]],
         ['5260', 'Inventory Loss & Damage', 'expense', 'EXPENSE', ['parent' => '5200', 'is_system' => true]],
+        // §08-10: what the bank takes without asking — account maintenance, SMS
+        // alerts, commission on withdrawals. It is its own account because a
+        // company that never looks at it is the company that discovers its
+        // charges a year late; the bank charge desk defaults to exactly this leaf
+        // and a rule may point somewhere else if the accountant wants that.
+        ['5280', 'Bank Charges', 'expense', 'EXPENSE', ['parent' => '5200', 'is_system' => true]],
         ['5300', 'Bad Debt Expense', 'expense', 'EXPENSE', ['parent' => '5000', 'is_system' => true]],
     ];
 

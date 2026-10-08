@@ -119,6 +119,10 @@ class SystemRoleSeeder extends Seeder
                 // came out of it — and the service still refuses them their own
                 // request.
                 'pettycash.funds', 'pettycash.spend', 'pettycash.approve', 'pettycash.replenish',
+                // §08-10: the manager records what the bank took and writes the
+                // tariff rules that post it automatically — a bank charge is a
+                // fact from outside, not a payment anybody here authorised.
+                'bank.charges', 'bank.charges.rules',
                 // §08-05: the manager also answers for a counted difference —
                 // counting the drawer is the cash desk's, signing off what is
                 // missing from it is a second pair of eyes, and the service

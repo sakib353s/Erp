@@ -284,6 +284,10 @@ class CatalogImporter
         'cash & bank > cheque management > cleared cheques' => ['/app/cash-bank/cheques?state=cleared', 'cheques.view'],
         'cash & bank > cheque management > bounced cheques' => ['/app/cash-bank/cheques?state=failed', 'cheques.view'],
         'cash & bank > cheque management > post-dated cheques' => ['/app/cash-bank/cheques?state=post_dated', 'cheques.view'],
+        // §08-10: the tariff rules that post themselves. One screen, because the
+        // register and the rules that feed it are one question — what is the bank
+        // taking, and what has it been told to take by itself?
+        'cash & bank > bank accounts > bank charge auto-posting' => ['/app/cash-bank/bank-charges', 'bank.charges'],
         'cash & bank > cheque management > cheque print' => ['/app/cash-bank/cheques?direction=issued', 'cheques.print'],
         // §08-15…§08-18: the expense desk. Five of its six leaves are views of one
         // register — "All Expenses" and "Pending Approval" are the same list asked

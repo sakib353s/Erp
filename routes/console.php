@@ -36,4 +36,7 @@ Schedule::command('erp:inventory:expiry-alerts')->dailyAt('06:40');
  | Early, before the working day: whatever needs a signature should be waiting on
  | somebody's desk when they sit down, not appearing at lunchtime.
  */
+// §08-10 runs first: a bank charge is money already gone, so it is posted before
+// the day's expenses are generated rather than after them.
+Schedule::command('erp:cash:bank-charges')->dailyAt('06:10');
 Schedule::command('erp:cash:recurring-expenses')->dailyAt('06:20');

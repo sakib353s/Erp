@@ -78,6 +78,11 @@ final class DocumentTypeRegistry
         ['code' => 'expense', 'type_group' => 'accounting', 'name' => 'Expense', 'printed_title' => 'EXPENSE VOUCHER'],
 
         // ---- HR
+        // §08-10: a bank charge is a numbered document in its own series. It is
+        // not an expense voucher — nobody was paid — and it is not a payment
+        // voucher either, so it gets a number a person can quote to the bank when
+        // they query the tariff.
+        ['code' => 'bank_charge', 'type_group' => 'accounting', 'name' => 'Bank Charge', 'printed_title' => 'BANK CHARGE'],
         ['code' => 'payroll', 'type_group' => 'hr', 'name' => 'Payroll Sheet', 'printed_title' => 'PAYROLL', 'tax_applicable' => true],
         ['code' => 'payslip', 'type_group' => 'hr', 'name' => 'Payslip', 'printed_title' => 'PAYSLIP', 'tax_applicable' => true],
 
@@ -101,6 +106,7 @@ final class DocumentTypeRegistry
         'journal_voucher' => 'JV',
         'expense_voucher' => 'EX',
         'expense' => 'EXP',
+        'bank_charge' => 'BC',
         'cash_transfer' => 'CT',
         'stock_adjustment' => 'ADJ',
         'stock_transfer' => 'TRF',

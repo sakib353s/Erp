@@ -5,6 +5,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BankChargeController;
 use App\Http\Controllers\BankReconciliationController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BulkPriceUpdateController;
@@ -1093,6 +1094,36 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::get('/app/cash-bank/cash-counts/{cashCount}', [CashCountController::class, 'show'])
         ->middleware('permission:cash.view')
         ->name('cash-bank.cash-counts.show');
+
+    /*
+     * §08-10 — the money a bank takes without asking. Recording a charge is
+     * bookkeeping, because the bank has already taken it; writing the *rule* that
+     * decides what will be charged automatically from now on is policy, and it is
+     * behind its own key (`bank.charges.rules`) for exactly that reason. Both the
+     * rule and the reversal of a charge are the same shape the rest of this module
+     * keeps: a mistake is answered rather than erased.
+     */
+    Route::get('/app/cash-bank/bank-charges', [BankChargeController::class, 'index'])
+        ->middleware('permission:bank.charges')
+        ->name('cash-bank.bank-charges');
+    Route::post('/app/cash-bank/bank-charges', [BankChargeController::class, 'storeCharge'])
+        ->middleware('permission:bank.charges')
+        ->name('cash-bank.bank-charges.store');
+    Route::post('/app/cash-bank/bank-charges/run', [BankChargeController::class, 'runDue'])
+        ->middleware('permission:bank.charges')
+        ->name('cash-bank.bank-charges.run');
+    Route::post('/app/cash-bank/bank-charges/{charge}/reverse', [BankChargeController::class, 'reverse'])
+        ->middleware('permission:bank.charges')
+        ->name('cash-bank.bank-charges.reverse');
+    Route::post('/app/cash-bank/bank-charge-rules', [BankChargeController::class, 'storeRule'])
+        ->middleware('permission:bank.charges.rules')
+        ->name('cash-bank.bank-charge-rules.store');
+    Route::put('/app/cash-bank/bank-charge-rules/{rule}', [BankChargeController::class, 'updateRule'])
+        ->middleware('permission:bank.charges.rules')
+        ->name('cash-bank.bank-charge-rules.update');
+    Route::post('/app/cash-bank/bank-charge-rules/{rule}/toggle', [BankChargeController::class, 'toggleRule'])
+        ->middleware('permission:bank.charges.rules')
+        ->name('cash-bank.bank-charge-rules.toggle');
 
     Route::get('/app/accounting/opening-trial-balance', [FinancialReportController::class, 'openingTrialBalance'])
         ->middleware('permission:accounting.reports.view')

@@ -195,6 +195,12 @@ class FoundationPermissionSeeder extends Seeder
             // Reading a book and proving it against the bank are different
             // jobs: the second one is the signature at the bottom of the page.
             ['bank', 'reconciliations', 'manage', 'bank.reconcile', 'Reconcile a bank account against its own statement'],
+            // §08-10: recording a bank charge is bookkeeping — the bank already
+            // took the money. Writing the rule that decides what will be charged
+            // automatically from now on is policy, and it is the act that can
+            // quietly move money every quarter for years, so it is its own key.
+            ['bank', 'charges', 'create', 'bank.charges', 'Record the charges a bank takes and reverse one that was wrong'],
+            ['bank', 'charge_rules', 'manage', 'bank.charges.rules', 'Write the standing rules that post bank charges automatically'],
             ['wallets', 'reconciliations', 'manage', 'wallets.reconcile', 'Reconcile a mobile wallet against a statement the provider exported'],
             // §08-13: writing a cheque into the register is a clerk's job;
             // saying the bank has paid it is the moment the ledger moves, and
