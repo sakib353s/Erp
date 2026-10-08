@@ -80,15 +80,22 @@
                         <tr>
                             <td>
                                 <i class="bi bi-file-earmark me-1" aria-hidden="true"></i>
-                                <span class="fw-semibold">{{ $document->original_name }}</span>
+                                <a class="fw-semibold" href="{{ route('documents.show', $document) }}">{{ $document->original_name }}</a>
+                                @if (($shared[$document->id] ?? false))
+                                    <span class="erp-chip erp-chip-soft ms-1" title="This file has a live public link">Shared</span>
+                                @endif
                             </td>
                             <td class="text-body-secondary small">{{ $document->mime_type }}</td>
                             <td class="text-end">{{ number_format($document->size_bytes / 1024, 1) }} KB</td>
                             <td><span class="erp-chip erp-chip-soft">{{ $document->purpose ?: 'attachment' }}</span></td>
                             <td class="text-body-secondary small">
-                                {{ $document->uploadedBy?->name ?: '—' }}<br>{{ $document->created_at?->format('d M Y, H:i') }}
+                                {{ $document->uploader?->name ?: '—' }}<br>{{ $document->created_at?->format('d M Y, H:i') }}
                             </td>
                             <td class="text-end">
+                                <a class="btn btn-sm btn-light" href="{{ route('documents.show', $document) }}"
+                                   title="The file's own page: metadata, sharing and the access log">
+                                    <i class="bi bi-folder2-open" aria-hidden="true"></i> Open
+                                </a>
                                 @if ($perm('documents.download'))
                                     <a class="btn btn-sm btn-light" href="{{ route('documents.download', $document) }}">
                                         <i class="bi bi-download" aria-hidden="true"></i> Download

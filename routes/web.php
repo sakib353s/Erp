@@ -76,7 +76,9 @@ use App\Http\Controllers\ProductImportController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProofOfDeliveryController;
+use App\Http\Controllers\DocumentShareController;
 use App\Http\Controllers\InvoiceVerificationController;
+use App\Http\Controllers\PublicDocumentController;
 use App\Http\Controllers\PublicShareController;
 use App\Http\Controllers\PublicVerificationController;
 use App\Http\Controllers\RiderAssignmentController;
@@ -135,6 +137,21 @@ Route::get('/verify/{token}', [PublicVerificationController::class, 'verify'])
     ->middleware('throttle:30,1')
     ->where('token', '[A-Za-z0-9_\-]{43}')
     ->name('public.invoice.verify');
+
+/*
+ | Public document links (§16-21/§16-22) — the same shape as the verification
+ | door: the token is the capability, nothing else is required, and every visit
+ | and download is written to public_access_logs and the audit chain. Two
+ | addresses so a browser can show the metadata page and then save the file.
+ */
+Route::get('/public/d/{token}', [PublicDocumentController::class, 'show'])
+    ->middleware('throttle:30,1')
+    ->where('token', '[A-Za-z0-9_\-]{43}')
+    ->name('public.document.show');
+Route::get('/public/d/{token}/download', [PublicDocumentController::class, 'download'])
+    ->middleware('throttle:30,1')
+    ->where('token', '[A-Za-z0-9_\-]{43}')
+    ->name('public.document.download');
 
 /*
  | Courier tracking webhook (02-90) — no session identity by design:
@@ -2621,6 +2638,26 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::delete('/app/documents/{document}', [DocumentController::class, 'destroy'])
         ->middleware('permission:documents.manage')
         ->name('documents.destroy');
+
+    /* §16-21: the file's own page, and the three doors that publish, replace or
+     | withdraw its public link. Literal segments first, and the id is numeric so
+     | no file name can ever be mistaken for a route. */
+    Route::get('/app/documents/{document}', [DocumentController::class, 'show'])
+        ->middleware('permission:documents.view')
+        ->whereNumber('document')
+        ->name('documents.show');
+    Route::post('/app/documents/{document}/share', [DocumentShareController::class, 'publish'])
+        ->middleware('permission:documents.manage')
+        ->whereNumber('document')
+        ->name('documents.share.publish');
+    Route::post('/app/documents/{document}/share/rotate', [DocumentShareController::class, 'rotate'])
+        ->middleware('permission:documents.manage')
+        ->whereNumber('document')
+        ->name('documents.share.rotate');
+    Route::post('/app/documents/{document}/share/revoke', [DocumentShareController::class, 'revoke'])
+        ->middleware('permission:documents.manage')
+        ->whereNumber('document')
+        ->name('documents.share.revoke');
 
     /* ---- Navigation registry admin ---- */
     Route::get('/app/navigation', [MenuController::class, 'index'])

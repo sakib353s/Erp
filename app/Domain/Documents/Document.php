@@ -2,6 +2,7 @@
 
 namespace App\Domain\Documents;
 
+use App\Domain\Foundation\Branch;
 use App\Domain\Foundation\Company;
 use App\Domain\Foundation\User;
 use Illuminate\Database\Eloquent\Model;
@@ -18,7 +19,8 @@ class Document extends Model
 
     protected $fillable = [
         'company_id', 'branch_id', 'owner_type', 'owner_id', 'document_type_id', 'purpose',
-        'visibility', 'public_token_hash', 'public_token_expires_at', 'public_token_revoked_at',
+        'visibility', 'public_token_hash', 'public_token_version', 'public_token_issued_at',
+        'public_token_expires_at', 'public_token_revoked_at',
         'disk', 'path', 'original_name', 'mime_type', 'extension', 'size_bytes',
         'checksum', 'width', 'height', 'derivative_path', 'version', 'revision_of_id',
         'scan_status', 'scanned_at', 'uploaded_by',
@@ -29,6 +31,8 @@ class Document extends Model
         'width' => 'integer',
         'height' => 'integer',
         'version' => 'integer',
+        'public_token_version' => 'integer',
+        'public_token_issued_at' => 'datetime',
         'public_token_expires_at' => 'datetime',
         'public_token_revoked_at' => 'datetime',
         'scanned_at' => 'datetime',
@@ -37,6 +41,12 @@ class Document extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    /** Which branch the file belongs to; a company-level file has no branch. */
+    public function branch(): BelongsTo
+    {
+        return $this->belongsTo(Branch::class);
     }
 
     public function documentType(): BelongsTo

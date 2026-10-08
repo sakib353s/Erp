@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Domain\Audit\Services\AuditRecorder;
 use App\Domain\Documents\Document;
+use App\Domain\Documents\Services\DocumentShareService;
 use App\Domain\Documents\Services\FileUploadService;
 use App\Http\Requests\UploadDocumentRequest;
 use Illuminate\Http\RedirectResponse;
@@ -25,6 +26,7 @@ class DocumentController extends Controller
     public function __construct(
         protected FileUploadService $uploads,
         protected AuditRecorder $audit,
+        protected DocumentShareService $share,
     ) {}
 
     public function index(Request $request): View
@@ -32,7 +34,7 @@ class DocumentController extends Controller
         $actor = $request->user();
         $ids = $actor->accessibleBranchIds();
 
-        $query = Document::query()->with(['uploadedBy', 'documentType'])->orderByDesc('id');
+        $query = Document::query()->with(['uploader', 'documentType'])->orderByDesc('id');
 
         if ($ids !== null) {
             $query->whereIn('branch_id', array_merge($ids, [null]));
@@ -46,10 +48,19 @@ class DocumentController extends Controller
             $query->where('original_name', 'like', "%{$search}%");
         }
 
+        $documents = $query->paginate(15)->withQueryString();
+
+        // §16-21: which of these files have a live public link, read back from
+        // the same service that publishes them so the list cannot disagree with
+        // the file's own screen.
+        $shared = $documents->getCollection()
+            ->mapWithKeys(fn (Document $document) => [$document->id => $this->share->published($document)]);
+
         return view('documents.index', [
-            'documents' => $query->paginate(15)->withQueryString(),
+            'documents' => $documents,
             'q' => $search,
             'purpose' => $purpose,
+            'shared' => $shared,
         ]);
     }
 
@@ -69,6 +80,18 @@ class DocumentController extends Controller
         }
 
         return back()->with('status', "Uploaded {$document->original_name}.");
+    }
+
+    /** §16-21: one file, its metadata, its public link and every visit to it. */
+    public function show(Request $request, Document $document): View
+    {
+        abort_unless($document->company_id === $request->user()->company_id, 404);
+
+        return view('documents.show', [
+            'document' => $document->load(['documentType', 'uploader', 'branch']),
+            'verification' => $this->share->summary($document),
+            'stored' => $this->share->stored($document),
+        ]);
     }
 
     public function download(Request $request, Document $document): StreamedResponse
