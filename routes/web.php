@@ -5,6 +5,7 @@ use App\Domain\Reporting\ReportRegistry;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\AuditController;
+use App\Http\Controllers\UtilityBillController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BankChargeController;
 use App\Http\Controllers\BankReconciliationController;
@@ -2355,6 +2356,69 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
             ->whereNumber('asset')
             ->whereNumber('record')
             ->name('assets.records.unlink');
+    });
+
+    /* ---- §12 Business Management: the utility bills (12-15) ----
+     *
+     * Six menu leaves, one desk. Electricity, water, gas, connectivity and rent
+     * are the same document with a different provider behind it, so the shelves
+     * are one screen filtered by `family` rather than six controllers that would
+     * drift apart.
+     *
+     * Reading is `business.utilities.view` — the person who opens the post needs
+     * to know what is owed. Filing, correcting, paying, approving and voiding are
+     * `business.utilities.manage`, because those decide where money goes.
+     *
+     * The literal segments come first and `{bill}` is constrained to digits, so
+     * `/app/utility-bills/renewals` is the lens and `/app/utility-bills/12` is a
+     * bill.
+     */
+    Route::middleware('permission:business.utilities.view')->group(function () {
+        Route::get('/app/utility-bills', [UtilityBillController::class, 'index'])
+            ->name('business.utilities.index');
+        Route::get('/app/utility-bills/renewals', [UtilityBillController::class, 'renewals'])
+            ->name('business.utilities.renewals');
+        Route::get('/app/utility-bills/providers', [UtilityBillController::class, 'providers'])
+            ->name('business.utilities.providers');
+        Route::get('/app/utility-bills/{bill}', [UtilityBillController::class, 'show'])
+            ->whereNumber('bill')
+            ->name('business.utilities.show');
+    });
+
+    Route::middleware('permission:business.utilities.manage')->group(function () {
+        Route::get('/app/utility-bills/create', [UtilityBillController::class, 'create'])
+            ->name('business.utilities.create');
+        Route::post('/app/utility-bills', [UtilityBillController::class, 'store'])
+            ->name('business.utilities.store');
+        Route::get('/app/utility-bills/{bill}/edit', [UtilityBillController::class, 'edit'])
+            ->whereNumber('bill')
+            ->name('business.utilities.edit');
+        Route::put('/app/utility-bills/{bill}', [UtilityBillController::class, 'update'])
+            ->whereNumber('bill')
+            ->name('business.utilities.update');
+        Route::post('/app/utility-bills/{bill}/pay', [UtilityBillController::class, 'pay'])
+            ->whereNumber('bill')
+            ->name('business.utilities.pay');
+        Route::post('/app/utility-bills/{bill}/approve', [UtilityBillController::class, 'approve'])
+            ->whereNumber('bill')
+            ->name('business.utilities.approve');
+        Route::post('/app/utility-bills/{bill}/reject', [UtilityBillController::class, 'reject'])
+            ->whereNumber('bill')
+            ->name('business.utilities.reject');
+        Route::post('/app/utility-bills/{bill}/void', [UtilityBillController::class, 'void'])
+            ->whereNumber('bill')
+            ->name('business.utilities.void');
+
+        Route::get('/app/utility-bills/providers/create', [UtilityBillController::class, 'createProvider'])
+            ->name('business.utilities.providers.create');
+        Route::post('/app/utility-bills/providers', [UtilityBillController::class, 'storeProvider'])
+            ->name('business.utilities.providers.store');
+        Route::get('/app/utility-bills/providers/{provider}/edit', [UtilityBillController::class, 'editProvider'])
+            ->whereNumber('provider')
+            ->name('business.utilities.providers.edit');
+        Route::put('/app/utility-bills/providers/{provider}', [UtilityBillController::class, 'updateProvider'])
+            ->whereNumber('provider')
+            ->name('business.utilities.providers.update');
     });
 
     /* ---- Audit trail ---- */

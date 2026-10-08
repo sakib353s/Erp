@@ -184,6 +184,10 @@ class SystemRoleSeeder extends Seeder
                 // permission to write things off — a manager's call, because
                 // disposal and depreciation touch the books.
                 'business.assets.view', 'business.assets.manage',
+                // §12-15: filing the electricity bill and paying it are one job
+                // at a manager's level — including the second signature when the
+                // amount crosses the company's own approval limit.
+                'business.utilities.view', 'business.utilities.manage',
             ]],
             ['slug' => 'employee', 'name' => 'Employee', 'description' => 'Staff account: own portal access only — own leave, own payslips.', 'keys' => [
                 'dashboard.view', 'employees.view', 'documents.view', 'search.view',
@@ -201,6 +205,9 @@ class SystemRoleSeeder extends Seeder
                 // is — that is how a laptop gets handed back — but not write it
                 // off. The employee bundle gets the reading half.
                 'business.assets.view',
+                // §12-15: everybody may see what the premises cost — the
+                // reading half — but nobody pays a bill without the manage key.
+                'business.utilities.view',
             ]],
             ['slug' => 'technician', 'name' => 'Technician', 'description' => 'Service technician (portal-capable).', 'keys' => [
                 'dashboard.view', 'documents.view', 'documents.upload', 'search.view',

@@ -584,6 +584,16 @@ class CatalogImporter
         'business management > branches > branch comparison' => ['/app/branches/compare', 'branches.compare'],
         'business management > branches > branch transfer' => ['/app/branches/transfer', 'branches.view'],
 
+        // §12-15: the utility bills. Each shelf is the same desk filtered by the
+        // family the provider belongs to, and the last leaf is the lens that
+        // sorts the same rows by the clock instead of by the month.
+        'business management > utility bills > electricity (desco/dpdc)' => ['/app/utility-bills?family=electricity', 'business.utilities.view'],
+        'business management > utility bills > water (wasa)' => ['/app/utility-bills?family=water', 'business.utilities.view'],
+        'business management > utility bills > gas (titas)' => ['/app/utility-bills?family=gas', 'business.utilities.view'],
+        'business management > utility bills > internet & mobile' => ['/app/utility-bills?family=internet', 'business.utilities.view'],
+        'business management > utility bills > rent payments' => ['/app/utility-bills?family=rent', 'business.utilities.view'],
+        'business management > utility bills > renewal reminders' => ['/app/utility-bills/renewals', 'business.utilities.view'],
+
         // §12-03/04: the company's own papers, and the two screens that already
         // existed for its identity and its preferences.
         'business management > company > company profile' => ['/app/settings/company', 'settings.company'],

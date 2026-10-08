@@ -193,6 +193,12 @@ class FoundationPermissionSeeder extends Seeder
             ['business', 'assets', 'view', 'business.assets.view', 'Read the asset register, vehicles, equipment and the trip log'],
             ['business', 'assets', 'manage', 'business.assets.manage', 'Register, move, capitalise, depreciate and dispose of assets, and log trips'],
 
+            // §12-15: the bills the premises send. Reading is the desk's —
+            // whoever opens the post needs to know what is owed — while paying
+            // and approving move money and belong to the manage key.
+            ['business', 'utilities', 'view', 'business.utilities.view', 'Read the utility bills, the provider registry and the renewal reminders'],
+            ['business', 'utilities', 'manage', 'business.utilities.manage', 'File, correct, pay, approve and void utility bills, and keep the provider registry'],
+
             ['settings', 'company', 'manage', 'settings.company', 'Edit company profile'],
 
             // Phase H — HRM (§10): attendance, leave, structure
