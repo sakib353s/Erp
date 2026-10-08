@@ -114,6 +114,7 @@ export const SECTIONS = [
                     { label: 'Bank Transactions', url: './cash-bank.html', icon: 'bi-journal-text' },
                     { label: 'Bank Reconciliation', url: './bank-recon.html', icon: 'bi-shield-check', target: 'cash' },
                     { label: 'Bank Statement Import', url: './bank-recon.html', icon: 'bi-file-earmark-spreadsheet' },
+                    { label: 'Bank Charge Auto-Posting', url: './bank-charges.html', icon: 'bi-cash-coin' },
                 ],
             },
             {
@@ -229,6 +230,7 @@ export const PALETTE = [
     { label: 'All Bank Accounts', url: './cash-bank.html', icon: 'bi-bank', section: 'Cash & bank', group: 'Bank Accounts' },
     { label: 'Bank Reconciliation', url: './bank-recon.html', icon: 'bi-shield-check', section: 'Cash & bank', group: 'Bank Accounts' },
     { label: 'Bank Statement Import', url: './bank-recon.html', icon: 'bi-file-earmark-spreadsheet', section: 'Cash & bank', group: 'Bank Accounts' },
+    { label: 'Bank Charge Auto-Posting', url: './bank-charges.html', icon: 'bi-cash-coin', section: 'Cash & bank', group: 'Bank Accounts' },
     { label: 'Mobile Reconciliation', url: './bank-recon.html', icon: 'bi-phone-vibrate', section: 'Cash & bank', group: 'Mobile Banking' },
     { label: 'Received Cheques', url: './cheques.html', icon: 'bi-journal-arrow-down', section: 'Cash & bank', group: 'Cheque Management' },
     { label: 'Issued Cheques', url: './cheques.html', icon: 'bi-journal-arrow-up', section: 'Cash & bank', group: 'Cheque Management' },
@@ -553,6 +555,7 @@ export function previewBar(current) {
         ['cash-bank.html', 'Cash & bank'],
         ['bank-recon.html', 'Reconciliation'],
         ['cash-counts.html', 'Cash count'],
+        ['bank-charges.html', 'Bank charges'],
         ['cheques.html', 'Cheques'],
         ['expenses.html', 'Expenses'],
         ['expense-recurring.html', 'Recurring'],

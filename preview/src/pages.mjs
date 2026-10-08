@@ -1577,10 +1577,10 @@ ${topbar({ title: 'Cash & bank', trail: [{ label: 'Cash & Bank' }, { label: 'Cas
             </div>
 
             <section class="erp-kpi-grid mb-3">
-                <div class="erp-kpi"><span class="erp-kpi-label">Cash in hand</span><span class="erp-kpi-value">৳ 318,450.00</span><span class="erp-kpi-hint">Tills and cash drawers, from the books</span></div>
-                <div class="erp-kpi"><span class="erp-kpi-label">In the bank</span><span class="erp-kpi-value">৳ 1,342,920.50</span><span class="erp-kpi-hint">Every bank account added up</span></div>
-                <div class="erp-kpi"><span class="erp-kpi-label">Mobile wallets</span><span class="erp-kpi-value">৳ 51,720.00</span><span class="erp-kpi-hint">bKash, Nagad, Rocket and Upay balances</span></div>
-                <div class="erp-kpi"><span class="erp-kpi-label">Money in the company</span><span class="erp-kpi-value">৳ 1,713,090.50</span><span class="erp-kpi-hint">The three totals above, added up</span></div>
+                <div class="erp-kpi"><span class="erp-kpi-label">Cash in hand</span><span class="erp-kpi-value">৳ 318,450.00</span><span class="erp-kpi-foot">Tills and cash drawers, from the books</span></div>
+                <div class="erp-kpi"><span class="erp-kpi-label">In the bank</span><span class="erp-kpi-value">৳ 1,342,920.50</span><span class="erp-kpi-foot">Every bank account added up</span></div>
+                <div class="erp-kpi"><span class="erp-kpi-label">Mobile wallets</span><span class="erp-kpi-value">৳ 51,720.00</span><span class="erp-kpi-foot">bKash, Nagad, Rocket and Upay balances</span></div>
+                <div class="erp-kpi"><span class="erp-kpi-label">Money in the company</span><span class="erp-kpi-value">৳ 1,713,090.50</span><span class="erp-kpi-foot">The three totals above, added up</span></div>
             </section>
 
             <form class="erp-filterbar" method="GET" action="./cash-bank.html">
@@ -1939,7 +1939,7 @@ export function cheques() {
 
     return `
 ${previewBar('cheques.html')}
-<div class="erp-app-body">
+<div class="erp-shell">
     ${sidebar('cash_bank')}
     <main class="erp-main">
         ${topbar('The cheque register')}
@@ -1948,7 +1948,7 @@ ${previewBar('cheques.html')}
             <header class="erp-page-head">
                 <div>
                     <p class="erp-eyebrow"><i class="bi bi-bank" aria-hidden="true"></i> Cash &amp; bank · Cheque management</p>
-                    <h1 class="erp-page-title">The cheque register</h1>
+                    <h1 class="erp-h1">The cheque register</h1>
                     <p class="erp-page-sub">A cheque is a promise, and this is the book of promises: what is in the drawer, what is with a bank, what has been paid — and what came back. Nothing here reaches the ledger until a bank actually pays it, because money that has been promised is not money that has arrived.</p>
                 </div>
                 <div class="erp-page-head-actions">
@@ -2241,7 +2241,7 @@ export function expenses() {
 
     return `
 ${previewBar('expenses.html')}
-<div class="erp-app-body">
+<div class="erp-shell">
     ${sidebar('cash_bank')}
     <main class="erp-main">
         ${topbar('Expense desk')}
@@ -2250,7 +2250,7 @@ ${previewBar('expenses.html')}
             <header class="erp-page-head">
                 <div>
                     <p class="erp-eyebrow"><i class="bi bi-receipt" aria-hidden="true"></i> Cash &amp; bank · Expenses</p>
-                    <h1 class="erp-page-title">What the company spent</h1>
+                    <h1 class="erp-h1">What the company spent</h1>
                     <p class="erp-page-sub">Every expense names what it was for and where the money went — a category that is a real ledger account, and either the account the money left or the supplier it is owed to. Above the approval limit nothing posts until somebody else signs it off.</p>
                 </div>
                 <div class="erp-page-head-actions">
@@ -2481,7 +2481,7 @@ export function recurringExpenses() {
 
     return `
 ${previewBar('expense-recurring.html')}
-<div class="erp-app-body">
+<div class="erp-shell">
     ${sidebar('cash_bank')}
     <main class="erp-main">
         ${topbar('Recurring expenses')}
@@ -2490,7 +2490,7 @@ ${previewBar('expense-recurring.html')}
             <header class="erp-page-head">
                 <div>
                     <p class="erp-eyebrow"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Cash &amp; bank · Expenses</p>
-                    <h1 class="erp-page-title">The expenses that come round again</h1>
+                    <h1 class="erp-h1">The expenses that come round again</h1>
                     <p class="erp-page-sub">Rent, salaries and the internet line do not need discovering — they are known in advance, and a desk that retypes them every month eventually forgets one. A schedule here records nothing by itself: on its own day it produces an expense through the ordinary desk, approval limit and all.</p>
                 </div>
                 <div class="erp-page-head-actions">
@@ -2724,7 +2724,7 @@ export function pettyCash() {
 
     return `
 ${previewBar('petty-cash.html')}
-<div class="erp-app-body">
+<div class="erp-shell">
     ${sidebar('cash_bank')}
     <main class="erp-main">
         ${topbar('Petty cash')}
@@ -2733,7 +2733,7 @@ ${previewBar('petty-cash.html')}
             <header class="erp-page-head">
                 <div>
                     <p class="erp-eyebrow"><i class="bi bi-cash-coin" aria-hidden="true"></i> Cash &amp; bank · Petty cash</p>
-                    <h1 class="erp-page-title">The float in the drawer</h1>
+                    <h1 class="erp-h1">The float in the drawer</h1>
                     <p class="erp-page-sub">A float is real money in a real place, held by a named person. It is its own account in the chart of accounts, so the balance below is the ledger's own figure rather than a number this desk keeps. Above the company's limit a voucher is asked for before it is paid, and whoever asked cannot be the person who approves it.</p>
                 </div>
                 <div class="erp-page-head-actions">
@@ -2772,12 +2772,9 @@ ${previewBar('petty-cash.html')}
             </div>
 
             <div class="erp-table-shell" data-erp-table>
-                <header class="erp-table-head">
-                    <div>
-                        <h2 class="erp-table-title">The floats</h2>
-                        <p class="erp-table-count">4 float(s)</p>
-                    </div>
-                </header>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">The floats<span class="erp-chip erp-chip-outline">4 float(s)</span></h2>
+                </div>
                 <div class="erp-table-scroll">
                     <table class="table erp-table erp-table-stack">
                         <thead>
@@ -2828,12 +2825,9 @@ ${previewBar('petty-cash.html')}
             </div>
 
             <div class="erp-table-shell mt-3" data-erp-table>
-                <header class="erp-table-head">
-                    <div>
-                        <h2 class="erp-table-title">Paid out lately</h2>
-                        <p class="erp-table-count">3 voucher(s)</p>
-                    </div>
-                </header>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">Paid out lately<span class="erp-chip erp-chip-outline">3 voucher(s)</span></h2>
+                </div>
                 <div class="erp-table-scroll">
                     <table class="table erp-table erp-table-stack">
                         <thead>
@@ -2974,7 +2968,7 @@ export function pettyCashRequests() {
 
     return `
 ${previewBar('petty-cash-requests.html')}
-<div class="erp-app-body">
+<div class="erp-shell">
     ${sidebar('cash_bank')}
     <main class="erp-main">
         ${topbar('Petty cash requests')}
@@ -2983,7 +2977,7 @@ ${previewBar('petty-cash-requests.html')}
             <header class="erp-page-head">
                 <div>
                     <p class="erp-eyebrow"><i class="bi bi-question-circle" aria-hidden="true"></i> Cash &amp; bank · Petty cash · Requests</p>
-                    <h1 class="erp-page-title">Money asked for before it is spent</h1>
+                    <h1 class="erp-h1">Money asked for before it is spent</h1>
                     <p class="erp-page-sub">Above the company's limit nothing comes out of a float until somebody asks and somebody else agrees. A request is not a voucher: while it waits there is no payment, no number and nothing in the ledger — so a waiting request can never be mistaken for money that has moved.</p>
                 </div>
                 <div class="erp-page-head-actions">
@@ -3016,12 +3010,9 @@ ${previewBar('petty-cash-requests.html')}
             </div>
 
             <div class="erp-table-shell" data-erp-table>
-                <header class="erp-table-head">
-                    <div>
-                        <h2 class="erp-table-title">What people have asked for</h2>
-                        <p class="erp-table-count">3 request(s) shown</p>
-                    </div>
-                    <div class="erp-table-tools">
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">What people have asked for<span class="erp-chip erp-chip-outline">3 request(s) shown</span></h2>
+                    <div class="erp-card-actions">
                         <select class="form-select form-select-sm" aria-label="Filter by state">
                             <option>Everything</option>
                             <option selected>Waiting for approval</option>
@@ -3029,7 +3020,7 @@ ${previewBar('petty-cash-requests.html')}
                             <option>Rejected</option>
                         </select>
                     </div>
-                </header>
+                </div>
                 <div class="erp-table-scroll">
                     <table class="table erp-table erp-table-stack">
                         <thead>
@@ -3170,7 +3161,7 @@ export function pettyCashExpenses() {
 
     return `
 ${previewBar('petty-cash-expenses.html')}
-<div class="erp-app-body">
+<div class="erp-shell">
     ${sidebar('cash_bank')}
     <main class="erp-main">
         ${topbar('Petty cash expenses')}
@@ -3179,7 +3170,7 @@ ${previewBar('petty-cash-expenses.html')}
             <header class="erp-page-head">
                 <div>
                     <p class="erp-eyebrow"><i class="bi bi-receipt" aria-hidden="true"></i> Cash &amp; bank · Petty cash · Expenses</p>
-                    <h1 class="erp-page-title">What came out of the float</h1>
+                    <h1 class="erp-h1">What came out of the float</h1>
                     <p class="erp-page-sub">Every voucher here is a real payment: the money left the float's own account and the ledger knows about it — debited to the category it was spent on, credited to the tin. The float cannot pay more than it holds, which is why the register and the ledger always agree.</p>
                 </div>
                 <div class="erp-page-head-actions">
@@ -3245,12 +3236,9 @@ ${previewBar('petty-cash-expenses.html')}
             </form>
 
             <div class="erp-table-shell" data-erp-table>
-                <header class="erp-table-head">
-                    <div>
-                        <h2 class="erp-table-title">Vouchers paid out of the floats</h2>
-                        <p class="erp-table-count">4 voucher(s) shown</p>
-                    </div>
-                </header>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">Vouchers paid out of the floats<span class="erp-chip erp-chip-outline">4 voucher(s) shown</span></h2>
+                </div>
                 <div class="erp-table-scroll">
                     <table class="table erp-table erp-table-stack">
                         <thead>
@@ -3378,7 +3366,7 @@ export function pettyCashReplenishment() {
 
     return `
 ${previewBar('petty-cash-replenishment.html')}
-<div class="erp-app-body">
+<div class="erp-shell">
     ${sidebar('cash_bank')}
     <main class="erp-main">
         ${topbar('Petty cash replenishment')}
@@ -3387,7 +3375,7 @@ ${previewBar('petty-cash-replenishment.html')}
             <header class="erp-page-head">
                 <div>
                     <p class="erp-eyebrow"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Cash &amp; bank · Petty cash · Replenishment</p>
-                    <h1 class="erp-page-title">Putting the float back</h1>
+                    <h1 class="erp-h1">Putting the float back</h1>
                     <p class="erp-page-sub">A replenishment is a transfer, not an expense: the spending was recorded voucher by voucher, when each was paid, so recording it again here would count every rickshaw twice. This screen puts the float back to the level it is meant to hold — and nothing else.</p>
                 </div>
                 <div class="erp-page-head-actions">
@@ -3420,12 +3408,9 @@ ${previewBar('petty-cash-replenishment.html')}
             </div>
 
             <div class="erp-table-shell" data-erp-table>
-                <header class="erp-table-head">
-                    <div>
-                        <h2 class="erp-table-title">Where each float stands</h2>
-                        <p class="erp-table-count">4 float(s)</p>
-                    </div>
-                </header>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">Where each float stands<span class="erp-chip erp-chip-outline">4 float(s)</span></h2>
+                </div>
                 <div class="erp-table-scroll">
                     <table class="table erp-table erp-table-stack">
                         <thead>
@@ -3507,12 +3492,9 @@ ${previewBar('petty-cash-replenishment.html')}
             </section>
 
             <div class="erp-table-shell mt-3" data-erp-table>
-                <header class="erp-table-head">
-                    <div>
-                        <h2 class="erp-table-title">Replenishments — Head office tin</h2>
-                        <p class="erp-table-count">3 top-up(s) shown</p>
-                    </div>
-                </header>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">Replenishments — Head office tin<span class="erp-chip erp-chip-outline">3 top-up(s) shown</span></h2>
+                </div>
                 <div class="erp-table-scroll">
                     <table class="table erp-table erp-table-stack">
                         <thead>
@@ -3589,7 +3571,7 @@ export function cashCounts() {
 
     return `
 ${previewBar('cash-counts.html')}
-<div class="erp-app-body">
+<div class="erp-shell">
     ${sidebar('cash_bank')}
     <main class="erp-main">
         ${topbar('Cash count')}
@@ -3598,7 +3580,7 @@ ${previewBar('cash-counts.html')}
             <header class="erp-page-head">
                 <div>
                     <p class="erp-eyebrow"><i class="bi bi-clipboard-check" aria-hidden="true"></i> Cash &amp; bank · Cash management · Cash count</p>
-                    <h1 class="erp-page-title">Counting the drawer</h1>
+                    <h1 class="erp-h1">Counting the drawer</h1>
                     <p class="erp-page-sub">Every other screen here believes the ledger. This one asks what is actually in the tin: the notes and coins are written down, added up, and compared with the books, and the gap — if there is one — is the only thing that posts. Above the company's tolerance the gap waits for somebody other than the person holding the money.</p>
                 </div>
                 <div class="erp-page-head-actions">
@@ -3635,12 +3617,9 @@ ${previewBar('cash-counts.html')}
             </div>
 
             <div class="erp-table-shell" data-erp-table>
-                <header class="erp-table-head">
-                    <div>
-                        <h2 class="erp-table-title">The drawers</h2>
-                        <p class="erp-table-count">3 cash account(s)</p>
-                    </div>
-                </header>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">The drawers<span class="erp-chip erp-chip-outline">3 cash account(s)</span></h2>
+                </div>
                 <div class="erp-table-scroll">
                     <table class="table erp-table erp-table-stack">
                         <thead>
@@ -3768,12 +3747,9 @@ ${previewBar('cash-counts.html')}
             </form>
 
             <div class="erp-table-shell mt-3" data-erp-table>
-                <header class="erp-table-head">
-                    <div>
-                        <h2 class="erp-table-title">Counts made</h2>
-                        <p class="erp-table-count">4 count(s) shown</p>
-                    </div>
-                </header>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">Counts made<span class="erp-chip erp-chip-outline">4 count(s) shown</span></h2>
+                </div>
                 <div class="erp-table-scroll">
                     <table class="table erp-table erp-table-stack">
                         <thead>
@@ -3829,7 +3805,7 @@ export function cashCountSheet() {
 
     return `
 ${previewBar('cash-count.html')}
-<div class="erp-app-body">
+<div class="erp-shell">
     ${sidebar('cash_bank')}
     <main class="erp-main">
         ${topbar('Cash count sheet')}
@@ -3838,7 +3814,7 @@ ${previewBar('cash-count.html')}
             <header class="erp-page-head">
                 <div>
                     <p class="erp-eyebrow"><i class="bi bi-clipboard-check" aria-hidden="true"></i> Cash &amp; bank · Cash management · Cash count</p>
-                    <h1 class="erp-page-title">The counted drawer</h1>
+                    <h1 class="erp-h1">The counted drawer</h1>
                     <p class="erp-page-sub">What the books said on the day, what was found in the tin, and the notes and coins that were added up to say so — kept together because a count is evidence rather than a figure. Nothing on this sheet was recalculated afterwards.</p>
                 </div>
                 <div class="erp-page-head-actions">
@@ -3936,6 +3912,398 @@ ${previewBar('cash-count.html')}
             <p class="erp-filter-note mt-3">
                 <i class="bi bi-info-circle" aria-hidden="true"></i>
                 This drawer now reads ৳ 9,650.00 in the books, and it was last counted 2026-10-08. Another count of it is still waiting for a decision.
+            </p>
+
+        </div>
+    </main>
+</div>`;
+}
+
+/**
+ * §08-10 — what the bank takes without asking.
+ *
+ * The desk the user asked for in this slice: the register of charges the banks
+ * have already taken, the rules that will take the next ones by themselves, and
+ * the one button that runs what is due now instead of waiting for the morning.
+ */
+export function bankCharges() {
+    const rules = [
+        {
+            name: 'Account maintenance', account: '1120 — City Bank current', expense: '5280 — Bank Charges',
+            terms: '500.00 every quarter', quote: 'would charge ৳ 500.00 today — fixed', rhythm: 'every quarter on the 5th',
+            next: '2027-01-05', charged: '7', register: '7 in the register', state: 'active', tone: 'running',
+        },
+        {
+            name: 'Commission on withdrawals', account: '1120 — City Bank current', expense: '5280 — Bank Charges',
+            terms: '0.5% of withdrawals, minimum 100.00', quote: 'would charge ৳ 240.00 today — 0.5% of ৳ 48,000.00 of withdrawals since 2026-10-05',
+            rhythm: 'every month on the last day', next: '2026-10-31', charged: '11', register: '11 in the register', state: 'active', tone: 'running',
+        },
+        {
+            name: 'SMS alert fee — Nagad', account: '1130 — Nagad merchant', expense: '5280 — Bank Charges',
+            terms: '25.00 every month', quote: 'paused — nothing will be charged', rhythm: 'every month on the 1st',
+            next: '—', charged: '4', register: '4 in the register', state: 'paused', tone: 'paused',
+        },
+    ];
+
+    const charges = [
+        {
+            date: '2026-10-05', no: 'BC-2026-00012', what: 'Quarterly maintenance', account: 'City Bank current', expense: 'Bank Charges',
+            basis: '500.00 fixed', origin: 'generated by Account maintenance', amount: '500.00', state: 'posted',
+        },
+        {
+            date: '2026-10-05', no: 'BC-2026-00011', what: 'Commission on withdrawals — September', account: 'City Bank current', expense: 'Bank Charges',
+            basis: '0.5% of ৳ 1,86,400.00 of withdrawals', origin: 'generated by Commission on withdrawals', amount: '932.00', state: 'posted',
+        },
+        {
+            date: '2026-09-30', no: 'BC-2026-00010', what: 'Cash handling charge', account: 'City Bank current', expense: 'Bank Charges',
+            basis: '400.00 fixed', origin: 'recorded by hand', amount: '400.00', state: 'reversed',
+            answer: 'answered by JV-2026-00418 — the bank reversed it',
+        },
+        {
+            date: '2026-09-01', no: 'BC-2026-00009', what: 'SMS alert fee', account: 'Nagad merchant', expense: 'Bank Charges',
+            basis: '25.00 fixed', origin: 'generated by SMS alert fee — Nagad', amount: '25.00', state: 'posted',
+        },
+    ];
+
+    return `
+${previewBar('bank-charges.html')}
+<div class="erp-shell">
+    ${sidebar('cash_bank')}
+    <main class="erp-main">
+        ${topbar('Bank charges')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-cash-coin" aria-hidden="true"></i> Cash &amp; bank · Bank accounts · Bank charge auto-posting</p>
+                    <h1 class="erp-h1">What the bank takes without asking</h1>
+                    <p class="erp-page-sub">Account maintenance, SMS alerts, commission on withdrawals: a current account quietly loses money every quarter and none of it arrives as a bill. A rule written here says what the bank takes and when, and from then on the charge posts by itself — Dr the charge, Cr the account it came out of, two lines, no party, because nobody was paid.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./cash-bank.html"><i class="bi bi-bank" aria-hidden="true"></i> The accounts</a>
+                    <button class="btn btn-primary" type="button"><i class="bi bi-lightning-charge" aria-hidden="true"></i> Run what is due <span class="erp-chip erp-chip-warn ms-1">2</span></button>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-cash-coin" aria-hidden="true"></i> Taken this month</p>
+                    <p class="erp-kpi-value">৳ 1,432.00</p>
+                    <p class="erp-kpi-foot">2 charge(s) posted since the first of the month</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-calendar-range" aria-hidden="true"></i> Taken this year</p>
+                    <p class="erp-kpi-value">৳ 4,318.00</p>
+                    <p class="erp-kpi-foot">11 charge(s) — what the banks have taken so far</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-graph-up" aria-hidden="true"></i> Average charge</p>
+                    <p class="erp-kpi-value">৳ 392.55</p>
+                    <p class="erp-kpi-foot">This year's charges divided by how many there were</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-sliders" aria-hidden="true"></i> Rules in place</p>
+                    <p class="erp-kpi-value">2 / 3</p>
+                    <p class="erp-kpi-foot">2 have come due — ৳ 740.00 to post</p>
+                </div>
+            </div>
+
+            <div class="erp-note erp-note-warn mb-3">
+                <i class="bi bi-clock-history" aria-hidden="true"></i>
+                <div>
+                    <strong class="d-block mb-1">2 rule(s) have come due</strong>
+                    ৳ 740.00 in charges is waiting to be posted. The scheduled run does this every morning; the button above is for when the statement cannot wait until tomorrow.
+                </div>
+            </div>
+
+            <form class="erp-filterbar" onsubmit="return false">
+                <div class="erp-filter">
+                    <label class="form-label" for="bc-account">Account</label>
+                    <select class="form-select" id="bc-account">
+                        <option>Every account</option>
+                        <option>1120 — City Bank current</option>
+                        <option>1130 — Nagad merchant</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="bc-state">State</label>
+                    <select class="form-select" id="bc-state">
+                        <option>Everything</option>
+                        <option>Posted</option>
+                        <option>Reversed</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="bc-origin">Came from</label>
+                    <select class="form-select" id="bc-origin">
+                        <option>Rules and the statement</option>
+                        <option>A rule, posted by itself</option>
+                        <option>Recorded by hand</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="bc-from">From</label>
+                    <input class="form-control" id="bc-from" type="date" value="2026-09-01">
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="bc-to">To</label>
+                    <input class="form-control" id="bc-to" type="date" value="2026-10-08">
+                </div>
+                <div class="erp-filter erp-filter-wide">
+                    <label class="form-label" for="bc-q">Search</label>
+                    <input class="form-control" id="bc-q" placeholder="Charge number, what it was for, the bank's reference">
+                </div>
+                <div class="erp-filterbar-actions">
+                    <a class="btn btn-link" href="./bank-charges.html">Reset</a>
+                    <button class="btn btn-primary" type="button"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                </div>
+            </form>
+
+            <section class="erp-table-shell" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">
+                        What the banks have taken
+                        <span class="erp-chip erp-chip-outline">4 charge(s) shown</span>
+                    </h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Charge</th>
+                                <th>Taken from</th>
+                                <th>Booked to</th>
+                                <th>Computed from</th>
+                                <th class="erp-th-num">Amount</th>
+                                <th>State</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${charges.map((row) => `
+                            <tr>
+                                <td>${row.date}</td>
+                                <td>
+                                    <span class="erp-cell-strong">${row.no}</span>
+                                    <div class="erp-td-muted">${row.what}</div>
+                                </td>
+                                <td>${row.account}</td>
+                                <td>${row.expense}</td>
+                                <td>
+                                    ${row.basis}
+                                    <div class="erp-td-muted">${row.origin}</div>
+                                </td>
+                                <td class="erp-td-num">৳ ${row.amount}</td>
+                                <td>
+                                    <span class="erp-status erp-status-${row.state}">${row.state === 'posted' ? 'Posted' : 'Reversed'}</span>
+                                    ${row.answer ? `<div class="erp-td-muted">${row.answer}</div>` : ''}
+                                </td>
+                                <td class="erp-td-actions">${row.state === 'posted' ? '<span class="erp-td-muted">Reverse</span>' : '<span class="erp-td-muted">history, not a button</span>'}</td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="erp-card mt-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">The rules — what the bank is told to take</h2>
+                        <p class="erp-card-sub">A rule is a standing statement about a tariff, not a posting: writing one charges nothing. On its day the charge posts by itself, and a rule and a hand-recorded charge can never duplicate each other because the same rule cannot post twice for the same date.</p>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack">
+                        <thead>
+                            <tr>
+                                <th>Rule</th>
+                                <th>Account</th>
+                                <th>Booked to</th>
+                                <th>Terms</th>
+                                <th>Rhythm</th>
+                                <th>Next charge</th>
+                                <th class="erp-th-num">Charged so far</th>
+                                <th>State</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rules.map((rule) => `
+                            <tr>
+                                <td><span class="erp-cell-strong">${rule.name}</span></td>
+                                <td>${rule.account}</td>
+                                <td>${rule.expense}</td>
+                                <td>
+                                    ${rule.terms}
+                                    <div class="erp-td-muted">${rule.quote}</div>
+                                </td>
+                                <td>${rule.rhythm}</td>
+                                <td>${rule.next}</td>
+                                <td class="erp-td-num">
+                                    ${rule.charged}
+                                    <div class="erp-td-muted">${rule.register}</div>
+                                </td>
+                                <td><span class="erp-status erp-status-${rule.state}">${rule.state === 'active' ? 'Running' : 'Paused'}</span></td>
+                                <td class="erp-td-actions">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button">
+                                        <i class="bi ${rule.state === 'active' ? 'bi-pause' : 'bi-play'}" aria-hidden="true"></i>
+                                        ${rule.state === 'active' ? 'Pause' : 'Resume'}
+                                    </button>
+                                </td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div class="erp-split mt-3">
+                <section class="erp-card">
+                    <header class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">Record a charge</h2>
+                            <p class="erp-card-sub">For a charge that has already happened: pick the rule and the desk computes the amount from its terms, or leave the rule out and enter the figure the statement shows.</p>
+                        </div>
+                    </header>
+                    <form onsubmit="return false">
+                        <div class="erp-form-grid">
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bc-rule">Rule</label>
+                                <select class="form-select" id="bc-rule">
+                                    <option>No rule — I have the figure</option>
+                                    <option>Account maintenance — 500.00 every quarter</option>
+                                    <option>Commission on withdrawals — 0.5% of withdrawals, minimum 100.00</option>
+                                </select>
+                                <small class="form-text">Naming a rule takes the account, the expense account and the amount from it.</small>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bc-from-account">Taken from</label>
+                                <select class="form-select" id="bc-from-account">
+                                    <option>Use the rule's account</option>
+                                    <option>1120 — City Bank current</option>
+                                    <option>1130 — Nagad merchant</option>
+                                </select>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bc-expense">Booked to</label>
+                                <select class="form-select" id="bc-expense">
+                                    <option>5280 — Bank Charges</option>
+                                    <option>5220 — Rent</option>
+                                    <option>5230 — Utilities</option>
+                                </select>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bc-amount">Amount</label>
+                                <input class="form-control" id="bc-amount" placeholder="Leave empty to use the rule's terms">
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bc-on">Date the bank took it</label>
+                                <input class="form-control" id="bc-on" type="date" value="2026-10-08">
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bc-ref">Bank's reference</label>
+                                <input class="form-control" id="bc-ref" placeholder="From the statement, if there is one">
+                            </div>
+                            <div class="erp-form-field erp-form-field-wide">
+                                <label class="form-label" for="bc-narration">What it was for</label>
+                                <input class="form-control" id="bc-narration" placeholder="Quarterly account maintenance">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary mt-2" type="button"><i class="bi bi-cash-coin" aria-hidden="true"></i> Record and post the charge</button>
+                    </form>
+                </section>
+
+                <section class="erp-card">
+                    <header class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">Write a rule</h2>
+                            <p class="erp-card-sub">Nothing is charged by writing one. A commission is computed on the money that left the account since the last charge, so the figure can be checked against the bank's own arithmetic.</p>
+                        </div>
+                    </header>
+                    <form onsubmit="return false">
+                        <div class="erp-form-grid">
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-name">Name</label>
+                                <input class="form-control" id="bcr-name" placeholder="Account maintenance">
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-account">Taken from</label>
+                                <select class="form-select" id="bcr-account">
+                                    <option>1120 — City Bank current</option>
+                                    <option>1130 — Nagad merchant</option>
+                                </select>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-expense">Booked to</label>
+                                <select class="form-select" id="bcr-expense"><option>5280 — Bank Charges</option></select>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-basis">Terms</label>
+                                <select class="form-select" id="bcr-basis">
+                                    <option>A fixed amount</option>
+                                    <option>A percentage of what leaves the account</option>
+                                </select>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-amount">Fixed amount</label>
+                                <input class="form-control" id="bcr-amount" placeholder="500.00">
+                                <small class="form-text">Used when the terms are a fixed amount.</small>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-rate">Rate %</label>
+                                <input class="form-control" id="bcr-rate" placeholder="0.15">
+                                <small class="form-text">Used when the terms are a percentage of what left the account.</small>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-min">Minimum</label>
+                                <input class="form-control" id="bcr-min" placeholder="100.00">
+                                <small class="form-text">A floor under a commission — “0.15%, minimum ৳100”. A quarter in which nothing left the account is charged nothing.</small>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-frequency">How often</label>
+                                <select class="form-select" id="bcr-frequency">
+                                    <option>Every month</option>
+                                    <option selected>Every quarter</option>
+                                    <option>Every half year</option>
+                                    <option>Every year</option>
+                                </select>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-day">On which day</label>
+                                <input class="form-control" id="bcr-day" value="5">
+                                <small class="form-text">A short month takes its last day rather than spilling into the next one.</small>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-starts">First date</label>
+                                <input class="form-control" id="bcr-starts" type="date" value="2026-10-08">
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-ends">Last date</label>
+                                <input class="form-control" id="bcr-ends" type="date">
+                                <small class="form-text">Optional. A rule whose last date has passed stops itself.</small>
+                            </div>
+                            <div class="erp-form-field erp-form-field-wide">
+                                <label class="form-label" for="bcr-narration">What it is</label>
+                                <input class="form-control" id="bcr-narration" placeholder="Quarterly maintenance charge on the current account">
+                            </div>
+                        </div>
+                        <label class="form-check">
+                            <input class="form-check-input" type="checkbox" checked>
+                            <span class="form-check-label">Run it</span>
+                        </label>
+                        <button class="btn btn-primary mt-2" type="button"><i class="bi bi-sliders" aria-hidden="true"></i> Write the rule</button>
+                    </form>
+                </section>
+            </div>
+
+            <p class="erp-filter-note mt-2">
+                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                Recording what the bank has taken and writing the rules that post charges by themselves are two separate permissions — the second is the one that can quietly move money every quarter for years.
+            </p>
+
+            <p class="erp-filter-note mt-2">
+                <i class="bi bi-signpost-split" aria-hidden="true"></i>
+                <span>Related: <a href="./cash-bank.html">The accounts</a> · <a href="./bank-recon.html">Bank reconciliation</a> · <a href="./expenses.html">Expenses</a></span>
             </p>
 
         </div>

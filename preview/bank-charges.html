@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#ffffff">
-    <title>Design system · BD ERP — UI redesign preview</title>
+    <title>Bank charges · BD ERP — UI redesign preview</title>
     <link rel="stylesheet" href="./assets/preview.css">
 </head>
 <body class="erp-body">
@@ -15,11 +15,11 @@
 <div class="erp-preview-bar">
     <i class="bi bi-easel2" aria-hidden="true"></i>
     <strong>UI redesign preview</strong>
-    <a href="./index.html" style="color:#fff;text-decoration:underline">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html">Labels</a><span style="opacity:.4">·</span><a href="./cash-bank.html">Cash & bank</a><span style="opacity:.4">·</span><a href="./bank-recon.html">Reconciliation</a><span style="opacity:.4">·</span><a href="./cash-counts.html">Cash count</a><span style="opacity:.4">·</span><a href="./bank-charges.html">Bank charges</a><span style="opacity:.4">·</span><a href="./cheques.html">Cheques</a><span style="opacity:.4">·</span><a href="./expenses.html">Expenses</a><span style="opacity:.4">·</span><a href="./expense-recurring.html">Recurring</a><span style="opacity:.4">·</span><a href="./petty-cash.html">Petty cash</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
+    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html">Labels</a><span style="opacity:.4">·</span><a href="./cash-bank.html">Cash & bank</a><span style="opacity:.4">·</span><a href="./bank-recon.html">Reconciliation</a><span style="opacity:.4">·</span><a href="./cash-counts.html">Cash count</a><span style="opacity:.4">·</span><a href="./bank-charges.html" style="color:#fff;text-decoration:underline">Bank charges</a><span style="opacity:.4">·</span><a href="./cheques.html">Cheques</a><span style="opacity:.4">·</span><a href="./expenses.html">Expenses</a><span style="opacity:.4">·</span><a href="./expense-recurring.html">Recurring</a><span style="opacity:.4">·</span><a href="./petty-cash.html">Petty cash</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
     <span class="erp-preview-note">Static render of the new shell — same CSS + JS the Laravel app ships. Press ⌘K / Ctrl+K.</span>
 </div>
-<div class="erp-shell" data-rail="expanded">
-
+<div class="erp-shell">
+    
 <aside class="erp-sidebar" id="erpSidebar" aria-label="Primary navigation">
     <div class="erp-sidebar-head">
         <a class="erp-brand" href="./dashboard.html">
@@ -77,15 +77,15 @@
             </p>
             
     <div class="erp-nav-group">
-        <button class="erp-nav-group-btn is-active has-active-trail" type="button"
-                data-bs-toggle="collapse" data-bs-target="#nav-work-0" aria-expanded="true">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-work-0" aria-expanded="false">
             <i class="bi bi-inbox erp-nav-icon" aria-hidden="true"></i>
             <span>Work queue</span>
             <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
         </button>
-        <div class="collapse show" id="nav-work-0">
+        <div class="collapse" id="nav-work-0">
             <div class="erp-nav-sub">
-        <a class="erp-nav-link active" href="./dashboard.html" aria-current="page">
+        <a class="erp-nav-link" href="./dashboard.html">
             <span>Dashboard</span>
         </a>
         <a class="erp-nav-link" href="#">
@@ -577,26 +577,17 @@
         <span class="erp-version">Build 2026.10 · v2</span>
     </div>
 </aside>
-    <div class="erp-main">
-
+    <main class="erp-main">
+        
 <header class="erp-topbar">
     <button class="erp-icon-btn d-lg-none" type="button" data-erp-sidebar-open aria-label="Open navigation">
         <i class="bi bi-list" aria-hidden="true"></i>
     </button>
 
     <div class="erp-topbar-crumbs">
-        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb">
-        <li>
-            <span class="is-current" aria-current="page">Configuration</span>
-        </li>
-        <li>
-            <span class="is-current" aria-current="page">Appearance</span>
-        </li>
-        <li>
-            <span class="is-current" aria-current="page">Design system</span>
-        </li></ol></nav>
+        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb"></ol></nav>
         <div class="erp-topbar-title">
-            <strong class="d-none d-md-inline">Design system</strong>
+            <strong class="d-none d-md-inline">Dashboard</strong>
             <span class="erp-chip erp-chip-outline d-none d-xl-inline-flex" title="Current branch context">
                 <i class="bi bi-geo-alt" aria-hidden="true"></i>Dhaka HQ
             </span>
@@ -670,262 +661,444 @@
         </div>
     </div>
 </header>
-        <main class="erp-content" id="erpContent">
+        <div class="erp-content">
+
             <header class="erp-page-head">
-                <div class="erp-page-head-main">
-                    <p class="erp-eyebrow">Redesign review</p>
-                    <h1 class="erp-h1">Aperture — the white-first design system</h1>
-                    <p class="erp-page-sub">
-                        One configurable accent, layered near-white surfaces, hairline borders, restrained elevation and tabular numerals for money.
-                        No purple anywhere (§18.1 forbids it) — the sidebar, tokens and components below are exactly what the Laravel views now render.
-                    </p>
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-cash-coin" aria-hidden="true"></i> Cash &amp; bank · Bank accounts · Bank charge auto-posting</p>
+                    <h1 class="erp-h1">What the bank takes without asking</h1>
+                    <p class="erp-page-sub">Account maintenance, SMS alerts, commission on withdrawals: a current account quietly loses money every quarter and none of it arrives as a bill. A rule written here says what the bank takes and when, and from then on the charge posts by itself — Dr the charge, Cr the account it came out of, two lines, no party, because nobody was paid.</p>
                 </div>
                 <div class="erp-page-head-actions">
-                    <button class="btn btn-outline-secondary" type="button" data-erp-density-toggle>Toggle density</button>
-                    <button class="btn btn-primary" type="button" data-erp-theme-toggle>Toggle dark mode</button>
+                    <a class="btn btn-outline-secondary" href="./cash-bank.html"><i class="bi bi-bank" aria-hidden="true"></i> The accounts</a>
+                    <button class="btn btn-primary" type="button"><i class="bi bi-lightning-charge" aria-hidden="true"></i> Run what is due <span class="erp-chip erp-chip-warn ms-1">2</span></button>
                 </div>
             </header>
 
-            <section class="erp-card mb-3">
-                <header class="erp-card-head"><h2 class="erp-card-title">Core tokens</h2></header>
-                <div class="row g-2">
-                    
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#ffffff"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Canvas</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#ffffff</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#fafbfc"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Surface 2</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#fafbfc</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#f1f3f6"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Surface 3</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#f1f3f6</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#0d1117"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Ink</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#0d1117</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#4a5261"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Ink 2</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#4a5261</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#818b9c"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Ink 3</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#818b9c</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#0f766e"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Accent — deep teal</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#0f766e</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#eefaf7"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Accent soft</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#eefaf7</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#0f7b4f"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Success</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#0f7b4f</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#b45309"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Warning</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#b45309</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#b42318"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Danger</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#b42318</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#0f6d8c"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Info</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#0f6d8c</code>
-                        </div>
-                    </div>
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-cash-coin" aria-hidden="true"></i> Taken this month</p>
+                    <p class="erp-kpi-value">৳ 1,432.00</p>
+                    <p class="erp-kpi-foot">2 charge(s) posted since the first of the month</p>
                 </div>
-            </section>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-calendar-range" aria-hidden="true"></i> Taken this year</p>
+                    <p class="erp-kpi-value">৳ 4,318.00</p>
+                    <p class="erp-kpi-foot">11 charge(s) — what the banks have taken so far</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-graph-up" aria-hidden="true"></i> Average charge</p>
+                    <p class="erp-kpi-value">৳ 392.55</p>
+                    <p class="erp-kpi-foot">This year's charges divided by how many there were</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-sliders" aria-hidden="true"></i> Rules in place</p>
+                    <p class="erp-kpi-value">2 / 3</p>
+                    <p class="erp-kpi-foot">2 have come due — ৳ 740.00 to post</p>
+                </div>
+            </div>
 
-            <div class="row g-3 mb-3">
-                <div class="col-lg-6">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head"><h2 class="erp-card-title">Accent presets — all non-purple</h2></header>
-                        <div class="d-flex flex-wrap gap-2 mb-3">
+            <div class="erp-note erp-note-warn mb-3">
+                <i class="bi bi-clock-history" aria-hidden="true"></i>
+                <div>
+                    <strong class="d-block mb-1">2 rule(s) have come due</strong>
+                    ৳ 740.00 in charges is waiting to be posted. The scheduled run does this every morning; the button above is for when the statement cannot wait until tomorrow.
+                </div>
+            </div>
+
+            <form class="erp-filterbar" onsubmit="return false">
+                <div class="erp-filter">
+                    <label class="form-label" for="bc-account">Account</label>
+                    <select class="form-select" id="bc-account">
+                        <option>Every account</option>
+                        <option>1120 — City Bank current</option>
+                        <option>1130 — Nagad merchant</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="bc-state">State</label>
+                    <select class="form-select" id="bc-state">
+                        <option>Everything</option>
+                        <option>Posted</option>
+                        <option>Reversed</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="bc-origin">Came from</label>
+                    <select class="form-select" id="bc-origin">
+                        <option>Rules and the statement</option>
+                        <option>A rule, posted by itself</option>
+                        <option>Recorded by hand</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="bc-from">From</label>
+                    <input class="form-control" id="bc-from" type="date" value="2026-09-01">
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="bc-to">To</label>
+                    <input class="form-control" id="bc-to" type="date" value="2026-10-08">
+                </div>
+                <div class="erp-filter erp-filter-wide">
+                    <label class="form-label" for="bc-q">Search</label>
+                    <input class="form-control" id="bc-q" placeholder="Charge number, what it was for, the bank's reference">
+                </div>
+                <div class="erp-filterbar-actions">
+                    <a class="btn btn-link" href="./bank-charges.html">Reset</a>
+                    <button class="btn btn-primary" type="button"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                </div>
+            </form>
+
+            <section class="erp-table-shell" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">
+                        What the banks have taken
+                        <span class="erp-chip erp-chip-outline">4 charge(s) shown</span>
+                    </h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Charge</th>
+                                <th>Taken from</th>
+                                <th>Booked to</th>
+                                <th>Computed from</th>
+                                <th class="erp-th-num">Amount</th>
+                                <th>State</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             
-                            <button class="erp-chip erp-chip-outline" type="button"
-                                    onclick="document.documentElement.dataset.accent='teal'">
-                                <span style="width:12px;height:12px;border-radius:50%;background:#0f766e;display:inline-block"></span>Deep teal
-                            </button>
-                            <button class="erp-chip erp-chip-outline" type="button"
-                                    onclick="document.documentElement.dataset.accent='azure'">
-                                <span style="width:12px;height:12px;border-radius:50%;background:#0b5cab;display:inline-block"></span>Azure
-                            </button>
-                            <button class="erp-chip erp-chip-outline" type="button"
-                                    onclick="document.documentElement.dataset.accent='forest'">
-                                <span style="width:12px;height:12px;border-radius:50%;background:#1c7c4a;display:inline-block"></span>Forest
-                            </button>
-                            <button class="erp-chip erp-chip-outline" type="button"
-                                    onclick="document.documentElement.dataset.accent='graphite'">
-                                <span style="width:12px;height:12px;border-radius:50%;background:#1f2937;display:inline-block"></span>Graphite
-                            </button>
-                        </div>
-                        <p class="erp-widget-note mb-0">Operators choose the company accent in Settings › Appearance; each user still controls light/dark and row density locally. Try the chips — the whole UI re-themes from tokens.</p>
-                    </section>
-                </div>
-                <div class="col-lg-6">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head"><h2 class="erp-card-title">Status vocabulary — semantic, never rainbow</h2></header>
-                        <div class="d-flex flex-wrap gap-2 mb-3">
-                            <span class="erp-status erp-status-active">active</span><span class="erp-status erp-status-pending">pending</span><span class="erp-status erp-status-approved">approved</span><span class="erp-status erp-status-rejected">rejected</span><span class="erp-status erp-status-processing">processing</span><span class="erp-status erp-status-cancelled">cancelled</span><span class="erp-status erp-status-delivered">delivered</span><span class="erp-status erp-status-overdue">overdue</span>
-                        </div>
-                        <div class="d-flex flex-wrap gap-2">
-                            <span class="erp-chip erp-chip-soft">soft chip</span>
-                            <span class="erp-chip erp-chip-outline">outline chip</span>
-                            <span class="erp-chip erp-chip-warn">needs attention</span>
-                            <span class="erp-chip erp-chip-ok">settled</span>
-                            <span class="erp-chip erp-chip-danger">over limit</span>
-                        </div>
-                    </section>
-                </div>
-            </div>
-
-            <div class="row g-3 mb-3">
-                <div class="col-lg-6">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head"><h2 class="erp-card-title">Buttons &amp; actions</h2></header>
-                        <div class="d-flex flex-wrap gap-2 mb-3">
-                            <button class="btn btn-primary" type="button"><i class="bi bi-check2" aria-hidden="true"></i> Primary</button>
-                            <button class="btn btn-outline-secondary" type="button">Secondary</button>
-                            <button class="btn btn-outline-danger" type="button"><i class="bi bi-x-circle" aria-hidden="true"></i> Destructive</button>
-                            <button class="btn btn-success" type="button">Success</button>
-                            <button class="btn btn-primary" type="button" disabled>Disabled</button>
-                        </div>
-                        <div class="d-flex flex-wrap gap-2 align-items-center">
-                            <button class="btn btn-sm btn-outline-secondary" type="button">Small</button>
-                            <button class="erp-icon-btn" type="button" aria-label="Icon action"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
-                            <kbd>⌘</kbd><kbd>K</kbd>
-                            <span class="erp-status erp-status-approved">approved</span>
-                        </div>
-                    </section>
-                </div>
-                <div class="col-lg-6">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head"><h2 class="erp-card-title">Form controls</h2></header>
-                        <div class="mb-3">
-                            <label class="form-label" for="ds-name">Customer name</label>
-                            <input class="form-control" id="ds-name" placeholder="e.g. Nusrat Jahan">
-                            <div class="form-text">Type-ahead resolves duplicates by phone number.</div>
-                        </div>
-                        <div class="row g-2">
-                            <div class="col-6">
-                                <label class="form-label" for="ds-branch">Branch</label>
-                                <select class="form-select" id="ds-branch"><option>Dhaka HQ</option><option>Chattogram</option></select>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label" for="ds-date">Delivery date</label>
-                                <input class="form-control" id="ds-date" value="07/10/2026">
-                            </div>
-                        </div>
-                        <div class="form-check mt-3">
-                            <input class="form-check-input" type="checkbox" id="ds-vat" checked>
-                            <label class="form-check-label" for="ds-vat">Apply VAT from the item tax rate master</label>
-                        </div>
-                    </section>
-                </div>
-            </div>
-
-            <section class="erp-card mb-3">
-                <header class="erp-card-head">
-                    <h2 class="erp-card-title">Page-state contract (§18.6)</h2>
-                    <span class="erp-chip erp-chip-outline">loading · empty · error</span>
-                </header>
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <div class="erp-card erp-card-tight h-100">
-                            <p class="erp-field-label">Loading (skeleton)</p>
-                            <span class="erp-skeleton erp-skeleton-lg mb-2" style="width:60%"></span>
-                            <span class="erp-skeleton mb-2" style="width:100%"></span>
-                            <span class="erp-skeleton mb-2" style="width:88%"></span>
-                            <span class="erp-skeleton" style="width:72%"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="erp-card erp-card-tight h-100 d-flex">
-                            <div class="erp-empty">
-                                <span class="erp-empty-icon"><i class="bi bi-inbox" aria-hidden="true"></i></span>
-                                <p>No orders match these filters</p>
-                                <small>Widen the date range, or clear the branch filter to include Chattogram.</small>
-                                <div class="erp-empty-actions">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Clear filters</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="erp-card erp-card-tight h-100">
-                            <p class="erp-field-label">Recoverable error</p>
-                            <div class="erp-inline-error">
-                                <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
-                                <div>
-                                    <strong class="d-block">Courier rate card unavailable</strong>
-                                    Pathao did not respond. The order is saved; charges will resolve on retry.
-                                    <button class="btn btn-sm btn-outline-secondary mt-2" type="button">Retry</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                            <tr>
+                                <td>2026-10-05</td>
+                                <td>
+                                    <span class="erp-cell-strong">BC-2026-00012</span>
+                                    <div class="erp-td-muted">Quarterly maintenance</div>
+                                </td>
+                                <td>City Bank current</td>
+                                <td>Bank Charges</td>
+                                <td>
+                                    500.00 fixed
+                                    <div class="erp-td-muted">generated by Account maintenance</div>
+                                </td>
+                                <td class="erp-td-num">৳ 500.00</td>
+                                <td>
+                                    <span class="erp-status erp-status-posted">Posted</span>
+                                    
+                                </td>
+                                <td class="erp-td-actions"><span class="erp-td-muted">Reverse</span></td>
+                            </tr>
+                            <tr>
+                                <td>2026-10-05</td>
+                                <td>
+                                    <span class="erp-cell-strong">BC-2026-00011</span>
+                                    <div class="erp-td-muted">Commission on withdrawals — September</div>
+                                </td>
+                                <td>City Bank current</td>
+                                <td>Bank Charges</td>
+                                <td>
+                                    0.5% of ৳ 1,86,400.00 of withdrawals
+                                    <div class="erp-td-muted">generated by Commission on withdrawals</div>
+                                </td>
+                                <td class="erp-td-num">৳ 932.00</td>
+                                <td>
+                                    <span class="erp-status erp-status-posted">Posted</span>
+                                    
+                                </td>
+                                <td class="erp-td-actions"><span class="erp-td-muted">Reverse</span></td>
+                            </tr>
+                            <tr>
+                                <td>2026-09-30</td>
+                                <td>
+                                    <span class="erp-cell-strong">BC-2026-00010</span>
+                                    <div class="erp-td-muted">Cash handling charge</div>
+                                </td>
+                                <td>City Bank current</td>
+                                <td>Bank Charges</td>
+                                <td>
+                                    400.00 fixed
+                                    <div class="erp-td-muted">recorded by hand</div>
+                                </td>
+                                <td class="erp-td-num">৳ 400.00</td>
+                                <td>
+                                    <span class="erp-status erp-status-reversed">Reversed</span>
+                                    <div class="erp-td-muted">answered by JV-2026-00418 — the bank reversed it</div>
+                                </td>
+                                <td class="erp-td-actions"><span class="erp-td-muted">history, not a button</span></td>
+                            </tr>
+                            <tr>
+                                <td>2026-09-01</td>
+                                <td>
+                                    <span class="erp-cell-strong">BC-2026-00009</span>
+                                    <div class="erp-td-muted">SMS alert fee</div>
+                                </td>
+                                <td>Nagad merchant</td>
+                                <td>Bank Charges</td>
+                                <td>
+                                    25.00 fixed
+                                    <div class="erp-td-muted">generated by SMS alert fee — Nagad</div>
+                                </td>
+                                <td class="erp-td-num">৳ 25.00</td>
+                                <td>
+                                    <span class="erp-status erp-status-posted">Posted</span>
+                                    
+                                </td>
+                                <td class="erp-td-actions"><span class="erp-td-muted">Reverse</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </section>
 
-            <p class="erp-page-sub">
-                Static preview rendered from the shipped stylesheet and behaviour layer. Screens:
-                <a href="./dashboard.html">Dashboard</a>,
-                <a href="./orders.html">Sales orders</a>,
-                <a href="./order-detail.html">Order workspace</a>,
-                <a href="./pos.html">POS terminal</a>,
-                <a href="./login.html">Sign in</a>.
-            </p>
-        </main>
+            <section class="erp-card mt-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">The rules — what the bank is told to take</h2>
+                        <p class="erp-card-sub">A rule is a standing statement about a tariff, not a posting: writing one charges nothing. On its day the charge posts by itself, and a rule and a hand-recorded charge can never duplicate each other because the same rule cannot post twice for the same date.</p>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack">
+                        <thead>
+                            <tr>
+                                <th>Rule</th>
+                                <th>Account</th>
+                                <th>Booked to</th>
+                                <th>Terms</th>
+                                <th>Rhythm</th>
+                                <th>Next charge</th>
+                                <th class="erp-th-num">Charged so far</th>
+                                <th>State</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr>
+                                <td><span class="erp-cell-strong">Account maintenance</span></td>
+                                <td>1120 — City Bank current</td>
+                                <td>5280 — Bank Charges</td>
+                                <td>
+                                    500.00 every quarter
+                                    <div class="erp-td-muted">would charge ৳ 500.00 today — fixed</div>
+                                </td>
+                                <td>every quarter on the 5th</td>
+                                <td>2027-01-05</td>
+                                <td class="erp-td-num">
+                                    7
+                                    <div class="erp-td-muted">7 in the register</div>
+                                </td>
+                                <td><span class="erp-status erp-status-active">Running</span></td>
+                                <td class="erp-td-actions">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button">
+                                        <i class="bi bi-pause" aria-hidden="true"></i>
+                                        Pause
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="erp-cell-strong">Commission on withdrawals</span></td>
+                                <td>1120 — City Bank current</td>
+                                <td>5280 — Bank Charges</td>
+                                <td>
+                                    0.5% of withdrawals, minimum 100.00
+                                    <div class="erp-td-muted">would charge ৳ 240.00 today — 0.5% of ৳ 48,000.00 of withdrawals since 2026-10-05</div>
+                                </td>
+                                <td>every month on the last day</td>
+                                <td>2026-10-31</td>
+                                <td class="erp-td-num">
+                                    11
+                                    <div class="erp-td-muted">11 in the register</div>
+                                </td>
+                                <td><span class="erp-status erp-status-active">Running</span></td>
+                                <td class="erp-td-actions">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button">
+                                        <i class="bi bi-pause" aria-hidden="true"></i>
+                                        Pause
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="erp-cell-strong">SMS alert fee — Nagad</span></td>
+                                <td>1130 — Nagad merchant</td>
+                                <td>5280 — Bank Charges</td>
+                                <td>
+                                    25.00 every month
+                                    <div class="erp-td-muted">paused — nothing will be charged</div>
+                                </td>
+                                <td>every month on the 1st</td>
+                                <td>—</td>
+                                <td class="erp-td-num">
+                                    4
+                                    <div class="erp-td-muted">4 in the register</div>
+                                </td>
+                                <td><span class="erp-status erp-status-paused">Paused</span></td>
+                                <td class="erp-td-actions">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button">
+                                        <i class="bi bi-play" aria-hidden="true"></i>
+                                        Resume
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
-<footer class="erp-footer">
-    <span>BD ERP · Rafshan Trading Ltd.</span>
-    <span class="erp-footer-meta">
-        <span>07 Oct 2026, 06:20 PM · Asia/Dhaka</span>
-        <span class="d-none d-md-inline">Press <kbd>⌘</kbd><kbd>K</kbd> to jump anywhere</span>
-    </span>
-</footer>
-    </div>
+            <div class="erp-split mt-3">
+                <section class="erp-card">
+                    <header class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">Record a charge</h2>
+                            <p class="erp-card-sub">For a charge that has already happened: pick the rule and the desk computes the amount from its terms, or leave the rule out and enter the figure the statement shows.</p>
+                        </div>
+                    </header>
+                    <form onsubmit="return false">
+                        <div class="erp-form-grid">
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bc-rule">Rule</label>
+                                <select class="form-select" id="bc-rule">
+                                    <option>No rule — I have the figure</option>
+                                    <option>Account maintenance — 500.00 every quarter</option>
+                                    <option>Commission on withdrawals — 0.5% of withdrawals, minimum 100.00</option>
+                                </select>
+                                <small class="form-text">Naming a rule takes the account, the expense account and the amount from it.</small>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bc-from-account">Taken from</label>
+                                <select class="form-select" id="bc-from-account">
+                                    <option>Use the rule's account</option>
+                                    <option>1120 — City Bank current</option>
+                                    <option>1130 — Nagad merchant</option>
+                                </select>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bc-expense">Booked to</label>
+                                <select class="form-select" id="bc-expense">
+                                    <option>5280 — Bank Charges</option>
+                                    <option>5220 — Rent</option>
+                                    <option>5230 — Utilities</option>
+                                </select>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bc-amount">Amount</label>
+                                <input class="form-control" id="bc-amount" placeholder="Leave empty to use the rule's terms">
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bc-on">Date the bank took it</label>
+                                <input class="form-control" id="bc-on" type="date" value="2026-10-08">
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bc-ref">Bank's reference</label>
+                                <input class="form-control" id="bc-ref" placeholder="From the statement, if there is one">
+                            </div>
+                            <div class="erp-form-field erp-form-field-wide">
+                                <label class="form-label" for="bc-narration">What it was for</label>
+                                <input class="form-control" id="bc-narration" placeholder="Quarterly account maintenance">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary mt-2" type="button"><i class="bi bi-cash-coin" aria-hidden="true"></i> Record and post the charge</button>
+                    </form>
+                </section>
+
+                <section class="erp-card">
+                    <header class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">Write a rule</h2>
+                            <p class="erp-card-sub">Nothing is charged by writing one. A commission is computed on the money that left the account since the last charge, so the figure can be checked against the bank's own arithmetic.</p>
+                        </div>
+                    </header>
+                    <form onsubmit="return false">
+                        <div class="erp-form-grid">
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-name">Name</label>
+                                <input class="form-control" id="bcr-name" placeholder="Account maintenance">
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-account">Taken from</label>
+                                <select class="form-select" id="bcr-account">
+                                    <option>1120 — City Bank current</option>
+                                    <option>1130 — Nagad merchant</option>
+                                </select>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-expense">Booked to</label>
+                                <select class="form-select" id="bcr-expense"><option>5280 — Bank Charges</option></select>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-basis">Terms</label>
+                                <select class="form-select" id="bcr-basis">
+                                    <option>A fixed amount</option>
+                                    <option>A percentage of what leaves the account</option>
+                                </select>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-amount">Fixed amount</label>
+                                <input class="form-control" id="bcr-amount" placeholder="500.00">
+                                <small class="form-text">Used when the terms are a fixed amount.</small>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-rate">Rate %</label>
+                                <input class="form-control" id="bcr-rate" placeholder="0.15">
+                                <small class="form-text">Used when the terms are a percentage of what left the account.</small>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-min">Minimum</label>
+                                <input class="form-control" id="bcr-min" placeholder="100.00">
+                                <small class="form-text">A floor under a commission — “0.15%, minimum ৳100”. A quarter in which nothing left the account is charged nothing.</small>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-frequency">How often</label>
+                                <select class="form-select" id="bcr-frequency">
+                                    <option>Every month</option>
+                                    <option selected>Every quarter</option>
+                                    <option>Every half year</option>
+                                    <option>Every year</option>
+                                </select>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-day">On which day</label>
+                                <input class="form-control" id="bcr-day" value="5">
+                                <small class="form-text">A short month takes its last day rather than spilling into the next one.</small>
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-starts">First date</label>
+                                <input class="form-control" id="bcr-starts" type="date" value="2026-10-08">
+                            </div>
+                            <div class="erp-form-field">
+                                <label class="form-label" for="bcr-ends">Last date</label>
+                                <input class="form-control" id="bcr-ends" type="date">
+                                <small class="form-text">Optional. A rule whose last date has passed stops itself.</small>
+                            </div>
+                            <div class="erp-form-field erp-form-field-wide">
+                                <label class="form-label" for="bcr-narration">What it is</label>
+                                <input class="form-control" id="bcr-narration" placeholder="Quarterly maintenance charge on the current account">
+                            </div>
+                        </div>
+                        <label class="form-check">
+                            <input class="form-check-input" type="checkbox" checked>
+                            <span class="form-check-label">Run it</span>
+                        </label>
+                        <button class="btn btn-primary mt-2" type="button"><i class="bi bi-sliders" aria-hidden="true"></i> Write the rule</button>
+                    </form>
+                </section>
+            </div>
+
+            <p class="erp-filter-note mt-2">
+                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                Recording what the bank has taken and writing the rules that post charges by themselves are two separate permissions — the second is the one that can quietly move money every quarter for years.
+            </p>
+
+            <p class="erp-filter-note mt-2">
+                <i class="bi bi-signpost-split" aria-hidden="true"></i>
+                <span>Related: <a href="./cash-bank.html">The accounts</a> · <a href="./bank-recon.html">Bank reconciliation</a> · <a href="./expenses.html">Expenses</a></span>
+            </p>
+
+        </div>
+    </main>
 </div>
 
 <div class="erp-backdrop" data-erp-backdrop hidden></div>
