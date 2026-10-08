@@ -106,6 +106,12 @@ class SystemRoleSeeder extends Seeder
                 // button, so a manager holding all of them still answers for what
                 // they cleared.
                 'cheques.view', 'cheques.manage', 'cheques.clear', 'cheques.print',
+                // §08-15…§08-18: a department manager records what the department
+                // spends and signs off what it spends above the limit. The
+                // maker-checker rule is in ExpenseService, so holding the
+                // approval key still cannot approve their own entry — and the
+                // category mapping stays with whoever configures the books.
+                'expenses.view', 'expenses.create', 'expenses.approve',
                 // §04-28: stock leaving the building on a transfer is the same
                 // kind of decision as stock being written off, so it is the same
                 // desk that signs it off — and never the person who raised it.

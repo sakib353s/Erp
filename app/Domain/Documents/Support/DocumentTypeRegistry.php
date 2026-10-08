@@ -70,6 +70,12 @@ final class DocumentTypeRegistry
         // on the slip, and inventing a second one here would be the fastest way
         // to disagree with the bank statement.
         ['code' => 'cheque', 'type_group' => 'accounting', 'name' => 'Cheque', 'printed_title' => 'CHEQUE', 'requires_numbering' => false],
+        // §08-16: an expense is a numbered document in its own series — "show
+        // me EXP-2026-00031" is how a receipt and the posting behind it are
+        // found again in the file. It is deliberately NOT folded into
+        // `expense_voucher`, which the cash-payment desk numbers vouchers in:
+        // one number should point at one kind of document.
+        ['code' => 'expense', 'type_group' => 'accounting', 'name' => 'Expense', 'printed_title' => 'EXPENSE VOUCHER'],
 
         // ---- HR
         ['code' => 'payroll', 'type_group' => 'hr', 'name' => 'Payroll Sheet', 'printed_title' => 'PAYROLL', 'tax_applicable' => true],
@@ -94,6 +100,7 @@ final class DocumentTypeRegistry
         'purchase_order' => 'PO',
         'journal_voucher' => 'JV',
         'expense_voucher' => 'EX',
+        'expense' => 'EXP',
         'cash_transfer' => 'CT',
         'stock_adjustment' => 'ADJ',
         'stock_transfer' => 'TRF',

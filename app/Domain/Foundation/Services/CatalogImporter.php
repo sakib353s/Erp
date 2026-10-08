@@ -280,6 +280,16 @@ class CatalogImporter
         'cash & bank > cheque management > bounced cheques' => ['/app/cash-bank/cheques?state=failed', 'cheques.view'],
         'cash & bank > cheque management > post-dated cheques' => ['/app/cash-bank/cheques?state=post_dated', 'cheques.view'],
         'cash & bank > cheque management > cheque print' => ['/app/cash-bank/cheques?direction=issued', 'cheques.print'],
+        // §08-15…§08-18: the expense desk. Five of its six leaves are views of one
+        // register — "All Expenses" and "Pending Approval" are the same list asked
+        // two questions — so each one opens the register already filtered. The
+        // sixth (Expense Categories) is the mapping screen and opens itself.
+        // Recurring Expenses and Expense Reports are still PLANNED and stay
+        // unmapped on purpose: a leaf must never point at a screen nobody built.
+        'cash & bank > expenses > all expenses' => ['/app/cash-bank/expenses', 'expenses.view'],
+        'cash & bank > expenses > add expense' => ['/app/cash-bank/expenses/create', 'expenses.create'],
+        'cash & bank > expenses > expense categories' => ['/app/cash-bank/expense-categories', 'expenses.categories'],
+        'cash & bank > expenses > pending approval' => ['/app/cash-bank/expenses?status=pending_approval', 'expenses.view'],
         'accounting > chart of accounts > coa tree' => ['/app/accounting/coa', 'accounting.coa.view'],
         'accounting > chart of accounts > account groups' => ['/app/accounting/account-groups', 'accounting.coa.view'],
         'accounting > chart of accounts > add account' => ['/app/accounting/accounts/create', 'accounting.coa.manage'],

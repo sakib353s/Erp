@@ -10,6 +10,7 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BulkPriceUpdateController;
 use App\Http\Controllers\CashBankController;
 use App\Http\Controllers\ChequeController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\CodController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CompanyController;
@@ -967,6 +968,40 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::get('/app/cash-bank/cheques/{cheque}/print', [ChequeController::class, 'print'])
         ->middleware('permission:cheques.print')
         ->name('cash-bank.cheques.print');
+
+    /*
+     * §08-15…§08-18 — the expense desk. Recording an expense, deciding it and
+     * configuring what a category books to are three jobs: `expenses.view` reads
+     * the register, `expenses.create` records one, `expenses.approve` is the
+     * signature that lets a large one reach the ledger, and `expenses.categories`
+     * decides which accounts the whole report is built from. The maker-checker
+     * rule lives in ExpenseService, not in a hidden button, so holding the
+     * approval key does not let anybody approve their own expense.
+     */
+    Route::get('/app/cash-bank/expenses', [ExpenseController::class, 'index'])
+        ->middleware('permission:expenses.view')
+        ->name('cash-bank.expenses');
+    Route::get('/app/cash-bank/expenses/create', [ExpenseController::class, 'create'])
+        ->middleware('permission:expenses.create')
+        ->name('cash-bank.expenses.create');
+    Route::post('/app/cash-bank/expenses', [ExpenseController::class, 'store'])
+        ->middleware('permission:expenses.create')
+        ->name('cash-bank.expenses.store');
+    Route::get('/app/cash-bank/expenses/{expense}', [ExpenseController::class, 'show'])
+        ->middleware('permission:expenses.view')
+        ->name('cash-bank.expenses.show');
+    Route::post('/app/cash-bank/expenses/{expense}/decide', [ExpenseController::class, 'decide'])
+        ->middleware('permission:expenses.approve')
+        ->name('cash-bank.expenses.decide');
+    Route::get('/app/cash-bank/expense-categories', [ExpenseController::class, 'categories'])
+        ->middleware('permission:expenses.view')
+        ->name('cash-bank.expense-categories');
+    Route::post('/app/cash-bank/expense-categories', [ExpenseController::class, 'storeCategory'])
+        ->middleware('permission:expenses.categories')
+        ->name('cash-bank.expense-categories.store');
+    Route::put('/app/cash-bank/expense-categories/{category}', [ExpenseController::class, 'updateCategory'])
+        ->middleware('permission:expenses.categories')
+        ->name('cash-bank.expense-categories.update');
 
     Route::get('/app/accounting/opening-trial-balance', [FinancialReportController::class, 'openingTrialBalance'])
         ->middleware('permission:accounting.reports.view')

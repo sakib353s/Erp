@@ -554,12 +554,25 @@ return [
                 ],
             ],
 
-            /*
-             * Appearance — the §18.1 "one configurable accent" contract.
-             * Every preset in resources/css/app.css is a non-purple,
-             * WCAG-AA enterprise accent; the operator picks one company-wide
-             * and each user may still switch light/dark + row density locally.
-             */
+            /* §08-15/§08-16: the expense desk asks one question before it
+               posts anything — is this worth more than the company lets a
+               single person spend? The answer is a setting rather than a rule
+               written into the module, and the number an expense was judged
+               against is copied onto the expense itself, so changing this
+               later never rewrites what a past approval was based on. */
+            'cash' => [
+                'label' => 'Cash & Bank',
+                'description' => 'The money desk: how much may be spent before a signature is needed.',
+                'fields' => [
+                    'expense_approval_above' => [
+                        'label' => 'Expenses need approval at or above',
+                        'type' => 'number',
+                        'default' => 0,
+                        'min' => 0,
+                        'help' => 'An expense worth this much or more is recorded and then waits for somebody else to approve it; nothing reaches the ledger while it waits. Zero means every expense posts as it is recorded — which is how a one-person company works, and it is the default here on purpose.',
+                    ],
+                ],
+            ],
             'inventory' => [
                 'label' => 'Inventory Settings',
                 'description' => 'Thresholds the stock reports and alerts judge against.',
@@ -785,6 +798,12 @@ return [
                 ],
             ],
 
+            /*
+             * Appearance — the §18.1 "one configurable accent" contract.
+             * Every preset in resources/css/app.css is a non-purple,
+             * WCAG-AA enterprise accent; the operator picks one company-wide
+             * and each user may still switch light/dark + row density locally.
+             */
             'appearance' => [
                 'label' => 'Appearance',
                 'description' => 'Workspace identity and default reading density.',

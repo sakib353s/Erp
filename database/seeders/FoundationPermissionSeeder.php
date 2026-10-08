@@ -199,6 +199,16 @@ class FoundationPermissionSeeder extends Seeder
             ['cheques', 'register', 'manage', 'cheques.manage', 'Write cheques into the register'],
             ['cheques', 'register', 'clear', 'cheques.clear', 'Say a cheque cleared or failed — the moment it reaches the ledger'],
             ['cheques', 'register', 'print', 'cheques.print', 'Print the record of a cheque the company issued'],
+            // §08-15…§08-18: an expense, the signature that lets a large one
+            // post, and the mapping that decides which account the whole
+            // expense report is built from. They are four jobs: reading the
+            // register is a manager's, recording an expense is a clerk's,
+            // approving one belongs to whoever answers for the money, and
+            // re-pointing a category moves every future figure in the report.
+            ['expenses', 'register', 'view', 'expenses.view', 'Read the expense register'],
+            ['expenses', 'register', 'create', 'expenses.create', 'Record an expense'],
+            ['expenses', 'approval', 'decide', 'expenses.approve', 'Approve, refuse or reverse an expense — the moments the ledger moves'],
+            ['expenses', 'categories', 'manage', 'expenses.categories', 'Decide which ledger account an expense category books to'],
             ['accounting', 'opening', 'create', 'accounting.opening.create', 'Post opening balances'],
             ['accounting', 'receipts', 'view', 'accounting.receipts.view', 'View receipts'],
             ['accounting', 'receipts', 'create', 'accounting.receipts.create', 'Record receipts'],

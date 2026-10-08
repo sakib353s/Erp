@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             InventoryCoreSeeder::class,
             SalesCoreSeeder::class,
             PurchaseCoreSeeder::class,
+            CashBankCoreSeeder::class,
         ]);
     }
 }

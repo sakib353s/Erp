@@ -15,6 +15,7 @@ use App\Domain\Foundation\Services\TenantContext;
 use App\Domain\Foundation\User;
 use App\Domain\Settings\Services\SettingService;
 use Database\Seeders\AccountingCoreSeeder;
+use Database\Seeders\CashBankCoreSeeder;
 use Database\Seeders\InventoryCoreSeeder;
 use Database\Seeders\SalesCoreSeeder;
 use Illuminate\Support\Facades\DB;
@@ -224,6 +225,7 @@ class CompanyService
             InventoryCoreSeeder::class,
             SalesCoreSeeder::class,
             PurchaseCoreSeeder::class,
+            CashBankCoreSeeder::class,
         ] as $seeder) {
             app($seeder)->run();
         }

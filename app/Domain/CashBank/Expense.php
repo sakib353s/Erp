@@ -1,0 +1,180 @@
+<?php
+
+namespace App\Domain\CashBank;
+
+use App\Domain\Accounting\Account;
+use App\Domain\Accounting\JournalEntry;
+use App\Domain\Foundation\User;
+use App\Domain\Purchase\Supplier;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+/**
+ * §08-15/§08-16/§08-18 — one expense: a receipt, a category and the money that
+ * answered it.
+ *
+ * The state machine is deliberately short, because an expense has only three
+ * honest questions:
+ *
+ *   pending_approval → posted        somebody with the authority said yes; the
+ *                                    ledger hears about it now and not before
+ *   pending_approval → rejected      somebody said no; nothing posted, ever
+ *   posted           → reversed      it was wrong, and both the entry and its
+ *                                    answer stay in the ledger
+ *
+ * `settled_with` is the second axis and it is not a state: an expense paid from
+ * the till and one owed to a supplier are both expenses, and the ledger
+ * difference is one credit line. Both are final when posted — money that has
+ * left does not come back because somebody edited a screen, which is why the
+ * way to undo a posted expense is a reversal, not an update.
+ */
+class Expense extends Model
+{
+    public const STATUS_PENDING = 'pending_approval';
+
+    public const STATUS_POSTED = 'posted';
+
+    public const STATUS_REJECTED = 'rejected';
+
+    public const STATUS_REVERSED = 'reversed';
+
+    public const STATUSES = [
+        self::STATUS_PENDING => 'Waiting for approval',
+        self::STATUS_POSTED => 'Posted',
+        self::STATUS_REJECTED => 'Rejected',
+        self::STATUS_REVERSED => 'Reversed',
+    ];
+
+    public const SETTLED_MONEY = 'money';
+
+    public const SETTLED_PAYABLE = 'payable';
+
+    public const SETTLED_WITH = [
+        self::SETTLED_MONEY => 'Paid from an account',
+        self::SETTLED_PAYABLE => 'Owed to a supplier',
+    ];
+
+    protected $fillable = [
+        'company_id', 'branch_id', 'expense_no', 'category_id', 'expense_date',
+        'payee', 'supplier_id', 'narration', 'amount', 'currency',
+        'settled_with', 'money_account_id', 'status', 'approval_gate',
+        'approval_threshold', 'decided_by', 'decided_at', 'decision_note',
+        'journal_entry_id', 'reversal_entry_id', 'receipt_document_id', 'created_by',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'expense_date' => 'date',
+            'amount' => 'decimal:4',
+            'approval_gate' => 'boolean',
+            'approval_threshold' => 'decimal:4',
+            'decided_at' => 'datetime',
+        ];
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(ExpenseCategory::class, 'category_id');
+    }
+
+    /** The account the debit lands on — the category's, never a guess. */
+    public function categoryAccount(): ?Account
+    {
+        return $this->category?->account;
+    }
+
+    public function moneyAccount(): BelongsTo
+    {
+        return $this->belongsTo(Account::class, 'money_account_id');
+    }
+
+    public function supplier(): BelongsTo
+    {
+        return $this->belongsTo(Supplier::class);
+    }
+
+    public function journalEntry(): BelongsTo
+    {
+        return $this->belongsTo(JournalEntry::class);
+    }
+
+    public function reversalEntry(): BelongsTo
+    {
+        return $this->belongsTo(JournalEntry::class, 'reversal_entry_id');
+    }
+
+    /** The receipt, if one was photographed or scanned. */
+    public function receipt(): BelongsTo
+    {
+        return $this->belongsTo(\App\Domain\Documents\Document::class, 'receipt_document_id');
+    }
+
+    public function decisionMaker(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'decided_by');
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function label(): string
+    {
+        return self::STATUSES[$this->status] ?? ucfirst(str_replace('_', ' ', (string) $this->status));
+    }
+
+    /**
+     * The badge this expense reads as. The state vocabulary already exists in
+     * the stylesheet — a pending expense is a warning, a posted one is booked, a
+     * rejected one is stopped and a reversed one is history — so the model
+     * returns the status itself rather than inventing a second vocabulary.
+     */
+    public function statusTone(): string
+    {
+        return match ($this->status) {
+            self::STATUS_PENDING => 'pending_approval',
+            self::STATUS_POSTED => 'posted',
+            self::STATUS_REJECTED => 'rejected',
+            default => 'reversed',
+        };
+    }
+
+    /** Paid now, or owed? The badge on the settlement column. */
+    public function settlementTone(): string
+    {
+        return $this->settled_with === self::SETTLED_PAYABLE ? 'unpaid' : 'paid';
+    }
+
+    public function settlementLabel(): string
+    {
+        return self::SETTLED_WITH[$this->settled_with] ?? (string) $this->settled_with;
+    }
+
+    public function isPending(): bool
+    {
+        return $this->status === self::STATUS_PENDING;
+    }
+
+    public function isPosted(): bool
+    {
+        return $this->status === self::STATUS_POSTED;
+    }
+
+    public function isRejected(): bool
+    {
+        return $this->status === self::STATUS_REJECTED;
+    }
+
+    public function isReversed(): bool
+    {
+        return $this->status === self::STATUS_REVERSED;
+    }
+
+    /** Posted money that has not been given back — the only state a reversal may touch. */
+    public function isReversible(): bool
+    {
+        return $this->isPosted() && $this->reversal_entry_id === null;
+    }
+}
