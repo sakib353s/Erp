@@ -2468,3 +2468,241 @@ ${footer()}
 </div>
 <script>window.erpNavIndex = [];</script>`;
 }
+
+/* ------------------------------------------------- 14. recurring expenses */
+export function recurringExpenses() {
+    const schedules = [
+        { payee: 'Khan Properties', what: 'Monthly rent — Uttara warehouse', category: 'Office rent', account: '5220 — Rent Expense', money: 'paid — 1120 — Islami Bank, current', amount: '35,000.00', rhythm: 'every month on the 3rd', day: 3, next: '2026-11-03', state: 'active', late: 'last ran 2026-10-03', count: '7 generated' },
+        { payee: 'Aarong Dairy', what: 'Office milk and tea', category: 'Office supplies', account: '5240 — Office Supplies', money: 'paid — 1110 — Cash in Hand', amount: '2,500.00', rhythm: 'every month on the 5th', day: 5, next: '2026-10-05', state: 'active', late: 'due — 3 day(s) late', count: '12 generated' },
+        { payee: 'Link3 Technologies', what: 'Internet line, 40 Mbps', category: 'Utilities', account: '5230 — Utilities Expense', money: 'paid — 1130 — Dutch-Bangla Bank', amount: '4,200.00', rhythm: 'every quarter on the 10th', day: 10, next: '2026-12-10', state: 'active', late: 'last ran 2026-09-10', count: '4 generated' },
+        { payee: 'DESCO', what: 'Warehouse electricity', category: 'Utilities', account: '5230 — Utilities Expense', money: 'owed to a supplier', amount: '18,400.00', rhythm: 'every month on the 28th', day: 28, next: '2026-10-28', state: 'active', late: 'never generated yet', count: '0 generated' },
+        { payee: 'Security guard, night shift', what: 'Security wages', category: 'Salaries & wages', account: '5210 — Salaries & Wages', money: 'paid — 1110 — Cash in Hand', amount: '9,000.00', rhythm: 'every week', day: '', next: '2026-10-15', state: 'paused', late: 'paused by the owner — nothing generated for it', count: '3 generated' },
+    ];
+
+    return `
+${previewBar('expense-recurring.html')}
+<div class="erp-app-body">
+    ${sidebar('cash_bank')}
+    <main class="erp-main">
+        ${topbar('Recurring expenses')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Cash &amp; bank · Expenses</p>
+                    <h1 class="erp-page-title">The expenses that come round again</h1>
+                    <p class="erp-page-sub">Rent, salaries and the internet line do not need discovering — they are known in advance, and a desk that retypes them every month eventually forgets one. A schedule here records nothing by itself: on its own day it produces an expense through the ordinary desk, approval limit and all.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./expenses.html"><i class="bi bi-receipt" aria-hidden="true"></i> The register</a>
+                    <a class="btn btn-outline-secondary" href="./expenses.html"><i class="bi bi-diagram-3" aria-hidden="true"></i> Categories</a>
+                    <button class="erp-icon-btn" type="button" title="Pin this page" aria-label="Pin this page"><i class="bi bi-star" aria-hidden="true"></i></button>
+                </div>
+            </header>
+
+            <div class="erp-note erp-note-warn mb-3">
+                <i class="bi bi-clock-history" aria-hidden="true"></i>
+                <div>
+                    <strong class="d-block mb-1">1 schedule has come due</strong>
+                    The oldest is Aarong Dairy — every month on the 5th, due 2026-10-05, 3 day(s) late. The scheduled run does this every morning; a schedule refused there keeps its date, so nothing is skipped silently.
+                </div>
+            </div>
+
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Active schedules</p>
+                    <p class="erp-kpi-value">4</p>
+                    <p class="erp-kpi-foot">1 paused</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-clock-history" aria-hidden="true"></i> Due today or earlier</p>
+                    <p class="erp-kpi-value">1</p>
+                    <p class="erp-kpi-foot">Nothing posts until the day arrives — and then the approval limit still applies</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-journal-check" aria-hidden="true"></i> Generated this month</p>
+                    <p class="erp-kpi-value">৳ 62,600.00</p>
+                    <p class="erp-kpi-foot">3 expense(s) produced by a schedule</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-calendar-event" aria-hidden="true"></i> Next to run</p>
+                    <p class="erp-kpi-value">2026-10-15</p>
+                    <p class="erp-kpi-foot">Security guard, night shift</p>
+                </div>
+            </div>
+
+            <section class="erp-card erp-card-flush">
+                <header class="erp-card-head">
+                    <h2 class="erp-card-title">Schedules <span class="erp-chip erp-chip-outline">5 schedule(s)</span></h2>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="erp-table">
+                        <thead>
+                            <tr>
+                                <th>What it is</th><th>Account it books to</th><th class="erp-th-num">Amount</th>
+                                <th>Rhythm</th><th>Next due</th><th>State</th><th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${schedules.map((s) => `
+                            <tr>
+                                <td data-label="What it is">
+                                    <span class="erp-cell-strong">${s.payee}</span>
+                                    <span class="d-block erp-td-muted">${s.category} · ${s.money}</span>
+                                </td>
+                                <td data-label="Account" class="erp-td-muted">${s.account}</td>
+                                <td data-label="Amount" class="erp-td-num">
+                                    <input class="form-control form-control-sm erp-num text-end" type="number" step="0.01" value="${s.amount.replaceAll(',', '')}" aria-label="Amount for ${s.payee}">
+                                </td>
+                                <td data-label="Rhythm">
+                                    <select class="form-select form-select-sm" aria-label="Frequency for ${s.payee}">
+                                        <option${s.rhythm.includes('month') ? ' selected' : ''}>Every month</option>
+                                        <option${s.rhythm.includes('week') ? ' selected' : ''}>Every week</option>
+                                        <option${s.rhythm.includes('quarter') ? ' selected' : ''}>Every quarter</option>
+                                        <option${s.rhythm.includes('year') ? ' selected' : ''}>Every year</option>
+                                    </select>
+                                    <input class="form-control form-control-sm erp-num mt-1" type="number" min="1" max="31" value="${s.day}" placeholder="day" aria-label="Day of the month for ${s.payee}">
+                                    <span class="d-block erp-td-muted mt-1">${s.rhythm}</span>
+                                </td>
+                                <td data-label="Next due">
+                                    <span class="erp-cell-strong">${s.next}</span>
+                                    <span class="d-block erp-td-muted">${s.late}</span>
+                                    <input class="form-control form-control-sm mt-1" type="date" placeholder="no end date" aria-label="Last date for ${s.payee}">
+                                </td>
+                                <td data-label="State">
+                                    ${statusChip(s.state, s.state === 'paused' ? 'Paused' : 'Active')}
+                                    <span class="d-block erp-td-muted">${s.count}</span>
+                                </td>
+                                <td class="erp-td-actions">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-check2" aria-hidden="true"></i> Save</button>
+                                    <button class="btn btn-sm btn-outline-secondary" type="button">
+                                        ${s.state === 'paused' ? '<i class="bi bi-play" aria-hidden="true"></i> Resume' : '<i class="bi bi-pause" aria-hidden="true"></i> Pause'}
+                                    </button>
+                                </td>
+                            </tr>`).join('')}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7">
+                                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                        <span class="erp-td-muted">The scheduled run does this every morning at 06:20. This button is for when today's rent cannot wait for tomorrow.</span>
+                                        <button class="btn btn-outline-secondary btn-sm" type="button"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Generate what is due</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </section>
+
+            <div class="erp-filter-note mt-2">
+                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                <span>A schedule never posts anything itself. On its day it produces an expense through the ordinary desk — so the approval limit applies, the category decides the account, and the person who created the schedule is the one who cannot approve what it generated.</span>
+            </div>
+
+            <section class="erp-card mt-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Schedule an expense</h2>
+                        <p class="erp-card-sub">The category decides which account it books to; the account below is where the money leaves from. Nothing is generated before the first date.</p>
+                    </div>
+                </header>
+                <form onsubmit="return false">
+                    <div class="erp-form-grid">
+                        <div class="erp-form-field">
+                            <label class="form-label" for="r-category">Category</label>
+                            <select class="form-select" id="r-category">
+                                <option>Office rent — books to 5220 — Rent Expense</option>
+                                <option>Utilities — books to 5230 — Utilities Expense</option>
+                                <option>Salaries &amp; wages — books to 5210 — Salaries &amp; Wages</option>
+                            </select>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="r-payee">Paid to</label>
+                            <input class="form-control" type="text" id="r-payee" placeholder="Khan Properties">
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="r-amount">Amount each time</label>
+                            <div class="erp-input-group">
+                                <span class="input-group-text">৳</span>
+                                <input class="form-control erp-num" type="number" step="0.01" id="r-amount" placeholder="35,000.00">
+                            </div>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="r-frequency">How often</label>
+                            <select class="form-select" id="r-frequency">
+                                <option>Every month</option><option>Every week</option>
+                                <option>Every quarter</option><option>Every year</option>
+                            </select>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="r-day">Day of the month</label>
+                            <input class="form-control erp-num" type="number" min="1" max="31" id="r-day" placeholder="blank — the day it starts">
+                            <div class="form-text">A month that is too short clamps to its last day: the 31st means the 28th in February and the 31st again in March.</div>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="r-start">First on</label>
+                            <input class="form-control" type="date" id="r-start" value="2026-10-08">
+                            <div class="form-text">The first run is this date itself, not one period later.</div>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="r-end">Last on (optional)</label>
+                            <input class="form-control" type="date" id="r-end">
+                            <div class="form-text">A lease with an end date stops itself rather than generating into a period nobody agreed to.</div>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="r-settled">Paid, or owed?</label>
+                            <select class="form-select" id="r-settled">
+                                <option>Paid from an account</option>
+                                <option>Owed to a supplier</option>
+                            </select>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="r-money">Paid from</label>
+                            <select class="form-select" id="r-money">
+                                <option>1110 — Cash in Hand</option>
+                                <option>1120 — Islami Bank, current</option>
+                                <option>1130 — Dutch-Bangla Bank</option>
+                                <option>1140 — bKash merchant wallet</option>
+                            </select>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="r-supplier">Owed to (optional)</label>
+                            <select class="form-select" id="r-supplier">
+                                <option>— no supplier on the books —</option>
+                                <option>Aarong Dairy</option>
+                            </select>
+                        </div>
+                        <div class="erp-form-field erp-form-field-wide">
+                            <label class="form-label" for="r-narration">What it is</label>
+                            <input class="form-control" type="text" id="r-narration" placeholder="Monthly rent — Uttara warehouse">
+                        </div>
+                        <div class="erp-form-field">
+                            <span class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="r-active" checked>
+                                <label class="form-check-label" for="r-active">Start it immediately</label>
+                            </span>
+                            <div class="form-text">Switched off, the schedule is kept and fires nothing — the same state as pausing it later.</div>
+                        </div>
+                    </div>
+                    <div class="erp-card-tight d-flex flex-wrap justify-content-between align-items-center gap-2 px-3 pb-3">
+                        <span class="erp-td-muted">Every generated expense is an ordinary expense: it can be approved, refused or reversed like any other, and it carries the schedule that produced it.</span>
+                        <button class="btn btn-primary" type="button"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Schedule it</button>
+                    </div>
+                </form>
+            </section>
+
+            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
+                <p class="erp-field-label">More in this module</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="erp-chip erp-chip-outline" href="./expenses.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>All Expenses</a>
+                    <a class="erp-chip erp-chip-outline" href="./cheques.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Cheque Register</a>
+                    <a class="erp-chip erp-chip-outline" href="./cash-bank.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Cash in Hand</a>
+                </div>
+            </nav>
+        </main>
+${footer()}
+    </div>
+</div>
+<script>window.erpNavIndex = [];</script>`;
+}

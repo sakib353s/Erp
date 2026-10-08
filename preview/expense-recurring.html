@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#ffffff">
-    <title>Customer 360 · BD ERP — UI redesign preview</title>
+    <title>Recurring expenses · BD ERP — UI redesign preview</title>
     <link rel="stylesheet" href="./assets/preview.css">
 </head>
 <body class="erp-body">
@@ -15,11 +15,11 @@
 <div class="erp-preview-bar">
     <i class="bi bi-easel2" aria-hidden="true"></i>
     <strong>UI redesign preview</strong>
-    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html" style="color:#fff;text-decoration:underline">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html">Labels</a><span style="opacity:.4">·</span><a href="./cash-bank.html">Cash & bank</a><span style="opacity:.4">·</span><a href="./bank-recon.html">Reconciliation</a><span style="opacity:.4">·</span><a href="./cheques.html">Cheques</a><span style="opacity:.4">·</span><a href="./expenses.html">Expenses</a><span style="opacity:.4">·</span><a href="./expense-recurring.html">Recurring</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
+    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html">Labels</a><span style="opacity:.4">·</span><a href="./cash-bank.html">Cash & bank</a><span style="opacity:.4">·</span><a href="./bank-recon.html">Reconciliation</a><span style="opacity:.4">·</span><a href="./cheques.html">Cheques</a><span style="opacity:.4">·</span><a href="./expenses.html">Expenses</a><span style="opacity:.4">·</span><a href="./expense-recurring.html" style="color:#fff;text-decoration:underline">Recurring</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
     <span class="erp-preview-note">Static render of the new shell — same CSS + JS the Laravel app ships. Press ⌘K / Ctrl+K.</span>
 </div>
-<div class="erp-shell" data-rail="expanded">
-
+<div class="erp-app-body">
+    
 <aside class="erp-sidebar" id="erpSidebar" aria-label="Primary navigation">
     <div class="erp-sidebar-head">
         <a class="erp-brand" href="./dashboard.html">
@@ -548,26 +548,17 @@
         <span class="erp-version">Build 2026.10 · v2</span>
     </div>
 </aside>
-<div class="erp-main">
-
+    <main class="erp-main">
+        
 <header class="erp-topbar">
     <button class="erp-icon-btn d-lg-none" type="button" data-erp-sidebar-open aria-label="Open navigation">
         <i class="bi bi-list" aria-hidden="true"></i>
     </button>
 
     <div class="erp-topbar-crumbs">
-        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb">
-        <li>
-            <span class="is-current" aria-current="page">undefined</span>
-        </li>
-        <li>
-            <span class="is-current" aria-current="page">undefined</span>
-        </li>
-        <li>
-            <span class="is-current" aria-current="page">undefined</span>
-        </li></ol></nav>
+        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb"></ol></nav>
         <div class="erp-topbar-title">
-            <strong class="d-none d-md-inline">Rahman Traders</strong>
+            <strong class="d-none d-md-inline">Dashboard</strong>
             <span class="erp-chip erp-chip-outline d-none d-xl-inline-flex" title="Current branch context">
                 <i class="bi bi-geo-alt" aria-hidden="true"></i>Dhaka HQ
             </span>
@@ -641,153 +632,362 @@
         </div>
     </div>
 </header>
-<main class="erp-content" id="erpContent">
-    <header class="erp-page-head">
-        <div class="erp-page-head-main">
-            <p class="erp-eyebrow">Customer · CUST-00001</p>
-            <h1 class="erp-h1">Rahman Traders</h1>
-            <p class="erp-page-sub">Business · 01711-222333 · Dhaka · Group: Retailer</p>
-        </div>
-        <div class="erp-page-head-actions">
-            <a class="btn btn-outline-secondary" href="#ledger"><i class="bi bi-journal-text" aria-hidden="true"></i> Ledger</a>
-            <a class="btn btn-outline-secondary" href="#"><i class="bi bi-printer" aria-hidden="true"></i> Statement</a>
-            <a class="btn btn-primary" href="#"><i class="bi bi-pencil" aria-hidden="true"></i> Edit</a>
-        </div>
-    </header>
+        <div class="erp-content">
 
-    <div class="erp-note erp-note-warn mb-3">
-        <i class="bi bi-shield-exclamation" aria-hidden="true"></i>
-        <div>
-            <strong>Exposure is close to the approved credit limit.</strong>
-            Due ৳ 24,580 against a limit of ৳ 50,000 — 49% used, with 15-day terms.
-        </div>
-    </div>
-
-    <div class="erp-kpi-grid mb-3">
-        <div class="erp-kpi"><p class="erp-kpi-label">Lifetime invoiced</p><p class="erp-kpi-value">৳ 12,84,930</p><p class="erp-kpi-foot">48 invoices</p></div>
-        <div class="erp-kpi"><p class="erp-kpi-label">Received</p><p class="erp-kpi-value">৳ 12,60,350</p><p class="erp-kpi-foot">Posted receipts</p></div>
-        <div class="erp-kpi"><p class="erp-kpi-label">Outstanding</p><p class="erp-kpi-value">৳ 24,580</p><p class="erp-kpi-foot">2 open invoices</p></div>
-        <div class="erp-kpi"><p class="erp-kpi-label">Overdue</p><p class="erp-kpi-value">৳ 4,120</p><p class="erp-kpi-foot">Oldest due 29 Sep 2026</p></div>
-    </div>
-
-    <div class="erp-split">
-        <div class="erp-split-main">
-            <section class="erp-card mb-3">
-                <div class="erp-card-head">
-                    <h2 class="erp-card-title">Recent documents</h2>
-                    <div class="erp-card-actions"><a class="btn btn-sm btn-light" href="./orders.html">All invoices</a></div>
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Cash &amp; bank · Expenses</p>
+                    <h1 class="erp-page-title">The expenses that come round again</h1>
+                    <p class="erp-page-sub">Rent, salaries and the internet line do not need discovering — they are known in advance, and a desk that retypes them every month eventually forgets one. A schedule here records nothing by itself: on its own day it produces an expense through the ordinary desk, approval limit and all.</p>
                 </div>
-                <div class="table-responsive">
-                    <table class="table erp-table align-middle mb-0">
-                        <thead><tr><th>Invoice</th><th>Date</th><th>Status</th><th class="erp-th-num">Total</th><th class="erp-th-num">Due</th></tr></thead>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./expenses.html"><i class="bi bi-receipt" aria-hidden="true"></i> The register</a>
+                    <a class="btn btn-outline-secondary" href="./expenses.html"><i class="bi bi-diagram-3" aria-hidden="true"></i> Categories</a>
+                    <button class="erp-icon-btn" type="button" title="Pin this page" aria-label="Pin this page"><i class="bi bi-star" aria-hidden="true"></i></button>
+                </div>
+            </header>
+
+            <div class="erp-note erp-note-warn mb-3">
+                <i class="bi bi-clock-history" aria-hidden="true"></i>
+                <div>
+                    <strong class="d-block mb-1">1 schedule has come due</strong>
+                    The oldest is Aarong Dairy — every month on the 5th, due 2026-10-05, 3 day(s) late. The scheduled run does this every morning; a schedule refused there keeps its date, so nothing is skipped silently.
+                </div>
+            </div>
+
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Active schedules</p>
+                    <p class="erp-kpi-value">4</p>
+                    <p class="erp-kpi-foot">1 paused</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-clock-history" aria-hidden="true"></i> Due today or earlier</p>
+                    <p class="erp-kpi-value">1</p>
+                    <p class="erp-kpi-foot">Nothing posts until the day arrives — and then the approval limit still applies</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-journal-check" aria-hidden="true"></i> Generated this month</p>
+                    <p class="erp-kpi-value">৳ 62,600.00</p>
+                    <p class="erp-kpi-foot">3 expense(s) produced by a schedule</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-calendar-event" aria-hidden="true"></i> Next to run</p>
+                    <p class="erp-kpi-value">2026-10-15</p>
+                    <p class="erp-kpi-foot">Security guard, night shift</p>
+                </div>
+            </div>
+
+            <section class="erp-card erp-card-flush">
+                <header class="erp-card-head">
+                    <h2 class="erp-card-title">Schedules <span class="erp-chip erp-chip-outline">5 schedule(s)</span></h2>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="erp-table">
+                        <thead>
+                            <tr>
+                                <th>What it is</th><th>Account it books to</th><th class="erp-th-num">Amount</th>
+                                <th>Rhythm</th><th>Next due</th><th>State</th><th></th>
+                            </tr>
+                        </thead>
                         <tbody>
                             
                             <tr>
-                                <td><span class="erp-row-link">INV-2026-00771</span></td>
-                                <td class="erp-td-muted">04 Oct 2026</td>
-                                <td><span class="erp-status erp-status-paid">paid</span></td>
-                                <td class="erp-td-num">৳ 18,240</td>
-                                <td class="erp-td-num erp-td-muted">৳ 0</td>
+                                <td data-label="What it is">
+                                    <span class="erp-cell-strong">Khan Properties</span>
+                                    <span class="d-block erp-td-muted">Office rent · paid — 1120 — Islami Bank, current</span>
+                                </td>
+                                <td data-label="Account" class="erp-td-muted">5220 — Rent Expense</td>
+                                <td data-label="Amount" class="erp-td-num">
+                                    <input class="form-control form-control-sm erp-num text-end" type="number" step="0.01" value="35000.00" aria-label="Amount for Khan Properties">
+                                </td>
+                                <td data-label="Rhythm">
+                                    <select class="form-select form-select-sm" aria-label="Frequency for Khan Properties">
+                                        <option selected>Every month</option>
+                                        <option>Every week</option>
+                                        <option>Every quarter</option>
+                                        <option>Every year</option>
+                                    </select>
+                                    <input class="form-control form-control-sm erp-num mt-1" type="number" min="1" max="31" value="3" placeholder="day" aria-label="Day of the month for Khan Properties">
+                                    <span class="d-block erp-td-muted mt-1">every month on the 3rd</span>
+                                </td>
+                                <td data-label="Next due">
+                                    <span class="erp-cell-strong">2026-11-03</span>
+                                    <span class="d-block erp-td-muted">last ran 2026-10-03</span>
+                                    <input class="form-control form-control-sm mt-1" type="date" placeholder="no end date" aria-label="Last date for Khan Properties">
+                                </td>
+                                <td data-label="State">
+                                    <span class="erp-status erp-status-active">Active</span>
+                                    <span class="d-block erp-td-muted">7 generated</span>
+                                </td>
+                                <td class="erp-td-actions">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-check2" aria-hidden="true"></i> Save</button>
+                                    <button class="btn btn-sm btn-outline-secondary" type="button">
+                                        <i class="bi bi-pause" aria-hidden="true"></i> Pause
+                                    </button>
+                                </td>
                             </tr>
                             <tr>
-                                <td><span class="erp-row-link">INV-2026-00812</span></td>
-                                <td class="erp-td-muted">07 Oct 2026</td>
-                                <td><span class="erp-status erp-status-partial">partial</span></td>
-                                <td class="erp-td-num">৳ 24,580</td>
-                                <td class="erp-td-num erp-amount-warn">৳ 4,120</td>
+                                <td data-label="What it is">
+                                    <span class="erp-cell-strong">Aarong Dairy</span>
+                                    <span class="d-block erp-td-muted">Office supplies · paid — 1110 — Cash in Hand</span>
+                                </td>
+                                <td data-label="Account" class="erp-td-muted">5240 — Office Supplies</td>
+                                <td data-label="Amount" class="erp-td-num">
+                                    <input class="form-control form-control-sm erp-num text-end" type="number" step="0.01" value="2500.00" aria-label="Amount for Aarong Dairy">
+                                </td>
+                                <td data-label="Rhythm">
+                                    <select class="form-select form-select-sm" aria-label="Frequency for Aarong Dairy">
+                                        <option selected>Every month</option>
+                                        <option>Every week</option>
+                                        <option>Every quarter</option>
+                                        <option>Every year</option>
+                                    </select>
+                                    <input class="form-control form-control-sm erp-num mt-1" type="number" min="1" max="31" value="5" placeholder="day" aria-label="Day of the month for Aarong Dairy">
+                                    <span class="d-block erp-td-muted mt-1">every month on the 5th</span>
+                                </td>
+                                <td data-label="Next due">
+                                    <span class="erp-cell-strong">2026-10-05</span>
+                                    <span class="d-block erp-td-muted">due — 3 day(s) late</span>
+                                    <input class="form-control form-control-sm mt-1" type="date" placeholder="no end date" aria-label="Last date for Aarong Dairy">
+                                </td>
+                                <td data-label="State">
+                                    <span class="erp-status erp-status-active">Active</span>
+                                    <span class="d-block erp-td-muted">12 generated</span>
+                                </td>
+                                <td class="erp-td-actions">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-check2" aria-hidden="true"></i> Save</button>
+                                    <button class="btn btn-sm btn-outline-secondary" type="button">
+                                        <i class="bi bi-pause" aria-hidden="true"></i> Pause
+                                    </button>
+                                </td>
                             </tr>
                             <tr>
-                                <td><span class="erp-row-link">INV-2026-00825</span></td>
-                                <td class="erp-td-muted">08 Oct 2026</td>
-                                <td><span class="erp-status erp-status-issued">issued</span></td>
-                                <td class="erp-td-num">৳ 9,780</td>
-                                <td class="erp-td-num erp-amount-warn">৳ 9,780</td>
+                                <td data-label="What it is">
+                                    <span class="erp-cell-strong">Link3 Technologies</span>
+                                    <span class="d-block erp-td-muted">Utilities · paid — 1130 — Dutch-Bangla Bank</span>
+                                </td>
+                                <td data-label="Account" class="erp-td-muted">5230 — Utilities Expense</td>
+                                <td data-label="Amount" class="erp-td-num">
+                                    <input class="form-control form-control-sm erp-num text-end" type="number" step="0.01" value="4200.00" aria-label="Amount for Link3 Technologies">
+                                </td>
+                                <td data-label="Rhythm">
+                                    <select class="form-select form-select-sm" aria-label="Frequency for Link3 Technologies">
+                                        <option>Every month</option>
+                                        <option>Every week</option>
+                                        <option selected>Every quarter</option>
+                                        <option>Every year</option>
+                                    </select>
+                                    <input class="form-control form-control-sm erp-num mt-1" type="number" min="1" max="31" value="10" placeholder="day" aria-label="Day of the month for Link3 Technologies">
+                                    <span class="d-block erp-td-muted mt-1">every quarter on the 10th</span>
+                                </td>
+                                <td data-label="Next due">
+                                    <span class="erp-cell-strong">2026-12-10</span>
+                                    <span class="d-block erp-td-muted">last ran 2026-09-10</span>
+                                    <input class="form-control form-control-sm mt-1" type="date" placeholder="no end date" aria-label="Last date for Link3 Technologies">
+                                </td>
+                                <td data-label="State">
+                                    <span class="erp-status erp-status-active">Active</span>
+                                    <span class="d-block erp-td-muted">4 generated</span>
+                                </td>
+                                <td class="erp-td-actions">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-check2" aria-hidden="true"></i> Save</button>
+                                    <button class="btn btn-sm btn-outline-secondary" type="button">
+                                        <i class="bi bi-pause" aria-hidden="true"></i> Pause
+                                    </button>
+                                </td>
                             </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <section class="erp-card" id="ledger">
-                <div class="erp-card-head">
-                    <h2 class="erp-card-title">Ledger extract <span class="erp-chip erp-chip-outline">derived</span></h2>
-                    <div class="erp-card-actions"><a class="btn btn-sm btn-light" href="#">Full ledger</a></div>
-                </div>
-                <div class="table-responsive">
-                    <table class="table erp-table align-middle mb-0">
-                        <thead><tr><th>Date</th><th>Reference</th><th>Particulars</th><th class="erp-th-num">Debit</th><th class="erp-th-num">Credit</th><th class="erp-th-num">Balance</th></tr></thead>
-                        <tbody>
-                            <tr class="erp-table-opening"><td class="erp-td-muted">01 Oct 2026</td><td>—</td><td><strong>Opening balance</strong></td><td colspan="3" class="erp-td-num erp-amount">16,460.00</td></tr>
-                            <tr><td class="erp-td-muted">04 Oct 2026</td><td>INV-2026-00771</td><td>Sales invoice</td><td class="erp-td-num">18,240.00</td><td class="erp-td-num">—</td><td class="erp-td-num erp-amount">34,700.00</td></tr>
-                            <tr><td class="erp-td-muted">05 Oct 2026</td><td>MR-2026-00318</td><td>Receipt (Cash)</td><td class="erp-td-num">—</td><td class="erp-td-num">18,240.00</td><td class="erp-td-num erp-amount">16,460.00</td></tr>
-                            <tr><td class="erp-td-muted">07 Oct 2026</td><td>INV-2026-00812</td><td>Sales invoice</td><td class="erp-td-num">24,580.00</td><td class="erp-td-num">—</td><td class="erp-td-num erp-amount">41,040.00</td></tr>
-                            <tr><td class="erp-td-muted">08 Oct 2026</td><td>MR-2026-00331</td><td>Receipt (bKash)</td><td class="erp-td-num">—</td><td class="erp-td-num">20,460.00</td><td class="erp-td-num erp-amount">20,580.00</td></tr>
+                            <tr>
+                                <td data-label="What it is">
+                                    <span class="erp-cell-strong">DESCO</span>
+                                    <span class="d-block erp-td-muted">Utilities · owed to a supplier</span>
+                                </td>
+                                <td data-label="Account" class="erp-td-muted">5230 — Utilities Expense</td>
+                                <td data-label="Amount" class="erp-td-num">
+                                    <input class="form-control form-control-sm erp-num text-end" type="number" step="0.01" value="18400.00" aria-label="Amount for DESCO">
+                                </td>
+                                <td data-label="Rhythm">
+                                    <select class="form-select form-select-sm" aria-label="Frequency for DESCO">
+                                        <option selected>Every month</option>
+                                        <option>Every week</option>
+                                        <option>Every quarter</option>
+                                        <option>Every year</option>
+                                    </select>
+                                    <input class="form-control form-control-sm erp-num mt-1" type="number" min="1" max="31" value="28" placeholder="day" aria-label="Day of the month for DESCO">
+                                    <span class="d-block erp-td-muted mt-1">every month on the 28th</span>
+                                </td>
+                                <td data-label="Next due">
+                                    <span class="erp-cell-strong">2026-10-28</span>
+                                    <span class="d-block erp-td-muted">never generated yet</span>
+                                    <input class="form-control form-control-sm mt-1" type="date" placeholder="no end date" aria-label="Last date for DESCO">
+                                </td>
+                                <td data-label="State">
+                                    <span class="erp-status erp-status-active">Active</span>
+                                    <span class="d-block erp-td-muted">0 generated</span>
+                                </td>
+                                <td class="erp-td-actions">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-check2" aria-hidden="true"></i> Save</button>
+                                    <button class="btn btn-sm btn-outline-secondary" type="button">
+                                        <i class="bi bi-pause" aria-hidden="true"></i> Pause
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="What it is">
+                                    <span class="erp-cell-strong">Security guard, night shift</span>
+                                    <span class="d-block erp-td-muted">Salaries & wages · paid — 1110 — Cash in Hand</span>
+                                </td>
+                                <td data-label="Account" class="erp-td-muted">5210 — Salaries & Wages</td>
+                                <td data-label="Amount" class="erp-td-num">
+                                    <input class="form-control form-control-sm erp-num text-end" type="number" step="0.01" value="9000.00" aria-label="Amount for Security guard, night shift">
+                                </td>
+                                <td data-label="Rhythm">
+                                    <select class="form-select form-select-sm" aria-label="Frequency for Security guard, night shift">
+                                        <option>Every month</option>
+                                        <option selected>Every week</option>
+                                        <option>Every quarter</option>
+                                        <option>Every year</option>
+                                    </select>
+                                    <input class="form-control form-control-sm erp-num mt-1" type="number" min="1" max="31" value="" placeholder="day" aria-label="Day of the month for Security guard, night shift">
+                                    <span class="d-block erp-td-muted mt-1">every week</span>
+                                </td>
+                                <td data-label="Next due">
+                                    <span class="erp-cell-strong">2026-10-15</span>
+                                    <span class="d-block erp-td-muted">paused by the owner — nothing generated for it</span>
+                                    <input class="form-control form-control-sm mt-1" type="date" placeholder="no end date" aria-label="Last date for Security guard, night shift">
+                                </td>
+                                <td data-label="State">
+                                    <span class="erp-status erp-status-paused">Paused</span>
+                                    <span class="d-block erp-td-muted">3 generated</span>
+                                </td>
+                                <td class="erp-td-actions">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-check2" aria-hidden="true"></i> Save</button>
+                                    <button class="btn btn-sm btn-outline-secondary" type="button">
+                                        <i class="bi bi-play" aria-hidden="true"></i> Resume
+                                    </button>
+                                </td>
+                            </tr>
                         </tbody>
                         <tfoot>
-                            <tr><td colspan="3" class="erp-td-muted">Period totals</td><td class="erp-td-num">42,820.00</td><td class="erp-td-num">38,700.00</td><td class="erp-td-num erp-amount">20,580.00</td></tr>
+                            <tr>
+                                <td colspan="7">
+                                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                        <span class="erp-td-muted">The scheduled run does this every morning at 06:20. This button is for when today's rent cannot wait for tomorrow.</span>
+                                        <button class="btn btn-outline-secondary btn-sm" type="button"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Generate what is due</button>
+                                    </div>
+                                </td>
+                            </tr>
                         </tfoot>
                     </table>
                 </div>
             </section>
-        </div>
 
-        <aside class="erp-split-side">
-            <section class="erp-card mb-3">
-                <h2 class="erp-card-title mb-3">Credit control</h2>
-                <dl class="erp-dl erp-dl-tight">
-                    <dt>Credit limit</dt><dd>৳ 50,000.00</dd>
-                    <dt>Credit days</dt><dd>15 days</dd>
-                    <dt>Exposure</dt><dd>৳ 24,580.00</dd>
-                    <dt>Segment</dt><dd>Regular</dd>
-                    <dt>Loyalty points</dt><dd>1,240</dd>
-                </dl>
+            <div class="erp-filter-note mt-2">
+                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                <span>A schedule never posts anything itself. On its day it produces an expense through the ordinary desk — so the approval limit applies, the category decides the account, and the person who created the schedule is the one who cannot approve what it generated.</span>
+            </div>
 
-                <form class="mt-3" onsubmit="return false">
-                    <div class="row g-2">
-                        <div class="col-6"><label class="form-label" for="limit">New limit (৳)</label><input class="form-control" id="limit" value="50000.00"></div>
-                        <div class="col-6"><label class="form-label" for="days">Credit days</label><input class="form-control" id="days" value="15"></div>
-                        <div class="col-12"><label class="form-label" for="reason">Reason</label><input class="form-control" id="reason" placeholder="e.g. 6 months of on-time settlement"></div>
+            <section class="erp-card mt-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Schedule an expense</h2>
+                        <p class="erp-card-sub">The category decides which account it books to; the account below is where the money leaves from. Nothing is generated before the first date.</p>
                     </div>
-                    <button class="btn btn-outline-secondary w-100 mt-2" type="submit">Record new limit</button>
-                </form>
-
-                <div class="erp-timeline mt-3">
-                    
-                    <div class="erp-timeline-item">
-                        <span class="erp-timeline-marker" aria-hidden="true"></span>
-                        <div class="erp-timeline-body"><strong>৳ 20,000 → ৳ 50,000</strong><p class="mb-0 small">Six months of on-time settlement · 12 Sep 2026</p></div>
-                    </div>
-                    <div class="erp-timeline-item">
-                        <span class="erp-timeline-marker" aria-hidden="true"></span>
-                        <div class="erp-timeline-body"><strong>৳ 0 → ৳ 20,000</strong><p class="mb-0 small">First wholesale order · 02 Jun 2026</p></div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="erp-card mb-3">
-                <h2 class="erp-card-title mb-3">Relationship health <span class="erp-chip erp-chip-ok">NPS 67</span></h2>
-                <div class="erp-timeline">
-                    <div class="erp-timeline-item"><span class="erp-timeline-marker erp-timeline-promoter" aria-hidden="true"></span>
-                        <div class="erp-timeline-body"><strong>9/10 · promoter</strong><p class="mb-0 small">Delivery on time, invoice printed correctly · 28 Sep 2026</p></div></div>
-                    <div class="erp-timeline-item"><span class="erp-timeline-marker erp-timeline-passive" aria-hidden="true"></span>
-                        <div class="erp-timeline-body"><strong>8/10 · passive</strong><p class="mb-0 small">Wants earlier dispatch on Fridays · 12 Sep 2026</p></div></div>
-                    <div class="erp-timeline-item"><span class="erp-timeline-marker erp-timeline-promoter" aria-hidden="true"></span>
-                        <div class="erp-timeline-body"><strong>10/10 · promoter</strong><p class="mb-0 small">Referred Agrabad Hardware · 05 Sep 2026</p></div></div>
-                </div>
-            </section>
-
-            <section class="erp-card">
-                <h2 class="erp-card-title mb-3">Blacklist</h2>
-                <p class="erp-td-muted small">A blacklist entry requires a reason and refuses new documents until it is lifted.</p>
+                </header>
                 <form onsubmit="return false">
-                    <label class="form-label" for="blacklist_reason">Reason (required)</label>
-                    <textarea class="form-control" id="blacklist_reason" rows="2" placeholder="Recorded against the audit trail"></textarea>
-                    <button class="btn btn-danger w-100 mt-2" type="submit">Blacklist customer</button>
+                    <div class="erp-form-grid">
+                        <div class="erp-form-field">
+                            <label class="form-label" for="r-category">Category</label>
+                            <select class="form-select" id="r-category">
+                                <option>Office rent — books to 5220 — Rent Expense</option>
+                                <option>Utilities — books to 5230 — Utilities Expense</option>
+                                <option>Salaries &amp; wages — books to 5210 — Salaries &amp; Wages</option>
+                            </select>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="r-payee">Paid to</label>
+                            <input class="form-control" type="text" id="r-payee" placeholder="Khan Properties">
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="r-amount">Amount each time</label>
+                            <div class="erp-input-group">
+                                <span class="input-group-text">৳</span>
+                                <input class="form-control erp-num" type="number" step="0.01" id="r-amount" placeholder="35,000.00">
+                            </div>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="r-frequency">How often</label>
+                            <select class="form-select" id="r-frequency">
+                                <option>Every month</option><option>Every week</option>
+                                <option>Every quarter</option><option>Every year</option>
+                            </select>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="r-day">Day of the month</label>
+                            <input class="form-control erp-num" type="number" min="1" max="31" id="r-day" placeholder="blank — the day it starts">
+                            <div class="form-text">A month that is too short clamps to its last day: the 31st means the 28th in February and the 31st again in March.</div>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="r-start">First on</label>
+                            <input class="form-control" type="date" id="r-start" value="2026-10-08">
+                            <div class="form-text">The first run is this date itself, not one period later.</div>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="r-end">Last on (optional)</label>
+                            <input class="form-control" type="date" id="r-end">
+                            <div class="form-text">A lease with an end date stops itself rather than generating into a period nobody agreed to.</div>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="r-settled">Paid, or owed?</label>
+                            <select class="form-select" id="r-settled">
+                                <option>Paid from an account</option>
+                                <option>Owed to a supplier</option>
+                            </select>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="r-money">Paid from</label>
+                            <select class="form-select" id="r-money">
+                                <option>1110 — Cash in Hand</option>
+                                <option>1120 — Islami Bank, current</option>
+                                <option>1130 — Dutch-Bangla Bank</option>
+                                <option>1140 — bKash merchant wallet</option>
+                            </select>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="form-label" for="r-supplier">Owed to (optional)</label>
+                            <select class="form-select" id="r-supplier">
+                                <option>— no supplier on the books —</option>
+                                <option>Aarong Dairy</option>
+                            </select>
+                        </div>
+                        <div class="erp-form-field erp-form-field-wide">
+                            <label class="form-label" for="r-narration">What it is</label>
+                            <input class="form-control" type="text" id="r-narration" placeholder="Monthly rent — Uttara warehouse">
+                        </div>
+                        <div class="erp-form-field">
+                            <span class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="r-active" checked>
+                                <label class="form-check-label" for="r-active">Start it immediately</label>
+                            </span>
+                            <div class="form-text">Switched off, the schedule is kept and fires nothing — the same state as pausing it later.</div>
+                        </div>
+                    </div>
+                    <div class="erp-card-tight d-flex flex-wrap justify-content-between align-items-center gap-2 px-3 pb-3">
+                        <span class="erp-td-muted">Every generated expense is an ordinary expense: it can be approved, refused or reversed like any other, and it carries the schedule that produced it.</span>
+                        <button class="btn btn-primary" type="button"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Schedule it</button>
+                    </div>
                 </form>
             </section>
-        </aside>
-    </div>
-</main>
+
+            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
+                <p class="erp-field-label">More in this module</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="erp-chip erp-chip-outline" href="./expenses.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>All Expenses</a>
+                    <a class="erp-chip erp-chip-outline" href="./cheques.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Cheque Register</a>
+                    <a class="erp-chip erp-chip-outline" href="./cash-bank.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Cash in Hand</a>
+                </div>
+            </nav>
+        </main>
 
 <footer class="erp-footer">
     <span>BD ERP · Rafshan Trading Ltd.</span>
@@ -796,7 +996,7 @@
         <span class="d-none d-md-inline">Press <kbd>⌘</kbd><kbd>K</kbd> to jump anywhere</span>
     </span>
 </footer>
-</div>
+    </div>
 </div>
 <script>window.erpNavIndex = [];</script>
 

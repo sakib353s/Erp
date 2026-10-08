@@ -131,6 +131,7 @@ export const SECTIONS = [
                     { label: 'Add Expense', url: './expenses.html', icon: 'bi-plus-lg' },
                     { label: 'Expense Categories', url: './expenses.html', icon: 'bi-diagram-3' },
                     { label: 'Pending Approval', url: './expenses.html', icon: 'bi-hourglass-split' },
+                    { label: 'Recurring Expenses', url: './expense-recurring.html', icon: 'bi-arrow-repeat' },
                 ],
             },
             {
@@ -229,6 +230,7 @@ export const PALETTE = [
     { label: 'Add Expense', url: './expenses.html', icon: 'bi-plus-lg', section: 'Cash & bank', group: 'Expenses' },
     { label: 'Expense Categories', url: './expenses.html', icon: 'bi-diagram-3', section: 'Cash & bank', group: 'Expenses' },
     { label: 'Pending Approval', url: './expenses.html', icon: 'bi-hourglass-split', section: 'Cash & bank', group: 'Expenses' },
+    { label: 'Recurring Expenses', url: './expense-recurring.html', icon: 'bi-arrow-repeat', section: 'Cash & bank', group: 'Expenses' },
     { label: 'Print labels', url: './labels.html', icon: 'bi-printer', section: 'Inventory & warehouse', group: 'Barcode & QR' },
     { label: 'Generate barcode', url: './labels.html', icon: 'bi-upc-scan', section: 'Inventory & warehouse', group: 'Barcode & QR' },
     { label: 'Generate QR code', url: './labels.html', icon: 'bi-qr-code', section: 'Inventory & warehouse', group: 'Barcode & QR' },
@@ -538,6 +540,7 @@ export function previewBar(current) {
         ['bank-recon.html', 'Reconciliation'],
         ['cheques.html', 'Cheques'],
         ['expenses.html', 'Expenses'],
+        ['expense-recurring.html', 'Recurring'],
         ['login.html', 'Sign in'],
     ];
 
