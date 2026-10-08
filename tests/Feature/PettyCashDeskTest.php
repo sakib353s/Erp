@@ -189,7 +189,7 @@ class PettyCashDeskTest extends TestCase
     public function test_a_custodian_cannot_open_the_desk_that_declares_floats(): void
     {
         $custodian = $this->makeUser();
-        $custodian->roles()->attach($this->roleWith(['pettycash.spend', 'pettycash.replenish']));
+        $custodian->roles()->attach($this->roleWith(['portal.erp.access', 'pettycash.spend', 'pettycash.replenish']));
 
         $this->actingAs($custodian)->get(route('cash-bank.petty-cash'))->assertForbidden();
         $this->actingAs($custodian)->get(route('cash-bank.petty-cash.expenses'))->assertOk();
@@ -317,9 +317,9 @@ class PettyCashDeskTest extends TestCase
     public function test_above_the_limit_the_money_is_asked_for_and_the_asker_cannot_answer(): void
     {
         $custodian = $this->makeUser();
-        $custodian->roles()->attach($this->roleWith(['pettycash.spend']));
+        $custodian->roles()->attach($this->roleWith(['portal.erp.access', 'pettycash.spend']));
         $checker = $this->makeUser();
-        $checker->roles()->attach($this->roleWith(['pettycash.approve', 'pettycash.spend']));
+        $checker->roles()->attach($this->roleWith(['portal.erp.access', 'pettycash.approve', 'pettycash.spend']));
 
         $fund = $this->fund(['custodian_id' => $custodian->id]);
         $category = $this->category();
@@ -515,7 +515,7 @@ class PettyCashDeskTest extends TestCase
         // Decide the request — somebody other than the person who asked — and
         // spend the tin flat; then it closes.
         $checker = $this->makeUser();
-        $checker->roles()->attach($this->roleWith(['pettycash.approve']));
+        $checker->roles()->attach($this->roleWith(['portal.erp.access', 'pettycash.approve']));
 
         $request = PettyCashRequest::query()->sole();
         $this->actingAs($checker)

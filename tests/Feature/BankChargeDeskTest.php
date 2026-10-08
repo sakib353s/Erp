@@ -157,7 +157,7 @@ class BankChargeDeskTest extends TestCase
         // Recording what the bank took is one job; deciding what will be taken
         // automatically from now on is another.
         $clerk = $this->makeUser();
-        $clerk->roles()->attach($this->roleWith(['bank.charges']));
+        $clerk->roles()->attach($this->roleWith(['portal.erp.access', 'bank.charges']));
 
         $this->actingAs($clerk)->get(route('cash-bank.bank-charges'))->assertOk();
 

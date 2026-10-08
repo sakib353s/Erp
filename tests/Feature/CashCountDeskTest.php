@@ -111,7 +111,7 @@ class CashCountDeskTest extends TestCase
         ], $overrides);
     }
 
-    protected function count(array $overrides = [], ?User $actor = null): TestResponse
+    protected function submitCount(array $overrides = [], ?User $actor = null): TestResponse
     {
         return $this->actingAs($actor ?? $this->admin)
             ->post(route('cash-bank.cash-counts.store'), $this->payload($overrides));
@@ -135,7 +135,7 @@ class CashCountDeskTest extends TestCase
 
         // The desk is readable with the module floor; counting is not.
         $reader = $this->makeUser();
-        $reader->roles()->attach($this->roleWith(['cash.view']));
+        $reader->roles()->attach($this->roleWith(['portal.erp.access', 'cash.view']));
 
         $this->actingAs($reader)->get(route('cash-bank.cash-counts'))->assertOk();
         $this->actingAs($reader)->post(route('cash-bank.cash-counts.store'), $this->payload())
@@ -161,7 +161,7 @@ class CashCountDeskTest extends TestCase
         $this->fill(10000);
         $before = JournalEntry::query()->count();
 
-        $this->count()
+        $this->submitCount()
             ->assertRedirect();
 
         $count = CashCount::query()->sole();
@@ -195,7 +195,7 @@ class CashCountDeskTest extends TestCase
         $this->fill(5000);
         $before = JournalEntry::query()->count();
 
-        $this->count([
+        $this->submitCount([
             'counted_amount' => '5000.00',
             'difference_reason' => null,
         ])->assertRedirect();
@@ -219,7 +219,7 @@ class CashCountDeskTest extends TestCase
     {
         $this->fill(4000);
 
-        $this->count(['counted_amount' => '4150.00', 'difference_reason' => 'A customer paid too much and left']);
+        $this->submitCount(['counted_amount' => '4150.00', 'difference_reason' => 'A customer paid too much and left']);
 
         $count = CashCount::query()->sole();
         $over = $count->journalEntry->lines->firstWhere('dc', 'credit');
@@ -236,7 +236,7 @@ class CashCountDeskTest extends TestCase
     {
         $this->fill(1000);
 
-        $this->count(['counted_amount' => '900.00', 'difference_reason' => null])
+        $this->submitCount(['counted_amount' => '900.00', 'difference_reason' => null])
             ->assertSessionHasErrors('cash_count');
 
         $this->assertSame(0, CashCount::query()->count());
@@ -245,7 +245,7 @@ class CashCountDeskTest extends TestCase
 
         // A count through an exact figure needs no excuse, because there is no
         // difference to excuse.
-        $this->count(['counted_amount' => '1000.00', 'difference_reason' => null])
+        $this->submitCount(['counted_amount' => '1000.00', 'difference_reason' => null])
             ->assertSessionHasNoErrors();
     }
 
@@ -258,7 +258,7 @@ class CashCountDeskTest extends TestCase
             ['kind' => 'note', 'face_value' => '500', 'quantity' => 2],
         ];
 
-        $this->count([
+        $this->submitCount([
             'counted_amount' => '5000.00',
             'difference_reason' => null,
             'denominations' => $matched,
@@ -271,7 +271,7 @@ class CashCountDeskTest extends TestCase
         $this->assertSame(4, $count->lines()->orderBy('position')->first()->quantity);
 
         // A breakdown that adds up to something else is refused, not tidied up.
-        $this->count([
+        $this->submitCount([
             'counted_amount' => '5000.00',
             'difference_reason' => null,
             'denominations' => [
@@ -291,12 +291,12 @@ class CashCountDeskTest extends TestCase
 
         // A manager who holds both keys, counting a drawer alone at night.
         $both = $this->makeUser(['name' => 'Manager With Keys']);
-        $both->roles()->attach($this->roleWith(['cash.view', 'cash.counts', 'cash.counts.approve']));
+        $both->roles()->attach($this->roleWith(['portal.erp.access', 'cash.view', 'cash.counts', 'cash.counts.approve']));
 
         $other = $this->makeUser(['name' => 'Second Signatory']);
-        $other->roles()->attach($this->roleWith(['cash.view', 'cash.counts.approve']));
+        $other->roles()->attach($this->roleWith(['portal.erp.access', 'cash.view', 'cash.counts.approve']));
 
-        $this->count(['counted_amount' => '9600.00', 'difference_reason' => 'Banked 400 short by mistake'], $both)
+        $this->submitCount(['counted_amount' => '9600.00', 'difference_reason' => 'Banked 400 short by mistake'], $both)
             ->assertSessionHasNoErrors();
 
         $count = CashCount::query()->sole();
@@ -337,12 +337,12 @@ class CashCountDeskTest extends TestCase
         $before = JournalEntry::query()->count();
 
         $counter = $this->makeUser(['name' => 'Till Counter']);
-        $counter->roles()->attach($this->roleWith(['cash.view', 'cash.counts']));
+        $counter->roles()->attach($this->roleWith(['portal.erp.access', 'cash.view', 'cash.counts']));
 
         $approver = $this->makeUser(['name' => 'Desk Manager']);
-        $approver->roles()->attach($this->roleWith(['cash.view', 'cash.counts', 'cash.counts.approve']));
+        $approver->roles()->attach($this->roleWith(['portal.erp.access', 'cash.view', 'cash.counts', 'cash.counts.approve']));
 
-        $this->count(['counted_amount' => '9500.00', 'difference_reason' => 'Two courier payments came out of the till'], $counter)
+        $this->submitCount(['counted_amount' => '9500.00', 'difference_reason' => 'Two courier payments came out of the till'], $counter)
             ->assertRedirect();
 
         $count = CashCount::query()->sole();
@@ -394,10 +394,10 @@ class CashCountDeskTest extends TestCase
         $this->fill(3000);
 
         $counter = $this->makeUser();
-        $counter->roles()->attach($this->roleWith(['cash.view', 'cash.counts']));
+        $counter->roles()->attach($this->roleWith(['portal.erp.access', 'cash.view', 'cash.counts']));
 
         // A 200 gap is under a 500 tolerance, so it posts as it is counted.
-        $this->count(['counted_amount' => '2800.00', 'difference_reason' => 'Tea money'], $counter)
+        $this->submitCount(['counted_amount' => '2800.00', 'difference_reason' => 'Tea money'], $counter)
             ->assertSessionHasNoErrors();
 
         $count = CashCount::query()->sole();
@@ -415,12 +415,12 @@ class CashCountDeskTest extends TestCase
         $this->fill(6000);
 
         $counter = $this->makeUser();
-        $counter->roles()->attach($this->roleWith(['cash.view', 'cash.counts']));
+        $counter->roles()->attach($this->roleWith(['portal.erp.access', 'cash.view', 'cash.counts']));
 
         $approver = $this->makeUser();
-        $approver->roles()->attach($this->roleWith(['cash.view', 'cash.counts.approve']));
+        $approver->roles()->attach($this->roleWith(['portal.erp.access', 'cash.view', 'cash.counts.approve']));
 
-        $this->count(['counted_amount' => '5700.00', 'difference_reason' => 'Missing voucher'], $counter)
+        $this->submitCount(['counted_amount' => '5700.00', 'difference_reason' => 'Missing voucher'], $counter)
             ->assertSessionHasNoErrors();
 
         $count = CashCount::query()->sole();
@@ -453,12 +453,12 @@ class CashCountDeskTest extends TestCase
         $this->tolerance(50);
         $this->fill(2000);
 
-        $this->count(['counted_amount' => '1800.00', 'difference_reason' => 'Short at the till'])->assertSessionHasNoErrors();
+        $this->submitCount(['counted_amount' => '1800.00', 'difference_reason' => 'Short at the till'])->assertSessionHasNoErrors();
 
         $this->assertSame(1, CashCount::query()->count());
 
         // Counting it again would ask somebody to approve the same gap twice.
-        $this->count(['counted_amount' => '1900.00', 'difference_reason' => 'Recount'])->assertSessionHasErrors('cash_count');
+        $this->submitCount(['counted_amount' => '1900.00', 'difference_reason' => 'Recount'])->assertSessionHasErrors('cash_count');
         $this->assertSame(1, CashCount::query()->count());
 
         // Another drawer is a different question entirely: the pending count of
@@ -469,7 +469,7 @@ class CashCountDeskTest extends TestCase
             'code' => '1110-C2',
         ], $this->admin->id);
 
-        $this->count([
+        $this->submitCount([
             'account_id' => $second->id,
             'counted_amount' => '0.00',
             'difference_reason' => null,
@@ -485,7 +485,7 @@ class CashCountDeskTest extends TestCase
     {
         $this->fill(1000, '1120');
 
-        $this->count(['account_id' => $this->account('1120')->id, 'counted_amount' => '1000.00', 'difference_reason' => null])
+        $this->submitCount(['account_id' => $this->account('1120')->id, 'counted_amount' => '1000.00', 'difference_reason' => null])
             ->assertSessionHasErrors('cash_count');
 
         $this->assertSame(0, CashCount::query()->count());
@@ -513,7 +513,7 @@ class CashCountDeskTest extends TestCase
             'updated_at' => now(),
         ]);
 
-        $this->count(['account_id' => $foreignAccount, 'counted_amount' => '10.00'])->assertSessionHasErrors('account_id');
+        $this->submitCount(['account_id' => $foreignAccount, 'counted_amount' => '10.00'])->assertSessionHasErrors('account_id');
         $this->assertSame(0, CashCount::query()->count());
     }
 
@@ -521,7 +521,7 @@ class CashCountDeskTest extends TestCase
     {
         $this->fill(8000);
 
-        $this->count([
+        $this->submitCount([
             'counted_amount' => '7850.00',
             'difference_reason' => 'Courier paid from the till',
             'denominations' => [

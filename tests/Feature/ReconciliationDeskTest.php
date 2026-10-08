@@ -81,7 +81,7 @@ class ReconciliationDeskTest extends TestCase
         // A role that may read geo masters is not a role that has looked at a
         // bank statement — reading one's own books is a different key.
         $outsider = $this->makeUser();
-        $outsider->roles()->attach($this->roleWith(['masters.view'])->id);
+        $outsider->roles()->attach($this->roleWith(['portal.erp.access', 'masters.view'])->id);
 
         $this->actingAs($outsider)->get(route('cash-bank.reconciliations'))->assertForbidden();
         $this->actingAs($outsider)->get(route('cash-bank.wallets'))->assertForbidden();
@@ -223,7 +223,7 @@ class ReconciliationDeskTest extends TestCase
             ->assertSessionHasErrors('reconciliation');
 
         $checker = $this->makeUser();
-        $checker->roles()->attach($this->roleWith(['cash.view', 'bank.view', 'bank.reconcile'])->id);
+        $checker->roles()->attach($this->roleWith(['portal.erp.access', 'cash.view', 'bank.view', 'bank.reconcile'])->id);
 
         $this->actingAs($checker)
             ->post(route('cash-bank.reconciliations.sign-off', ['reconciliation' => $reconciliation->id]))
@@ -335,7 +335,7 @@ class ReconciliationDeskTest extends TestCase
 
         // Nobody signs this — not the preparer, and not a fresh pair of eyes.
         $checker = $this->makeUser();
-        $checker->roles()->attach($this->roleWith(['cash.view', 'bank.view', 'bank.reconcile'])->id);
+        $checker->roles()->attach($this->roleWith(['portal.erp.access', 'cash.view', 'bank.view', 'bank.reconcile'])->id);
 
         $this->actingAs($checker)
             ->post(route('cash-bank.reconciliations.sign-off', ['reconciliation' => $reconciliation->id]))
@@ -388,7 +388,7 @@ class ReconciliationDeskTest extends TestCase
         $this->assertSame(2, ReconciliationLine::query()->where('reconciliation_id', $reconciliation->id)->count());
 
         $checker = $this->makeUser();
-        $checker->roles()->attach($this->roleWith(['cash.view', 'bank.view', 'bank.reconcile'])->id);
+        $checker->roles()->attach($this->roleWith(['portal.erp.access', 'cash.view', 'bank.view', 'bank.reconcile'])->id);
 
         $this->actingAs($checker)
             ->post(route('cash-bank.reconciliations.sign-off', ['reconciliation' => $reconciliation->id]))
@@ -427,7 +427,7 @@ class ReconciliationDeskTest extends TestCase
         $this->assertTrue($first->isProved());
 
         $checker = $this->makeUser();
-        $checker->roles()->attach($this->roleWith(['cash.view', 'bank.view', 'bank.reconcile'])->id);
+        $checker->roles()->attach($this->roleWith(['portal.erp.access', 'cash.view', 'bank.view', 'bank.reconcile'])->id);
 
         $this->actingAs($checker)
             ->post(route('cash-bank.reconciliations.sign-off', ['reconciliation' => $first->id]))
@@ -506,7 +506,7 @@ class ReconciliationDeskTest extends TestCase
 
         // Declaring a wallet and reconciling one are different powers.
         $walletClerk = $this->makeUser();
-        $walletClerk->roles()->attach($this->roleWith(['cash.view', 'wallets.accounts', 'wallets.reconcile'])->id);
+        $walletClerk->roles()->attach($this->roleWith(['portal.erp.access', 'cash.view', 'wallets.accounts', 'wallets.reconcile'])->id);
 
         $this->actingAs($walletClerk)
             ->post(route('cash-bank.wallets.statement.import', ['account' => $wallet->id]), [
@@ -534,7 +534,7 @@ class ReconciliationDeskTest extends TestCase
         $this->assertTrue($reconciliation->isProved(), 'the wallet statement explains the whole balance');
 
         $bankClerk = $this->makeUser();
-        $bankClerk->roles()->attach($this->roleWith(['cash.view', 'bank.view', 'bank.reconcile'])->id);
+        $bankClerk->roles()->attach($this->roleWith(['portal.erp.access', 'cash.view', 'bank.view', 'bank.reconcile'])->id);
 
         $this->actingAs($bankClerk)->get(route('cash-bank.wallets'))->assertForbidden();
         $this->actingAs($bankClerk)->get(route('cash-bank.wallets.statement', ['account' => $wallet->id]))->assertForbidden();

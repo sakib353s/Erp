@@ -15,6 +15,9 @@ use App\Domain\Foundation\Services\TenantContext;
 use App\Domain\Foundation\User;
 use App\Domain\Settings\Services\SettingService;
 use Database\Seeders\AccountingCoreSeeder;
+use Database\Seeders\FoundationPermissionSeeder;
+use Database\Seeders\ReferenceDataSeeder;
+use Database\Seeders\SystemRoleSeeder;
 use Database\Seeders\CashBankCoreSeeder;
 use Database\Seeders\InventoryCoreSeeder;
 use Database\Seeders\PurchaseCoreSeeder;
@@ -219,9 +222,21 @@ class CompanyService
 
         // Company-scoped structural seeders return early when no company
         // exists (DatabaseSeeder often runs before first boot). Re-run them
-        // now that THE company and its default branch exist: COA, default
-        // warehouse, sales posting rules — still zero fake business data.
+        // now that THE company and its default branch exist: the Bangladesh
+        // reference lists and the current fiscal year, the COA, the default
+        // warehouse, the posting rules — still zero fake business data.
+        //
+        // ReferenceDataSeeder must be first: it is the seeder that creates the
+        // current fiscal year, and AccountingCoreSeeder can only open that
+        // year's posting periods once the year exists. Without it a fresh
+        // instance has a chart of accounts and nowhere to post a single entry.
         foreach ([
+            ReferenceDataSeeder::class,
+            // The system roles are built by looking their keys up in the
+            // permission catalogue, so the catalogue has to exist first —
+            // whether or not `db:seed` was ever run before first boot.
+            FoundationPermissionSeeder::class,
+            SystemRoleSeeder::class,
             AccountingCoreSeeder::class,
             InventoryCoreSeeder::class,
             SalesCoreSeeder::class,

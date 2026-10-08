@@ -73,9 +73,21 @@ class ChequeDeskTest extends TestCase
     }
 
     /** How many entries the cheque register has posted — the number that must stay still. */
+    /**
+     * Every ledger entry the cheque desk has written.
+     *
+     * A reversal is written by the accounting engine as a `journal_entry`
+     * pointing back at the original — the original is marked reversed rather
+     * than edited — so counting only `source_type = cheque` would read a
+     * bounced cheque as “nothing happened after the clearing”.
+     */
     protected function posted(): int
     {
-        return JournalEntry::query()->where('source_type', 'cheque')->count();
+        return JournalEntry::query()
+            ->where(fn ($query) => $query
+                ->where('source_type', 'cheque')
+                ->orWhereIn('reversal_of_id', JournalEntry::query()->where('source_type', 'cheque')->select('id')))
+            ->count();
     }
 
     /** @return array<string, mixed> */
@@ -156,7 +168,7 @@ class ChequeDeskTest extends TestCase
 
         // A clerk who may read the register but not write in it.
         $reader = $this->makeUser();
-        $reader->roles()->attach($this->roleWith(['cheques.view'])->id);
+        $reader->roles()->attach($this->roleWith(['portal.erp.access', 'cheques.view'])->id);
 
         $this->actingAs($reader)->get(route('cash-bank.cheques'))->assertOk();
         $this->actingAs($reader)
@@ -169,7 +181,7 @@ class ChequeDeskTest extends TestCase
         // A clerk who may write cheques in but may not decide the bank paid one:
         // that is the moment the ledger moves, and it is somebody else's key.
         $writer = $this->makeUser();
-        $writer->roles()->attach($this->roleWith(['cheques.view', 'cheques.manage'])->id);
+        $writer->roles()->attach($this->roleWith(['portal.erp.access', 'cheques.view', 'cheques.manage'])->id);
 
         $this->actingAs($writer)->get(route('cash-bank.cheques'))->assertOk();
         $this->actingAs($writer)

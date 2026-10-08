@@ -251,7 +251,7 @@ class RecurringExpenseDeskTest extends TestCase
 
         // A manager who writes schedules and holds the approval key too.
         $manager = $this->makeUser();
-        $manager->roles()->attach($this->roleWith([
+        $manager->roles()->attach($this->roleWith(['portal.erp.access', 
             'expenses.view', 'expenses.create', 'expenses.approve', 'expenses.recurring',
         ])->id);
 
@@ -277,7 +277,7 @@ class RecurringExpenseDeskTest extends TestCase
         $this->assertSame(0, $this->posted());
 
         $approver = $this->makeUser();
-        $approver->roles()->attach($this->roleWith(['expenses.approve'])->id);
+        $approver->roles()->attach($this->roleWith(['portal.erp.access', 'expenses.approve'])->id);
 
         $this->actingAs($approver)
             ->post(route('cash-bank.expenses.decide', ['expense' => $expense->id]), [
@@ -524,7 +524,7 @@ class RecurringExpenseDeskTest extends TestCase
         // A clerk who may read the schedules but not record expenses can see
         // what is due — and cannot turn it into money.
         $reader = $this->makeUser();
-        $reader->roles()->attach($this->roleWith(['expenses.recurring'])->id);
+        $reader->roles()->attach($this->roleWith(['portal.erp.access', 'expenses.recurring'])->id);
 
         $this->actingAs($reader)
             ->get(route('cash-bank.expenses.recurring'))

@@ -204,7 +204,7 @@ class ExpenseDeskTest extends TestCase
 
         // The person who approves is somebody else.
         $approver = $this->makeUser();
-        $approver->roles()->attach($this->roleWith(['expenses.view', 'expenses.approve'])->id);
+        $approver->roles()->attach($this->roleWith(['portal.erp.access', 'expenses.view', 'expenses.approve'])->id);
 
         $this->actingAs($approver)
             ->post(route('cash-bank.expenses.decide', ['expense' => $expense->id]), [
@@ -234,7 +234,7 @@ class ExpenseDeskTest extends TestCase
 
         // A manager who records expenses and holds the approval key too.
         $manager = $this->makeUser();
-        $manager->roles()->attach($this->roleWith(['expenses.view', 'expenses.create', 'expenses.approve'])->id);
+        $manager->roles()->attach($this->roleWith(['portal.erp.access', 'expenses.view', 'expenses.create', 'expenses.approve'])->id);
 
         $expense = $this->record($category, ['amount' => '2000.00'], $manager);
 
@@ -254,7 +254,7 @@ class ExpenseDeskTest extends TestCase
         $expense = $this->record($category, ['amount' => '9000.00']);
 
         $approver = $this->makeUser();
-        $approver->roles()->attach($this->roleWith(['expenses.approve'])->id);
+        $approver->roles()->attach($this->roleWith(['portal.erp.access', 'expenses.approve'])->id);
 
         $this->actingAs($approver)
             ->post(route('cash-bank.expenses.decide', ['expense' => $expense->id]), [
@@ -443,7 +443,7 @@ class ExpenseDeskTest extends TestCase
         $category = $this->category();
 
         $reader = $this->makeUser();
-        $reader->roles()->attach($this->roleWith(['expenses.view'])->id);
+        $reader->roles()->attach($this->roleWith(['portal.erp.access', 'expenses.view'])->id);
 
         $this->actingAs($reader)->get(route('cash-bank.expenses'))->assertOk();
         $this->actingAs($reader)->get(route('cash-bank.expense-categories'))->assertOk();
@@ -463,7 +463,7 @@ class ExpenseDeskTest extends TestCase
 
         // A clerk who records expenses cannot approve one or re-point a category.
         $clerk = $this->makeUser();
-        $clerk->roles()->attach($this->roleWith(['expenses.view', 'expenses.create'])->id);
+        $clerk->roles()->attach($this->roleWith(['portal.erp.access', 'expenses.view', 'expenses.create'])->id);
 
         $expense = $this->record($category, ['amount' => '300.00'], $clerk);
 

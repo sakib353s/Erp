@@ -162,7 +162,7 @@ class CashBankDeskTest extends TestCase
         $this->assertSame('1500.5000', (string) $payment->amount);
         $this->assertSame($cash->id, $payment->account_id);
         $this->assertSame('cash', $payment->method);
-        $this->assertStringStartsWith('MR-', $payment->receipt_no);
+        $this->assertStringStartsWith('MR/', $payment->receipt_no); // {PREFIX}/{YYYY}/{SEQ}
 
         $lines = JournalLine::query()->where('journal_entry_id', $payment->journal_entry_id)->get();
 
@@ -210,7 +210,7 @@ class CashBankDeskTest extends TestCase
 
         $this->assertSame('debit', $lines->firstWhere('account_id', $rent->id)->dc);
         $this->assertSame('credit', $lines->firstWhere('account_id', $cash->id)->dc);
-        $this->assertStringStartsWith('EX-', $payment->receipt_no);
+        $this->assertStringStartsWith('EX/', $payment->receipt_no);
 
         // Paying "to" a bank account is a transfer wearing the wrong form.
         $this->actingAs($this->admin)
@@ -258,7 +258,7 @@ class CashBankDeskTest extends TestCase
         $this->assertCount(2, $lines);
         $this->assertSame('debit', $lines->firstWhere('account_id', $bank->id)->dc, 'the money landed in the bank');
         $this->assertSame('credit', $lines->firstWhere('account_id', $cash->id)->dc, 'and left the till');
-        $this->assertStringStartsWith('CT-', $transfer->transfer_no);
+        $this->assertStringStartsWith('CT/', $transfer->transfer_no);
         $this->assertSame(CashTransfer::STATUS_POSTED, $transfer->status);
 
         // The desk's answer to a double submit is the same document, not a second move.
@@ -383,7 +383,7 @@ class CashBankDeskTest extends TestCase
     public function test_opening_a_wallet_is_a_different_power_from_opening_a_bank_account(): void
     {
         $banker = $this->makeUser();
-        $banker->roles()->attach($this->roleWith(['bank.accounts', 'cash.view'])->id);
+        $banker->roles()->attach($this->roleWith(['portal.erp.access', 'bank.accounts', 'cash.view'])->id);
 
         $this->actingAs($banker)
             ->post(route('cash-bank.accounts.store'), [

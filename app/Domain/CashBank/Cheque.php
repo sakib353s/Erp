@@ -40,6 +40,9 @@ class Cheque extends Model
 
     public const STATUS_RECEIVED = 'received';
 
+    /** Written by us and not yet presented: the mirror image of `received`. */
+    public const STATUS_ISSUED = 'issued';
+
     public const STATUS_DEPOSITED = 'deposited';
 
     public const STATUS_PRESENTED = 'presented';
