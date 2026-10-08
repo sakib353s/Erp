@@ -17,6 +17,7 @@ use App\Domain\Settings\Services\SettingService;
 use Database\Seeders\AccountingCoreSeeder;
 use Database\Seeders\CashBankCoreSeeder;
 use Database\Seeders\InventoryCoreSeeder;
+use Database\Seeders\PurchaseCoreSeeder;
 use Database\Seeders\SalesCoreSeeder;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;

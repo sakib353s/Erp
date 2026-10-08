@@ -523,10 +523,15 @@ class MeetingBoardTest extends TestCase
     {
         $meeting = $this->callMeeting();
 
+        // `singleton` is not mass-assignable on purpose — the column is the
+        // database-level guard behind a one-company instance. Written by hand,
+        // false being the only value its unique index has room for.
+        $elsewhere = new Company(['name' => 'Another Company', 'is_active' => true]);
+        $elsewhere->singleton = false;
+        $elsewhere->save();
+
         $outsider = User::query()->create([
-            'company_id' => Company::query()->create([
-                'name' => 'Another Company', 'singleton' => 'other', 'is_active' => true,
-            ])->id,
+            'company_id' => $elsewhere->id,
             'name' => 'Outsider',
             'email' => 'outsider@elsewhere.test',
             'password' => self::ADMIN_PASSWORD,

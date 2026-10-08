@@ -86,8 +86,20 @@ class AppServiceProvider extends ServiceProvider
 
         /* ---------------- Authorization (Rules 6 & 7) ---------------- */
 
+        /*
+         * Rule 6 — permissions live in the database, never in Gate::define()
+         * calls. `$user->can('business.assets.manage')` therefore asks the
+         * same catalogue the `permission:` middleware asks, so a form request
+         * and its route can never disagree about who may act. Abilities the
+         * catalogue does not know return null ("no opinion") and fall through
+         * to the policies below; a super admin still holds everything.
+         */
         Gate::before(function (User $user, string $ability) {
-            return $user->isSuperAdmin() ? true : null;
+            if ($user->isSuperAdmin()) {
+                return true;
+            }
+
+            return app(PermissionCatalog::class)->allows($user, $ability) ? true : null;
         });
 
         Gate::policy(Branch::class, BranchPolicy::class);

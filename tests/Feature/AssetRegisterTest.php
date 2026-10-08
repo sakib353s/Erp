@@ -107,12 +107,12 @@ class AssetRegisterTest extends TestCase
 
     protected function viewer(User $user): void
     {
-        $user->roles()->attach($this->roleWith(['business.assets.view'])->id);
+        $user->roles()->attach($this->roleWith(['portal.erp.access', 'business.assets.view'])->id);
     }
 
     protected function keeper(User $user): void
     {
-        $user->roles()->attach($this->roleWith(['business.assets.view', 'business.assets.manage'])->id);
+        $user->roles()->attach($this->roleWith(['portal.erp.access', 'business.assets.view', 'business.assets.manage'])->id);
     }
 
     /**
@@ -291,10 +291,16 @@ class AssetRegisterTest extends TestCase
     {
         $asset = $this->probe();
 
+        // `singleton` is not mass-assignable on purpose: the column is the
+        // database-level guard that makes this a one-company instance. The
+        // second row is therefore written by hand — the false flag is the only
+        // value the unique index leaves room for.
+        $elsewhere = new Company(['name' => 'Another Company', 'is_active' => true]);
+        $elsewhere->singleton = false;
+        $elsewhere->save();
+
         $outsider = User::query()->create([
-            'company_id' => Company::query()->create([
-                'name' => 'Another Company', 'singleton' => 'other', 'is_active' => true,
-            ])->id,
+            'company_id' => $elsewhere->id,
             'name' => 'Outsider',
             'email' => 'outsider@elsewhere.test',
             'password' => self::ADMIN_PASSWORD,
@@ -558,7 +564,13 @@ class AssetRegisterTest extends TestCase
         Carbon::setTestNow(Carbon::parse('2027-02-28 09:00:00'));
 
         $waiting = $this->probe(['name' => 'Not yet in the books']);
-        $this->probe(['name' => 'No policy', 'depreciation_method' => 'none', 'useful_life_months' => null]);
+
+        // Cost in the books with no usable policy: nothing will ever be charged
+        // for it, so the desk has to name it rather than count it as covered.
+        $this->capitalise(
+            $this->probe(['name' => 'No policy', 'depreciation_method' => 'none', 'useful_life_months' => null]),
+            '2027-02-01',
+        );
 
         $this->capitalise($this->probe(['name' => 'Charged up']), '2027-02-01');
 

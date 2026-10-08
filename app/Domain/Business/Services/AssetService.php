@@ -607,6 +607,28 @@ class AssetService
     }
 
     /**
+     * An inclusive day range on a date column.
+     *
+     * `where('trip_date', '<=', '2027-02-20')` quietly loses the last day:
+     * Eloquent writes a `date` cast as `2027-02-20 00:00:00`, and that string
+     * sorts *after* `2027-02-20` as text. Comparing the day part is what
+     * somebody means by "from the 1st to the 20th", and it reads the same on
+     * SQLite and MySQL.
+     */
+    protected function withinDays(Builder $query, string $column, ?string $from, ?string $to): Builder
+    {
+        if ($from !== null && $from !== '') {
+            $query->whereDate($column, '>=', Carbon::parse($from)->toDateString());
+        }
+
+        if ($to !== null && $to !== '') {
+            $query->whereDate($column, '<=', Carbon::parse($to)->toDateString());
+        }
+
+        return $query;
+    }
+
+    /**
      * @param  array{asset_id?: mixed, from?: ?string, to?: ?string, q?: ?string, per_page?: int}  $filters
      */
     public function trips(array $filters = []): LengthAwarePaginator
@@ -623,13 +645,12 @@ class AssetService
             $query->where('business_asset_id', (int) $filters['asset_id']);
         }
 
-        if ($from = ($filters['from'] ?? null)) {
-            $query->where('trip_date', '>=', Carbon::parse($from)->toDateString());
-        }
-
-        if ($to = ($filters['to'] ?? null)) {
-            $query->where('trip_date', '<=', Carbon::parse($to)->toDateString());
-        }
+        $this->withinDays(
+            $query,
+            'trip_date',
+            isset($filters['from']) ? (string) $filters['from'] : null,
+            isset($filters['to']) ? (string) $filters['to'] : null,
+        );
 
         if ($search = trim((string) ($filters['q'] ?? ''))) {
             $query->where(function (Builder $q) use ($search) {
@@ -662,9 +683,12 @@ class AssetService
             ->orderBy('name')
             ->get()
             ->map(function (BusinessAsset $vehicle) use ($from, $to) {
-                $trips = $vehicle->trips()
-                    ->whereBetween('trip_date', [$from->toDateString(), $to->toDateString()])
-                    ->get();
+                $trips = $this->withinDays(
+                    $vehicle->trips()->getQuery(),
+                    'trip_date',
+                    $from->toDateString(),
+                    $to->toDateString(),
+                )->get();
 
                 $distance = round((float) $trips->sum('distance_km'), 2);
                 $fuel = round((float) $trips->sum('fuel_cost'), 2);

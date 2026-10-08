@@ -78,7 +78,7 @@ class AssetDepreciationCommand extends Command
 
             $this->table(
                 ['Asset', 'Kind', 'Period', 'Charge', 'Book value after'],
-                $due->map(function (BusinessAsset $asset) use ($asAt, &$total) {
+                $due->map(function (BusinessAsset $asset) use ($assets, $asAt, &$total) {
                     $amount = round(min($asset->monthlyDepreciation(), $asset->remainingDepreciable()), 2);
                     $total += $amount;
 

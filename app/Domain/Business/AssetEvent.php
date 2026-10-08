@@ -29,6 +29,13 @@ class AssetEvent extends Model
         'disposed' => 'Disposed',
     ];
 
+    /**
+     * The history of the asset register, named for the register it describes:
+     * one `business_asset_events` row per thing that happened to an asset, so
+     * a report can join the register without guessing at a second prefix.
+     */
+    protected $table = 'business_asset_events';
+
     protected $fillable = [
         'company_id', 'business_asset_id', 'action', 'happened_on', 'note', 'meta', 'actor_id',
     ];
