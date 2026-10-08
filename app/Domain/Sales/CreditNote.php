@@ -56,31 +56,3 @@ class CreditNote extends Model
         return $this->hasMany(CreditNoteLine::class);
     }
 }
-
-class CreditNoteLine extends Model
-{
-    use Auditable;
-
-    protected $fillable = [
-        'company_id', 'credit_note_id', 'line_no', 'product_id',
-        'invoice_line_id', 'description', 'qty', 'unit_price', 'tax', 'line_total',
-    ];
-
-    protected $casts = [
-        'qty' => 'decimal:4',
-        'unit_price' => 'decimal:4',
-        'tax' => 'decimal:4',
-        'line_total' => 'decimal:4',
-        'line_no' => 'integer',
-    ];
-
-    public function creditNote(): BelongsTo
-    {
-        return $this->belongsTo(CreditNote::class, 'credit_note_id');
-    }
-
-    public function product(): BelongsTo
-    {
-        return $this->belongsTo(Product::class);
-    }
-}

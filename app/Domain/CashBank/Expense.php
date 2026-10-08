@@ -5,7 +5,7 @@ namespace App\Domain\CashBank;
 use App\Domain\Accounting\Account;
 use App\Domain\Accounting\JournalEntry;
 use App\Domain\Foundation\User;
-use App\Domain\Purchase\Supplier;
+use App\Domain\Masters\Supplier;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 

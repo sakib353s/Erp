@@ -13,7 +13,7 @@ use App\Domain\CashBank\Services\RecurringExpenseService;
 use App\Domain\CashBank\Support\AmountInWords;
 use App\Domain\Documents\Services\FileUploadService;
 use App\Domain\Foundation\Services\TenantContext;
-use App\Domain\Purchase\Supplier;
+use App\Domain\Masters\Supplier;
 use App\Http\Requests\ExpenseDecisionRequest;
 use App\Http\Requests\StoreExpenseCategoryRequest;
 use App\Http\Requests\StoreExpenseRequest;

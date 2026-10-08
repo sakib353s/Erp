@@ -80,35 +80,3 @@ class SalesOrder extends Model
         return $this->hasOne(SuspiciousOrderFlag::class, 'sales_order_id');
     }
 }
-
-class SalesOrderLine extends Model
-{
-    use Auditable;
-
-    protected $fillable = [
-        'company_id', 'sales_order_id', 'line_no', 'product_id', 'description',
-        'qty', 'delivered_qty', 'invoiced_qty', 'unit_price', 'discount',
-        'tax', 'line_total',
-    ];
-
-    protected $casts = [
-        'qty' => 'decimal:4',
-        'delivered_qty' => 'decimal:4',
-        'invoiced_qty' => 'decimal:4',
-        'unit_price' => 'decimal:4',
-        'discount' => 'decimal:4',
-        'tax' => 'decimal:4',
-        'line_total' => 'decimal:4',
-        'line_no' => 'integer',
-    ];
-
-    public function order(): BelongsTo
-    {
-        return $this->belongsTo(SalesOrder::class, 'sales_order_id');
-    }
-
-    public function product(): BelongsTo
-    {
-        return $this->belongsTo(Product::class);
-    }
-}

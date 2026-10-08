@@ -57,32 +57,3 @@ class Quotation extends Model
         return $query->where('company_id', auth()->user()?->company_id ?? $this->company_id);
     }
 }
-
-class QuotationLine extends Model
-{
-    use Auditable;
-
-    protected $fillable = [
-        'company_id', 'quotation_id', 'line_no', 'product_id', 'description',
-        'qty', 'unit_price', 'discount', 'tax', 'line_total',
-    ];
-
-    protected $casts = [
-        'qty' => 'decimal:4',
-        'unit_price' => 'decimal:4',
-        'discount' => 'decimal:4',
-        'tax' => 'decimal:4',
-        'line_total' => 'decimal:4',
-        'line_no' => 'integer',
-    ];
-
-    public function quotation(): BelongsTo
-    {
-        return $this->belongsTo(Quotation::class);
-    }
-
-    public function product(): BelongsTo
-    {
-        return $this->belongsTo(Product::class);
-    }
-}

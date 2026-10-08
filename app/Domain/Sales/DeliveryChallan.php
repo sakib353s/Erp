@@ -55,28 +55,3 @@ class DeliveryChallan extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 }
-
-class DeliveryChallanLine extends Model
-{
-    use Auditable;
-
-    protected $fillable = [
-        'company_id', 'delivery_challan_id', 'line_no', 'product_id',
-        'description', 'qty',
-    ];
-
-    protected $casts = [
-        'qty' => 'decimal:4',
-        'line_no' => 'integer',
-    ];
-
-    public function challan(): BelongsTo
-    {
-        return $this->belongsTo(DeliveryChallan::class, 'delivery_challan_id');
-    }
-
-    public function product(): BelongsTo
-    {
-        return $this->belongsTo(Product::class);
-    }
-}
