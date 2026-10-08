@@ -118,8 +118,14 @@ class RecurringExpenseDeskTest extends TestCase
         return RecurringExpense::query()->orderByDesc('id')->firstOrFail();
     }
 
-    /** The button that does what the daily run would do tomorrow morning. */
-    protected function run(): TestResponse
+    /**
+     * The button that does what the daily run would do tomorrow morning.
+     *
+     * Named for what it clicks, not `run()`: PHPUnit's own TestCase::run() is
+     * final, and a test helper that pretends to be it is a fatal error the
+     * moment the file is loaded.
+     */
+    protected function runTheGenerator(): TestResponse
     {
         return $this->actingAs($this->admin)->post(route('cash-bank.expenses.recurring.run'));
     }
@@ -186,7 +192,7 @@ class RecurringExpenseDeskTest extends TestCase
         $category = $this->category();
         $schedule = $this->schedule($category);
 
-        $this->run()->assertSessionHasNoErrors();
+        $this->runTheGenerator()->assertSessionHasNoErrors();
 
         $expense = Expense::query()->sole();
 
@@ -215,7 +221,7 @@ class RecurringExpenseDeskTest extends TestCase
         $this->assertDatabaseHas('audit_events', ['action' => 'cash.recurring_expense_generated']);
 
         // Nothing is due any more, so the button says so and writes nothing.
-        $this->run()->assertSessionHasNoErrors();
+        $this->runTheGenerator()->assertSessionHasNoErrors();
         $this->assertSame(1, Expense::query()->count());
         $this->assertSame(1, $this->posted());
     }
@@ -299,7 +305,7 @@ class RecurringExpenseDeskTest extends TestCase
         // describes anything. Nothing posts, and nothing is skipped either.
         $category->forceFill(['is_active' => false])->save();
 
-        $this->run();
+        $this->runTheGenerator();
 
         $schedule->refresh();
         $this->assertSame(0, Expense::query()->count());
@@ -317,7 +323,7 @@ class RecurringExpenseDeskTest extends TestCase
         // Put it right and the same schedule pays the month it owes.
         $category->forceFill(['is_active' => true])->save();
 
-        $this->run()->assertSessionHasNoErrors();
+        $this->runTheGenerator()->assertSessionHasNoErrors();
 
         $this->assertSame(1, Expense::query()->count());
         $this->assertSame(1, $this->posted());
@@ -334,14 +340,14 @@ class RecurringExpenseDeskTest extends TestCase
             'ends_on' => now()->toDateString(),
         ]);
 
-        $this->run()->assertSessionHasNoErrors();
+        $this->runTheGenerator()->assertSessionHasNoErrors();
 
         $this->assertSame(1, Expense::query()->count());
         $this->assertFalse($schedule->refresh()->isActive());
         $this->assertSame(1, (int) $schedule->generated_count);
 
         // The next run generates nothing for it: the contract is over.
-        $this->run();
+        $this->runTheGenerator();
         $this->assertSame(1, Expense::query()->count());
         $this->assertSame(1, $this->posted());
     }
@@ -389,7 +395,7 @@ class RecurringExpenseDeskTest extends TestCase
         $this->assertSame(now()->toDateString(), $schedule->next_due_on?->toDateString());
         $this->assertDatabaseHas('audit_events', ['action' => 'cash.recurring_expense_paused']);
 
-        $this->run();
+        $this->runTheGenerator();
         $this->assertSame(0, Expense::query()->count());
 
         // Resuming keeps the date it owed all along — pausing is not a reset.
@@ -403,7 +409,7 @@ class RecurringExpenseDeskTest extends TestCase
         $this->assertSame(1, app(RecurringExpenseService::class)->dueCount());
         $this->assertDatabaseHas('audit_events', ['action' => 'cash.recurring_expense_resumed']);
 
-        $this->run()->assertSessionHasNoErrors();
+        $this->runTheGenerator()->assertSessionHasNoErrors();
         $this->assertSame(1, Expense::query()->count());
     }
 
