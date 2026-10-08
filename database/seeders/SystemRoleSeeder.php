@@ -95,6 +95,8 @@ class SystemRoleSeeder extends Seeder
                 // or closing a bank account is a decision above a department.
                 'cash.view', 'cash.receipts.create', 'cash.payments.create',
                 'cash.transfers', 'bank.view',
+                // §08-08: checking the bank is what a manager's signature is for.
+                'bank.reconcile', 'wallets.reconcile',
                 // §04-28: stock leaving the building on a transfer is the same
                 // kind of decision as stock being written off, so it is the same
                 // desk that signs it off — and never the person who raised it.

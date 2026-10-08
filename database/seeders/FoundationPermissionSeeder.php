@@ -186,6 +186,10 @@ class FoundationPermissionSeeder extends Seeder
             ['bank', 'accounts', 'manage', 'bank.accounts', 'Declare, rename and close cash and bank accounts'],
             ['bank', 'books', 'view', 'bank.view', "Read an account's book, the way a statement is read"],
             ['wallets', 'accounts', 'manage', 'wallets.accounts', 'Open and configure mobile wallets'],
+            // Reading a book and proving it against the bank are different
+            // jobs: the second one is the signature at the bottom of the page.
+            ['bank', 'reconciliations', 'manage', 'bank.reconcile', 'Reconcile a bank account against its own statement'],
+            ['wallets', 'reconciliations', 'manage', 'wallets.reconcile', 'Reconcile a mobile wallet against a statement the provider exported'],
             ['accounting', 'opening', 'create', 'accounting.opening.create', 'Post opening balances'],
             ['accounting', 'receipts', 'view', 'accounting.receipts.view', 'View receipts'],
             ['accounting', 'receipts', 'create', 'accounting.receipts.create', 'Record receipts'],

@@ -420,6 +420,33 @@ class MoneyAccountService
         return $account->refresh();
     }
 
+    /**
+     * What an account held on a date (§08-08): the same posted lines, summed up
+     * to that day instead of to today. A reconciliation is a statement about one
+     * day — "on 31 March the bank said 82,400 and the books said 79,900" — so it
+     * cannot read a balance that has moved since, which is why this exists
+     * beside `positionFor()` rather than instead of it.
+     *
+     * A null date means "as of everything posted", i.e. today's balance.
+     */
+    public function balanceOf(Account $account, ?int $branchId = null, ?string $asOf = null): string
+    {
+        $row = JournalLine::query()
+            ->join('journal_entries as e', 'e.id', '=', 'journal_lines.journal_entry_id')
+            ->where('journal_lines.company_id', $this->companyId())
+            ->where('journal_lines.account_id', $account->id)
+            ->where('e.posting_state', JournalEntry::STATE_POSTED)
+            ->when($branchId !== null, fn ($query) => $query->where('e.branch_id', $branchId))
+            ->when($asOf !== null, fn ($query) => $query->whereDate('e.entry_date', '<=', $asOf))
+            ->selectRaw(
+                "COALESCE(SUM(CASE WHEN journal_lines.dc = 'debit' THEN journal_lines.amount ELSE 0 END), 0) as d,
+                 COALESCE(SUM(CASE WHEN journal_lines.dc = 'credit' THEN journal_lines.amount ELSE 0 END), 0) as c",
+            )
+            ->first();
+
+        return bcsub((string) ($row->d ?? '0'), (string) ($row->c ?? '0'), 4);
+    }
+
     /** The number of posted lines on an account — what "has history" means here. */
     public function movementCount(Account $account): int
     {

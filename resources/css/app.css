@@ -2837,6 +2837,30 @@ hr { border-color: var(--line); opacity: 1; }
 .erp-money-out { color: var(--danger); font-variant-numeric: tabular-nums; }
 .erp-money-flat { color: var(--ink); font-variant-numeric: tabular-nums; }
 
+/* §08-08/09: reconciliation states. `balanced` reads as done, `signed_off` as
+ * settled history, and a statement run is either a preview, imported, or a
+ * refusal that kept the file out of the books. */
+.erp-status-balanced {
+    background: var(--ok-soft);
+    color: var(--ok);
+}
+
+.erp-status-signed_off,
+.erp-status-signed-off {
+    background: var(--surface-3);
+    color: var(--ink-2);
+}
+
+.erp-status-imported {
+    background: var(--ok-soft);
+    color: var(--ok);
+}
+
+.erp-status-preview {
+    background: var(--info-soft);
+    color: var(--info);
+}
+
 /* ------------------------------------------------- 31. detail layout & docs */
 /*
  * Master-detail two-pane layout (§18.2 DetailPanel, §18.4 768-1199):

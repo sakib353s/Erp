@@ -254,6 +254,12 @@ class CatalogImporter
         'cash & bank > bank accounts > all bank accounts' => ['/app/cash-bank/accounts', 'bank.accounts'],
         'cash & bank > bank accounts > add bank account' => ['/app/cash-bank/accounts', 'bank.accounts'],
         'cash & bank > bank accounts > bank transactions' => ['/app/cash-bank', 'cash.view'],
+        // §08-08/09/12: the statement desk. A menu leaf cannot carry an account id,
+        // so these land on the hub that lists every account to reconcile — a menu
+        // entry must never point at a page that cannot open without one.
+        'cash & bank > bank accounts > bank reconciliation' => ['/app/cash-bank/reconciliations', 'bank.view'],
+        'cash & bank > bank accounts > bank statement import' => ['/app/cash-bank/reconciliations', 'bank.view'],
+        'cash & bank > mobile banking > mobile reconciliation' => ['/app/cash-bank/wallets', 'wallets.accounts'],
         // A wallet is an account money sits in, so the leaves that name one point
         // at the registry that opens it — four providers, one screen, because the
         // only thing that differs between them is a name in a list.

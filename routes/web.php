@@ -5,6 +5,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BankReconciliationController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BulkPriceUpdateController;
 use App\Http\Controllers\CashBankController;
@@ -866,6 +867,61 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::get('/app/cash-bank/books/{account}', [CashBankController::class, 'book'])
         ->middleware('permission:bank.view')
         ->name('cash-bank.book');
+    // §08-08/09/12: proving the books against the institution's own statement.
+    // Two hubs because a bank account and a mobile wallet are reconciled under
+    // different keys — the instrument decides, and the route cannot carry it.
+    Route::get('/app/cash-bank/reconciliations', [BankReconciliationController::class, 'index'])
+        ->middleware('permission:bank.view')
+        ->name('cash-bank.reconciliations');
+    Route::get('/app/cash-bank/wallets', [BankReconciliationController::class, 'wallets'])
+        ->middleware('permission:wallets.accounts')
+        ->name('cash-bank.wallets');
+    Route::get('/app/cash-bank/accounts/{account}/statement', [BankReconciliationController::class, 'statement'])
+        ->middleware('permission:bank.view')
+        ->name('cash-bank.statement');
+    Route::get('/app/cash-bank/accounts/{account}/statement/template', [BankReconciliationController::class, 'statementTemplate'])
+        ->middleware('permission:bank.view')
+        ->name('cash-bank.statement.template');
+    Route::post('/app/cash-bank/accounts/{account}/statement', [BankReconciliationController::class, 'importStatement'])
+        ->middleware('permission:bank.reconcile')
+        ->name('cash-bank.statement.import');
+    Route::get('/app/cash-bank/accounts/{account}/reconcile', [BankReconciliationController::class, 'reconcile'])
+        ->middleware('permission:bank.view')
+        ->name('cash-bank.reconcile');
+    Route::post('/app/cash-bank/accounts/{account}/reconcile', [BankReconciliationController::class, 'open'])
+        ->middleware('permission:bank.reconcile')
+        ->name('cash-bank.reconcile.open');
+    Route::get('/app/cash-bank/wallets/{account}/statement', [BankReconciliationController::class, 'walletStatement'])
+        ->middleware('permission:wallets.accounts')
+        ->name('cash-bank.wallets.statement');
+    Route::post('/app/cash-bank/wallets/{account}/statement', [BankReconciliationController::class, 'importWalletStatement'])
+        ->middleware('permission:wallets.reconcile')
+        ->name('cash-bank.wallets.statement.import');
+    Route::get('/app/cash-bank/wallets/{account}/reconcile', [BankReconciliationController::class, 'walletReconcile'])
+        ->middleware('permission:wallets.accounts')
+        ->name('cash-bank.wallets.reconcile');
+    Route::post('/app/cash-bank/wallets/{account}/reconcile', [BankReconciliationController::class, 'openWallet'])
+        ->middleware('permission:wallets.reconcile')
+        ->name('cash-bank.wallets.reconcile.open');
+    // The document itself: the instrument lives on its account, so the module
+    // floor is the route's and the instrument's own key is asserted in the
+    // controller, where the account is known.
+    Route::get('/app/cash-bank/reconciliations/{reconciliation}', [BankReconciliationController::class, 'show'])
+        ->middleware('permission:cash.view')
+        ->name('cash-bank.reconciliations.show');
+    Route::post('/app/cash-bank/reconciliations/{reconciliation}/closing', [BankReconciliationController::class, 'restate'])
+        ->middleware('permission:cash.view')
+        ->name('cash-bank.reconciliations.restate');
+    Route::post('/app/cash-bank/reconciliations/{reconciliation}/match', [BankReconciliationController::class, 'match'])
+        ->middleware('permission:cash.view')
+        ->name('cash-bank.reconciliations.match');
+    Route::post('/app/cash-bank/reconciliations/{reconciliation}/unmatch', [BankReconciliationController::class, 'unmatch'])
+        ->middleware('permission:cash.view')
+        ->name('cash-bank.reconciliations.unmatch');
+    Route::post('/app/cash-bank/reconciliations/{reconciliation}/sign-off', [BankReconciliationController::class, 'signOff'])
+        ->middleware('permission:cash.view')
+        ->name('cash-bank.reconciliations.sign-off');
+
     Route::get('/app/cash-bank/receipts', [CashBankController::class, 'receipts'])
         ->middleware('permission:cash.view')
         ->name('cash-bank.receipts');
