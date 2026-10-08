@@ -116,8 +116,11 @@ class BusinessRecord extends Model
 
         return $query->where('status', self::STATUS_ACTIVE)
             ->where(function ($q) use ($from, $to) {
-                $q->whereBetween('expires_on', [$from->toDateString(), $to->toDateString()])
-                    ->orWhereBetween('due_on', [$from->toDateString(), $to->toDateString()]);
+                $q->where(function ($inner) use ($from, $to) {
+                    $inner->whereDate('expires_on', '>=', $from)->whereDate('expires_on', '<=', $to);
+                })->orWhere(function ($inner) use ($from, $to) {
+                    $inner->whereDate('due_on', '>=', $from)->whereDate('due_on', '<=', $to);
+                });
             });
     }
 

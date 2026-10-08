@@ -428,7 +428,7 @@ class RecurringExpenseService
         $generatedThisMonth = Expense::query()
             ->where('company_id', $this->companyId())
             ->whereNotNull('recurring_expense_id')
-            ->whereBetween('expense_date', [now()->startOfMonth()->toDateString(), now()->endOfMonth()->toDateString()]);
+            ->whereDate('expense_date', '>=', now()->startOfMonth()->toDateString())->whereDate('expense_date', '<=', now()->endOfMonth()->toDateString());
 
         $generatedCount = (clone $generatedThisMonth)->count();
         $generatedTotal = (float) (clone $generatedThisMonth)->sum('amount');

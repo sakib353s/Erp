@@ -536,8 +536,12 @@ class BusinessRecordService
 
         $rows = $this->visible()->active()
             ->where(function (Builder $q) use ($gridStart, $gridEnd) {
-                $q->whereBetween('expires_on', [$gridStart->toDateString(), $gridEnd->toDateString()])
-                    ->orWhereBetween('due_on', [$gridStart->toDateString(), $gridEnd->toDateString()]);
+                $q->where(fn ($inner) => $inner
+                    ->whereDate('expires_on', '>=', $gridStart->toDateString())
+                    ->whereDate('expires_on', '<=', $gridEnd->toDateString()))
+                    ->orWhere(fn ($inner) => $inner
+                        ->whereDate('due_on', '>=', $gridStart->toDateString())
+                        ->whereDate('due_on', '<=', $gridEnd->toDateString()));
             })
             ->with('branch')
             ->get();
@@ -709,9 +713,9 @@ class BusinessRecordService
             'expired' => $query->whereNotNull('expires_on')->where('expires_on', '<', $now),
             'overdue' => $query->whereNotNull('due_on')->where('due_on', '<', $now),
             'expiring' => $query->whereNotNull('expires_on')
-                ->whereBetween('expires_on', [$now, $near])
+                ->whereDate('expires_on', '>=', $now)->whereDate('expires_on', '<=', $near)
                 ->where(fn (Builder $q) => $q->whereNull('due_on')->orWhere('due_on', '>=', $now)),
-            'due_soon' => $query->whereNotNull('due_on')->whereBetween('due_on', [$now, $near]),
+            'due_soon' => $query->whereNotNull('due_on')->whereDate('due_on', '>=', $now)->whereDate('due_on', '<=', $near),
             'undated' => $query->whereNull('expires_on')->whereNull('due_on'),
             'valid' => $query->where(fn (Builder $q) => $q->where('expires_on', '>', $near)->orWhere('due_on', '>', $near)),
             default => null,

@@ -246,7 +246,7 @@ class PurchaseQuery
             'overdue_bills' => (clone $overdue)->count(),
             'due_week' => (float) $scoped()->open()
                 ->whereNotNull('due_date')
-                ->whereBetween('due_date', [now()->toDateString(), now()->addDays(7)->toDateString()])
+                ->whereDate('due_date', '>=', now()->toDateString())->whereDate('due_date', '<=', now()->addDays(7)->toDateString())
                 ->sum('due_amount'),
             'drafts' => $scoped()->whereIn('status', ['draft', 'pending_approval'])->count(),
             'awaiting' => $scoped()->where('status', 'pending_approval')->count(),

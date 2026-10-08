@@ -623,10 +623,10 @@ class BankChargeService
             ->where('status', BankCharge::STATUS_POSTED);
 
         $thisMonth = (clone $live)
-            ->whereBetween('charged_on', [$asOf->copy()->startOfMonth()->toDateString(), $asOf->copy()->endOfMonth()->toDateString()]);
+            ->whereDate('charged_on', '>=', $asOf->copy()->startOfMonth()->toDateString())->whereDate('charged_on', '<=', $asOf->copy()->endOfMonth()->toDateString());
 
         $thisYear = (clone $live)
-            ->whereBetween('charged_on', [$asOf->copy()->startOfYear()->toDateString(), $asOf->copy()->endOfYear()->toDateString()]);
+            ->whereDate('charged_on', '>=', $asOf->copy()->startOfYear()->toDateString())->whereDate('charged_on', '<=', $asOf->copy()->endOfYear()->toDateString());
 
         $yearCount = (clone $thisYear)->count();
         $yearTotal = (float) (clone $thisYear)->sum('amount');

@@ -596,7 +596,7 @@ class PettyCashService
 
         $thisMonth = PettyCashTransaction::query()
             ->where('company_id', $this->companyId())
-            ->whereBetween('occurred_on', [now()->startOfMonth()->toDateString(), now()->endOfMonth()->toDateString()]);
+            ->whereDate('occurred_on', '>=', now()->startOfMonth()->toDateString())->whereDate('occurred_on', '<=', now()->endOfMonth()->toDateString());
 
         $paid = (clone $thisMonth)->where('kind', PettyCashTransaction::KIND_DISBURSEMENT);
         $topped = (clone $thisMonth)->where('kind', PettyCashTransaction::KIND_REPLENISHMENT);

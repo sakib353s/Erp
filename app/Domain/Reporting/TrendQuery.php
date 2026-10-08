@@ -64,7 +64,7 @@ class TrendQuery
             ->where('company_id', $companyId)
             ->whereNull('branch_id')
             ->where('metric', 'invoice_revenue')
-            ->whereBetween('metric_date', [$dateFrom, $dateTo])
+            ->whereDate('metric_date', '>=', $dateFrom)->whereDate('metric_date', '<=', $dateTo)
             ->pluck('value', 'metric_date');
 
         $series = collect();

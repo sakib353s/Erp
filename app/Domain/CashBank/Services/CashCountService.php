@@ -331,7 +331,12 @@ class CashCountService
     public function summary(): array
     {
         $companyId = $this->companyId();
-        $month = [now()->startOfMonth()->toDateString(), now()->endOfMonth()->toDateString()];
+        // Day bounds, not date strings: `counted_on` is a date column and a
+        // stored day reads back as `2026-10-31 00:00:00`, so a window ending
+        // `'2026-10-31'` would sort the last day of the month out of the
+        // month it belongs to.
+        $monthFrom = now()->startOfMonth()->toDateString();
+        $monthTo = now()->endOfMonth()->toDateString();
 
         $drawers = $this->drawers();
 
@@ -342,7 +347,8 @@ class CashCountService
         $posted = CashCount::query()
             ->where('company_id', $companyId)
             ->where('status', CashCount::STATUS_POSTED)
-            ->whereBetween('counted_on', $month);
+            ->whereDate('counted_on', '>=', $monthFrom)
+            ->whereDate('counted_on', '<=', $monthTo);
 
         $short = (clone $posted)->where('variance', '<', 0);
         $over = (clone $posted)->where('variance', '>', 0);
