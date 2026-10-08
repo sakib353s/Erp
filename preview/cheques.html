@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#ffffff">
-    <title>Customers (CRM) · BD ERP — UI redesign preview</title>
+    <title>Cheque register · BD ERP — UI redesign preview</title>
     <link rel="stylesheet" href="./assets/preview.css">
 </head>
 <body class="erp-body">
@@ -15,11 +15,11 @@
 <div class="erp-preview-bar">
     <i class="bi bi-easel2" aria-hidden="true"></i>
     <strong>UI redesign preview</strong>
-    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html" style="color:#fff;text-decoration:underline">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html">Labels</a><span style="opacity:.4">·</span><a href="./cash-bank.html">Cash & bank</a><span style="opacity:.4">·</span><a href="./bank-recon.html">Reconciliation</a><span style="opacity:.4">·</span><a href="./cheques.html">Cheques</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
+    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html">Labels</a><span style="opacity:.4">·</span><a href="./cash-bank.html">Cash & bank</a><span style="opacity:.4">·</span><a href="./bank-recon.html">Reconciliation</a><span style="opacity:.4">·</span><a href="./cheques.html" style="color:#fff;text-decoration:underline">Cheques</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
     <span class="erp-preview-note">Static render of the new shell — same CSS + JS the Laravel app ships. Press ⌘K / Ctrl+K.</span>
 </div>
-<div class="erp-shell" data-rail="expanded">
-
+<div class="erp-app-body">
+    
 <aside class="erp-sidebar" id="erpSidebar" aria-label="Primary navigation">
     <div class="erp-sidebar-head">
         <a class="erp-brand" href="./dashboard.html">
@@ -522,23 +522,17 @@
         <span class="erp-version">Build 2026.10 · v2</span>
     </div>
 </aside>
-<div class="erp-main">
-
+    <main class="erp-main">
+        
 <header class="erp-topbar">
     <button class="erp-icon-btn d-lg-none" type="button" data-erp-sidebar-open aria-label="Open navigation">
         <i class="bi bi-list" aria-hidden="true"></i>
     </button>
 
     <div class="erp-topbar-crumbs">
-        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb">
-        <li>
-            <span class="is-current" aria-current="page">undefined</span>
-        </li>
-        <li>
-            <span class="is-current" aria-current="page">undefined</span>
-        </li></ol></nav>
+        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb"></ol></nav>
         <div class="erp-topbar-title">
-            <strong class="d-none d-md-inline">Customers</strong>
+            <strong class="d-none d-md-inline">Dashboard</strong>
             <span class="erp-chip erp-chip-outline d-none d-xl-inline-flex" title="Current branch context">
                 <i class="bi bi-geo-alt" aria-hidden="true"></i>Dhaka HQ
             </span>
@@ -612,193 +606,433 @@
         </div>
     </div>
 </header>
-<main class="erp-content" id="erpContent">
-    <header class="erp-page-head">
-        <div class="erp-page-head-main">
-            <p class="erp-eyebrow">Sales &amp; CRM</p>
-            <h1 class="erp-h1">Customers</h1>
-            <p class="erp-page-sub">Every party you sell to, with the money they owe derived from the ledgers — never from a hand-edited due column.</p>
-        </div>
-        <div class="erp-page-head-actions">
-            <a class="btn btn-outline-secondary" href="#"><i class="bi bi-download" aria-hidden="true"></i> Export CSV</a>
-            <a class="btn btn-outline-secondary" href="#"><i class="bi bi-alarm" aria-hidden="true"></i> Due &amp; ageing</a>
-            <a class="btn btn-outline-secondary" href="#"><i class="bi bi-collection" aria-hidden="true"></i> Groups</a>
-            <a class="btn btn-primary" href="#"><i class="bi bi-person-plus" aria-hidden="true"></i> New customer</a>
-        </div>
-    </header>
+        <div class="erp-content">
 
-    <div class="erp-kpi-grid mb-3">
-        
-        <div class="erp-kpi" style="--hue: var(--c1)">
-            <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>Not yet due</p>
-            <p class="erp-kpi-value">৳ 7,42,180</p>
-            <p class="erp-kpi-foot">38 invoices</p>
-        </div>
-        <div class="erp-kpi" style="--hue: var(--c2)">
-            <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>Overdue 1-30 days</p>
-            <p class="erp-kpi-value">৳ 4,10,900</p>
-            <p class="erp-kpi-foot">19 invoices</p>
-        </div>
-        <div class="erp-kpi" style="--hue: var(--c3)">
-            <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>Overdue 31-60 days</p>
-            <p class="erp-kpi-value">৳ 2,18,450</p>
-            <p class="erp-kpi-foot">11 invoices</p>
-        </div>
-        <div class="erp-kpi" style="--hue: var(--c4)">
-            <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>Overdue 61-90 days</p>
-            <p class="erp-kpi-value">৳ 1,02,300</p>
-            <p class="erp-kpi-foot">6 invoices</p>
-        </div>
-        <div class="erp-kpi" style="--hue: var(--c7)">
-            <p class="erp-kpi-label"><span class="erp-hue-dot" aria-hidden="true"></span>Overdue 90+ days</p>
-            <p class="erp-kpi-value">৳ 88,610</p>
-            <p class="erp-kpi-foot">4 invoices</p>
-        </div>
-    </div>
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-bank" aria-hidden="true"></i> Cash &amp; bank · Cheque management</p>
+                    <h1 class="erp-page-title">The cheque register</h1>
+                    <p class="erp-page-sub">A cheque is a promise, and this is the book of promises: what is in the drawer, what is with a bank, what has been paid — and what came back. Nothing here reaches the ledger until a bank actually pays it, because money that has been promised is not money that has arrived.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./cash-bank.html"><i class="bi bi-wallet2" aria-hidden="true"></i> Where the money is</a>
+                    <a class="btn btn-outline-secondary" href="./bank-recon.html"><i class="bi bi-shield-check" aria-hidden="true"></i> Bank reconciliation</a>
+                    <button class="erp-icon-btn" type="button" title="Pin this page" aria-label="Pin this page"><i class="bi bi-star" aria-hidden="true"></i></button>
+                </div>
+            </header>
 
-    <form class="erp-filterbar" onsubmit="return false">
-        <div class="erp-filter erp-filter-wide">
-            <label class="form-label" for="q">Search</label>
-            <div class="erp-input-group">
-                <i class="bi bi-search" aria-hidden="true"></i>
-                <input class="form-control" type="search" id="q" placeholder="Name, code, phone or e-mail…">
+            <div class="erp-note erp-note-info mb-3">
+                <i class="bi bi-check2-circle" aria-hidden="true"></i>
+                <div>Received · 004512 · Islami Bank · 26,000.00 is in the register. Nothing reaches the ledger until the bank pays it.</div>
             </div>
-        </div>
-        <div class="erp-filter">
-            <label class="form-label" for="group">Group</label>
-            <select class="form-select" id="group"><option>All groups</option><option>Retailer</option><option>Wholesaler</option><option>Corporate</option></select>
-        </div>
-        <div class="erp-filter">
-            <label class="form-label" for="district">District</label>
-            <select class="form-select" id="district"><option>All districts</option><option>Dhaka</option><option>Chattogram</option><option>Sylhet</option><option>Khulna</option></select>
-        </div>
-        <div class="erp-filter">
-            <label class="form-label" for="status">Status</label>
-            <select class="form-select" id="status"><option>Any</option><option>Blacklisted</option><option>Inactive</option><option>Over credit limit</option></select>
-        </div>
-        <div class="erp-filterbar-actions">
-            <a class="btn btn-link" href="./customers.html">Reset</a>
-            <button class="btn btn-primary" type="submit"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
-        </div>
-    </form>
 
-    <div class="erp-table-shell" data-erp-table>
-        <div class="erp-card-head px-3 pt-3">
-            <h2 class="erp-card-title">Customers <span class="erp-chip erp-chip-outline">5 customers</span></h2>
-        </div>
-        <div class="erp-table-scroll">
-            <table class="table erp-table align-middle mb-0">
-                <thead>
-                    <tr>
-                        <th>Customer</th>
-                        <th>Contact</th>
-                        <th>Group</th>
-                        <th class="erp-th-num">Credit limit</th>
-                        <th class="erp-th-num">Due</th>
-                        <th class="erp-th-num">Overdue</th>
-                        <th>Status</th>
-                        <th class="erp-th-actions">Open</th>
-                    </tr>
-                </thead>
-                <tbody>
-        <tr>
-            <td data-label="Customer">
-                <a class="erp-row-link" href="./customer-profile.html">Rahman Traders</a>
-                <span class="erp-td-muted d-block small">CUST-00001 · business</span>
-            </td>
-            <td data-label="Contact" class="erp-td-muted">Dhaka · Mirpur</td>
-            <td data-label="Group"><span class="erp-chip erp-chip-soft">Retailer</span></td>
-            <td data-label="Credit limit" class="erp-td-num">৳ 50,000 / 15d</td>
-            <td data-label="Due" class="erp-td-num">৳ 24,580</td>
-            <td data-label="Overdue" class="erp-td-num"><span class="erp-amount erp-amount-danger">৳ 4,120</span></td>
-            <td data-label="Status"><span class="erp-status erp-status-active">active</span></td>
-            <td data-label="Open" class="erp-td-actions">
-                <a class="btn btn-sm btn-outline-secondary" href="./customer-profile.html">Profile</a>
-                <a class="btn btn-sm btn-light" href="./customer-profile.html#ledger">Ledger</a>
-            </td>
-        </tr>
-        <tr>
-            <td data-label="Customer">
-                <a class="erp-row-link" href="./customer-profile.html">Nusrat Jahan</a>
-                <span class="erp-td-muted d-block small">CUST-00002</span>
-            </td>
-            <td data-label="Contact" class="erp-td-muted">Dhaka · Dhanmondi</td>
-            <td data-label="Group"><span class="erp-td-muted">—</span></td>
-            <td data-label="Credit limit" class="erp-td-num">Cash only</td>
-            <td data-label="Due" class="erp-td-num">৳ 0</td>
-            <td data-label="Overdue" class="erp-td-num"><span class="erp-td-muted">—</span></td>
-            <td data-label="Status"><span class="erp-status erp-status-active">active</span></td>
-            <td data-label="Open" class="erp-td-actions">
-                <a class="btn btn-sm btn-outline-secondary" href="./customer-profile.html">Profile</a>
-                <a class="btn btn-sm btn-light" href="./customer-profile.html#ledger">Ledger</a>
-            </td>
-        </tr>
-        <tr>
-            <td data-label="Customer">
-                <a class="erp-row-link" href="./customer-profile.html">Sylhet Grocers</a>
-                <span class="erp-td-muted d-block small">CUST-00003 · business</span>
-            </td>
-            <td data-label="Contact" class="erp-td-muted">Sylhet · Zindabazar</td>
-            <td data-label="Group"><span class="erp-chip erp-chip-soft">Wholesaler</span></td>
-            <td data-label="Credit limit" class="erp-td-num">৳ 1,50,000 / 30d</td>
-            <td data-label="Due" class="erp-td-num">৳ 1,86,400</td>
-            <td data-label="Overdue" class="erp-td-num"><span class="erp-amount erp-amount-danger">৳ 96,400</span></td>
-            <td data-label="Status"><span class="erp-status erp-status-pending">over limit</span></td>
-            <td data-label="Open" class="erp-td-actions">
-                <a class="btn btn-sm btn-outline-secondary" href="./customer-profile.html">Profile</a>
-                <a class="btn btn-sm btn-light" href="./customer-profile.html#ledger">Ledger</a>
-            </td>
-        </tr>
-        <tr>
-            <td data-label="Customer">
-                <a class="erp-row-link" href="./customer-profile.html">Agrabad Hardware</a>
-                <span class="erp-td-muted d-block small">CUST-00004 · business</span>
-            </td>
-            <td data-label="Contact" class="erp-td-muted">Chattogram · Agrabad</td>
-            <td data-label="Group"><span class="erp-chip erp-chip-soft">Retailer</span></td>
-            <td data-label="Credit limit" class="erp-td-num">৳ 75,000 / 20d</td>
-            <td data-label="Due" class="erp-td-num">৳ 12,300</td>
-            <td data-label="Overdue" class="erp-td-num"><span class="erp-td-muted">—</span></td>
-            <td data-label="Status"><span class="erp-status erp-status-active">active</span></td>
-            <td data-label="Open" class="erp-td-actions">
-                <a class="btn btn-sm btn-outline-secondary" href="./customer-profile.html">Profile</a>
-                <a class="btn btn-sm btn-light" href="./customer-profile.html#ledger">Ledger</a>
-            </td>
-        </tr>
-        <tr>
-            <td data-label="Customer">
-                <a class="erp-row-link" href="./customer-profile.html">Karim Store</a>
-                <span class="erp-td-muted d-block small">CUST-00005</span>
-            </td>
-            <td data-label="Contact" class="erp-td-muted">Khulna · Sonadanga</td>
-            <td data-label="Group"><span class="erp-td-muted">—</span></td>
-            <td data-label="Credit limit" class="erp-td-num">Cash only</td>
-            <td data-label="Due" class="erp-td-num">৳ 0</td>
-            <td data-label="Overdue" class="erp-td-num"><span class="erp-td-muted">—</span></td>
-            <td data-label="Status"><span class="erp-status erp-status-blacklisted">blacklisted</span></td>
-            <td data-label="Open" class="erp-td-actions">
-                <a class="btn btn-sm btn-outline-secondary" href="./customer-profile.html">Profile</a>
-                <a class="btn btn-sm btn-light" href="./customer-profile.html#ledger">Ledger</a>
-            </td>
-        </tr></tbody>
-            </table>
-        </div>
-        <div class="erp-table-foot">
-            <span>5 customers</span>
-            <span class="erp-td-muted">Page 1 of 1</span>
-        </div>
-    </div>
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-journal-bookmark" aria-hidden="true"></i> In hand</p>
+                    <p class="erp-kpi-value">৳ 26,000.00</p>
+                    <p class="erp-kpi-foot">1 customer cheque in the drawer — the books have not heard about it yet</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-bank" aria-hidden="true"></i> With the bank</p>
+                    <p class="erp-kpi-value">৳ 44,500.00</p>
+                    <p class="erp-kpi-foot">1 deposited, none cleared yet</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-pencil-square" aria-hidden="true"></i> We wrote, not presented</p>
+                    <p class="erp-kpi-value">৳ 12,640.00</p>
+                    <p class="erp-kpi-foot">1 of our own cheques is still outstanding</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-calendar-event" aria-hidden="true"></i> Post-dated</p>
+                    <p class="erp-kpi-value">৳ 8,000.00</p>
+                    <p class="erp-kpi-foot">1 dated ahead — the desk refuses to bank it early</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-check2-circle" aria-hidden="true"></i> Cleared this month</p>
+                    <p class="erp-kpi-value">৳ 121,300.00</p>
+                    <p class="erp-kpi-foot">3 cheque(s) the bank actually paid</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Failed this month</p>
+                    <p class="erp-kpi-value">৳ 5,000.00</p>
+                    <p class="erp-kpi-foot">1 bounced or returned</p>
+                </div>
+            </div>
 
-    <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
-        <p class="erp-field-label">More in this module</p>
-        <div class="d-flex flex-wrap gap-2">
-            <a class="erp-chip erp-chip-outline" href="./orders.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Sales orders</a>
-            <a class="erp-chip erp-chip-outline" href="#"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Sales invoices</a>
-            <a class="erp-chip erp-chip-outline" href="#"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Coupons &amp; promotions</a>
-            <a class="erp-chip erp-chip-outline" href="#"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Sales team</a>
-        </div>
-    </nav>
-</main>
+            <section class="erp-card mb-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Still hanging over Islami Bank — current account</h2>
+                        <p class="erp-card-sub">Promises written against this account that no bank has settled yet — the footnote a bank book needs before anybody signs it off.</p>
+                    </div>
+                    <div class="erp-card-actions">
+                        <a class="btn btn-sm btn-outline-secondary" href="./cash-bank.html"><i class="bi bi-journal-text" aria-hidden="true"></i> Its book</a>
+                    </div>
+                </header>
+                <div class="p-3">
+                    <div class="erp-dl erp-dl-tight erp-dl-striped">
+                        <dt>Outstanding cheques</dt>
+                        <dd>4</dd>
+                        <dt>Promised money</dt>
+                        <dd class="erp-money-flat">91,140.00</dd>
+                        <dt>Of that, post-dated</dt>
+                        <dd class="erp-money-flat">8,000.00</dd>
+                    </div>
+                    <div class="erp-table-scroll mt-2">
+                        <table class="erp-table erp-table-compact">
+                            <thead>
+                                <tr><th>Cheque</th><th>Party</th><th class="erp-th-num">Amount</th><th>State</th></tr>
+                            </thead>
+                            <tbody>
+                                
+                                <tr>
+                                    <td data-label="Cheque"><span class="erp-cell-strong font-monospace">004512</span><span class="d-block erp-td-muted">02 Oct 2026</span></td>
+                                    <td data-label="Party">Rahman Traders</td>
+                                    <td data-label="Amount" class="erp-td-num"><span class="erp-money-in">26,000.00</span></td>
+                                    <td data-label="State"><span class="erp-status erp-status-outstanding">Received — in hand</span></td>
+                                </tr>
+
+                                <tr>
+                                    <td data-label="Cheque"><span class="erp-cell-strong font-monospace">004513</span><span class="d-block erp-td-muted">28 Sep 2026</span></td>
+                                    <td data-label="Party">Meghna Enterprise</td>
+                                    <td data-label="Amount" class="erp-td-num"><span class="erp-money-in">44,500.00</span></td>
+                                    <td data-label="State"><span class="erp-status erp-status-deposited">Deposited, awaiting clearing</span></td>
+                                </tr>
+
+                                <tr>
+                                    <td data-label="Cheque"><span class="erp-cell-strong font-monospace">339001</span><span class="d-block erp-td-muted">15 Oct 2026</span></td>
+                                    <td data-label="Party">Alam Store</td>
+                                    <td data-label="Amount" class="erp-td-num"><span class="erp-money-in">8,000.00</span></td>
+                                    <td data-label="State"><span class="erp-status erp-status-outstanding">Post-dated · Received — in hand</span></td>
+                                </tr>
+
+                                <tr>
+                                    <td data-label="Cheque"><span class="erp-cell-strong font-monospace">334455</span><span class="d-block erp-td-muted">30 Sep 2026</span></td>
+                                    <td data-label="Party">Dhaka WASA</td>
+                                    <td data-label="Amount" class="erp-td-num"><span class="erp-money-out">12,640.00</span></td>
+                                    <td data-label="State"><span class="erp-status erp-status-issued">Issued — not yet presented</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <form class="erp-filterbar" onsubmit="return false" role="search">
+                <div class="erp-filter">
+                    <label class="form-label" for="state">State</label>
+                    <select class="form-select" id="state">
+                        <option>Everything</option>
+                        <option>Received — in hand</option>
+                        <option>Issued — not yet presented</option>
+                        <option>Deposited, awaiting clearing</option>
+                        <option>Presented, awaiting clearing</option>
+                        <option>Cleared</option>
+                        <option>Bounced</option>
+                        <option>Returned unpaid</option>
+                        <option>Outstanding</option>
+                        <option selected>Post-dated</option>
+                        <option>Bounced or returned</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="direction">Direction</label>
+                    <select class="form-select" id="direction">
+                        <option>Received and issued</option>
+                        <option>Received from a customer</option>
+                        <option>Issued to a supplier or payee</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="account">Clears through</label>
+                    <select class="form-select" id="account">
+                        <option>Any money account</option>
+                        <option selected>1121 — Islami Bank, current account</option>
+                        <option>1110 — Cash in Hand</option>
+                    </select>
+                </div>
+                <div class="erp-filter erp-filter-wide">
+                    <label class="form-label" for="q">Find</label>
+                    <input class="form-control" type="search" id="q" placeholder="Cheque number, party or bank">
+                </div>
+                <div class="erp-filterbar-actions">
+                    <a class="btn btn-link" href="#">Reset</a>
+                    <button class="btn btn-primary" type="button"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                </div>
+            </form>
+
+            <section class="erp-card erp-card-flush">
+                <header class="erp-card-head">
+                    <h2 class="erp-card-title">The register <span class="erp-chip erp-chip-outline">7 cheque(s) shown</span></h2>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="erp-table">
+                        <thead>
+                            <tr>
+                                <th>Cheque</th><th>Date written</th><th>Party</th><th>Clears through</th>
+                                <th>Settles</th><th class="erp-th-num">Amount</th><th>State</th><th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr>
+                                <td data-label="Cheque">
+                                    <span class="erp-cell-strong font-monospace">004512</span>
+                                    <span class="d-block erp-td-muted">Received from a customer</span>
+                                </td>
+                                <td data-label="Date written" class="erp-td-muted">
+                                    02 Oct 2026
+                                    
+                                </td>
+                                <td data-label="Party">Rahman Traders<span class="d-block erp-td-muted">Islami Bank</span></td>
+                                <td data-label="Clears through" class="erp-td-muted">1121 — Current account</td>
+                                <td data-label="Settles" class="erp-td-muted">1130 — Accounts Receivable</td>
+                                <td data-label="Amount" class="erp-td-num"><span class="erp-money-in">26,000.00</span></td>
+                                <td data-label="State">
+                                    <span class="erp-status erp-status-outstanding">Received — in hand</span>
+                                    
+                                </td>
+                                <td class="erp-td-actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-eye" aria-hidden="true"></i> Open</a>
+                                    
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td data-label="Cheque">
+                                    <span class="erp-cell-strong font-monospace">004513</span>
+                                    <span class="d-block erp-td-muted">Received from a customer</span>
+                                </td>
+                                <td data-label="Date written" class="erp-td-muted">
+                                    28 Sep 2026
+                                    
+                                </td>
+                                <td data-label="Party">Meghna Enterprise<span class="d-block erp-td-muted">City Bank</span></td>
+                                <td data-label="Clears through" class="erp-td-muted">1121 — Current account</td>
+                                <td data-label="Settles" class="erp-td-muted">1130 — Accounts Receivable</td>
+                                <td data-label="Amount" class="erp-td-num"><span class="erp-money-in">44,500.00</span></td>
+                                <td data-label="State">
+                                    <span class="erp-status erp-status-deposited">Deposited, awaiting clearing</span>
+                                    
+                                </td>
+                                <td class="erp-td-actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-eye" aria-hidden="true"></i> Open</a>
+                                    
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td data-label="Cheque">
+                                    <span class="erp-cell-strong font-monospace">339001</span>
+                                    <span class="d-block erp-td-muted">Received from a customer</span>
+                                </td>
+                                <td data-label="Date written" class="erp-td-muted">
+                                    15 Oct 2026
+                                    <span class="d-block"><span class="erp-chip erp-chip-outline">Post-dated</span></span>
+                                </td>
+                                <td data-label="Party">Alam Store<span class="d-block erp-td-muted">BRAC Bank</span></td>
+                                <td data-label="Clears through" class="erp-td-muted">1121 — Current account</td>
+                                <td data-label="Settles" class="erp-td-muted">1130 — Accounts Receivable</td>
+                                <td data-label="Amount" class="erp-td-num"><span class="erp-money-in">8,000.00</span></td>
+                                <td data-label="State">
+                                    <span class="erp-status erp-status-outstanding">Post-dated · Received — in hand</span>
+                                    
+                                </td>
+                                <td class="erp-td-actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-eye" aria-hidden="true"></i> Open</a>
+                                    
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td data-label="Cheque">
+                                    <span class="erp-cell-strong font-monospace">334455</span>
+                                    <span class="d-block erp-td-muted">Issued by us</span>
+                                </td>
+                                <td data-label="Date written" class="erp-td-muted">
+                                    30 Sep 2026
+                                    
+                                </td>
+                                <td data-label="Party">Dhaka WASA<span class="d-block erp-td-muted">Dutch-Bangla Bank</span></td>
+                                <td data-label="Clears through" class="erp-td-muted">1121 — Current account</td>
+                                <td data-label="Settles" class="erp-td-muted">5230 — Utilities Expense</td>
+                                <td data-label="Amount" class="erp-td-num"><span class="erp-money-out">12,640.00</span></td>
+                                <td data-label="State">
+                                    <span class="erp-status erp-status-issued">Issued — not yet presented</span>
+                                    
+                                </td>
+                                <td class="erp-td-actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-eye" aria-hidden="true"></i> Open</a>
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-printer" aria-hidden="true"></i> Print</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td data-label="Cheque">
+                                    <span class="erp-cell-strong font-monospace">334456</span>
+                                    <span class="d-block erp-td-muted">Issued by us</span>
+                                </td>
+                                <td data-label="Date written" class="erp-td-muted">
+                                    26 Sep 2026
+                                    
+                                </td>
+                                <td data-label="Party">Nahar Fabrics<span class="d-block erp-td-muted">Dutch-Bangla Bank</span></td>
+                                <td data-label="Clears through" class="erp-td-muted">1121 — Current account</td>
+                                <td data-label="Settles" class="erp-td-muted">2110 — Accounts Payable</td>
+                                <td data-label="Amount" class="erp-td-num"><span class="erp-money-out">31,900.00</span></td>
+                                <td data-label="State">
+                                    <span class="erp-status erp-status-presented">Presented, awaiting clearing</span>
+                                    
+                                </td>
+                                <td class="erp-td-actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-eye" aria-hidden="true"></i> Open</a>
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-printer" aria-hidden="true"></i> Print</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td data-label="Cheque">
+                                    <span class="erp-cell-strong font-monospace">338001</span>
+                                    <span class="d-block erp-td-muted">Received from a customer</span>
+                                </td>
+                                <td data-label="Date written" class="erp-td-muted">
+                                    18 Sep 2026
+                                    
+                                </td>
+                                <td data-label="Party">Rahmania Store<span class="d-block erp-td-muted">Islami Bank</span></td>
+                                <td data-label="Clears through" class="erp-td-muted">1121 — Current account</td>
+                                <td data-label="Settles" class="erp-td-muted">1130 — Accounts Receivable</td>
+                                <td data-label="Amount" class="erp-td-num"><span class="erp-money-in">61,500.00</span></td>
+                                <td data-label="State">
+                                    <span class="erp-status erp-status-cleared">Cleared</span>
+                                    <span class="d-block erp-td-muted font-monospace mt-1">JV-2026-004418</span>
+                                </td>
+                                <td class="erp-td-actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-eye" aria-hidden="true"></i> Open</a>
+                                    
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td data-label="Cheque">
+                                    <span class="erp-cell-strong font-monospace">338002</span>
+                                    <span class="d-block erp-td-muted">Received from a customer</span>
+                                </td>
+                                <td data-label="Date written" class="erp-td-muted">
+                                    12 Sep 2026
+                                    
+                                </td>
+                                <td data-label="Party">Sonali Traders<span class="d-block erp-td-muted">Sonali Bank</span></td>
+                                <td data-label="Clears through" class="erp-td-muted">1121 — Current account</td>
+                                <td data-label="Settles" class="erp-td-muted">1130 — Accounts Receivable</td>
+                                <td data-label="Amount" class="erp-td-num"><span class="erp-money-in">5,000.00</span></td>
+                                <td data-label="State">
+                                    <span class="erp-status erp-status-failed">Bounced</span>
+                                    <span class="d-block erp-td-muted font-monospace mt-1">JV-2026-004401 → reversed</span>
+                                </td>
+                                <td class="erp-td-actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-eye" aria-hidden="true"></i> Open</a>
+                                    
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div class="erp-split mt-3">
+                <section class="erp-card">
+                    <header class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">One cheque, start to finish</h2>
+                            <p class="erp-card-sub">338001 · Rahmania Store · cleared on 22 Sep 2026 — the four steps this desk records, and the only one of them the ledger hears about.</p>
+                        </div>
+                        <div class="erp-card-actions"><span class="erp-status erp-status-cleared erp-status-lg">Cleared</span></div>
+                    </header>
+                    <ul class="erp-steps">
+                        <li class="erp-step erp-step-done">
+                            <div class="erp-step-mark"><span class="erp-step-dot"><i class="bi bi-check-lg" aria-hidden="true"></i></span><span class="erp-step-line"></span></div>
+                            <div class="erp-step-body"><p class="erp-step-title">Recorded as received</p><p class="erp-step-meta">18 Sep 2026</p></div>
+                        </li>
+                        <li class="erp-step erp-step-done">
+                            <div class="erp-step-mark"><span class="erp-step-dot"><i class="bi bi-check-lg" aria-hidden="true"></i></span><span class="erp-step-line"></span></div>
+                            <div class="erp-step-body"><p class="erp-step-title">Deposited with the bank</p><p class="erp-step-meta">19 Sep 2026</p></div>
+                        </li>
+                        <li class="erp-step erp-step-done">
+                            <div class="erp-step-mark"><span class="erp-step-dot"><i class="bi bi-check-lg" aria-hidden="true"></i></span></div>
+                            <div class="erp-step-body"><p class="erp-step-title">Cleared — the bank paid it</p><p class="erp-step-meta">22 Sep 2026 · posted once, as JV-2026-004418</p></div>
+                        </li>
+                    </ul>
+
+                    <div class="erp-dl erp-dl-striped mt-2">
+                        <dt>In English</dt>
+                        <dd class="erp-cell-strong">Taka sixty-one thousand five hundred only</dd>
+                        <dt>In Bangla</dt>
+                        <dd class="erp-cell-strong">টাকা একষট্টি হাজার পাঁচশ মাত্র</dd>
+                        <dt>Figures, Bangla</dt>
+                        <dd>৬১,৫০০.০০</dd>
+                    </div>
+
+                    <div class="erp-table-scroll mt-3">
+                        <table class="erp-table erp-table-compact">
+                            <thead><tr><th>Account</th><th>What it was</th><th class="erp-th-num">Debit</th><th class="erp-th-num">Credit</th></tr></thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>1121</code> <span class="erp-cell-strong">Islami Bank — current account</span></td>
+                                    <td class="erp-td-muted">Cheque 338001 from Rahmania Store cleared into Islami Bank — current account</td>
+                                    <td class="erp-td-num">61,500.00</td>
+                                    <td class="erp-td-num"></td>
+                                </tr>
+                                <tr>
+                                    <td><code>1130</code> <span class="erp-cell-strong">Accounts Receivable</span></td>
+                                    <td class="erp-td-muted">—</td>
+                                    <td class="erp-td-num"></td>
+                                    <td class="erp-td-num">61,500.00</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr><th colspan="2" class="text-end">Total</th><th class="erp-th-num">61,500.00</th><th class="erp-th-num">61,500.00</th></tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </section>
+
+                <aside>
+                    <div class="erp-card">
+                        <header class="erp-card-head"><h2 class="erp-card-title">How this desk posts</h2></header>
+                        <div class="p-3">
+                            <ul class="erp-list small mb-0">
+                                <li class="d-flex gap-2 border-top py-2">
+                                    <i class="bi bi-1-circle" aria-hidden="true"></i>
+                                    <span><strong>Nothing posts when it is written.</strong> A cheque in the register is a promise, and a ledger carrying promises is a ledger nobody can reconcile.</span>
+                                </li>
+                                <li class="d-flex gap-2 border-top py-2">
+                                    <i class="bi bi-2-circle" aria-hidden="true"></i>
+                                    <span><strong>Depositing is not paying.</strong> A handed-in cheque stays outstanding until the bank clears it — the desk records the movement, not the money.</span>
+                                </li>
+                                <li class="d-flex gap-2 border-top py-2">
+                                    <i class="bi bi-3-circle" aria-hidden="true"></i>
+                                    <span><strong>Clearing posts once.</strong> The money account against what the cheque settled, dated the day the bank paid it.</span>
+                                </li>
+                                <li class="d-flex gap-2 border-top py-2 border-bottom">
+                                    <i class="bi bi-4-circle" aria-hidden="true"></i>
+                                    <span><strong>Bouncing after clearing reverses it.</strong> The original entry stays where it is and a reversal answers it, because the original really did happen.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+
+            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
+                <p class="erp-field-label">More in this module</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="erp-chip erp-chip-outline" href="./cash-bank.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Cash in Hand</a>
+                    <a class="erp-chip erp-chip-outline" href="./bank-recon.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Bank Reconciliation</a>
+                    <a class="erp-chip erp-chip-outline" href="./cash-bank.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>All Bank Accounts</a>
+                </div>
+            </nav>
+        </main>
 
 <footer class="erp-footer">
     <span>BD ERP · Rafshan Trading Ltd.</span>
@@ -807,7 +1041,7 @@
         <span class="d-none d-md-inline">Press <kbd>⌘</kbd><kbd>K</kbd> to jump anywhere</span>
     </span>
 </footer>
-</div>
+    </div>
 </div>
 <script>window.erpNavIndex = [];</script>
 

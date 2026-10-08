@@ -116,6 +116,16 @@ export const SECTIONS = [
                 ],
             },
             {
+                label: 'Cheque Management', icon: 'bi-journal-bookmark', items: [
+                    { label: 'Received Cheques', url: './cheques.html', icon: 'bi-journal-arrow-down', target: 'cash' },
+                    { label: 'Issued Cheques', url: './cheques.html', icon: 'bi-journal-arrow-up' },
+                    { label: 'Cleared Cheques', url: './cheques.html', icon: 'bi-check2-circle' },
+                    { label: 'Bounced Cheques', url: './cheques.html', icon: 'bi-x-octagon' },
+                    { label: 'Post-Dated Cheques', url: './cheques.html', icon: 'bi-calendar-event' },
+                    { label: 'Cheque Print', url: './cheques.html', icon: 'bi-printer' },
+                ],
+            },
+            {
                 label: 'Mobile Banking', icon: 'bi-phone', items: [
                     { label: 'bKash Account', url: './cash-bank.html', icon: 'bi-phone' },
                     { label: 'Nagad Account', url: './cash-bank.html', icon: 'bi-phone' },
@@ -201,6 +211,12 @@ export const PALETTE = [
     { label: 'Bank Reconciliation', url: './bank-recon.html', icon: 'bi-shield-check', section: 'Cash & bank', group: 'Bank Accounts' },
     { label: 'Bank Statement Import', url: './bank-recon.html', icon: 'bi-file-earmark-spreadsheet', section: 'Cash & bank', group: 'Bank Accounts' },
     { label: 'Mobile Reconciliation', url: './bank-recon.html', icon: 'bi-phone-vibrate', section: 'Cash & bank', group: 'Mobile Banking' },
+    { label: 'Received Cheques', url: './cheques.html', icon: 'bi-journal-arrow-down', section: 'Cash & bank', group: 'Cheque Management' },
+    { label: 'Issued Cheques', url: './cheques.html', icon: 'bi-journal-arrow-up', section: 'Cash & bank', group: 'Cheque Management' },
+    { label: 'Cleared Cheques', url: './cheques.html', icon: 'bi-check2-circle', section: 'Cash & bank', group: 'Cheque Management' },
+    { label: 'Bounced Cheques', url: './cheques.html', icon: 'bi-x-octagon', section: 'Cash & bank', group: 'Cheque Management' },
+    { label: 'Post-Dated Cheques', url: './cheques.html', icon: 'bi-calendar-event', section: 'Cash & bank', group: 'Cheque Management' },
+    { label: 'Cheque Print', url: './cheques.html', icon: 'bi-printer', section: 'Cash & bank', group: 'Cheque Management' },
     { label: 'Print labels', url: './labels.html', icon: 'bi-printer', section: 'Inventory & warehouse', group: 'Barcode & QR' },
     { label: 'Generate barcode', url: './labels.html', icon: 'bi-upc-scan', section: 'Inventory & warehouse', group: 'Barcode & QR' },
     { label: 'Generate QR code', url: './labels.html', icon: 'bi-qr-code', section: 'Inventory & warehouse', group: 'Barcode & QR' },
@@ -508,6 +524,7 @@ export function previewBar(current) {
         ['labels.html', 'Labels'],
         ['cash-bank.html', 'Cash & bank'],
         ['bank-recon.html', 'Reconciliation'],
+        ['cheques.html', 'Cheques'],
         ['login.html', 'Sign in'],
     ];
 

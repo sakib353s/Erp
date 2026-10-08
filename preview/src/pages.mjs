@@ -1912,3 +1912,307 @@ ${footer()}
 </div>
 <script>window.erpNavIndex = [];</script>`;
 }
+
+/**
+ * §08-13/08-14 — the cheque register, mirrored from
+ * resources/views/cash-bank/cheques.blade.php and cheque.blade.php. The promise
+ * life-cycle is the whole page: what is in the drawer, what is with a bank, what
+ * has been paid — and what came back.
+ */
+export function cheques() {
+    const register = [
+        { no: '004512', date: '02 Oct 2026', party: 'Rahman Traders', bank: 'Islami Bank', through: '1121 — Current account', settles: '1130 — Accounts Receivable', amount: '26,000.00', in: true, state: 'outstanding', label: 'Received — in hand', entry: '', print: false },
+        { no: '004513', date: '28 Sep 2026', party: 'Meghna Enterprise', bank: 'City Bank', through: '1121 — Current account', settles: '1130 — Accounts Receivable', amount: '44,500.00', in: true, state: 'deposited', label: 'Deposited, awaiting clearing', entry: '', print: false },
+        { no: '339001', date: '15 Oct 2026', party: 'Alam Store', bank: 'BRAC Bank', through: '1121 — Current account', settles: '1130 — Accounts Receivable', amount: '8,000.00', in: true, state: 'outstanding', label: 'Post-dated · Received — in hand', entry: '', print: false },
+        { no: '334455', date: '30 Sep 2026', party: 'Dhaka WASA', bank: 'Dutch-Bangla Bank', through: '1121 — Current account', settles: '5230 — Utilities Expense', amount: '12,640.00', in: false, state: 'issued', label: 'Issued — not yet presented', entry: '', print: true },
+        { no: '334456', date: '26 Sep 2026', party: 'Nahar Fabrics', bank: 'Dutch-Bangla Bank', through: '1121 — Current account', settles: '2110 — Accounts Payable', amount: '31,900.00', in: false, state: 'presented', label: 'Presented, awaiting clearing', entry: '', print: true },
+        { no: '338001', date: '18 Sep 2026', party: 'Rahmania Store', bank: 'Islami Bank', through: '1121 — Current account', settles: '1130 — Accounts Receivable', amount: '61,500.00', in: true, state: 'cleared', label: 'Cleared', entry: 'JV-2026-004418', print: false },
+        { no: '338002', date: '12 Sep 2026', party: 'Sonali Traders', bank: 'Sonali Bank', through: '1121 — Current account', settles: '1130 — Accounts Receivable', amount: '5,000.00', in: true, state: 'failed', label: 'Bounced', entry: 'JV-2026-004401 → reversed', print: false },
+    ];
+
+    const outstanding = [
+        { no: '004512', date: '02 Oct 2026', party: 'Rahman Traders', amount: '26,000.00', in: true, state: 'outstanding', label: 'Received — in hand' },
+        { no: '004513', date: '28 Sep 2026', party: 'Meghna Enterprise', amount: '44,500.00', in: true, state: 'deposited', label: 'Deposited, awaiting clearing' },
+        { no: '339001', date: '15 Oct 2026', party: 'Alam Store', amount: '8,000.00', in: true, state: 'outstanding', label: 'Post-dated · Received — in hand' },
+        { no: '334455', date: '30 Sep 2026', party: 'Dhaka WASA', amount: '12,640.00', in: false, state: 'issued', label: 'Issued — not yet presented' },
+    ];
+
+    return `
+${previewBar('cheques.html')}
+<div class="erp-app-body">
+    ${sidebar('cash_bank')}
+    <main class="erp-main">
+        ${topbar('The cheque register')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-bank" aria-hidden="true"></i> Cash &amp; bank · Cheque management</p>
+                    <h1 class="erp-page-title">The cheque register</h1>
+                    <p class="erp-page-sub">A cheque is a promise, and this is the book of promises: what is in the drawer, what is with a bank, what has been paid — and what came back. Nothing here reaches the ledger until a bank actually pays it, because money that has been promised is not money that has arrived.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./cash-bank.html"><i class="bi bi-wallet2" aria-hidden="true"></i> Where the money is</a>
+                    <a class="btn btn-outline-secondary" href="./bank-recon.html"><i class="bi bi-shield-check" aria-hidden="true"></i> Bank reconciliation</a>
+                    <button class="erp-icon-btn" type="button" title="Pin this page" aria-label="Pin this page"><i class="bi bi-star" aria-hidden="true"></i></button>
+                </div>
+            </header>
+
+            <div class="erp-note erp-note-info mb-3">
+                <i class="bi bi-check2-circle" aria-hidden="true"></i>
+                <div>Received · 004512 · Islami Bank · 26,000.00 is in the register. Nothing reaches the ledger until the bank pays it.</div>
+            </div>
+
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-journal-bookmark" aria-hidden="true"></i> In hand</p>
+                    <p class="erp-kpi-value">৳ 26,000.00</p>
+                    <p class="erp-kpi-foot">1 customer cheque in the drawer — the books have not heard about it yet</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-bank" aria-hidden="true"></i> With the bank</p>
+                    <p class="erp-kpi-value">৳ 44,500.00</p>
+                    <p class="erp-kpi-foot">1 deposited, none cleared yet</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-pencil-square" aria-hidden="true"></i> We wrote, not presented</p>
+                    <p class="erp-kpi-value">৳ 12,640.00</p>
+                    <p class="erp-kpi-foot">1 of our own cheques is still outstanding</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-calendar-event" aria-hidden="true"></i> Post-dated</p>
+                    <p class="erp-kpi-value">৳ 8,000.00</p>
+                    <p class="erp-kpi-foot">1 dated ahead — the desk refuses to bank it early</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-check2-circle" aria-hidden="true"></i> Cleared this month</p>
+                    <p class="erp-kpi-value">৳ 121,300.00</p>
+                    <p class="erp-kpi-foot">3 cheque(s) the bank actually paid</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Failed this month</p>
+                    <p class="erp-kpi-value">৳ 5,000.00</p>
+                    <p class="erp-kpi-foot">1 bounced or returned</p>
+                </div>
+            </div>
+
+            <section class="erp-card mb-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Still hanging over Islami Bank — current account</h2>
+                        <p class="erp-card-sub">Promises written against this account that no bank has settled yet — the footnote a bank book needs before anybody signs it off.</p>
+                    </div>
+                    <div class="erp-card-actions">
+                        <a class="btn btn-sm btn-outline-secondary" href="./cash-bank.html"><i class="bi bi-journal-text" aria-hidden="true"></i> Its book</a>
+                    </div>
+                </header>
+                <div class="p-3">
+                    <div class="erp-dl erp-dl-tight erp-dl-striped">
+                        <dt>Outstanding cheques</dt>
+                        <dd>4</dd>
+                        <dt>Promised money</dt>
+                        <dd class="erp-money-flat">91,140.00</dd>
+                        <dt>Of that, post-dated</dt>
+                        <dd class="erp-money-flat">8,000.00</dd>
+                    </div>
+                    <div class="erp-table-scroll mt-2">
+                        <table class="erp-table erp-table-compact">
+                            <thead>
+                                <tr><th>Cheque</th><th>Party</th><th class="erp-th-num">Amount</th><th>State</th></tr>
+                            </thead>
+                            <tbody>
+                                ${outstanding.map((row) => `
+                                <tr>
+                                    <td data-label="Cheque"><span class="erp-cell-strong font-monospace">${row.no}</span><span class="d-block erp-td-muted">${row.date}</span></td>
+                                    <td data-label="Party">${row.party}</td>
+                                    <td data-label="Amount" class="erp-td-num"><span class="${row.in ? 'erp-money-in' : 'erp-money-out'}">${row.amount}</span></td>
+                                    <td data-label="State"><span class="erp-status erp-status-${row.state}">${row.label}</span></td>
+                                </tr>`).join('\n')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <form class="erp-filterbar" onsubmit="return false" role="search">
+                <div class="erp-filter">
+                    <label class="form-label" for="state">State</label>
+                    <select class="form-select" id="state">
+                        <option>Everything</option>
+                        <option>Received — in hand</option>
+                        <option>Issued — not yet presented</option>
+                        <option>Deposited, awaiting clearing</option>
+                        <option>Presented, awaiting clearing</option>
+                        <option>Cleared</option>
+                        <option>Bounced</option>
+                        <option>Returned unpaid</option>
+                        <option>Outstanding</option>
+                        <option selected>Post-dated</option>
+                        <option>Bounced or returned</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="direction">Direction</label>
+                    <select class="form-select" id="direction">
+                        <option>Received and issued</option>
+                        <option>Received from a customer</option>
+                        <option>Issued to a supplier or payee</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="account">Clears through</label>
+                    <select class="form-select" id="account">
+                        <option>Any money account</option>
+                        <option selected>1121 — Islami Bank, current account</option>
+                        <option>1110 — Cash in Hand</option>
+                    </select>
+                </div>
+                <div class="erp-filter erp-filter-wide">
+                    <label class="form-label" for="q">Find</label>
+                    <input class="form-control" type="search" id="q" placeholder="Cheque number, party or bank">
+                </div>
+                <div class="erp-filterbar-actions">
+                    <a class="btn btn-link" href="#">Reset</a>
+                    <button class="btn btn-primary" type="button"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                </div>
+            </form>
+
+            <section class="erp-card erp-card-flush">
+                <header class="erp-card-head">
+                    <h2 class="erp-card-title">The register <span class="erp-chip erp-chip-outline">7 cheque(s) shown</span></h2>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="erp-table">
+                        <thead>
+                            <tr>
+                                <th>Cheque</th><th>Date written</th><th>Party</th><th>Clears through</th>
+                                <th>Settles</th><th class="erp-th-num">Amount</th><th>State</th><th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${register.map((row) => `
+                            <tr>
+                                <td data-label="Cheque">
+                                    <span class="erp-cell-strong font-monospace">${row.no}</span>
+                                    <span class="d-block erp-td-muted">${row.in ? 'Received from a customer' : 'Issued by us'}</span>
+                                </td>
+                                <td data-label="Date written" class="erp-td-muted">
+                                    ${row.date}
+                                    ${row.no === '339001' ? '<span class="d-block"><span class="erp-chip erp-chip-outline">Post-dated</span></span>' : ''}
+                                </td>
+                                <td data-label="Party">${row.party}<span class="d-block erp-td-muted">${row.bank}</span></td>
+                                <td data-label="Clears through" class="erp-td-muted">${row.through}</td>
+                                <td data-label="Settles" class="erp-td-muted">${row.settles}</td>
+                                <td data-label="Amount" class="erp-td-num"><span class="${row.in ? 'erp-money-in' : 'erp-money-out'}">${row.amount}</span></td>
+                                <td data-label="State">
+                                    <span class="erp-status erp-status-${row.state}">${row.label}</span>
+                                    ${row.entry ? `<span class="d-block erp-td-muted font-monospace mt-1">${row.entry}</span>` : ''}
+                                </td>
+                                <td class="erp-td-actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-eye" aria-hidden="true"></i> Open</a>
+                                    ${row.print ? '<a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-printer" aria-hidden="true"></i> Print</a>' : ''}
+                                </td>
+                            </tr>`).join('\n')}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div class="erp-split mt-3">
+                <section class="erp-card">
+                    <header class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">One cheque, start to finish</h2>
+                            <p class="erp-card-sub">338001 · Rahmania Store · cleared on 22 Sep 2026 — the four steps this desk records, and the only one of them the ledger hears about.</p>
+                        </div>
+                        <div class="erp-card-actions"><span class="erp-status erp-status-cleared erp-status-lg">Cleared</span></div>
+                    </header>
+                    <ul class="erp-steps">
+                        <li class="erp-step erp-step-done">
+                            <div class="erp-step-mark"><span class="erp-step-dot"><i class="bi bi-check-lg" aria-hidden="true"></i></span><span class="erp-step-line"></span></div>
+                            <div class="erp-step-body"><p class="erp-step-title">Recorded as received</p><p class="erp-step-meta">18 Sep 2026</p></div>
+                        </li>
+                        <li class="erp-step erp-step-done">
+                            <div class="erp-step-mark"><span class="erp-step-dot"><i class="bi bi-check-lg" aria-hidden="true"></i></span><span class="erp-step-line"></span></div>
+                            <div class="erp-step-body"><p class="erp-step-title">Deposited with the bank</p><p class="erp-step-meta">19 Sep 2026</p></div>
+                        </li>
+                        <li class="erp-step erp-step-done">
+                            <div class="erp-step-mark"><span class="erp-step-dot"><i class="bi bi-check-lg" aria-hidden="true"></i></span></div>
+                            <div class="erp-step-body"><p class="erp-step-title">Cleared — the bank paid it</p><p class="erp-step-meta">22 Sep 2026 · posted once, as JV-2026-004418</p></div>
+                        </li>
+                    </ul>
+
+                    <div class="erp-dl erp-dl-striped mt-2">
+                        <dt>In English</dt>
+                        <dd class="erp-cell-strong">Taka sixty-one thousand five hundred only</dd>
+                        <dt>In Bangla</dt>
+                        <dd class="erp-cell-strong">টাকা একষট্টি হাজার পাঁচশ মাত্র</dd>
+                        <dt>Figures, Bangla</dt>
+                        <dd>৬১,৫০০.০০</dd>
+                    </div>
+
+                    <div class="erp-table-scroll mt-3">
+                        <table class="erp-table erp-table-compact">
+                            <thead><tr><th>Account</th><th>What it was</th><th class="erp-th-num">Debit</th><th class="erp-th-num">Credit</th></tr></thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>1121</code> <span class="erp-cell-strong">Islami Bank — current account</span></td>
+                                    <td class="erp-td-muted">Cheque 338001 from Rahmania Store cleared into Islami Bank — current account</td>
+                                    <td class="erp-td-num">61,500.00</td>
+                                    <td class="erp-td-num"></td>
+                                </tr>
+                                <tr>
+                                    <td><code>1130</code> <span class="erp-cell-strong">Accounts Receivable</span></td>
+                                    <td class="erp-td-muted">—</td>
+                                    <td class="erp-td-num"></td>
+                                    <td class="erp-td-num">61,500.00</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr><th colspan="2" class="text-end">Total</th><th class="erp-th-num">61,500.00</th><th class="erp-th-num">61,500.00</th></tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </section>
+
+                <aside>
+                    <div class="erp-card">
+                        <header class="erp-card-head"><h2 class="erp-card-title">How this desk posts</h2></header>
+                        <div class="p-3">
+                            <ul class="erp-list small mb-0">
+                                <li class="d-flex gap-2 border-top py-2">
+                                    <i class="bi bi-1-circle" aria-hidden="true"></i>
+                                    <span><strong>Nothing posts when it is written.</strong> A cheque in the register is a promise, and a ledger carrying promises is a ledger nobody can reconcile.</span>
+                                </li>
+                                <li class="d-flex gap-2 border-top py-2">
+                                    <i class="bi bi-2-circle" aria-hidden="true"></i>
+                                    <span><strong>Depositing is not paying.</strong> A handed-in cheque stays outstanding until the bank clears it — the desk records the movement, not the money.</span>
+                                </li>
+                                <li class="d-flex gap-2 border-top py-2">
+                                    <i class="bi bi-3-circle" aria-hidden="true"></i>
+                                    <span><strong>Clearing posts once.</strong> The money account against what the cheque settled, dated the day the bank paid it.</span>
+                                </li>
+                                <li class="d-flex gap-2 border-top py-2 border-bottom">
+                                    <i class="bi bi-4-circle" aria-hidden="true"></i>
+                                    <span><strong>Bouncing after clearing reverses it.</strong> The original entry stays where it is and a reversal answers it, because the original really did happen.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+
+            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
+                <p class="erp-field-label">More in this module</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="erp-chip erp-chip-outline" href="./cash-bank.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Cash in Hand</a>
+                    <a class="erp-chip erp-chip-outline" href="./bank-recon.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Bank Reconciliation</a>
+                    <a class="erp-chip erp-chip-outline" href="./cash-bank.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>All Bank Accounts</a>
+                </div>
+            </nav>
+        </main>
+${footer()}
+    </div>
+</div>
+<script>window.erpNavIndex = [];</script>`;
+}
