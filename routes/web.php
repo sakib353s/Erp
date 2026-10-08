@@ -10,6 +10,7 @@ use App\Http\Controllers\BankReconciliationController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BulkPriceUpdateController;
 use App\Http\Controllers\CashBankController;
+use App\Http\Controllers\CashReportController;
 use App\Http\Controllers\CashCountController;
 use App\Http\Controllers\ChequeController;
 use App\Http\Controllers\PettyCashController;
@@ -1124,6 +1125,32 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::post('/app/cash-bank/bank-charge-rules/{rule}/toggle', [BankChargeController::class, 'toggleRule'])
         ->middleware('permission:bank.charges.rules')
         ->name('cash-bank.bank-charge-rules.toggle');
+
+    /*
+     * §08-20 and §08-22 — the cash and expense report family.
+     *
+     * Two keys, because the two audiences are different people: reading what the
+     * company spent is a manager's (every figure is a posted expense), and the
+     * cash book is the treasurer's — it opens the money accounts themselves and
+     * says where every taka in them came from and went to. Both are read-only:
+     * nothing on these five screens can move money, which is why they are keys of
+     * their own rather than a corner of the desks that can.
+     */
+    Route::get('/app/reports/cash/expenses', [CashReportController::class, 'expenses'])
+        ->middleware('permission:expenses.reports')
+        ->name('expenses.reports.index');
+    Route::get('/app/reports/cash/book', [CashReportController::class, 'book'])
+        ->middleware('permission:cash.reports')
+        ->name('cash.reports.book');
+    Route::get('/app/reports/cash/bank-book', [CashReportController::class, 'bankBook'])
+        ->middleware('permission:cash.reports')
+        ->name('cash.reports.bank-book');
+    Route::get('/app/reports/cash/flow', [CashReportController::class, 'flow'])
+        ->middleware('permission:cash.reports')
+        ->name('cash.reports.flow');
+    Route::get('/app/reports/cash/sessions', [CashReportController::class, 'sessions'])
+        ->middleware('permission:cash.reports')
+        ->name('cash.reports.sessions');
 
     Route::get('/app/accounting/opening-trial-balance', [FinancialReportController::class, 'openingTrialBalance'])
         ->middleware('permission:accounting.reports.view')

@@ -288,6 +288,11 @@ class CatalogImporter
         // register and the rules that feed it are one question — what is the bank
         // taking, and what has it been told to take by itself?
         'cash & bank > bank accounts > bank charge auto-posting' => ['/app/cash-bank/bank-charges', 'bank.charges'],
+        // §08-20/§08-22: the two report leaves. The expense report is read with
+        // the expense desk's own key; the cash reports page asks which of the
+        // four questions the reader came with.
+        'cash & bank > expenses > expense reports' => ['/app/reports/cash/expenses', 'expenses.reports'],
+        'cash & bank > cash reports' => ['/app/reports/cash/bank-book', 'cash.reports'],
         'cash & bank > cheque management > cheque print' => ['/app/cash-bank/cheques?direction=issued', 'cheques.print'],
         // §08-15…§08-18: the expense desk. Five of its six leaves are views of one
         // register — "All Expenses" and "Pending Approval" are the same list asked

@@ -123,6 +123,9 @@ class SystemRoleSeeder extends Seeder
                 // tariff rules that post it automatically — a bank charge is a
                 // fact from outside, not a payment anybody here authorised.
                 'bank.charges', 'bank.charges.rules',
+                // §08-20/§08-22: a manager answers for what the company spent and
+                // for where its money is, so both report keys are theirs.
+                'expenses.reports', 'cash.reports',
                 // §08-05: the manager also answers for a counted difference —
                 // counting the drawer is the cash desk's, signing off what is
                 // missing from it is a second pair of eyes, and the service

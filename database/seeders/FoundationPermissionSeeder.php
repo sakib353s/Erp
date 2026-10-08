@@ -235,6 +235,13 @@ class FoundationPermissionSeeder extends Seeder
             // tin; `pettycash.approve` is the signature a voucher at or above the
             // limit waits for. The service refuses a request decided by the person
             // who asked, so holding both keys is not a way round it.
+            // §08-20/§08-22: reading what the company spent and reading where
+            // its money actually is are two different audiences, so they are two
+            // keys. Both are read-only — nothing on the report screens moves
+            // money — which is why neither of them is a corner of the desks that
+            // can. Every figure on them is a posted journal line.
+            ['expenses', 'reports', 'view', 'expenses.reports', 'Read the expense report: what the company spent, by category, branch and month'],
+            ['cash', 'reports', 'view', 'cash.reports', 'Read the cash reports: the cash book, the bank book, the cash flow and the till variances'],
             ['pettycash', 'funds', 'manage', 'pettycash.funds', 'Declare a float, name its custodian and close it'],
             ['pettycash', 'vouchers', 'create', 'pettycash.spend', 'Pay a voucher out of the float and read its register'],
             ['pettycash', 'requests', 'decide', 'pettycash.approve', 'Decide the vouchers a custodian had to ask for'],
