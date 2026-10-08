@@ -809,7 +809,11 @@ class AssetService
      */
     public function register(array $filters = []): LengthAwarePaginator
     {
-        $query = $this->visible($filters['branch_id'] ?? null)->with(['branch', 'custodian', 'driver']);
+        // The branch filter is the *second* argument of visible(): passing it
+        // first asked for the company whose id happened to equal the branch id,
+        // which is why the branch dropdown on every shelf quietly did nothing.
+        $query = $this->visible(branchId: $filters['branch_id'] ?? null)
+            ->with(['branch', 'custodian', 'driver']);
 
         $categories = $this->registry->categoriesFor($filters['shelf'] ?? null);
         $query->inCategories($categories);
@@ -881,10 +885,21 @@ class AssetService
         ];
     }
 
-    /** Records this actor may see: their branches, plus company-wide rows. */
+    /**
+     * Records this actor may see: their own company, their branches, plus
+     * company-wide rows.
+     *
+     * The company filter is not decoration. `BusinessAsset` carries no global
+     * branch scope (a vehicle belongs to a branch *and* to the company), so
+     * without it every all-branch user reads rows belonging to a second company
+     * on the register — and an asset is referenced by its own number, so a code
+     * collision across companies would be a wrong-number, not just a stray row.
+     */
     public function visible(?int $companyId = null, mixed $branchId = null): Builder
     {
         $query = BusinessAsset::query();
+
+        $companyId ??= $this->context->companyId();
 
         if ($companyId !== null) {
             $query->where('company_id', $companyId);

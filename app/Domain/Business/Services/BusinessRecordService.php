@@ -670,6 +670,15 @@ class BusinessRecordService
     {
         $query = BusinessRecord::query();
 
+        // The register has no global branch scope of its own, so the company is
+        // filtered here: branch scoping alone would hand an all-branch user a
+        // second company's papers on the renewals lens.
+        $companyId = $this->context->companyId();
+
+        if ($companyId !== null) {
+            $query->where('company_id', $companyId);
+        }
+
         $ids = $this->context->accessibleBranchIds();
 
         if ($ids !== null) {
