@@ -80,6 +80,7 @@ use App\Domain\Sales\SalesCallLog;
 use App\Domain\Sales\SalesOrder;
 use App\Domain\Sales\SalesTarget;
 use App\Domain\Sales\Services\SuspiciousOrderFlagger;
+use App\Domain\Sales\Services\InvoiceVerificationService;
 use App\Domain\Sales\SuspiciousOrderFlag;
 use App\Domain\Sales\Territory;
 use App\Domain\Settings\Services\LocalizationService;
@@ -153,6 +154,7 @@ class SalesController extends Controller
         protected TaxService $taxService,
         protected LocalizationService $localization,
         protected TaxPolicy $taxPolicy,
+        protected InvoiceVerificationService $verification,
     ) {}
 
     /**
@@ -865,9 +867,12 @@ class SalesController extends Controller
 
     public function showInvoice(Invoice $invoice): View
     {
+        $invoice->load(['lines.product', 'customer', 'salesOrder']);
+
         return view('sales.invoices.show', [
-            'invoice' => $invoice->load(['lines.product', 'customer', 'salesOrder']),
+            'invoice' => $invoice,
             'taxInclusive' => $this->taxPolicy->pricesIncludeTax(),
+            'verification' => $this->verification->summary($invoice),
         ]);
     }
 

@@ -76,7 +76,9 @@ use App\Http\Controllers\ProductImportController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProofOfDeliveryController;
+use App\Http\Controllers\InvoiceVerificationController;
 use App\Http\Controllers\PublicShareController;
+use App\Http\Controllers\PublicVerificationController;
 use App\Http\Controllers\RiderAssignmentController;
 use App\Http\Controllers\RiderCodController;
 use App\Http\Controllers\RiderController;
@@ -122,6 +124,17 @@ Route::get('/share/quotation/{token}', [PublicShareController::class, 'quotation
     ->middleware('throttle:30,1')
     ->where('token', '[A-Za-z0-9]{32,64}')
     ->name('share.quotation');
+
+/*
+ | Public invoice verification (§16-19/§16-20) — also no session identity: the
+ | token is the capability and it is the only thing the URL carries. 43
+ | base64url characters (32 bytes of HMAC-SHA256); a link that has been rotated
+ | or withdrawn resolves to a 404 like any other token that was never issued.
+ */
+Route::get('/verify/{token}', [PublicVerificationController::class, 'verify'])
+    ->middleware('throttle:30,1')
+    ->where('token', '[A-Za-z0-9_\-]{43}')
+    ->name('public.invoice.verify');
 
 /*
  | Courier tracking webhook (02-90) — no session identity by design:
@@ -1725,6 +1738,21 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::get('/app/sales/invoices/{invoice}/mushak-9.1', [SalesController::class, 'mushak91'])
         ->middleware('permission:sales.invoices.statutory_print')
         ->name('sales.invoices.mushak-91');
+
+    /*
+     | §16-19: publishing the verification link is a capability, so it sits
+     | behind the key that already owns the document's life cycle rather than
+     | a new one invented for it.
+     */
+    Route::post('/app/sales/invoices/{invoice}/verification/issue', [InvoiceVerificationController::class, 'issue'])
+        ->middleware('permission:sales.invoices.issue')
+        ->name('sales.invoices.verification.issue');
+    Route::post('/app/sales/invoices/{invoice}/verification/rotate', [InvoiceVerificationController::class, 'rotate'])
+        ->middleware('permission:sales.invoices.issue')
+        ->name('sales.invoices.verification.rotate');
+    Route::post('/app/sales/invoices/{invoice}/verification/revoke', [InvoiceVerificationController::class, 'revoke'])
+        ->middleware('permission:sales.invoices.issue')
+        ->name('sales.invoices.verification.revoke');
     Route::post('/app/sales/payments', [SalesController::class, 'storePayment'])
         ->middleware('permission:sales.payments.create')
         ->name('sales.payments.store');

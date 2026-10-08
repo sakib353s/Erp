@@ -4,8 +4,10 @@ namespace App\Domain\Documents;
 
 use App\Domain\Delivery\ShippingLabel;
 use App\Domain\Foundation\User;
+use App\Domain\Inventory\Services\QrService;
 use App\Domain\Sales\Invoice;
 use App\Domain\Sales\SalesOrder;
+use App\Domain\Sales\Services\InvoiceVerificationService;
 use App\Domain\Settings\Services\LocalizationService;
 use App\Domain\Tax\Services\TaxPolicy;
 use Illuminate\Database\Eloquent\Model;
@@ -25,6 +27,8 @@ class DocumentRenderer
     public function __construct(
         protected LocalizationService $localization,
         protected TaxPolicy $taxPolicy,
+        protected InvoiceVerificationService $verification,
+        protected QrService $qr,
     ) {}
 
     public function renderInvoice(Invoice $invoice, User $user): Document
@@ -33,11 +37,21 @@ class DocumentRenderer
 
         // §15-07: the print obeys the company's (or the branch's) localization
         // switches — grouping, numerals and whether the amount is spelled out.
+        // §16-19: the verification address for the QR symbol, and the symbol
+        // itself. Null when nothing has been published — the paper then carries
+        // no code claiming a check that would fail.
+        $verificationUrl = $this->verification->url($invoice);
+
         $html = view('sales.invoices.print', [
             'invoice' => $invoice,
             'localization' => $this->localization,
             // §15-14: what the document may claim about its own totals.
             'taxInclusive' => $this->taxPolicy->pricesIncludeTax(),
+            'verificationUrl' => $verificationUrl,
+            'verificationQr' => $verificationUrl === null ? null : $this->qr->svg($verificationUrl, [
+                'moduleSize' => 3,
+                'title' => 'Verify '.(string) $invoice->invoice_no,
+            ])['svg'],
         ])->render();
 
         return $this->storeGenerated(

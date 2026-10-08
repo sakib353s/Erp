@@ -151,7 +151,7 @@
                         @if ($canPrint)
                             <button class="btn btn-sm btn-outline-light" type="submit"
                                     formaction="{{ route('sales.orders.bulk.print-invoice') }}">
-                                <i class="bi bi-printer" aria-hidden="true"></i> Invoice
+                                <i class="bi bi-printer" aria-hidden="true"></i> Print invoice
                             </button>
                         @endif
                         @if ($canPrintSlip)

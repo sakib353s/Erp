@@ -111,6 +111,100 @@
         </div>
     </div>
 
+    @php
+        // §16-19: a draft is not a document yet, so there is nothing to publish
+        // until it is issued — and the panel says that instead of offering a
+        // button whose link would resolve to nothing.
+        $verifiable = in_array($invoice->status, ['issued', 'partial', 'paid', 'void'], true);
+        $linkState = $verification['published'] ? 'active' : ($verification['revoked_at'] ? 'cancelled' : 'not_configured');
+        $linkLabel = $verification['published'] ? 'Link live' : ($verification['revoked_at'] ? 'Withdrawn' : 'No link');
+    @endphp
+
+    <div class="erp-card mt-3">
+        <div class="d-flex flex-wrap align-items-start justify-content-between gap-3">
+            <div>
+                <h2 class="erp-h3 mb-1">Public verification link</h2>
+                <p class="erp-page-sub mb-0">
+                    Somebody holding this invoice can open the number on this system and check that it was issued here.
+                    Only this document is published — never the accounting entry, the internal notes or another customer's details.
+                </p>
+            </div>
+            <x-ui.status :value="$linkState" :label="$linkLabel" />
+        </div>
+
+        @unless ($verifiable)
+            <div class="erp-note mt-3">
+                <i class="bi bi-hourglass" aria-hidden="true"></i>
+                <div>
+                    <strong>This {{ $invoice->status }} document cannot be published.</strong>
+                    <p class="mb-0">Issue the invoice first; a customer verifying a draft would be verifying something the company has not asked them to pay.</p>
+                </div>
+            </div>
+        @else
+            @if ($verification['published'])
+                <div class="row g-3 mt-3">
+                    <div class="col-lg-7">
+                        <label class="form-label" for="verification-url">The address inside the QR code</label>
+                        <input class="form-control" id="verification-url" type="text" readonly value="{{ $verification['url'] }}">
+                        <p class="erp-td-muted mb-0">Reprinting this invoice prints the same address. Rotating it prints a new one and stops the old one working.</p>
+                    </div>
+                    <div class="col-lg-5">
+                        <dl class="erp-dl erp-dl-tight mb-0">
+                            <div><dt>Published</dt><dd>{{ $verification['issued_at']?->format('d M Y, H:i') ?? '—' }}</dd></div>
+                            <div><dt>Rotation</dt><dd>{{ $verification['rotation'] }}</dd></div>
+                            <div><dt>Times opened</dt><dd>{{ $verification['visits'] }}</dd></div>
+                            <div>
+                                <dt>Last opened</dt>
+                                <dd>{{ $verification['last_seen_at'] ? \Illuminate\Support\Carbon::parse($verification['last_seen_at'])->format('d M Y, H:i') : 'never' }}</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            @elseif ($verification['revoked_at'])
+                <div class="erp-note erp-note-warn mt-3">
+                    <i class="bi bi-link-45deg" aria-hidden="true"></i>
+                    <div>
+                        <strong>Withdrawn {{ $verification['revoked_at']->format('d M Y, H:i') }}.</strong>
+                        <p class="mb-0">Any copy of this invoice that carries the old address now resolves to nothing. Publishing again issues a fresh link.</p>
+                    </div>
+                </div>
+            @else
+                <div class="erp-note mt-3">
+                    <i class="bi bi-qr-code" aria-hidden="true"></i>
+                    <div>
+                        <strong>Nothing is published yet.</strong>
+                        <p class="mb-0">Publishing writes the address into the invoice's QR code and opens the page that verifies it. The link can be rotated or withdrawn at any time.</p>
+                    </div>
+                </div>
+            @endif
+
+            @if ($perm('sales.invoices.issue'))
+                <div class="erp-form-actions mt-3">
+                    @if ($verification['published'])
+                        <a class="btn btn-outline-dark" target="_blank" rel="noopener" href="{{ $verification['url'] }}">
+                            <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Open the page
+                        </a>
+                        <form method="POST" action="{{ route('sales.invoices.verification.rotate', $invoice) }}"
+                              data-confirm="Rotate the link? The address printed on copies already handed out will stop working.">
+                            @csrf
+                            <button class="btn btn-outline-dark" type="submit">Rotate the link</button>
+                        </form>
+                        <form method="POST" action="{{ route('sales.invoices.verification.revoke', $invoice) }}"
+                              data-confirm="Withdraw the link? Nothing will verify this invoice until a new one is published.">
+                            @csrf
+                            <button class="btn btn-outline-danger" type="submit">Withdraw</button>
+                        </form>
+                    @else
+                        <form method="POST" action="{{ route('sales.invoices.verification.issue', $invoice) }}">
+                            @csrf
+                            <button class="btn btn-primary" type="submit">Publish verification link</button>
+                        </form>
+                    @endif
+                </div>
+            @endif
+        @endunless
+    </div>
+
     <div class="mt-3">
         <x-ui.related-pages />
     </div>

@@ -3,6 +3,7 @@
 namespace App\Domain\Sales;
 
 use App\Domain\Documents\DocumentType;
+use App\Domain\Foundation\Branch;
 use App\Domain\Foundation\Company;
 use App\Domain\Masters\Customer;
 use Illuminate\Database\Eloquent\Model;
@@ -39,11 +40,20 @@ class Invoice extends Model
         'paid_amount' => 'decimal:4',
         'due_amount' => 'decimal:4',
         'tax_applicable' => 'boolean',
+        // §16-19: the published link's own life cycle, read as instants rather
+        // than as strings on the screens that show when it moved.
+        'qr_token_issued_at' => 'datetime',
+        'qr_token_revoked_at' => 'datetime',
     ];
 
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function branch(): BelongsTo
+    {
+        return $this->belongsTo(Branch::class);
     }
 
     public function customer(): BelongsTo
