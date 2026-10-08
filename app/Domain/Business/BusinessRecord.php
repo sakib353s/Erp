@@ -45,6 +45,7 @@ class BusinessRecord extends Model
 
     protected $fillable = [
         'company_id', 'branch_id', 'business_asset_id', 'kind', 'title', 'reference_no', 'issuer',
+        'counterparty',
         'value_amount', 'issued_on', 'starts_on', 'expires_on', 'due_on',
         'repeat_months', 'last_completed_on', 'status', 'retired_on', 'notes',
         'meta', 'created_by',

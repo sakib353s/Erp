@@ -71,12 +71,12 @@ class BusinessRecordTest extends TestCase
 
     protected function recordsReader(User $user): void
     {
-        $user->roles()->attach($this->roleWith(['business.records.view'])->id);
+        $user->roles()->attach($this->roleWith(['portal.erp.access', 'business.records.view'])->id);
     }
 
     protected function recordsManager(User $user): void
     {
-        $user->roles()->attach($this->roleWith(['business.records.view', 'business.records.manage'])->id);
+        $user->roles()->attach($this->roleWith(['portal.erp.access', 'business.records.view', 'business.records.manage'])->id);
     }
 
     protected function anotherBranch(string $code = 'DHN'): Branch

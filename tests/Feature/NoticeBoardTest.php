@@ -56,12 +56,12 @@ class NoticeBoardTest extends TestCase
 
     protected function reader(User $user): void
     {
-        $user->roles()->attach($this->roleWith(['business.notices.view'])->id);
+        $user->roles()->attach($this->roleWith(['portal.erp.access', 'business.notices.view'])->id);
     }
 
     protected function publisher(User $user): void
     {
-        $user->roles()->attach($this->roleWith(['business.notices.view', 'business.notices.create'])->id);
+        $user->roles()->attach($this->roleWith(['portal.erp.access', 'business.notices.view', 'business.notices.create'])->id);
     }
 
     /**

@@ -69,12 +69,12 @@ class MeetingBoardTest extends TestCase
 
     protected function viewer(User $user): void
     {
-        $user->roles()->attach($this->roleWith(['business.meetings.view'])->id);
+        $user->roles()->attach($this->roleWith(['portal.erp.access', 'business.meetings.view'])->id);
     }
 
     protected function organiser(User $user): void
     {
-        $user->roles()->attach($this->roleWith(['business.meetings.view', 'business.meetings.manage'])->id);
+        $user->roles()->attach($this->roleWith(['portal.erp.access', 'business.meetings.view', 'business.meetings.manage'])->id);
     }
 
     /**
@@ -179,7 +179,8 @@ class MeetingBoardTest extends TestCase
 
     public function test_the_life_of_a_meeting_is_ordered_held_then_minuted(): void
     {
-        $meeting = $this->callMeeting();
+        $person = $this->makeUser(['name' => 'Rahima Begum']);
+        $meeting = $this->callMeeting([], [$person->id]);
 
         // Not held yet: no attendance to record, no minutes to write, no action
         // items to raise.
@@ -369,6 +370,8 @@ class MeetingBoardTest extends TestCase
         $this->assertSame('todo', $task->status);
 
         // It is the same work the task board shows, in the owner's own list.
+        $this->grant($owner, ['portal.erp.access', 'tasks.view_own']);
+
         $this->actingAs($owner)->get(route('tasks.index'))->assertOk()->assertSee('Recount aisle four before the audit');
 
         // And the meeting shows it as what came out of it.
@@ -402,7 +405,7 @@ class MeetingBoardTest extends TestCase
         ]);
 
         $this->viewer($mine);
-        $mine->roles()->attach($this->roleWith(['tasks.view_own'])->id);
+        $this->grant($mine, ['portal.erp.access', 'tasks.view_own']);
 
         $this->actingAs($mine)
             ->get(route('meetings.actionItems'))
@@ -411,7 +414,7 @@ class MeetingBoardTest extends TestCase
             ->assertDontSee('Somebody else’s action item');
 
         // The office's action items are the office's work: that needs tasks.view_all.
-        $mine->roles()->attach($this->roleWith(['tasks.view_all'])->id);
+        $this->grant($mine, ['portal.erp.access', 'tasks.view_all']);
 
         $this->actingAs($mine->fresh())
             ->get(route('meetings.actionItems'))

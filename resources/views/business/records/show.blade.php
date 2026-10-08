@@ -144,6 +144,9 @@
                         <div class="erp-list-row-main">
                             <span class="erp-cell-strong">{{ $file->label() }}</span>
                             <div class="erp-td-muted">
+                                @if ($file->document?->original_name)
+                                    {{ $file->document->original_name }} ·
+                                @endif
                                 {{ $file->document?->mime_type ?? 'file' }}
                                 @if ($file->attacher)
                                     · filed by {{ $file->attacher->name }}

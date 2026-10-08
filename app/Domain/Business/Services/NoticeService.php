@@ -56,6 +56,17 @@ class NoticeService
 
         $query = User::query()->where('company_id', $companyId)->where('status', 'active');
 
+        /*
+         * The person who wrote it has read it — they wrote it. Counting the
+         * author as outstanding would leave every company-wide notice a few
+         * percent short of done forever, and a tracker that can never reach 100%
+         * stops being a tracker. The author can still acknowledge if they want
+         * the record to say so; they are simply not owed an acknowledgement.
+         */
+        if ($notice->created_by !== null) {
+            $query->whereKeyNot($notice->created_by);
+        }
+
         return match ($notice->audience_type) {
             Notice::AUDIENCE_USERS => $query->whereIn('id', $ids)->orderBy('name')->get(),
             Notice::AUDIENCE_ROLES => $query

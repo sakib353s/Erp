@@ -55,10 +55,11 @@ class TaskBoardTest extends TestCase
 
     /* --------------------------------------------------------------- helpers */
 
+    /** A person with the task keys asked for — and the ERP portal itself. */
     protected function staff(array $keys): User
     {
         $user = $this->makeUser();
-        $user->roles()->attach($this->roleWith($keys)->id);
+        $user->roles()->attach($this->roleWith(['portal.erp.access', ...$keys])->id);
 
         return $user;
     }
@@ -192,13 +193,14 @@ class TaskBoardTest extends TestCase
         // From done, “todo” is not on the map — the refusal says what is.
         $this->service()->transition($task, Task::STATUS_DONE, $this->admin);
 
-        try {
-            $this->actingAs($this->admin)->post(route('tasks.transition', $task->fresh()), ['status' => Task::STATUS_TODO]);
+        $this->actingAs($this->admin)
+            ->post(route('tasks.transition', $task->fresh()), ['status' => Task::STATUS_TODO])
+            ->assertRedirect()
+            ->assertSessionHasErrors('status');
 
-            $this->fail('a done task must not jump back to todo');
-        } catch (ValidationException $refused) {
-            $this->assertStringContainsString('In progress', (string) $refused->validator->errors()->first('status'));
-        }
+        // The task did not move, and the refusal names the moves that exist.
+        $this->assertSame(Task::STATUS_DONE, $task->fresh()->status);
+        $this->assertStringContainsString('In progress', $this->allFlashedErrors());
 
         $this->assertSame(Task::STATUS_DONE, $task->fresh()->status);
     }
@@ -207,7 +209,10 @@ class TaskBoardTest extends TestCase
     {
         $task = $this->makeTask($this->admin);
 
-        $this->service()->transition($task, Task::STATUS_DONE, $this->admin);
+        // Work is started before it is finished: “to do” opens into in progress,
+        // blocked or cancelled, and only a running task can be done.
+        $this->service()->transition($task, Task::STATUS_IN_PROGRESS, $this->admin);
+        $this->service()->transition($task->fresh(), Task::STATUS_DONE, $this->admin);
         $this->assertNotNull($task->fresh()->completed_at);
 
         $this->service()->transition($task->fresh(), Task::STATUS_IN_PROGRESS, $this->admin);
@@ -312,7 +317,8 @@ class TaskBoardTest extends TestCase
         // Clearing the date is a decision, and it is on the timeline too.
         $this->service()->reschedule($task->fresh(), null, $this->admin);
         $this->assertNull($task->fresh()->due_at);
-        $this->assertSame(1, TaskEvent::query()->where('task_id', $task->id)->where('event', TaskEvent::DUE_CHANGED)->count());
+        // Two decisions, two lines on the timeline: the new date, then no date.
+        $this->assertSame(2, TaskEvent::query()->where('task_id', $task->id)->where('event', TaskEvent::DUE_CHANGED)->count());
     }
 
     public function test_an_urgent_task_comes_before_a_low_one_in_my_list(): void

@@ -4,6 +4,7 @@ namespace Tests\Concerns;
 
 use App\Domain\Foundation\Branch;
 use App\Domain\Foundation\Company;
+use App\Domain\Foundation\Events\RolePermissionsChanged;
 use App\Domain\Foundation\Permission;
 use App\Domain\Foundation\Role;
 use App\Domain\Foundation\Services\TenantContext;
@@ -120,6 +121,21 @@ trait CreatesERPInstance
         $role->permissions()->sync($ids);
 
         return $role;
+    }
+
+    /**
+     * Grant a role the way the user screen does.
+     *
+     * Effective permissions are cached per user, and the screen that changes
+     * somebody's roles tells the catalogue to forget. A test that grants a role
+     * *after* a request has already resolved that cache has to say so too — or
+     * it is testing a cache, not a permission.
+     */
+    protected function grant(User $user, array $permissionKeys): void
+    {
+        $user->roles()->attach($this->roleWith($permissionKeys)->id);
+
+        event(new RolePermissionsChanged(userIds: [$user->id]));
     }
 
     /**

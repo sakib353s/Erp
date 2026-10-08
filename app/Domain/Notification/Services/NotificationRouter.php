@@ -3,6 +3,7 @@
 namespace App\Domain\Notification\Services;
 
 use App\Domain\Foundation\Company;
+use App\Domain\Foundation\Permission;
 use App\Domain\Foundation\Services\TenantContext;
 use App\Domain\Foundation\User;
 use Illuminate\Support\Collection;
@@ -38,11 +39,26 @@ class NotificationRouter
             ->whereHas('directPermissions', fn ($q) => $q->where('permissions.key', $key)->where('user_permission.effect', 'grant'))
             ->get();
 
-        return $viaRoles
-            ->merge($viaDirect)
-            ->merge(User::query()->where('company_id', $companyId)->where('status', 'active')->where('is_super_admin', true)->get())
-            ->unique('id')
-            ->values();
+        $recipients = $viaRoles->merge($viaDirect);
+
+        /*
+         * A super admin holds every key the catalogue defines, so they are on
+         * every real digest list — including the ones nobody else holds. But a
+         * key that does not exist is a typo, not a permission: answering "the
+         * owner holds it" would quietly mail the owner and hide the mistake.
+         * Nobody holds an undefined key, and the command says so out loud.
+         */
+        if (Permission::query()->where('key', $key)->exists()) {
+            $recipients = $recipients->merge(
+                User::query()
+                    ->where('company_id', $companyId)
+                    ->where('status', 'active')
+                    ->where('is_super_admin', true)
+                    ->get()
+            );
+        }
+
+        return $recipients->unique('id')->values();
     }
 
     /** Security watchers: holders of the security-alerts permission + super admins. */
