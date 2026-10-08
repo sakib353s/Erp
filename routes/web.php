@@ -1,6 +1,7 @@
 <?php
 
 use App\Domain\Masters\Support\MasterCatalog;
+use App\Domain\Reporting\ReportRegistry;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\AuditController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\ContextController;
 use App\Http\Controllers\CourierPartnerController;
 use App\Http\Controllers\CourierProviderController;
 use App\Http\Controllers\CustomReportController;
+use App\Http\Controllers\ReportCentreController;
 use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeliveryZoneController;
@@ -1151,6 +1153,38 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::get('/app/reports/cash/sessions', [CashReportController::class, 'sessions'])
         ->middleware('permission:cash.reports')
         ->name('cash.reports.sessions');
+
+    /*
+     * §13 — the report centre.
+     *
+     * One page per family the catalogue names, and the index above them. The
+     * families are registered in a loop off ReportRegistry, so a family that
+     * exists in the catalogue but has no reports cannot appear: the registry
+     * reads the router, and the hub prints the gap in words instead of a blank
+     * page. Each family has its own key because the audiences are different
+     * people — reading the sales reports is not reading the payroll — and the
+     * floor key only lets a reader see the index, where every family is listed
+     * with the key it needs rather than being hidden.
+     */
+    Route::get('/app/reports', [ReportCentreController::class, 'index'])
+        ->middleware('permission:reports.view')
+        ->name('reports.index');
+    Route::get('/app/reports/custom', [ReportCentreController::class, 'custom'])
+        ->middleware('permission:reports.custom')
+        ->name('reports.custom');
+    Route::get('/app/reports/scheduled', [ReportCentreController::class, 'scheduled'])
+        ->middleware('permission:reports.scheduled')
+        ->name('reports.scheduled');
+    Route::post('/app/reports/scheduled', [ReportCentreController::class, 'storeSchedule'])
+        ->middleware('permission:reports.scheduled')
+        ->name('reports.scheduled.store');
+
+    foreach (ReportRegistry::FAMILIES as $familySlug => $familyDefinition) {
+        Route::get('/app/reports/'.$familySlug, [ReportCentreController::class, 'family'])
+            ->middleware('permission:'.$familyDefinition['permission'])
+            ->defaults('family', $familySlug)
+            ->name('reports.'.$familySlug);
+    }
 
     Route::get('/app/accounting/opening-trial-balance', [FinancialReportController::class, 'openingTrialBalance'])
         ->middleware('permission:accounting.reports.view')

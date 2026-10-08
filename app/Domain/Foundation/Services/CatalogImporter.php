@@ -329,6 +329,27 @@ class CatalogImporter
         'accounting > opening trial balance' => ['/app/accounting/opening-trial-balance', 'accounting.reports.view'],
         'accounting > financial reports > trial balance' => ['/app/accounting/trial-balance', 'accounting.reports.view'],
 
+        /*
+         * §13 — the report centre. The catalogue names twelve leaves under
+         * “13. REPORTS”; each one here points at the hub that actually exists,
+         * so the sidebar cannot offer a family the app does not have. Sales
+         * Reports and Custom Reports point at the two pages that live inside
+         * module 02 (§02-114…§02-120) because that is where they really are —
+         * duplicating them here would give the same screen two front doors and
+         * two permission checks to keep in step.
+         */
+        'reports > sales reports' => ['/app/reports/sales', 'reports.sales'],
+        'reports > purchase reports' => ['/app/reports/purchase', 'reports.purchase'],
+        'reports > inventory reports' => ['/app/reports/inventory', 'reports.inventory'],
+        'reports > customer reports' => ['/app/reports/customers', 'reports.customers'],
+        'reports > supplier reports' => ['/app/reports/suppliers', 'reports.suppliers'],
+        'reports > finance reports' => ['/app/reports/finance', 'reports.finance'],
+        'reports > vat & tax reports' => ['/app/reports/tax', 'reports.tax'],
+        'reports > employee reports' => ['/app/reports/hr', 'reports.hr'],
+        'reports > marketing reports' => ['/app/reports/marketing', 'reports.marketing'],
+        'reports > custom reports' => ['/app/reports/custom', 'reports.custom'],
+        'reports > scheduled reports' => ['/app/reports/scheduled', 'reports.scheduled'],
+
         // Phase E inventory core (04-01…04-33)
         'inventory > products > all products' => ['/app/inventory/products', 'inventory.products.view'],
         'inventory > products > add product' => ['/app/inventory/products/create', 'inventory.products.create'],

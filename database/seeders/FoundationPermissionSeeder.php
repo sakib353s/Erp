@@ -242,6 +242,24 @@ class FoundationPermissionSeeder extends Seeder
             // can. Every figure on them is a posted journal line.
             ['expenses', 'reports', 'view', 'expenses.reports', 'Read the expense report: what the company spent, by category, branch and month'],
             ['cash', 'reports', 'view', 'cash.reports', 'Read the cash reports: the cash book, the bank book, the cash flow and the till variances'],
+            // §13: reporting is an audience question, so the centre has a key
+            // per family rather than one “reports” switch. The floor key opens
+            // the index only, where every family is listed — including the ones
+            // the reader cannot open, with the key each one needs. Hiding a
+            // report somebody does not hold is how a manager ends up asking for
+            // a screen the company already has.
+            ['reports', 'centre', 'view', 'reports.view', 'See the report centre: every family the catalogue names, with what each one holds'],
+            ['reports', 'sales', 'view', 'reports.sales', 'Read the sales report family'],
+            ['reports', 'purchase', 'view', 'reports.purchase', 'Read the purchase report family'],
+            ['reports', 'inventory', 'view', 'reports.inventory', 'Read the inventory report family'],
+            ['reports', 'customers', 'view', 'reports.customers', 'Read the customer report family'],
+            ['reports', 'suppliers', 'view', 'reports.suppliers', 'Read the supplier report family'],
+            ['reports', 'finance', 'view', 'reports.finance', 'Read the finance report family'],
+            ['reports', 'tax', 'view', 'reports.tax', 'Read the VAT and tax report family'],
+            ['reports', 'hr', 'view', 'reports.hr', 'Read the employee report family — attendance, leave and (once payroll posts) pay'],
+            ['reports', 'marketing', 'view', 'reports.marketing', 'Read the marketing report family'],
+            ['reports', 'custom', 'view', 'reports.custom', 'Read the register of custom reports and their run history'],
+            ['reports', 'schedules', 'manage', 'reports.scheduled', 'Schedule a saved report to run itself, and read what the runs produced'],
             ['pettycash', 'funds', 'manage', 'pettycash.funds', 'Declare a float, name its custodian and close it'],
             ['pettycash', 'vouchers', 'create', 'pettycash.spend', 'Pay a voucher out of the float and read its register'],
             ['pettycash', 'requests', 'decide', 'pettycash.approve', 'Decide the vouchers a custodian had to ask for'],

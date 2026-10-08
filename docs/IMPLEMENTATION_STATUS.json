@@ -113,10 +113,11 @@
       "trace": "docs/TRACEABILITY/12-business-management.md"
     },
     "13_reports": {
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "rows_total": 13,
-      "rows_done": 0,
-      "trace": "docs/TRACEABILITY/13-reports.md"
+      "rows_done": 11,
+      "trace": "docs/TRACEABILITY/13-reports.md",
+      "notes": "§13-01…§13-09 plus the custom and scheduled leaves are built as the report centre (`GET /app/reports` and one hub per catalogue family). The registry is written against the router: an entry names the route it lives on, hubs list only entries whose route this installation registers, and every row's permission is read back off that route's own middleware — so a hub cannot offer a door that 404s, and cannot disagree with the door it shows. A report that exists but whose key the reader lacks is listed by name with the key it needs rather than hidden; each family has its own key; a family with nothing built says so in words. The custom-report register shows `report_definitions` with saved-filter and run counts and the last 25 `report_runs` with their honest state, and the builder link is offered only to a reader who holds `sales.reports.view` (where the builder really lives). The schedule form writes through `ScheduledReportService` — frequency validated, next run set, audited — and a definition belonging to another company is not found. Still PLANNED: 13-10 delivery reports (they read §07's shipments/tracking/COD collections and land with the rest of §07) and 13-13 the unified export/print/PDF frame (needs §19; per-report CSV exists today and the screens say so)."
     },
     "14_masters": {
       "status": "DONE",

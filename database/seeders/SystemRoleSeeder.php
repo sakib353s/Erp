@@ -143,6 +143,12 @@ class SystemRoleSeeder extends Seeder
                 // own keys cover it — a bin is a place, so the layout and the
                 // instructions that use it share one pair of keys.
                 'warehouses.view', 'warehouses.update',
+                // §13: a manager is exactly the person who lives in the reports,
+                // so the centre and the six families they answer for come with
+                // the role. Not the tax family — filing is the accountant's — and
+                // not the marketing or custom-schedule keys.
+                'reports.view', 'reports.sales', 'reports.purchase', 'reports.inventory',
+                'reports.customers', 'reports.suppliers', 'reports.finance', 'reports.hr',
             ]],
             ['slug' => 'employee', 'name' => 'Employee', 'description' => 'Staff account: own portal access only — own leave, own payslips.', 'keys' => [
                 'dashboard.view', 'employees.view', 'documents.view', 'search.view',

@@ -24,13 +24,13 @@ _Last updated: 2026-10-08, after the label cluster (§04-13/04-52/04-53/04-54) �
 | 10 Employee (HRM) | 17 / 47 | **attendance, leave, structure and service book built**; payroll, overtime, loans, bonuses, performance, recruitment, training, exit settlement pending |
 | 11 Marketing | 0 / 22 | SMS/WhatsApp campaign engine pending |
 | 12 Business management | 0 / 16 | branch P&L, targets, governance screens |
-| 13 Reports | 0 / 13 | report centre pending (sales reports exist inside module 02) |
+| 13 Reports | 11 / 13 | **the centre is open** — one page per catalogue family, and the pages are written *against the router*: a hub lists a report only if its route is really registered, and reads that row's permission back off the route's own middleware instead of typing it a second time, so a hub can never offer a dead door and can never disagree with the door it shows. The other half is the deliberate one: a report the reader's role cannot open is still **listed, by name, with the key it needs** — hiding it is how a manager concludes the system cannot do something it can. Each family carries its own key (reading the sales reports is not reading the payroll) and a family with nothing built says so in words on its page rather than leaving an empty card. The custom-report register lists the definitions this company saved, their run history **including the failures with their reasons**, and the schedules built on them; the schedule form writes through `ScheduledReportService`, so frequency, next run and the audit row are the service's rules, not the form's, and a definition belonging to another company is not found because the lookup is scoped. Delivery reports (13-10) land with the rest of §07 and the export/print frame (13-13) with §19 — both named on the pages they belong to instead of being faked. |
 | 14 Masters | 15 / 15 | complete |
 | 15 Settings | 0 / 35 | **not started** — company/branch/invoice/Bengali/payment-gateway settings screens |
 | 16 Cross-cutting | 0 / 64 | search, notifications, backups, BI, i18n, API mgmt, public links |
 
-**Totals: 287 of 619 catalogued rows implemented.** (Sales 104, Dashboard 26, Purchase 19, Inventory 52,
-HRM 17, Masters 15, CRM 14, Cash & Bank 22, Accounting 8, Suppliers 6, Returns 4.)
+**Totals: 298 of 619 catalogued rows implemented.** (Sales 104, Dashboard 26, Purchase 19, Inventory 52,
+HRM 17, Masters 15, CRM 14, Cash & Bank 22, Accounting 8, Suppliers 6, Returns 4, Reports 11.)
 
 ## The next three builds, in the order they unlock the most
 
