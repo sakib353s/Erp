@@ -2861,6 +2861,71 @@ hr { border-color: var(--line); opacity: 1; }
     color: var(--info);
 }
 
+/* §08-13: cheque states. A cheque in the drawer is *outstanding* — the word
+ * every desk already reads as "not settled" — so it wears the waiting tone
+ * rather than the green a received purchase wears. `deposited`/`presented` are
+ * informational: the slip is with a bank and the money is still nobody's.
+ * `cleared` is the good terminal state and `bounced` the bad one. */
+.erp-status-outstanding {
+    background: var(--warn-soft);
+    color: var(--warn);
+}
+
+.erp-status-deposited,
+.erp-status-presented {
+    background: var(--info-soft);
+    color: var(--info);
+}
+
+.erp-status-cleared {
+    background: var(--ok-soft);
+    color: var(--ok);
+}
+
+.erp-status-bounced {
+    background: var(--danger-soft);
+    color: var(--danger);
+}
+
+/* A cheque's life, on the page that decides it (§08-13). Every step is listed —
+ * including the ones that have not happened — because on this page "not
+ * deposited yet" is the answer to the question being asked, and a timeline that
+ * only showed what happened could not say it. */
+.erp-steps { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+.erp-step { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 12px; }
+.erp-step-mark { display: flex; flex-direction: column; align-items: center; }
+.erp-step-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    flex: none;
+    background: var(--surface-3);
+    border: 1px solid var(--line);
+    color: var(--ink-4);
+    font-size: 11px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+.erp-step-line { width: 2px; flex: 1 1 auto; min-height: 10px; background: var(--line-soft); }
+.erp-step-body { padding: 1px 0 14px; min-width: 0; }
+.erp-step-title { font-size: 13px; font-weight: 620; color: var(--ink-3); margin: 0; }
+.erp-step-meta { font-size: 12px; color: var(--ink-4); margin: 2px 0 0; }
+.erp-step-done .erp-step-dot { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
+.erp-step-done .erp-step-line { background: var(--ok-line); }
+.erp-step-done .erp-step-title { color: var(--ink); }
+.erp-step-now .erp-step-dot { background: var(--info-soft); border-color: var(--info-line); color: var(--info); }
+.erp-step-now .erp-step-title { color: var(--ink); }
+.erp-step-now .erp-step-line { background: var(--info-line); }
+.erp-step-bad .erp-step-dot { background: var(--danger-soft); border-color: var(--danger-line); color: var(--danger); }
+.erp-step-bad .erp-step-title { color: var(--ink); }
+/* A step that has not happened is the quietest thing on the list — it is the
+   answer to "what is still missing", so it is legible, but never competes with
+   the step the cheque is actually on. */
+.erp-step-pending .erp-step-title { color: var(--ink-4); }
+.erp-step-pending .erp-step-meta { color: var(--ink-4); }
+
 /* ------------------------------------------------- 31. detail layout & docs */
 /*
  * Master-detail two-pane layout (§18.2 DetailPanel, §18.4 768-1199):

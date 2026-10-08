@@ -64,6 +64,12 @@ final class DocumentTypeRegistry
         // for by its number — "show me the 40,000 that moved on the 3rd" — so it
         // is a numbered document, not two loose journal lines.
         ['code' => 'cash_transfer', 'type_group' => 'accounting', 'name' => 'Cash Transfer', 'printed_title' => 'CASH TRANSFER'],
+        // §08-14: the print-out of a cheque is filed, checksummed and logged
+        // like every other generated paper — but it carries no number of its
+        // own. The number that identifies a cheque is the one the bank printed
+        // on the slip, and inventing a second one here would be the fastest way
+        // to disagree with the bank statement.
+        ['code' => 'cheque', 'type_group' => 'accounting', 'name' => 'Cheque', 'printed_title' => 'CHEQUE', 'requires_numbering' => false],
 
         // ---- HR
         ['code' => 'payroll', 'type_group' => 'hr', 'name' => 'Payroll Sheet', 'printed_title' => 'PAYROLL', 'tax_applicable' => true],

@@ -77,7 +77,7 @@ class BankReconciliationController extends Controller
     {
         $this->assertInstrument($request, $account, 'wallet', 'wallets.accounts');
 
-        return $this->desk($request, $account, 'wallet');
+        return $this->desk($account, 'wallet');
     }
 
     /** The shape of file the desk reads, as a file, so nobody has to guess the columns. */

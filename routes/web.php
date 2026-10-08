@@ -9,6 +9,7 @@ use App\Http\Controllers\BankReconciliationController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BulkPriceUpdateController;
 use App\Http\Controllers\CashBankController;
+use App\Http\Controllers\ChequeController;
 use App\Http\Controllers\CodController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CompanyController;
@@ -940,6 +941,32 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::post('/app/cash-bank/transfer', [CashBankController::class, 'storeTransfer'])
         ->middleware('permission:cash.transfers')
         ->name('cash-bank.transfer.store');
+
+    /*
+     * §08-13/14 — the cheque register. Reading it is `cheques.view`, writing a
+     * cheque into it is `cheques.manage`, and saying the bank paid it —
+     * the moment the ledger moves — is `cheques.clear`. A merchant who may
+     * write the slip is not thereby the person who decides the money arrived,
+     * which is the same separation the statement desk keeps between the person
+     * who imports a statement and the person who signs it off.
+     */
+    Route::get('/app/cash-bank/cheques', [ChequeController::class, 'index'])
+        ->middleware('permission:cheques.view')
+        ->name('cash-bank.cheques');
+    Route::post('/app/cash-bank/cheques', [ChequeController::class, 'store'])
+        ->middleware('permission:cheques.manage')
+        ->name('cash-bank.cheques.store');
+    // Cheque Print lands here: a menu leaf cannot carry a cheque id, so it opens
+    // the list of issued cheques to print from rather than a page that cannot open.
+    Route::get('/app/cash-bank/cheques/{cheque}', [ChequeController::class, 'show'])
+        ->middleware('permission:cheques.view')
+        ->name('cash-bank.cheques.show');
+    Route::post('/app/cash-bank/cheques/{cheque}/transition', [ChequeController::class, 'transition'])
+        ->middleware('permission:cheques.clear')
+        ->name('cash-bank.cheques.transition');
+    Route::get('/app/cash-bank/cheques/{cheque}/print', [ChequeController::class, 'print'])
+        ->middleware('permission:cheques.print')
+        ->name('cash-bank.cheques.print');
 
     Route::get('/app/accounting/opening-trial-balance', [FinancialReportController::class, 'openingTrialBalance'])
         ->middleware('permission:accounting.reports.view')

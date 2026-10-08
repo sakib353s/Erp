@@ -190,6 +190,15 @@ class FoundationPermissionSeeder extends Seeder
             // jobs: the second one is the signature at the bottom of the page.
             ['bank', 'reconciliations', 'manage', 'bank.reconcile', 'Reconcile a bank account against its own statement'],
             ['wallets', 'reconciliations', 'manage', 'wallets.reconcile', 'Reconcile a mobile wallet against a statement the provider exported'],
+            // §08-13: writing a cheque into the register is a clerk's job;
+            // saying the bank has paid it is the moment the ledger moves, and
+            // that is a different hand — the same split as reading a book and
+            // signing off a reconciliation. Printing an issued cheque is a
+            // third: it puts the company's figures on paper a bank will read.
+            ['cheques', 'register', 'view', 'cheques.view', 'Read the cheque register'],
+            ['cheques', 'register', 'manage', 'cheques.manage', 'Write cheques into the register'],
+            ['cheques', 'register', 'clear', 'cheques.clear', 'Say a cheque cleared or failed — the moment it reaches the ledger'],
+            ['cheques', 'register', 'print', 'cheques.print', 'Print the record of a cheque the company issued'],
             ['accounting', 'opening', 'create', 'accounting.opening.create', 'Post opening balances'],
             ['accounting', 'receipts', 'view', 'accounting.receipts.view', 'View receipts'],
             ['accounting', 'receipts', 'create', 'accounting.receipts.create', 'Record receipts'],

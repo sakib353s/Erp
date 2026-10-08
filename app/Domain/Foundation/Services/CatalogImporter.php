@@ -240,12 +240,14 @@ class CatalogImporter
         'settings > system maintenance > rebuild search index' => ['/app/maintenance', 'maintenance.index'],
 
         // Phase D accounting (09-03…09-10, 09-32)
-        /* §08 — cash & bank. The catalogue's leaves are the four things the desk
+        /* §08 — cash & bank. The catalogue's leaves are the things the desk
          * actually does (read a position, take money in, pay money out, move it
-         * between accounts) plus the registry those accounts live in. The
-         * reconciliation, statement-import and petty-cash leaves stay PLANNED:
-         * a link to a screen that does not exist is worse than no link, and the
-         * menu builder refuses to render one.
+         * between accounts), the registry those accounts live in, the statement
+         * desk that proves them, and the cheque register. The leaves still
+         * PLANNED here — cash count, expenses, petty cash and bank-charge
+         * auto-posting — have no screen behind them yet, and a link to a screen
+         * that does not exist is worse than no link: the menu builder refuses to
+         * render one.
          */
         'cash & bank > cash management > cash in hand' => ['/app/cash-bank', 'cash.view'],
         'cash & bank > cash management > cash receipts' => ['/app/cash-bank/receipts', 'cash.view'],
@@ -267,6 +269,17 @@ class CatalogImporter
         'cash & bank > mobile banking > nagad account' => ['/app/cash-bank/accounts', 'wallets.accounts'],
         'cash & bank > mobile banking > rocket account' => ['/app/cash-bank/accounts', 'wallets.accounts'],
         'cash & bank > mobile banking > upay account' => ['/app/cash-bank/accounts', 'wallets.accounts'],
+        // §08-13: the cheque register. Its six leaves are six views of one book —
+        // a direction and a state are filters on the same screen — so each opens
+        // the register already filtered rather than a page of its own. Cheque
+        // Print asks for the issued list, where the printing happens, because a
+        // menu leaf cannot carry a cheque id.
+        'cash & bank > cheque management > received cheques' => ['/app/cash-bank/cheques?direction=received', 'cheques.view'],
+        'cash & bank > cheque management > issued cheques' => ['/app/cash-bank/cheques?direction=issued', 'cheques.view'],
+        'cash & bank > cheque management > cleared cheques' => ['/app/cash-bank/cheques?state=cleared', 'cheques.view'],
+        'cash & bank > cheque management > bounced cheques' => ['/app/cash-bank/cheques?state=failed', 'cheques.view'],
+        'cash & bank > cheque management > post-dated cheques' => ['/app/cash-bank/cheques?state=post_dated', 'cheques.view'],
+        'cash & bank > cheque management > cheque print' => ['/app/cash-bank/cheques?direction=issued', 'cheques.print'],
         'accounting > chart of accounts > coa tree' => ['/app/accounting/coa', 'accounting.coa.view'],
         'accounting > chart of accounts > account groups' => ['/app/accounting/account-groups', 'accounting.coa.view'],
         'accounting > chart of accounts > add account' => ['/app/accounting/accounts/create', 'accounting.coa.manage'],
