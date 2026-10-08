@@ -253,7 +253,23 @@ class CatalogImporter
         'sales > sales reports > peak hours analysis' => ['/app/reports/sales/peak-hours', 'sales.reports.view'],
         'sales > sales reports > sales trend' => ['/app/reports/sales/trend', 'sales.reports.view'],
         'sales > sales reports > custom sales report' => ['/app/reports/sales/custom', 'sales.reports.view'],
+        /* §15-23…§15-33 — the maintenance desk. Each leaf is a real operation on
+         * one page, anchored to the section it belongs to: a sidebar entry that
+         * leads to the page but not the part is a link that makes people hunt.
+         * Regenerate Thumbnails has no destination on purpose (§15-29): this
+         * build has no thumbnail cache, so the leaf stays inactive and invisible
+         * rather than pointing at a button with nothing behind it. */
+        'settings > system maintenance' => ['/app/maintenance', 'maintenance.index'],
+        'settings > system maintenance > clear cache' => ['/app/maintenance#cache', 'maintenance.index'],
+        'settings > system maintenance > clear sessions' => ['/app/maintenance#sessions', 'maintenance.index'],
+        'settings > system maintenance > clear temp files' => ['/app/maintenance#temp', 'maintenance.index'],
+        'settings > system maintenance > optimize database' => ['/app/maintenance#database', 'maintenance.database'],
+        'settings > system maintenance > repair database' => ['/app/maintenance#database', 'maintenance.repair'],
         'settings > system maintenance > rebuild search index' => ['/app/maintenance', 'maintenance.index'],
+        'settings > system maintenance > system information' => ['/app/maintenance#system', 'maintenance.index'],
+        'settings > system maintenance > error log viewer' => ['/app/maintenance/logs', 'maintenance.logs'],
+        'settings > system maintenance > self-healing status' => ['/app/maintenance#heal', 'maintenance.heal'],
+        'settings > system maintenance > reset settings' => ['/app/maintenance#reset', 'maintenance.reset'],
 
         // Phase D accounting (09-03…09-10, 09-32)
         /* §08 — cash & bank. The catalogue's leaves are the things the desk

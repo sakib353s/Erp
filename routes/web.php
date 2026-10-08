@@ -157,13 +157,48 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::get('/search', [SearchController::class, 'index'])
         ->name('search.index');
 
-    /* ---- System maintenance (rows 15-28 …) ---- */
+    /* ---- System maintenance (§15-23 … §15-33) ----
+           One key per kind of damage a person can do here: clearing a cache is
+           not repairing a table, and repairing a table is not resetting the
+           company's settings back to defaults. The desk itself is the entry
+           point; each button carries the key for what it actually does. */
     Route::get('/app/maintenance', [MaintenanceController::class, 'index'])
         ->middleware('permission:maintenance.index')
         ->name('maintenance.index');
+
+    Route::post('/maintenance/cache/clear', [MaintenanceController::class, 'clearCache'])
+        ->middleware('permission:maintenance.cache')
+        ->name('maintenance.cache.clear');
+    Route::post('/maintenance/sessions/clear', [MaintenanceController::class, 'clearSessions'])
+        ->middleware('permission:maintenance.sessions')
+        ->name('maintenance.sessions.clear');
+    Route::post('/maintenance/temp/clear', [MaintenanceController::class, 'clearTemp'])
+        ->middleware('permission:maintenance.temp')
+        ->name('maintenance.temp.clear');
+
+    Route::post('/maintenance/database/optimize', [MaintenanceController::class, 'optimize'])
+        ->middleware('permission:maintenance.database')
+        ->name('maintenance.database.optimize');
+    Route::post('/maintenance/database/integrity', [MaintenanceController::class, 'integrity'])
+        ->middleware('permission:maintenance.database')
+        ->name('maintenance.database.integrity');
+    Route::post('/maintenance/database/repair', [MaintenanceController::class, 'repair'])
+        ->middleware('permission:maintenance.repair')
+        ->name('maintenance.database.repair');
+
     Route::post('/maintenance/rebuild-index', [MaintenanceController::class, 'rebuildIndex'])
         ->middleware('permission:maintenance.index')
         ->name('maintenance.rebuild-index');
+    Route::post('/maintenance/self-heal', [MaintenanceController::class, 'selfHeal'])
+        ->middleware('permission:maintenance.heal')
+        ->name('maintenance.self-heal');
+    Route::post('/maintenance/settings/reset', [MaintenanceController::class, 'resetSettings'])
+        ->middleware('permission:maintenance.reset')
+        ->name('maintenance.settings.reset');
+
+    Route::get('/app/maintenance/logs', [MaintenanceController::class, 'logs'])
+        ->middleware('permission:maintenance.logs')
+        ->name('maintenance.logs');
 
     Route::get('/app/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::post('/app/profile', [ProfileController::class, 'update'])->name('profile.update');

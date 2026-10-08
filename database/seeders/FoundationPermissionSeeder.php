@@ -118,6 +118,19 @@ class FoundationPermissionSeeder extends Seeder
             ['settings', 'workflows', 'view', 'workflows.view', 'View approval workflows'],
             ['settings', 'workflows', 'manage', 'workflows.manage', 'Manage approval workflows'],
 
+            // §15-23…§15-33 — the maintenance desk. One key per kind of work:
+            // an operator who may clear a cache is not automatically somebody
+            // who may repair a table or reset the company's settings.
+            ['maintenance', 'desk', 'index', 'maintenance.index', 'Open the system maintenance desk'],
+            ['maintenance', 'cache', 'clear', 'maintenance.cache', 'Clear cache and compiled templates'],
+            ['maintenance', 'sessions', 'clear', 'maintenance.sessions', 'End other people’s sessions'],
+            ['maintenance', 'temp', 'clear', 'maintenance.temp', 'Remove temporary files'],
+            ['maintenance', 'database', 'optimize', 'maintenance.database', 'Optimise the database and run integrity checks'],
+            ['maintenance', 'database', 'repair', 'maintenance.repair', 'Repair database tables'],
+            ['maintenance', 'logs', 'view', 'maintenance.logs', 'Read the error log'],
+            ['maintenance', 'heal', 'run', 'maintenance.heal', 'Run a self-healing pass'],
+            ['maintenance', 'settings', 'reset', 'maintenance.reset', 'Reset settings to their defaults'],
+
             ['settings', 'approvals', 'view', 'approvals.view', 'Open approval inbox'],
             ['settings', 'approvals', 'decide', 'approvals.decide', 'Approve / reject / return requests'],
             ['settings', 'approvals', 'comment', 'approvals.comment', 'Comment on approval requests'],

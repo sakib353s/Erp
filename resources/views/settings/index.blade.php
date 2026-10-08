@@ -21,6 +21,11 @@
             <a class="btn btn-outline-secondary" href="{{ route('settings.show', 'general') }}">
                 <i class="bi bi-sliders" aria-hidden="true"></i> General
             </a>
+            @if ($perm('maintenance.index'))
+                <a class="btn btn-outline-secondary" href="{{ route('maintenance.index') }}">
+                    <i class="bi bi-tools" aria-hidden="true"></i> Maintenance
+                </a>
+            @endif
         </x-slot:actions>
     </x-ui.page-header>
 
