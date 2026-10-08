@@ -167,7 +167,11 @@ class CatalogImporter
         'masters > tax rates' => ['/app/masters/tax-rates', 'tax.manage'],
         'masters > district + upazila list' => ['/app/masters/districts', 'masters.view'],
         'masters > sms providers' => ['/app/masters/sms-providers', 'masters.manage'],
-        'masters > expense categories' => ['/app/masters/expense-categories', 'masters.manage'],
+        // §08-17: a category *is* a ledger account, so the Masters leaf for it
+        // opens the expense desk's own screen. The generic masters form for it
+        // was removed with the duplicate table — it asked for a bare account id
+        // and could not enforce that the account was this company's.
+        'masters > expense categories' => ['/app/cash-bank/expense-categories', 'expenses.categories'],
         'masters > payment methods' => ['/app/masters/payment-methods', 'masters.manage'],
         'masters > delivery zones' => ['/app/masters/delivery-zones', 'masters.manage'],
         'sales > delivery > delivery zones' => ['/app/sales/delivery/zones', 'sales.delivery.zones'],

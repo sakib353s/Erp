@@ -52,17 +52,12 @@ return new class extends Migration
             $table->unique(['company_id', 'code']);
         });
 
-        Schema::create('expense_categories', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('company_id')->constrained()->restrictOnDelete();
-            $table->string('code', 32);
-            $table->string('name', 128);
-            $table->string('description', 500)->nullable();
-            $table->unsignedBigInteger('gl_account_id')->nullable();
-            $table->boolean('is_active')->default(true);
-            $table->timestamps();
-            $table->unique(['company_id', 'code']);
-        });
+        /* `expense_categories` used to live here as a bare code/name list with a
+           nullable gl_account_id nothing enforced. §08-17 moved it to the expense
+           desk, where a category *is* a general-ledger account: 2026_10_11_120000
+           owns the table now (account_id, not nullable) and this migration no
+           longer creates it — otherwise a fresh install would try to create the
+           same table twice. */
 
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->id();
@@ -253,7 +248,6 @@ return new class extends Migration
         Schema::dropIfExists('upazilas');
         Schema::dropIfExists('districts');
         Schema::dropIfExists('payment_methods');
-        Schema::dropIfExists('expense_categories');
         Schema::dropIfExists('brands');
         Schema::dropIfExists('product_categories');
         Schema::dropIfExists('units');

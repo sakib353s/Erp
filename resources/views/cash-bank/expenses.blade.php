@@ -64,7 +64,7 @@
             label="Given back this window"
             value="৳ {{ $summary['reversed'] }}"
             icon="bi-arrow-counterclockwise"
-            :hint="$summary['rejected_count'].' refused before posting'; the figure above was posted and then reversed'" />
+            :hint="$summary['rejected_count'].' refused before posting — the figure above was posted and then reversed'" />
     </div>
 
     @if ($summary['pending_count'] > 0 && $perm('expenses.approve'))

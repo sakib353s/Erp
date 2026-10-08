@@ -9,7 +9,6 @@ use App\Domain\Masters\Courier;
 use App\Domain\Masters\Customer;
 use App\Domain\Masters\DeliveryZone;
 use App\Domain\Masters\District;
-use App\Domain\Masters\ExpenseCategory;
 use App\Domain\Masters\Holiday;
 use App\Domain\Masters\LeaveType;
 use App\Domain\Masters\PaymentMethod;
@@ -87,20 +86,12 @@ class MasterCatalog
                     'is_active' => ['label' => 'Active', 'type' => 'boolean'],
                 ],
             ],
-            'expense-categories' => [
-                'model' => ExpenseCategory::class,
-                'label' => 'Expense Categories',
-                'permission' => self::PERMISSION_MANAGE,
-                'company_scoped' => true,
-                'columns' => ['code', 'name', 'gl_account_id', 'is_active'],
-                'fields' => [
-                    'code' => ['label' => 'Code', 'type' => 'text', 'required' => true, 'max' => 32, 'upper' => true],
-                    'name' => ['label' => 'Name', 'type' => 'text', 'required' => true, 'max' => 191],
-                    'description' => ['label' => 'Description', 'type' => 'text', 'required' => false, 'max' => 500],
-                    'gl_account_id' => ['label' => 'GL account id', 'type' => 'integer', 'required' => false],
-                    'is_active' => ['label' => 'Active', 'type' => 'boolean'],
-                ],
-            ],
+            /* Expense categories are deliberately *not* here. §08-17 owns them:
+               a category is a general-ledger account, so it is created where the
+               account is chosen (cash-bank.expense-categories), not as free text
+               with a nullable account id. A second screen for the same rows was a
+               way for the ledger link to be skipped. */
+
             'payment-methods' => [
                 'model' => PaymentMethod::class,
                 'label' => 'Payment Methods',
