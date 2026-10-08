@@ -5395,6 +5395,7 @@ export function settingsDesk() {
         { key: 'security', label: 'Security Settings', what: 'Password policy, lockout policy and session policy.', fields: 10, set: 10, scope: 'company policy', changed: '2026-10-04 11:20', who: 'Instance Owner', permission: 'settings.security' },
         { key: 'notifications', label: 'Notification Settings', what: 'Channel defaults. External channels stay disabled until a real provider is configured.', fields: 5, set: 2, scope: 'company policy', changed: '2026-09-28 08:41', who: 'Instance Owner', permission: 'settings.notifications' },
         { key: 'workflow', label: 'Workflow & Approval Settings', what: 'Defaults for the generic database-driven approval engine.', fields: 3, set: 3, scope: 'company policy', changed: '2026-10-01 15:08', who: 'Instance Owner', permission: 'settings.workflow' },
+        { key: 'tax', label: 'VAT & Tax Settings', what: 'Inclusive or exclusive pricing, rounding, the default rate and the form revision on the statutory invoice.', fields: 5, set: 2, scope: 'per branch', changed: '2026-10-08 09:40', who: 'Instance Owner', permission: 'tax.manage', href: './settings-tax.html' },
         { key: 'numbering', label: 'Document Numbering', what: 'How every numbered document in the system is numbered.', fields: 4, set: 4, scope: 'per branch', changed: '2026-09-22 10:03', who: 'Instance Owner', permission: 'settings.numbering' },
         { key: 'audit', label: 'Audit Log Retention', what: 'How long evidence is kept online, and whether it may be exported.', fields: 3, set: 1, scope: 'company policy', changed: '2026-09-22 10:03', who: 'Instance Owner', permission: 'settings.audit' },
         { key: 'pos', label: 'POS Settings', what: 'Receipt paper, footer, rounding and offline behaviour.', fields: 4, set: 3, scope: 'per branch', changed: '2026-10-07 08:30', who: 'Manager', permission: 'pos.settings.configure' },
@@ -5425,7 +5426,7 @@ ${previewBar('settings.html')}
             <div class="erp-kpi-grid mb-3">
                 <div class="erp-kpi">
                     <p class="erp-kpi-label"><i class="bi bi-sliders" aria-hidden="true"></i> Setting groups</p>
-                    <p class="erp-kpi-value">15</p>
+                    <p class="erp-kpi-value">16</p>
                     <p class="erp-kpi-foot">12 of them are open to you</p>
                 </div>
                 <div class="erp-kpi">
@@ -6183,3 +6184,188 @@ ${previewBar('settings-localization.html')}
     </main>
 </div>`;
 }
+
+/**
+ * §15-14 — one settings group, opened: VAT & tax.
+ *
+ * The first settings screen whose values change money, so the page carries the
+ * arithmetic beside the switches: what an exclusive ৳115 becomes, what the same
+ * price becomes when the VAT is already inside it, where a paisa lands under
+ * each rounding mode, and what the nearest taka costs. Below that, the group's
+ * branch scope and the guard that refuses a default code naming no active rate.
+ */
+export function settingsTax() {
+    const tabs = [
+        'General', 'Bengali / Localization', 'Security', 'Notifications', 'Workflow',
+        'Numbering', 'VAT & Tax', 'Audit', 'POS', 'Labels', 'Appearance',
+    ];
+
+    const switches = [
+        {
+            label: 'My prices already include VAT',
+            control: `<div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="setting_prices_include_tax"><label class="form-check-label" for="setting_prices_include_tax">the customer pays the price on the shelf</label></div>`,
+            help: 'Retail counters in Bangladesh usually quote a price the customer pays. With this on, the tax is taken out of that figure instead of added to it: a ৳115 item at 15% is ৳100 taxable + ৳15 VAT, and the customer still pays ৳115.',
+        },
+        {
+            label: 'Default tax code',
+            control: `<input class="form-control" type="text" id="setting_default_code" value="VAT15">`,
+            help: 'Used when a taxable sale names no rate of its own. Leave empty and an untagged sale carries no tax — which is a decision, so the screen says so. A code that names no active rate is refused.',
+        },
+        {
+            label: 'Round VAT',
+            control: `<select class="form-select" id="setting_rounding_mode"><option value="document" selected>Once, on the document total</option><option value="line">On every line, then added up</option></select>`,
+            help: 'The two differ by a paisa or two on an order with fractions in it. Whichever you choose, the figure stored on the invoice is the figure that was printed.',
+        },
+        {
+            label: 'Round the grand total to the nearest taka',
+            control: `<div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="setting_round_to_nearest_taka"><label class="form-check-label" for="setting_round_to_nearest_taka">counter-friendly totals</label></div>`,
+            help: 'Convenient at a counter and awkward in a ledger: the difference is recorded in the invoice’s own rounding column, so the books still add up.',
+        },
+        {
+            label: 'Mushak 9.1 form revision',
+            control: `<input class="form-control" type="text" id="setting_mushak_form_revision" placeholder="printed only if you declare one">`,
+            help: 'Printed on the statutory tax invoice beside the form code, when your form has a revision marker. Left empty, the form prints no revision rather than one this system made up.',
+        },
+    ];
+
+    return `
+${previewBar('settings-tax.html')}
+<div class="erp-shell">
+    ${sidebar('configure')}
+    <main class="erp-main">
+        ${topbar('VAT & Tax Settings')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-percent" aria-hidden="true"></i> Settings</p>
+                    <h1 class="erp-h1">VAT &amp; Tax Settings</h1>
+                    <p class="erp-page-sub">Whether your prices already include VAT, how tax is rounded, which rate an untagged sale uses, and the form revision printed on the statutory tax invoice.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./settings.html"><i class="bi bi-sliders" aria-hidden="true"></i> Settings desk</a>
+                </div>
+            </header>
+
+            <ul class="nav erp-settings-tabs mb-3">
+                ${tabs.map((label) => `<li class="nav-item"><a class="nav-link${label === 'VAT & Tax' ? ' active' : ''}" href="./settings-tax.html">${label}</a></li>`).join('')}
+            </ul>
+
+            <form method="POST" action="#" onsubmit="return false">
+                <section class="erp-card erp-card-max">
+                    <header class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">VAT &amp; Tax Settings</h2>
+                            <p class="erp-card-sub">
+                                Scope: <strong>per branch may differ</strong>
+                                · this group needs <span class="font-monospace">tax.manage</span> to read it,
+                                <span class="font-monospace">settings.update</span> to change it.
+                            </p>
+                        </div>
+                        <span class="erp-chip erp-chip-soft">stored in <code>settings</code> table</span>
+                    </header>
+
+                    <div class="row g-3">
+                        ${switches.map((f) => `
+                            <div class="col-12">
+                                <label class="form-label">${f.label}</label>
+                                ${f.control}
+                                <div class="form-text">${f.help}</div>
+                            </div>`).join('')}
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button class="btn btn-primary" type="submit"><i class="bi bi-check-lg" aria-hidden="true"></i> Save settings</button>
+                        <a class="btn btn-outline-secondary" href="./settings-tax.html">Reset changes</a>
+                    </div>
+                </section>
+            </form>
+
+            <section class="erp-card erp-card-max mt-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">What these switches change</h2>
+                        <p class="erp-card-sub">Computed by the pricing engine the quotations, orders, POS sales and invoices all run through — the figures below are its output, not an illustration of it.</p>
+                    </div>
+                    <span class="erp-chip erp-chip-soft">15% · ৳115</span>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="erp-table erp-table-compact">
+                        <thead>
+                            <tr><th>Policy</th><th class="erp-th-num">Taxable value</th><th class="erp-th-num">VAT</th><th class="erp-th-num">Customer pays</th><th>Printed as</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="erp-cell-strong">Exclusive</span><div class="erp-td-muted">the shipped default</div></td>
+                                <td class="erp-td-num">৳115.00</td>
+                                <td class="erp-td-num">৳17.25</td>
+                                <td class="erp-td-num">৳132.25</td>
+                                <td class="erp-td-muted">Subtotal, then Tax</td>
+                            </tr>
+                            <tr>
+                                <td><span class="erp-cell-strong">Inclusive</span><div class="erp-td-muted">the price on the shelf</div></td>
+                                <td class="erp-td-num">৳100.00</td>
+                                <td class="erp-td-num">৳15.00</td>
+                                <td class="erp-td-num">৳115.00</td>
+                                <td class="erp-td-muted">Taxable value, VAT (included in the prices)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <dl class="erp-dl erp-dl-tight">
+                    <dt>Rounding, once on the document</dt>
+                    <dd class="font-monospace">three lines of ৳1.05 at 15% → 0.1575 × 3 → ৳0.4725 stored as the document's tax</dd>
+                    <dt>Rounding, on every line</dt>
+                    <dd class="font-monospace">0.1575 → ৳0.16 each → ৳0.48 on the same three lines</dd>
+                    <dt>Nearest taka</dt>
+                    <dd class="font-monospace">৳1419.79 → ৳1420.00, and the ৳0.21 difference lands in the invoice's rounding column</dd>
+                </dl>
+                <div class="p-3 pt-0">
+                    <p class="erp-filter-note mb-0">
+                        <i class="bi bi-info-circle" aria-hidden="true"></i>
+                        A default tax code that names no <strong>active</strong> rate of this company is refused when it is saved,
+                        and the attempt is written to the audit chain — a typo here would make every untagged sale tax-free.
+                    </p>
+                </div>
+            </section>
+
+            <section class="erp-card erp-card-max mt-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Branches that differ</h2>
+                        <p class="erp-card-sub">An outlet may price the way it sells while head office prices the way it invoices. The company value stays as it is everywhere else.</p>
+                    </div>
+                    <div class="erp-card-actions">
+                        <a class="erp-chip erp-chip-outline" href="./settings-branch.html"><i class="bi bi-diagram-3" aria-hidden="true"></i> Branch settings</a>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="erp-table erp-table-compact">
+                        <thead>
+                            <tr><th>Branch</th><th>Keys set there</th><th>Company value it replaces</th><th>Changed</th><th></th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="erp-cell-strong">Dhanmondi outlet</span><div class="erp-td-muted">DHK2</div></td>
+                                <td class="erp-td-muted font-monospace">prices_include_tax, round_to_nearest_taka</td>
+                                <td class="erp-td-muted">exclusive, exact to the paisa → the counter's way</td>
+                                <td class="erp-td-muted">2026-10-08 09:40</td>
+                                <td class="text-end"><a class="btn btn-outline-secondary btn-sm" href="./settings-branch.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="erp-cell-strong">Head office</span><div class="erp-td-muted">MAIN</div></td>
+                                <td class="erp-td-muted">— follows the company value</td>
+                                <td class="erp-td-muted">exclusive pricing, 15% added on top</td>
+                                <td class="erp-td-muted">—</td>
+                                <td class="text-end"><a class="btn btn-outline-secondary btn-sm" href="./settings-branch.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+    </main>
+</div>`;
+}
+

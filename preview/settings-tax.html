@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#ffffff">
-    <title>System maintenance · BD ERP — UI redesign preview</title>
+    <title>VAT &amp; tax settings · BD ERP — UI redesign preview</title>
     <link rel="stylesheet" href="./assets/preview.css">
 </head>
 <body class="erp-body">
@@ -604,15 +604,9 @@
     </button>
 
     <div class="erp-topbar-crumbs">
-        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb">
-        <li>
-            <span class="is-current" aria-current="page">Settings &amp; masters</span>
-        </li>
-        <li>
-            <span class="is-current" aria-current="page">System maintenance</span>
-        </li></ol></nav>
+        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb"></ol></nav>
         <div class="erp-topbar-title">
-            <strong class="d-none d-md-inline">System maintenance</strong>
+            <strong class="d-none d-md-inline">VAT &amp; Tax Settings</strong>
             <span class="erp-chip erp-chip-outline d-none d-xl-inline-flex" title="Current branch context">
                 <i class="bi bi-geo-alt" aria-hidden="true"></i>Dhaka HQ
             </span>
@@ -690,379 +684,151 @@
 
             <header class="erp-page-head">
                 <div>
-                    <p class="erp-eyebrow"><i class="bi bi-tools" aria-hidden="true"></i> Settings · System maintenance</p>
-                    <h1 class="erp-h1">System maintenance</h1>
-                    <p class="erp-page-sub">What this installation is, what may be done to it, and what will never be done to it automatically. Every operation records what it did — how many files, how many bytes, which tables — so “the system felt slower after maintenance” is a question with an answer.</p>
+                    <p class="erp-eyebrow"><i class="bi bi-percent" aria-hidden="true"></i> Settings</p>
+                    <h1 class="erp-h1">VAT &amp; Tax Settings</h1>
+                    <p class="erp-page-sub">Whether your prices already include VAT, how tax is rounded, which rate an untagged sale uses, and the form revision printed on the statutory tax invoice.</p>
                 </div>
                 <div class="erp-page-head-actions">
-                    <a class="btn btn-outline-secondary" href="./maintenance-log.html"><i class="bi bi-journal-code" aria-hidden="true"></i> Error log</a>
-                    <a class="btn btn-outline-secondary" href="./settings.html"><i class="bi bi-sliders" aria-hidden="true"></i> Settings</a>
+                    <a class="btn btn-outline-secondary" href="./settings.html"><i class="bi bi-sliders" aria-hidden="true"></i> Settings desk</a>
                 </div>
             </header>
 
-            <div class="erp-kpi-grid mb-3">
-                <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-database" aria-hidden="true"></i> Database</p>
-                    <p class="erp-kpi-value">412 MB</p>
-                    <p class="erp-kpi-foot">mysql 8.0 · 142 tables</p>
-                </div>
-                <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-device-hdd" aria-hidden="true"></i> Storage free</p>
-                    <p class="erp-kpi-value">68 GB</p>
-                    <p class="erp-kpi-foot">of 120 GB on /var/www/erp</p>
-                </div>
-                <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Pending jobs</p>
-                    <p class="erp-kpi-value">3</p>
-                    <p class="erp-kpi-foot">database queue · oldest queued 4 minutes ago</p>
-                </div>
-                <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-exclamation-octagon" aria-hidden="true"></i> Failed jobs</p>
-                    <p class="erp-kpi-value">0</p>
-                    <p class="erp-kpi-foot">Nothing has exhausted its retries</p>
-                </div>
-            </div>
+            <ul class="nav erp-settings-tabs mb-3">
+                <li class="nav-item"><a class="nav-link" href="./settings-tax.html">General</a></li><li class="nav-item"><a class="nav-link" href="./settings-tax.html">Bengali / Localization</a></li><li class="nav-item"><a class="nav-link" href="./settings-tax.html">Security</a></li><li class="nav-item"><a class="nav-link" href="./settings-tax.html">Notifications</a></li><li class="nav-item"><a class="nav-link" href="./settings-tax.html">Workflow</a></li><li class="nav-item"><a class="nav-link" href="./settings-tax.html">Numbering</a></li><li class="nav-item"><a class="nav-link active" href="./settings-tax.html">VAT & Tax</a></li><li class="nav-item"><a class="nav-link" href="./settings-tax.html">Audit</a></li><li class="nav-item"><a class="nav-link" href="./settings-tax.html">POS</a></li><li class="nav-item"><a class="nav-link" href="./settings-tax.html">Labels</a></li><li class="nav-item"><a class="nav-link" href="./settings-tax.html">Appearance</a></li>
+            </ul>
 
-            <section class="erp-card mb-3">
-                <header class="erp-card-head">
-                    <div>
-                        <h2 class="erp-card-title">What this page does not claim</h2>
-                        <p class="erp-card-sub">A system information page is only worth reading if it says “unknown” where it cannot see.</p>
-                    </div>
-                </header>
-                <div class="erp-table-scroll">
-                    <table class="table erp-table">
-                        <thead><tr><th>Question</th><th>Answer</th><th>Why</th></tr></thead>
-                        <tbody>
-                            
-                            <tr>
-                                <td class="erp-cell-strong">High availability</td>
-                                <td><span class="erp-chip erp-chip-outline">single instance</span></td>
-                                <td class="erp-td-muted">One application server and one database. There is no replica, no failover and no load balancer.</td>
-                            </tr>
-                            <tr>
-                                <td class="erp-cell-strong">Database integrity</td>
-                                <td><span class="erp-chip erp-chip-soft">ok · 2 days ago</span></td>
-                                <td class="erp-td-muted">142 tables checked — every one answered OK.</td>
-                            </tr>
-                            <tr>
-                                <td class="erp-cell-strong">Self-healing</td>
-                                <td><span class="erp-chip erp-chip-outline">last run 3 days ago</span></td>
-                                <td class="erp-td-muted">Only derived state is healed: cache, temp files, sessions, search index.</td>
-                            </tr>
-                            <tr>
-                                <td class="erp-cell-strong">Backups</td>
-                                <td><span class="erp-chip erp-chip-warn">not built in this build</span></td>
-                                <td class="erp-td-muted">Backup and restore (§15-19) is not implemented, so this page will not report a backup as current.</td>
-                            </tr>
-                            <tr>
-                                <td class="erp-cell-strong">Queue worker</td>
-                                <td><span class="erp-chip erp-chip-outline">unknown from here</span></td>
-                                <td class="erp-td-muted">A web request cannot see whether a worker is running. The pending figure is real; the worker is not.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <div class="row row-cols-1 row-cols-xl-2 g-3 mb-3">
-                <div class="col">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head">
-                            <h2 class="erp-card-title">Application &amp; runtime</h2>
-                            <span class="erp-chip erp-chip-outline">measured now</span>
-                        </header>
-                        <div class="p-3">
-                            <dl class="erp-dl erp-dl-tight mb-0">
-                                <dt>Application</dt><dd>Erp · production</dd>
-                                <dt>Framework</dt><dd>Laravel 13.0 on PHP 8.3.14</dd>
-                                <dt>Host</dt><dd>Linux (6.8.0) · nginx/1.24.0</dd>
-                                <dt>Timezone &amp; locale</dt><dd>Asia/Dhaka · bn · amounts in BDT</dd>
-                                <dt>Memory limit</dt><dd>256M (peak this request: 18 MB)</dd>
-                                <dt>Request limits</dt><dd>30s · upload 20M · post 24M</dd>
-                            </dl>
-                            <p class="erp-filter-note mt-3 mb-1">Extensions this application uses:</p>
-                            <div class="d-flex flex-wrap gap-1">
-                                <span class="erp-chip erp-chip-soft">pdo</span><span class="erp-chip erp-chip-soft">mbstring</span><span class="erp-chip erp-chip-soft">openssl</span><span class="erp-chip erp-chip-soft">bcmath</span><span class="erp-chip erp-chip-soft">gd</span><span class="erp-chip erp-chip-soft">zip</span><span class="erp-chip erp-chip-soft">intl</span><span class="erp-chip erp-chip-soft">fileinfo</span>
-                            </div>
+            <form method="POST" action="#" onsubmit="return false">
+                <section class="erp-card erp-card-max">
+                    <header class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">VAT &amp; Tax Settings</h2>
+                            <p class="erp-card-sub">
+                                Scope: <strong>per branch may differ</strong>
+                                · this group needs <span class="font-monospace">tax.manage</span> to read it,
+                                <span class="font-monospace">settings.update</span> to change it.
+                            </p>
                         </div>
-                    </section>
-                </div>
-                <div class="col">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head"><h2 class="erp-card-title">Database, storage &amp; services</h2></header>
-                        <div class="p-3">
-                            <dl class="erp-dl erp-dl-tight">
-                                <dt>Database</dt><dd>mysql · erp @ 127.0.0.1 · 8.0.36</dd>
-                                <dt>Size</dt><dd>412 MB · 142 tables · 96 migrations run</dd>
-                                <dt>Cache &amp; sessions</dt><dd>database cache · database sessions (14 live)</dd>
-                                <dt>Queue &amp; mail</dt><dd>database queue · smtp mailer · local filesystem</dd>
-                                <dt>Newest log line</dt><dd>12 minutes ago</dd>
-                            </dl>
-                            <p class="erp-filter-note mt-3 mb-1">Storage on disk:</p>
-                            <table class="table erp-table mb-0">
-                                <tbody>
-                                    <tr><td class="font-monospace erp-td-muted">storage/app/private</td><td class="erp-td-muted">Uploads &amp; documents</td><td class="erp-td-num">2.4 GB</td><td class="erp-td-num erp-td-muted">3,188 file(s)</td></tr>
-                                    <tr><td class="font-monospace erp-td-muted">storage/logs</td><td class="erp-td-muted">Log files</td><td class="erp-td-num">18.2 MB</td><td class="erp-td-num erp-td-muted">6 file(s)</td></tr>
-                                    <tr><td class="font-monospace erp-td-muted">storage/framework/cache</td><td class="erp-td-muted">Derived cache</td><td class="erp-td-num">41.2 MB</td><td class="erp-td-num erp-td-muted">220 file(s)</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
-                </div>
-            </div>
+                        <span class="erp-chip erp-chip-soft">stored in <code>settings</code> table</span>
+                    </header>
 
-            <section class="erp-card mb-3">
-                <header class="erp-card-head">
-                    <div>
-                        <h2 class="erp-card-title">What is in the database</h2>
-                        <p class="erp-card-sub">Counted in this request. After a restore, these are the first figures to compare — a count that came back as zero is how a silent failure is caught on the day it happens.</p>
-                    </div>
-                </header>
-                <div class="p-3">
-                    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
+                    <div class="row g-3">
                         
-                        <div class="col">
-                            <p class="erp-filter-note mb-1">Access</p>
-                            <dl class="erp-dl erp-dl-tight mb-0">
-                                <dt>Users</dt><dd>12</dd><dt>Roles</dt><dd>5</dd><dt>Branches</dt><dd>3</dd>
-                            </dl>
-                        </div>
-                        <div class="col">
-                            <p class="erp-filter-note mb-1">Trading</p>
-                            <dl class="erp-dl erp-dl-tight mb-0">
-                                <dt>Customers</dt><dd>486</dd><dt>Suppliers</dt><dd>63</dd><dt>Products</dt><dd>1,240</dd><dt>Invoices</dt><dd>3,914</dd>
-                            </dl>
-                        </div>
-                        <div class="col">
-                            <p class="erp-filter-note mb-1">Stock</p>
-                            <dl class="erp-dl erp-dl-tight mb-0">
-                                <dt>Warehouses</dt><dd>2</dd><dt>Stock balances</dt><dd>2,517</dd><dt>Valuation layers</dt><dd>4,088</dd>
-                            </dl>
-                        </div>
-                        <div class="col">
-                            <p class="erp-filter-note mb-1">Books</p>
-                            <dl class="erp-dl erp-dl-tight mb-0">
-                                <dt>Accounts</dt><dd>142</dd><dt>Journal entries</dt><dd>6,201</dd><dt>Journal lines</dt><dd>18,442</dd>
-                            </dl>
-                        </div>
-                        <div class="col">
-                            <p class="erp-filter-note mb-1">System</p>
-                            <dl class="erp-dl erp-dl-tight mb-0">
-                                <dt>Audit events</dt><dd>41,908</dd><dt>Setting rows</dt><dd>38</dd><dt>Search index rows</dt><dd>1,338</dd>
-                            </dl>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <h2 class="erp-h2 mb-2">Safe operations</h2>
-            <div class="row row-cols-1 row-cols-xl-2 g-3 mb-3">
-                
-                <div class="col">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head">
-                            <h2 class="erp-card-title">Clear cache</h2>
-                            <span class="erp-chip erp-chip-soft">Allowed self-heal</span>
-                        </header>
-                        <div class="p-3">
-                            <p class="text-body-secondary mb-2">Clears the application cache and compiled templates — both reproducible from the database.</p>
-                            <p class="erp-filter-note mb-3">Does not touch: uploads, backups, audit trail, log files, business rows.</p>
-                            <button class="btn btn-primary" type="button"><i class="bi bi-check-lg" aria-hidden="true"></i> Clear cache</button>
-                        </div>
-                    </section>
-                </div>
-                <div class="col">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head">
-                            <h2 class="erp-card-title">End other sessions</h2>
-                            <span class="erp-chip erp-chip-soft">Allowed self-heal</span>
-                        </header>
-                        <div class="p-3">
-                            <p class="text-body-secondary mb-2">Ends every session except the one you are using — a machine left signed in at a counter.</p>
-                            <p class="erp-filter-note mb-3">Your own session is kept: nothing escapes being the person who did it.</p>
-                            <button class="btn btn-primary" type="button"><i class="bi bi-check-lg" aria-hidden="true"></i> End other sessions</button>
-                        </div>
-                    </section>
-                </div>
-                <div class="col">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head">
-                            <h2 class="erp-card-title">Remove temporary files</h2>
-                            <span class="erp-chip erp-chip-soft">Allowed self-heal</span>
-                        </header>
-                        <div class="p-3">
-                            <p class="text-body-secondary mb-2">Sweeps storage/app/temp and the file-cache leftovers, skipping anything written in the last 24 hours.</p>
-                            <p class="erp-filter-note mb-3">Never follows a symlink out of the storage tree, never removes a directory.</p>
-                            <button class="btn btn-primary" type="button"><i class="bi bi-check-lg" aria-hidden="true"></i> Remove temporary files</button>
-                        </div>
-                    </section>
-                </div>
-                <div class="col">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head">
-                            <h2 class="erp-card-title">Rebuild the search index</h2>
-                            <span class="erp-chip erp-chip-soft">Allowed self-heal</span>
-                        </header>
-                        <div class="p-3">
-                            <p class="text-body-secondary mb-2">Rebuilds global search from source tables — users, branches, warehouses, roles, documents.</p>
-                            <p class="erp-filter-note mb-3">The index holds no fact the source tables do not.</p>
-                            <button class="btn btn-primary" type="button"><i class="bi bi-check-lg" aria-hidden="true"></i> Rebuild search index</button>
-                        </div>
-                    </section>
-                </div>
-            </div>
-
-            <h2 class="erp-h2 mb-2">Database</h2>
-            <div class="row row-cols-1 row-cols-xl-2 g-3 mb-3">
-                <div class="col">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head"><h2 class="erp-card-title">Optimise &amp; check</h2></header>
-                        <div class="p-3">
-                            <p class="text-body-secondary mb-2"><strong>Optimise</strong> reclaims the space free inside the table files and reports how much moved. <strong>Check</strong> asks every table whether it is sound — it reads, it never writes, and its answer is what a repair is allowed to act on.</p>
-                            <p class="erp-filter-note mb-3">Last check 2 days ago: <strong>142 table(s) checked — every one answered OK.</strong></p>
-                            <div class="d-flex flex-wrap gap-2">
-                                <button class="btn btn-primary" type="button"><i class="bi bi-speedometer2" aria-hidden="true"></i> Optimise</button>
-                                <button class="btn btn-outline-secondary" type="button"><i class="bi bi-clipboard-check" aria-hidden="true"></i> Run integrity check</button>
+                            <div class="col-12">
+                                <label class="form-label">My prices already include VAT</label>
+                                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="setting_prices_include_tax"><label class="form-check-label" for="setting_prices_include_tax">the customer pays the price on the shelf</label></div>
+                                <div class="form-text">Retail counters in Bangladesh usually quote a price the customer pays. With this on, the tax is taken out of that figure instead of added to it: a ৳115 item at 15% is ৳100 taxable + ৳15 VAT, and the customer still pays ৳115.</div>
                             </div>
-                        </div>
-                    </section>
-                </div>
-                <div class="col">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head">
-                            <h2 class="erp-card-title">Repair</h2>
-                            <span class="erp-chip erp-chip-outline">nothing to repair</span>
-                        </header>
-                        <div class="p-3">
-                            <p class="text-body-secondary mb-2">Repair writes to table structure, so it stands on two things it will not assume: a check on file, and a table that check named. It acts on nothing else — a “quick fix” that touches a table nobody looked at is how data loss starts.</p>
-                            <p class="erp-filter-note mb-0">Run an integrity check first. When it finds problems, they appear here with the tables that reported them, and repair becomes available for exactly those.</p>
-                        </div>
-                    </section>
-                </div>
-            </div>
+                            <div class="col-12">
+                                <label class="form-label">Default tax code</label>
+                                <input class="form-control" type="text" id="setting_default_code" value="VAT15">
+                                <div class="form-text">Used when a taxable sale names no rate of its own. Leave empty and an untagged sale carries no tax — which is a decision, so the screen says so. A code that names no active rate is refused.</div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Round VAT</label>
+                                <select class="form-select" id="setting_rounding_mode"><option value="document" selected>Once, on the document total</option><option value="line">On every line, then added up</option></select>
+                                <div class="form-text">The two differ by a paisa or two on an order with fractions in it. Whichever you choose, the figure stored on the invoice is the figure that was printed.</div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Round the grand total to the nearest taka</label>
+                                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="setting_round_to_nearest_taka"><label class="form-check-label" for="setting_round_to_nearest_taka">counter-friendly totals</label></div>
+                                <div class="form-text">Convenient at a counter and awkward in a ledger: the difference is recorded in the invoice’s own rounding column, so the books still add up.</div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Mushak 9.1 form revision</label>
+                                <input class="form-control" type="text" id="setting_mushak_form_revision" placeholder="printed only if you declare one">
+                                <div class="form-text">Printed on the statutory tax invoice beside the form code, when your form has a revision marker. Left empty, the form prints no revision rather than one this system made up.</div>
+                            </div>
+                    </div>
 
-            <section class="erp-card mb-3">
+                    <div class="d-flex gap-2 mt-4">
+                        <button class="btn btn-primary" type="submit"><i class="bi bi-check-lg" aria-hidden="true"></i> Save settings</button>
+                        <a class="btn btn-outline-secondary" href="./settings-tax.html">Reset changes</a>
+                    </div>
+                </section>
+            </form>
+
+            <section class="erp-card erp-card-max mt-3">
                 <header class="erp-card-head">
                     <div>
-                        <h2 class="erp-card-title">Self-healing</h2>
-                        <p class="erp-card-sub">The four safe operations above, in a fixed order, in one run. What is on this list is short on purpose — and the second list is why.</p>
+                        <h2 class="erp-card-title">What these switches change</h2>
+                        <p class="erp-card-sub">Computed by the pricing engine the quotations, orders, POS sales and invoices all run through — the figures below are its output, not an illustration of it.</p>
                     </div>
-                    <span class="erp-chip erp-chip-outline">last run 3 days ago</span>
+                    <span class="erp-chip erp-chip-soft">15% · ৳115</span>
                 </header>
-                <div class="p-3">
-                    <div class="row row-cols-1 row-cols-xl-2 g-3">
-                        <div class="col">
-                            <p class="erp-filter-note mb-2">Never performed automatically, whatever a heal is asked to do:</p>
-                            <table class="table erp-table mb-0">
-                                <tbody>
-                                    <tr><td class="erp-cell-strong">Schema changes</td><td class="erp-td-muted">A repair that alters structure has to be a migration somebody reviewed, with a rollback.</td></tr><tr><td class="erp-cell-strong">Posting or reversing entries</td><td class="erp-td-muted">Money moves through documents with an approver and an audit trail.</td></tr><tr><td class="erp-cell-strong">Editing or deleting audit rows</td><td class="erp-td-muted">The trail is the evidence that the rest of this list was followed.</td></tr><tr><td class="erp-cell-strong">Granting permissions</td><td class="erp-td-muted">A heal that widens access is privilege escalation with a friendly name.</td></tr><tr><td class="erp-cell-strong">Rewriting instance identity</td><td class="erp-td-muted">Company, currency and fiscal calendar are protected settings (§15-35).</td></tr><tr><td class="erp-cell-strong">Removing uploaded files</td><td class="erp-td-muted">A file a person uploaded is not garbage because the system cannot see who needs it.</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col">
-                            <p class="erp-filter-note mb-2">What a heal will run, in order:</p>
-                            <ol class="mb-3">
-                                <li>Clear cache and compiled templates</li>
-                                <li>Remove temporary files older than 24 hours</li>
-                                <li>End other sessions</li>
-                                <li>Rebuild the search index</li>
-                            </ol>
-                            <button class="btn btn-primary" type="button"><i class="bi bi-heart-pulse" aria-hidden="true"></i> Run safe self-healing</button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="erp-card mb-3">
-                <header class="erp-card-head">
-                    <div>
-                        <h2 class="erp-card-title">Reset settings to their defaults</h2>
-                        <p class="erp-card-sub">Every group goes back to the declared default. Business data is not touched: invoices, payments, stock, the ledger and the audit trail are exactly where they were.</p>
-                    </div>
-                    <span class="erp-chip erp-chip-warn">irreversible</span>
-                </header>
-                <div class="p-3">
-                    <p class="text-body-secondary mb-2">Rows are deleted rather than rewritten with the default value. A row that says what the default already says is a decision nobody made — and it would hide the useful fact that this company has not chosen yet. The settings history and the audit trail are kept.</p>
-                    <label class="erp-field-label">Type <code>RESET SETTINGS</code> to confirm</label>
-                    <input class="form-control mb-2" type="text" placeholder="RESET SETTINGS">
-                    <button class="btn btn-danger" type="button"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Reset settings</button>
-                </div>
-            </section>
-
-            <div class="erp-table-shell mb-3" data-erp-table>
-                <div class="erp-card-head px-3 pt-3">
-                    <h2 class="erp-card-title">Maintenance history<span class="erp-chip erp-chip-outline">4 recent run(s)</span></h2>
-                </div>
                 <div class="erp-table-scroll">
-                    <table class="table erp-table">
-                        <thead><tr><th>When</th><th>Operation</th><th>Result</th><th>What it did</th><th class="erp-th-num">Freed</th><th>By</th></tr></thead>
+                    <table class="erp-table erp-table-compact">
+                        <thead>
+                            <tr><th>Policy</th><th class="erp-th-num">Taxable value</th><th class="erp-th-num">VAT</th><th class="erp-th-num">Customer pays</th><th>Printed as</th></tr>
+                        </thead>
                         <tbody>
-                            
                             <tr>
-                                <td class="erp-td-muted">07 Oct 2026 09:12</td>
-                                <td class="erp-cell-strong">Cache cleared</td>
-                                <td><span class="erp-chip erp-chip-soft">ok</span></td>
-                                <td class="erp-td-muted">Cache cleared: 41.2 MB of derived files removed; uploads, backups and the audit trail untouched.</td>
-                                <td class="erp-td-num">41.2 MB</td>
-                                <td class="erp-td-muted">Instance Owner</td>
+                                <td><span class="erp-cell-strong">Exclusive</span><div class="erp-td-muted">the shipped default</div></td>
+                                <td class="erp-td-num">৳115.00</td>
+                                <td class="erp-td-num">৳17.25</td>
+                                <td class="erp-td-num">৳132.25</td>
+                                <td class="erp-td-muted">Subtotal, then Tax</td>
                             </tr>
                             <tr>
-                                <td class="erp-td-muted">06 Oct 2026 22:40</td>
-                                <td class="erp-cell-strong">Integrity check</td>
-                                <td><span class="erp-chip erp-chip-soft">ok</span></td>
-                                <td class="erp-td-muted">142 table(s) checked — every one answered OK.</td>
-                                <td class="erp-td-num">—</td>
-                                <td class="erp-td-muted">Instance Owner</td>
-                            </tr>
-                            <tr>
-                                <td class="erp-td-muted">05 Oct 2026 08:02</td>
-                                <td class="erp-cell-strong">Self-healing run</td>
-                                <td><span class="erp-chip erp-chip-soft">ok</span></td>
-                                <td class="erp-td-muted">Self-healing run: 4 safe operation(s) executed, 63.8 MB freed.</td>
-                                <td class="erp-td-num">63.8 MB</td>
-                                <td class="erp-td-muted">Instance Owner</td>
-                            </tr>
-                            <tr>
-                                <td class="erp-td-muted">02 Oct 2026 11:15</td>
-                                <td class="erp-cell-strong">Database repaired</td>
-                                <td><span class="erp-chip erp-chip-outline">refused</span></td>
-                                <td class="erp-td-muted">No integrity check is on file for this company. Run the check first.</td>
-                                <td class="erp-td-num">—</td>
-                                <td class="erp-td-muted">Instance Owner</td>
+                                <td><span class="erp-cell-strong">Inclusive</span><div class="erp-td-muted">the price on the shelf</div></td>
+                                <td class="erp-td-num">৳100.00</td>
+                                <td class="erp-td-num">৳15.00</td>
+                                <td class="erp-td-num">৳115.00</td>
+                                <td class="erp-td-muted">Taxable value, VAT (included in the prices)</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-            </div>
+                <dl class="erp-dl erp-dl-tight">
+                    <dt>Rounding, once on the document</dt>
+                    <dd class="font-monospace">three lines of ৳1.05 at 15% → 0.1575 × 3 → ৳0.4725 stored as the document's tax</dd>
+                    <dt>Rounding, on every line</dt>
+                    <dd class="font-monospace">0.1575 → ৳0.16 each → ৳0.48 on the same three lines</dd>
+                    <dt>Nearest taka</dt>
+                    <dd class="font-monospace">৳1419.79 → ৳1420.00, and the ৳0.21 difference lands in the invoice's rounding column</dd>
+                </dl>
+                <div class="p-3 pt-0">
+                    <p class="erp-filter-note mb-0">
+                        <i class="bi bi-info-circle" aria-hidden="true"></i>
+                        A default tax code that names no <strong>active</strong> rate of this company is refused when it is saved,
+                        and the attempt is written to the audit chain — a typo here would make every untagged sale tax-free.
+                    </p>
+                </div>
+            </section>
 
-            <div class="row row-cols-1 row-cols-xl-2 g-3">
-                <div class="col">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head"><h2 class="erp-card-title">Scheduled work (CLI)</h2></header>
-                        <div class="p-3">
-                            <p class="text-body-secondary mb-2">These run from cron, not from a browser: their absence shows up as work that never happened rather than as an error here, which is why the list is on this page.</p>
-                            <pre class="erp-pre mb-0">php artisan erp:search:rebuild
-php artisan erp:chain-verify
-php artisan erp:expiry-alerts
-php artisan erp:generate-bank-charges</pre>
-                        </div>
-                    </section>
+            <section class="erp-card erp-card-max mt-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Branches that differ</h2>
+                        <p class="erp-card-sub">An outlet may price the way it sells while head office prices the way it invoices. The company value stays as it is everywhere else.</p>
+                    </div>
+                    <div class="erp-card-actions">
+                        <a class="erp-chip erp-chip-outline" href="./settings-branch.html"><i class="bi bi-diagram-3" aria-hidden="true"></i> Branch settings</a>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="erp-table erp-table-compact">
+                        <thead>
+                            <tr><th>Branch</th><th>Keys set there</th><th>Company value it replaces</th><th>Changed</th><th></th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="erp-cell-strong">Dhanmondi outlet</span><div class="erp-td-muted">DHK2</div></td>
+                                <td class="erp-td-muted font-monospace">prices_include_tax, round_to_nearest_taka</td>
+                                <td class="erp-td-muted">exclusive, exact to the paisa → the counter's way</td>
+                                <td class="erp-td-muted">2026-10-08 09:40</td>
+                                <td class="text-end"><a class="btn btn-outline-secondary btn-sm" href="./settings-branch.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="erp-cell-strong">Head office</span><div class="erp-td-muted">MAIN</div></td>
+                                <td class="erp-td-muted">— follows the company value</td>
+                                <td class="erp-td-muted">exclusive pricing, 15% added on top</td>
+                                <td class="erp-td-muted">—</td>
+                                <td class="text-end"><a class="btn btn-outline-secondary btn-sm" href="./settings-branch.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="col">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head"><h2 class="erp-card-title">What is not built yet</h2></header>
-                        <div class="p-3">
-                            <dl class="erp-dl erp-dl-tight mb-0">
-                                <dt>Backup &amp; restore (§15-19)</dt>
-                                <dd>Not implemented. Take a database dump with your own tooling, and keep the restore steps written down outside the application.</dd>
-                                <dt>Image derivatives (§15-29)</dt>
-                                <dd>This build creates a document's image derivatives at upload time and stores them beside it. There is no separate thumbnail cache to regenerate.</dd>
-                            </dl>
-                        </div>
-                    </section>
-                </div>
-            </div>
+            </section>
 
         </div>
     </main>
