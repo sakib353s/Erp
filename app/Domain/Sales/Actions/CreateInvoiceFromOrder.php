@@ -10,6 +10,7 @@ use App\Domain\Sales\Invoice;
 use App\Domain\Sales\InvoiceLine;
 use App\Domain\Sales\SalesOrder;
 use App\Domain\Sales\Services\TotalsCalculator;
+use App\Domain\Tax\Services\TaxPolicy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
@@ -22,6 +23,7 @@ class CreateInvoiceFromOrder
 {
     public function __construct(
         protected TotalsCalculator $totals,
+        protected TaxPolicy $policy,
         protected NumberingService $numbering,
         protected TenantContext $context,
         protected AuditRecorder $audit,
@@ -63,6 +65,12 @@ class CreateInvoiceFromOrder
             $taxApplicable = (bool) ($payload['tax_applicable'] ?? false);
             $taxCode = $payload['tax_code'] ?? null;
 
+            // Which way round the money is: with exclusive pricing the line's net
+            // *is* the taxable value; with inclusive pricing the tax has to come
+            // out of it. Asking the policy once, here, is what keeps an invoice
+            // from printing a taxable value that its own price does not support.
+            $pricesIncludeTax = $this->policy->pricesIncludeTax();
+
             $lineDiscountTotal = 0.0;
             $taxable = 0.0;
             foreach ($order->lines as $orderLine) {
@@ -82,7 +90,7 @@ class CreateInvoiceFromOrder
                  * invoice whose taxable value plus VAT did not add up to its total.
                  */
                 $taxable += $taxApplicable
-                    ? max(0, round($lineNet - (float) $orderLine->tax, 4))
+                    ? max(0, round($lineNet - ($pricesIncludeTax ? (float) $orderLine->tax : 0.0), 4))
                     : $lineNet;
             }
             $lineDiscountTotal = round($lineDiscountTotal, 4);

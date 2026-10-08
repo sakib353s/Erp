@@ -78,7 +78,18 @@ class TotalsCalculator
              */
             $lineTax = 0.0;
             if ($taxApplicable) {
-                $policyLine = $this->policy->line($net, $taxCode, $at);
+                /*
+                 * The line's own code wins over the document's, and a line that
+                 * names none inherits the document's — which may in turn resolve
+                 * to the company default. §15-14's rule ("a default fills the
+                 * gap for an untagged sale but never overrides a line that names
+                 * its own rate") is only true if the line is actually read here;
+                 * pricing every line with the document's code silently repriced
+                 * a 5% line at the default 15%.
+                 */
+                $lineCode = trim((string) ($line['tax_code'] ?? '')) ?: $taxCode;
+
+                $policyLine = $this->policy->line($net, $lineCode, $at);
                 $net = $policyLine['net'];
                 $lineTax = $this->policy->storedLineTax($policyLine['tax']);
             }
