@@ -159,10 +159,42 @@ const palette = (() => {
 
     const input = $('[data-palette-input]', root);
     const list = $('[data-palette-list]', root);
+    const status = $('[data-palette-status]', root);
     const source = window.erpNavIndex || [];
+    const quickUrl = root.dataset.quickUrl || '/search/quick';
+
+    // §16-49 — the palette answers from two places, and the difference shows.
+    // The navigation index is already in the page, so matching a page is
+    // instant and offline. Records (an invoice number off a printed page, a
+    // customer's phone number, a product's barcode) are not in the page and
+    // cannot be: they live in the database and are filtered by the reader's own
+    // permissions server-side. So the keystrokes render from the nav index
+    // straight away, and the records arrive a moment later underneath.
+    const RECORD_ICONS = {
+        customer: 'bi-person-badge',
+        supplier: 'bi-truck',
+        product: 'bi-box-seam',
+        employee: 'bi-person-vcard',
+        invoice: 'bi-receipt',
+        quotation: 'bi-file-earmark-text',
+        order: 'bi-cart-check',
+        challan: 'bi-truck-front',
+        purchase_order: 'bi-clipboard-check',
+        purchase_bill: 'bi-journal-text',
+        warranty: 'bi-shield-check',
+        document: 'bi-paperclip',
+        user: 'bi-person',
+        branch: 'bi-diagram-3',
+        warehouse: 'bi-building',
+        role: 'bi-person-gear',
+    };
+
     let items = [];
+    let hits = [];
     let activeIndex = 0;
     let lastFocus = null;
+    let controller = null;
+    let debounce = null;
 
     function open() {
         lastFocus = document.activeElement;
@@ -170,6 +202,7 @@ const palette = (() => {
         root.removeAttribute('hidden');
         document.body.style.overflow = 'hidden';
         input.value = '';
+        hits = [];
         render('');
         window.setTimeout(() => input.focus(), 20);
     }
@@ -178,6 +211,9 @@ const palette = (() => {
         root.classList.remove('is-open');
         root.setAttribute('hidden', 'hidden');
         document.body.style.overflow = '';
+        window.clearTimeout(debounce);
+        controller?.abort();
+        controller = null;
         if (lastFocus instanceof HTMLElement) lastFocus.focus();
     }
 
@@ -203,10 +239,27 @@ const palette = (() => {
             .slice(0, 40)
             .map((row) => row.entry);
 
-        items = ranked;
+        // Records keep the order the server returned them in, which is the order
+        // it ranked them in. A record that is also a page (no such case today,
+        // but a document could be) would be deduped here rather than listed twice.
+        const records = hits
+            .filter((hit) => hit && hit.url && hit.title)
+            .filter((hit) => !ranked.some((entry) => entry.url === hit.url))
+            .map((hit) => ({
+                label: hit.title,
+                url: hit.url,
+                icon: RECORD_ICONS[hit.type] || 'bi-file-earmark-text',
+                section: 'Records',
+                record: true,
+                // The trailing detail: what the record is tied to, or failing
+                // that, simply what kind of thing it is.
+                hint: hit.subtitle || hit.excerpt || hit.kind || '',
+            }));
+
+        items = [...ranked, ...records];
         activeIndex = 0;
 
-        if (ranked.length === 0) {
+        if (items.length === 0) {
             list.innerHTML = `<p class="erp-palette-empty">
                 Nothing matches “${escapeHtml(query)}”.<br>
                 <small class="text-body-secondary">Try a document number, module name or action.</small>
@@ -217,16 +270,16 @@ const palette = (() => {
         let html = '';
         let currentGroup = null;
 
-        ranked.forEach((entry, index) => {
+        items.forEach((entry, index) => {
             const group = entry.section ?? entry.group ?? 'Navigate';
             if (group !== currentGroup) {
-                html += `<p class="erp-palette-group">${escapeHtml(group)}</p>`;
+                html += `<p class="erp-palette-group${group === 'Records' ? ' erp-palette-group-records' : ''}">${escapeHtml(group)}</p>`;
                 currentGroup = group;
             }
             html += `<a class="erp-palette-item${index === activeIndex ? ' is-active' : ''}"
                         href="${escapeHtml(entry.url)}" data-palette-item="${index}">
                         <i class="bi ${escapeHtml(entry.icon || 'bi-dot')}" aria-hidden="true"></i>
-                        <span>${escapeHtml(entry.label)}</span>
+                        <span class="erp-palette-label">${escapeHtml(entry.label)}</span>
                         ${entry.hint ? `<span class="erp-palette-hint">${escapeHtml(entry.hint)}</span>` : ''}
                      </a>`;
         });
@@ -236,6 +289,43 @@ const palette = (() => {
             // Permalinks keep ⌘/Ctrl-click working; plain clicks navigate in place.
             el.addEventListener('click', () => close());
         });
+    }
+
+    /**
+     * Ask the server for records matching what has been typed.
+     *
+     * Guarded twice over: the previous request is aborted so keystrokes never
+     * queue up behind each other, and the reply is dropped unless the box still
+     * holds the term it was asked for — otherwise a slow answer to “inv” would
+     * land under “invoice 4471”.
+     */
+    function fetchRecords(term) {
+        controller?.abort();
+        controller = new AbortController();
+
+        if (status) status.textContent = 'Searching records…';
+
+        window.fetch(`${quickUrl}?q=${encodeURIComponent(term)}`, {
+            headers: { Accept: 'application/json' },
+            credentials: 'same-origin',
+            signal: controller.signal,
+        })
+            .then((response) => (response.ok ? response.json() : { results: [] }))
+            .then((payload) => {
+                if (input.value.trim() !== term) return;
+                hits = Array.isArray(payload.results) ? payload.results : [];
+                if (status) {
+                    status.textContent = hits.length
+                        ? `${hits.length} record${hits.length === 1 ? '' : 's'} found`
+                        : 'No records match';
+                }
+                render(input.value);
+            })
+            .catch(() => {
+                // An aborted or failed lookup is not an error worth showing: the
+                // page matches in the list above are still there and still work.
+                if (status) status.textContent = '';
+            });
     }
 
     function highlight() {
@@ -253,7 +343,25 @@ const palette = (() => {
             if (target === root || target.closest('[data-palette-close]')) close();
         });
 
-        input?.addEventListener('input', () => render(input.value));
+        input?.addEventListener('input', () => {
+            render(input.value);
+
+            const term = input.value.trim();
+            window.clearTimeout(debounce);
+
+            if (term.length < 2) {
+                // One character is not a search; the server agrees (mb_strlen >= 2).
+                controller?.abort();
+                controller = null;
+                hits = [];
+                if (status) status.textContent = '';
+                return;
+            }
+
+            // 180ms: long enough that a fast typist costs one request per word
+            // rather than one per letter, short enough to feel immediate.
+            debounce = window.setTimeout(() => fetchRecords(term), 180);
+        });
 
         root.addEventListener('keydown', (event) => {
             if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {

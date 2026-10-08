@@ -6,7 +6,7 @@
     <div class="erp-page-head">
         <div>
             <h1 class="erp-h1">Search</h1>
-            <p class="erp-page-sub">Results are scoped to your branch access and effective permissions.</p>
+            <p class="erp-page-sub">One box for everything you can open — document numbers, barcodes, phone numbers, people, pages. Results are scoped to your branch access and effective permissions.</p>
         </div>
     </div>
 
@@ -14,7 +14,7 @@
         <div class="col-sm-8 col-md-6">
             <label class="visually-hidden" for="q">Search</label>
             <input class="form-control form-control-lg" type="search" id="q" name="q"
-                   value="{{ $q }}" placeholder="Search people, branches, warehouses, roles, documents…"
+                   value="{{ $q }}" placeholder="An invoice or bill number, a barcode, a phone number, a person…"
                    autofocus autocomplete="off">
         </div>
         <div class="col-auto">
@@ -30,7 +30,11 @@
         </div>
     @elseif ($hits->isEmpty())
         <div class="erp-card">
-            <p class="text-body-secondary mb-0">No results match “{{ $q }}” within your access.</p>
+            <p class="text-body-secondary mb-0">
+                No results match “{{ $q }}” within your access.
+                Records raised in the last few minutes may not be indexed yet — it is rebuilt every hour —
+                and anything outside your branches or permissions is not searched at all.
+            </p>
         </div>
     @else
         <p class="text-body-secondary">{{ $hits->count() }} result(s) for “{{ $q }}”.</p>
@@ -38,7 +42,7 @@
         @foreach ($grouped as $type => $group)
             <section class="erp-card mb-3">
                 <header class="erp-card-head">
-                    <h2 class="erp-card-title">{{ ucfirst($type) }}s</h2>
+                    <h2 class="erp-card-title">{{ \App\Search\SearchIndex::heading($type) }}</h2>
                     <span class="erp-chip erp-chip-soft">{{ $group->count() }}</span>
                 </header>
                 @foreach ($group as $hit)

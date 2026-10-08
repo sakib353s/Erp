@@ -100,3 +100,18 @@ Schedule::command('erp:cash:recurring-expenses')->dailyAt('06:20');
  | approximate.
  */
 Schedule::command('erp:business:asset-depreciation')->monthlyOn(1, '06:40');
+
+/*
+ | The global search index (§16-49). The index is what makes the search box
+ | answer in one query instead of a dozen, and an index nobody refreshes is a
+ | search that quietly stops finding this month's invoices. It is rebuilt whole
+ | rather than patched: the rebuild deletes the company's rows and rewrites them
+ | inside one transaction, so a search running during the rebuild reads either
+ | the old index or the new one and never a half-built one.
+ |
+ | Hourly, and overlapping is prevented, because the two things that matter are
+ | that it always finishes and that two copies of it never fight over the same
+ | rows. A record raised in the last few minutes may not be findable yet — it is
+ | still on the list it belongs to, so nothing is lost, only briefly unindexed.
+ */
+Schedule::command('erp:search:rebuild')->hourly()->withoutOverlapping();

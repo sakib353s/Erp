@@ -198,6 +198,12 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::get('/search', [SearchController::class, 'index'])
         ->name('search.index');
 
+    // §16-49: the ⌘K palette types into this. Throttled because the client — not
+    // a person — decides how many queries a keystroke costs the server.
+    Route::get('/search/quick', [SearchController::class, 'quick'])
+        ->middleware('throttle:120,1')
+        ->name('search.quick');
+
     /* ---- System maintenance (§15-23 … §15-33) ----
            One key per kind of damage a person can do here: clearing a cache is
            not repairing a table, and repairing a table is not resetting the
