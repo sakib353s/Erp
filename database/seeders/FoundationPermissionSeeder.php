@@ -88,6 +88,7 @@ class FoundationPermissionSeeder extends Seeder
             ['settings', 'branches', 'update', 'branches.update', 'Edit branches'],
             ['settings', 'branches', 'delete', 'branches.delete', 'Delete branches'],
             ['settings', 'branches', 'compare', 'branches.compare', 'Compare branches'],
+            ['settings', 'branches', 'transfer', 'branches.transfer', 'Move stock between branches'],
 
             ['inventory', 'warehouses', 'view', 'warehouses.view', 'View warehouses'],
             ['inventory', 'warehouses', 'create', 'warehouses.create', 'Create warehouses'],

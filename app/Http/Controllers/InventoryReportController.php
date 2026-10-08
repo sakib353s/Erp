@@ -159,6 +159,10 @@ class InventoryReportController extends Controller
                 (float) $entry->total_value,
             ], [
                 'Entries' => $analytics['totals']['entries'],
+                // The headline the screen leads with, first in the totals block:
+                // an export missing the figure the page is built around is a
+                // different report.
+                'Recorded value' => $analytics['totals']['recorded_value'],
                 'Damage value' => $analytics['by_kind']['damage']['value'],
                 'Loss value' => $analytics['by_kind']['loss']['value'],
                 'Written off (approved)' => $analytics['totals']['written_off_value'],

@@ -347,11 +347,18 @@ class StockTransferService
                         'narration' => 'Receive '.$transfer->transfer_no.' (clear transit)',
                     ], $request->user());
 
-                    // Arrive at destination.
+                    // Arrive at destination, ON THE SHELF. The in-transit
+                    // compartment belongs to the sending warehouse: it is credited
+                    // on dispatch and closed by the TRANSIT_CLEAR above. The
+                    // receiving end has nothing in transit to give back, so it is
+                    // posted straight into `on_hand` — leaving the type's default
+                    // in-transit state here would drive the destination's transit
+                    // column negative for goods it never held.
                     $this->ledger->post([
                         'product_id' => $line->product_id,
                         'warehouse_id' => $transfer->to_warehouse_id,
                         'movement_type' => StockMovement::TYPE_TRANSIT_IN,
+                        'state' => StockMovement::STATE_ON_HAND,
                         'qty' => $qtyReceived,
                         'unit_cost' => $line->unit_cost > 0 ? (float) $line->unit_cost : null,
                         'source_type' => 'stock_transfer',

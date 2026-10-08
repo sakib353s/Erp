@@ -20,6 +20,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class ProductCostHistory extends Model
 {
+    /**
+     * The migration creates the singular `product_cost_history` — the table is
+     * named after the record it holds, one row per change. Eloquent would
+     * pluralise the class name and miss it, which is a schema that exists and a
+     * screen that says it does not.
+     */
+    protected $table = 'product_cost_history';
+
+    /**
+     * Append-only: the table carries `changed_at` (the moment the cost moved)
+     * and no `created_at`/`updated_at`, because a row here is a fact that
+     * happened, not a record that gets maintained.
+     */
+    public $timestamps = false;
+
     protected $fillable = [
         'company_id', 'product_id', 'changed_by',
         'old_standard_cost', 'new_standard_cost',

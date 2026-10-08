@@ -574,6 +574,16 @@ class CatalogImporter
         'accounting > fixed assets > asset depreciation' => ['/app/assets/depreciation', 'business.assets.view'],
         'accounting > fixed assets > asset disposal' => ['/app/assets/disposal', 'business.assets.view'],
 
+        // §12-05…08: the branches themselves. All Branches, Add Branch and Branch
+        // Profile are the CRUD that already existed; Branch Settings is the
+        // per-branch screen §15 built; Comparison and Transfer are §12-07/12-08.
+        'business management > branches > all branches' => ['/app/branches', 'branches.view'],
+        'business management > branches > add branch' => ['/app/branches/create', 'branches.create'],
+        'business management > branches > branch profile' => ['/app/branches', 'branches.view'],
+        'business management > branches > branch settings' => ['/app/settings/branches', 'settings.branch'],
+        'business management > branches > branch comparison' => ['/app/branches/compare', 'branches.compare'],
+        'business management > branches > branch transfer' => ['/app/branches/transfer', 'branches.view'],
+
         // §12-03/04: the company's own papers, and the two screens that already
         // existed for its identity and its preferences.
         'business management > company > company profile' => ['/app/settings/company', 'settings.company'],

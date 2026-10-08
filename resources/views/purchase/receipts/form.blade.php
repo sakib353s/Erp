@@ -181,7 +181,7 @@
                                             <option value="">Choose the product that arrived…</option>
                                             @foreach ($products as $product)
                                                 <option value="{{ $product->id }}" @selected((int) ($line['product_id'] ?? 0) === $product->id)>
-                                                    {{ $product->sku }} · {{ \Illuminate\Support\Str::limit($product->name, 42) }}@if ($product->track_batch) · batch-tracked@endif
+                                                    {{ $product->sku }} · {{ \Illuminate\Support\Str::limit($product->name, 42) }} @if ($product->track_batch)· batch-tracked @endif
                                                 </option>
                                             @endforeach
                                         </select>

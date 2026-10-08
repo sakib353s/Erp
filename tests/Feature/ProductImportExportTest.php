@@ -189,12 +189,13 @@ class ProductImportExportTest extends TestCase
             'name' => 'Acme Tools',
             'is_active' => true,
         ]);
-        Unit::query()->create([
-            'company_id' => $this->admin->company_id,
-            'code' => 'PCS',
-            'name' => 'Pieces',
-            'is_active' => true,
-        ]);
+        // PCS already exists: the reference data seeds it as the base unit, and
+        // the import has to *resolve* that row rather than invent a second one —
+        // which is the point of the assertion below, not a setup detail.
+        Unit::query()->updateOrCreate(
+            ['company_id' => $this->admin->company_id, 'code' => 'PCS'],
+            ['name' => 'Pieces', 'is_active' => true],
+        );
 
         $csv = $this->csv(
             [['IMP-1', 'IMP-1-SKU', 'Imported widget', 'HARDWARE', 'Acme Tools', 'PCS', '', 'From the file', 'wac', '99.25', '1', '1', '1']],

@@ -139,6 +139,13 @@ class SystemRoleSeeder extends Seeder
                 // the maker-checker rule lives in the service, not in a hidden
                 // button, so a manager holding both still cannot clear their own.
                 'inventory.transfers.create',
+                // §12-07/12-08: seeing the branches beside each other is the
+                // manager's view of the company — and it still refuses anybody
+                // whose scope is one branch, however senior. Moving stock from
+                // one branch to another is the same transfer the inventory desk
+                // raises, so the manager holds this key and the branch desk
+                // writes through the same engine, approval threshold included.
+                'branches.compare', 'branches.transfer',
                 // §04-44: picking and putaway are warehouse work, and the module's
                 // own keys cover it — a bin is a place, so the layout and the
                 // instructions that use it share one pair of keys.

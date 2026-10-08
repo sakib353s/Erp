@@ -4,6 +4,7 @@ namespace App\Domain\Inventory;
 
 use App\Domain\Foundation\Branch;
 use App\Domain\Foundation\Company;
+use App\Domain\Foundation\Concerns\BranchScope;
 use App\Domain\Foundation\User;
 use App\Domain\Foundation\Warehouse;
 use Illuminate\Database\Eloquent\Model;
@@ -69,14 +70,23 @@ class StockTransfer extends Model
         return $this->belongsTo(Branch::class);
     }
 
+    /**
+     * Both ends of a transfer are read company-wide, never through the branch
+     * scope: a transfer exists *because* its two warehouses belong to different
+     * branches, so a branch-scoped relation would hide the far end of every
+     * cross-branch move and leave the desks showing a dash where the
+     * destination should be.
+     */
     public function fromWarehouse(): BelongsTo
     {
-        return $this->belongsTo(Warehouse::class, 'from_warehouse_id');
+        return $this->belongsTo(Warehouse::class, 'from_warehouse_id')
+            ->withoutGlobalScope(BranchScope::class);
     }
 
     public function toWarehouse(): BelongsTo
     {
-        return $this->belongsTo(Warehouse::class, 'to_warehouse_id');
+        return $this->belongsTo(Warehouse::class, 'to_warehouse_id')
+            ->withoutGlobalScope(BranchScope::class);
     }
 
     public function creator(): BelongsTo

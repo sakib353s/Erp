@@ -405,6 +405,28 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::middleware('permission:branches.view')->group(function () {
         Route::get('/app/branches', [BranchController::class, 'index'])->name('branches.index');
     });
+
+    /* §12-07 — the branches side by side. Literal segment first: `/compare`
+       must never be read as a branch id. */
+    Route::get('/app/branches/compare', [BranchController::class, 'compare'])
+        ->middleware('permission:branches.compare')
+        ->name('branches.compare');
+
+    /* §12-08 — every transfer that crossed a branch boundary, then the desk for
+       one branch. Both literal-first: `/transfer` is not a branch id. */
+    Route::get('/app/branches/transfer', [BranchController::class, 'transferOverview'])
+        ->middleware('permission:branches.view')
+        ->name('branches.transfers');
+
+    /* §12-08 — the branch transfer desk: what has moved, and the way to move
+       more through the stock-transfer engine. */
+    Route::middleware('permission:branches.view')->group(function () {
+        Route::get('/app/branches/{branch}/transfer', [BranchController::class, 'transfer'])
+            ->name('branches.transfer');
+    });
+    Route::post('/app/branches/{branch}/transfer', [BranchController::class, 'raiseTransfer'])
+        ->middleware('permission:branches.transfer')
+        ->name('branches.transfer.store');
     Route::get('/app/branches/create', [BranchController::class, 'create'])
         ->middleware('permission:branches.create')
         ->name('branches.create');

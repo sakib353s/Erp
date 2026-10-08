@@ -111,7 +111,7 @@ class SupplierLedgerTest extends TestCase
         return $bills->approve($bill, $this->makeUser()->id);
     }
 
-    protected function query(): PurchaseQuery
+    protected function purchaseQuery(): PurchaseQuery
     {
         return app(PurchaseQuery::class);
     }
@@ -138,7 +138,7 @@ class SupplierLedgerTest extends TestCase
         ], $this->admin->id);
         $returns->approve($return, $this->makeUser()->id);
 
-        $ledger = $this->query()->supplierLedger($this->supplier, ['from' => '2026-09-01', 'to' => '2026-09-30']);
+        $ledger = $this->purchaseQuery()->supplierLedger($this->supplier, ['from' => '2026-09-01', 'to' => '2026-09-30']);
 
         $this->assertSame(0.0, $ledger['opening']);
         $this->assertCount(3, $ledger['lines']);
@@ -171,7 +171,7 @@ class SupplierLedgerTest extends TestCase
 
         $this->bill(200, '2026-09-05');
 
-        $ledger = $this->query()->supplierLedger($this->supplier, ['from' => '2026-09-01', 'to' => '2026-09-30']);
+        $ledger = $this->purchaseQuery()->supplierLedger($this->supplier, ['from' => '2026-09-01', 'to' => '2026-09-30']);
 
         $this->assertSame(500.0, $ledger['opening'], '800 billed − 300 paid before the period');
         $this->assertCount(1, $ledger['lines']);
@@ -200,7 +200,7 @@ class SupplierLedgerTest extends TestCase
         ], $this->admin->id);
         $returns->cancel($return, 'Supplier accepted the goods after all.', $this->admin->id);
 
-        $ledger = $this->query()->supplierLedger($this->supplier, ['from' => '2026-09-01', 'to' => '2026-09-30']);
+        $ledger = $this->purchaseQuery()->supplierLedger($this->supplier, ['from' => '2026-09-01', 'to' => '2026-09-30']);
 
         $this->assertCount(1, $ledger['lines'], 'only the posted bill is on the account');
         $this->assertSame($posted->code, $ledger['lines'][0]['reference']);
@@ -232,7 +232,7 @@ class SupplierLedgerTest extends TestCase
         $this->assertNull($undated->due_date, 'no terms means no due date');
         app(PurchaseBillService::class)->approve($undated, $this->makeUser()->id);
 
-        $ageing = $this->query()->payablesAgeing();
+        $ageing = $this->purchaseQuery()->payablesAgeing();
 
         $this->assertSame(150.0, $ageing['totals']['current'], 'not-yet-due plus the undated bill');
         $this->assertSame(200.0, $ageing['totals']['d1_30']);
@@ -257,7 +257,7 @@ class SupplierLedgerTest extends TestCase
             'paid_at' => '2026-09-07',
         ], $this->admin->id);
 
-        $rows = $this->query()->supplierBalances();
+        $rows = $this->purchaseQuery()->supplierBalances();
         $row = $rows->firstWhere(fn ($row) => $row['supplier']->id === $this->supplier->id);
 
         $this->assertNotNull($row);
