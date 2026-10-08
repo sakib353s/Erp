@@ -423,6 +423,9 @@ class FoundationPermissionSeeder extends Seeder
             ['sales', 'invoices', 'statutory_print', 'sales.invoices.statutory_print', 'Print statutory tax documents'],
             ['sales', 'payments', 'view', 'sales.payments.view', 'View money receipts'],
             ['sales', 'payments', 'create', 'sales.payments.create', 'Record money receipts'],
+            // §16-23: a receipt is a document of its own, so producing one is its
+            // own act — the renderer's money-receipt type asks for this key.
+            ['sales', 'payments', 'print', 'sales.payments.print', 'Print money receipts'],
             ['sales', 'delivery', 'view', 'sales.delivery.view', 'View delivery challans'],
             ['sales', 'delivery', 'create', 'sales.delivery.create', 'Create delivery challans'],
             ['sales', 'delivery', 'dispatch', 'sales.delivery.dispatch', 'Dispatch and deliver challans'],

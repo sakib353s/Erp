@@ -2620,6 +2620,10 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     /* ---- Audit trail ---- */
     Route::middleware('permission:audit.view')->group(function () {
         Route::get('/app/audit', [AuditController::class, 'index'])->name('audit.index');
+        // §16-34: verifying is a read of the trail that leaves a mark in it, so
+        // it is a POST — a link that a browser or a prefetcher could follow
+        // would write audit rows nobody asked for.
+        Route::post('/app/audit/verify', [AuditController::class, 'verify'])->name('audit.verify');
         Route::get('/app/audit/{event}', [AuditController::class, 'show'])->name('audit.show');
     });
     Route::get('/app/audit-export/audit.csv', [AuditController::class, 'export'])

@@ -667,6 +667,51 @@ class DocumentRenderTest extends TestCase
             ->assertSeeText('documents.view_history');
     }
 
+    public function test_every_printable_type_asks_for_a_permission_that_exists(): void
+    {
+        // A renderer type names the key that admits it. A key that was invented
+        // rather than seeded 403s every non-administrator — and hides in local
+        // testing, because the administrator role syncs whatever exists. This
+        // walks the catalogue against the permissions table itself.
+        $keys = DB::table('permissions')->pluck('key')->all();
+
+        $asked = [];
+        $typed = 0;
+
+        foreach (app(\App\Domain\Documents\Services\DocumentRenderService::class)->catalogue() as $row) {
+            $permission = $row['permission'] ?? null;
+
+            if ($permission === null) {
+                continue;
+            }
+
+            // Two types may share a key (a ledger and a statement are the same
+            // read of the books), so count the types, not the keys.
+            $typed++;
+            $asked[$permission] = $row['code'];
+
+            $this->assertContains(
+                $permission,
+                $keys,
+                "The printable type [{$row['code']}] asks for [{$permission}], which no seeder defines.",
+            );
+        }
+
+        $this->assertSame(12, $typed, 'Every printable type should name a permission.');
+
+        // …and the four that were only ever assumed are now pinned.
+        foreach ([
+            'sales.quotations.view' => 'quotation',
+            'sales.orders.print' => 'sales_order',
+            'sales.delivery.print' => 'delivery_challan',
+            'sales.payments.print' => 'money_receipt',
+            'sales.invoices.print' => 'invoice',
+            'audit.export' => 'audit_report',
+        ] as $key => $code) {
+            $this->assertSame($code, $asked[$key] ?? null);
+        }
+    }
+
     public function test_an_unknown_type_is_a_404_and_an_unbuilt_one_says_why(): void
     {
         $this->actingAs($this->admin)

@@ -39,6 +39,16 @@ Schedule::command('erp:inventory:expiry-alerts')->dailyAt('06:40');
  */
 Schedule::command('erp:business:compliance-alerts')->dailyAt('06:50');
 
+/*
+ | §16-34: the audit chain is sealed for the month that has just closed. The
+ | chain proves that nothing inside it was rewritten; the seal proves the period
+ | still has the size and the ends it closed with, which is the only way a
+ | *deleted* old row can be noticed at all. It runs on the first morning of the
+ | month, after midnight, and it refuses to seal anything while the chain is
+ | broken — a stamp on a broken chain is worse than no stamp.
+ */
+Schedule::command('erp:audit:seal')->monthlyOn(1, '03:10');
+
 // §12-15 — the premises, once a morning. Ten minutes after the compliance
 // digest so the two do not arrive as one undifferentiated bell, and before the
 // working day so somebody can pay a bill that is about to be late.

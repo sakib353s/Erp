@@ -64,7 +64,13 @@ class AuditRecorder
                 'actor_label' => $attrs['actor_label'] ?? $user?->name,
                 'entity_type' => $attrs['entity_type'] ?? null,
                 'entity_id' => $attrs['entity_id'] ?? null,
-                'branch_id' => $attrs['branch_id'] ?? $this->context->branchId(),
+                // An *explicit* null is a fact, not a missing value: it says this
+                // action is company-wide. `??` cannot tell the two apart, so an
+                // explicit null used to be silently replaced by the acting branch
+                // — which is how a company-wide event ends up inside one branch.
+                'branch_id' => array_key_exists('branch_id', $attrs)
+                    ? $attrs['branch_id']
+                    : $this->context->branchId(),
                 'ip' => $attrs['ip'] ?? ($request?->ip() ?? null),
                 'user_agent' => $attrs['user_agent'] ?? mb_substr((string) ($request?->userAgent() ?? ''), 0, 191),
                 'correlation_id' => $attrs['correlation_id']
@@ -122,16 +128,64 @@ class AuditRecorder
             'ip' => $row['ip'] ?? null,
             'user_agent' => $row['user_agent'] ?? null,
             'correlation_id' => $row['correlation_id'] ?? null,
-            'before' => $row['before'] ?? null,
-            'after' => $row['after'] ?? null,
+            'before' => self::plain($row['before'] ?? null),
+            'after' => self::plain($row['after'] ?? null),
             'amount' => $row['amount'] === null ? null : number_format((float) $row['amount'], 4, '.', ''),
             'currency' => $row['currency'] ?? null,
             'result' => (string) ($row['result'] ?? ''),
             'reason' => $row['reason'] ?? null,
-            'created_at' => (string) ($row['created_at'] ?? ''),
+            'created_at' => self::stamp($row['created_at'] ?? null),
             'prev_hash' => $row['prev_hash'] ?? null,
         ];
 
         return hash('sha256', json_encode($canonical, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+    }
+
+    /**
+     * The one timestamp shape the hash uses.
+     *
+     * A row is hashed on the way in from an array and on the way out from a
+     * model, and the two are not the same object: writing gets the string that
+     * goes into the column, reading gets whatever the model casts it back to
+     * (an ISO-8601 instant, in UTC). Hashing those two verbatim made every chain
+     * fail its own verification — the classic way a tamper-evident log becomes a
+     * log nobody can check. So both sides pass through here: any accepted date
+     * shape becomes the same wall-clock string in the application's timezone,
+     * which is exactly what the column holds.
+     */
+    public static function stamp(mixed $value): ?string
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        if (! $value instanceof \DateTimeInterface) {
+            try {
+                $value = \Carbon\Carbon::parse((string) $value);
+            } catch (\Throwable) {
+                return (string) $value; // not a date at all — hash it as it stands
+            }
+        }
+
+        return \Carbon\Carbon::instance($value)
+            ->setTimezone(config('app.timezone', 'UTC'))
+            ->format('Y-m-d H:i:s');
+    }
+
+    /**
+     * The one array shape the hash uses, for the redacted snapshots: a round
+     * trip through JSON, so a payload hashes identically whether it arrives as
+     * PHP arrays and objects or comes back out of a JSON column.
+     */
+    public static function plain(mixed $value): mixed
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        return json_decode(
+            (string) json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+            true,
+        );
     }
 }

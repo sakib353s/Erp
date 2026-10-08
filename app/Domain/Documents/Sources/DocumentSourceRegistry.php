@@ -885,6 +885,7 @@ final class DocumentSourceRegistry
                             ['key' => 'actor', 'label' => 'Who', 'type' => 'text'],
                             ['key' => 'entity', 'label' => 'What', 'type' => 'text'],
                             ['key' => 'result', 'label' => 'Result', 'type' => 'text'],
+                            ['key' => 'reason', 'label' => 'Why', 'type' => 'text', 'width' => '22%'],
                             ['key' => 'amount', 'label' => 'Amount', 'type' => 'money', 'align' => 'end'],
                         ],
                         'rows' => $events->map(fn (AuditEvent $event) => [
@@ -893,6 +894,9 @@ final class DocumentSourceRegistry
                             'actor' => (string) ($event->actor_label ?? $event->actor_type),
                             'entity' => trim((string) $event->entity_type.' #'.(string) $event->entity_id, ' #'),
                             'result' => (string) ($event->result ?? '—'),
+                            // The reason is the part a reader needs most: a refusal
+                            // without its why is not evidence of anything.
+                            'reason' => (string) ($event->reason ?? ''),
                             'amount' => (float) ($event->amount ?? 0),
                         ])->all(),
                         'totals' => [
