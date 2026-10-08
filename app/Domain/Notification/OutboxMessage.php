@@ -29,6 +29,7 @@ class OutboxMessage extends Model
 
     protected $fillable = [
         'company_id', 'channel', 'message_template_id', 'sales_order_id',
+        'marketing_campaign_id',
         'recipient', 'subject', 'body', 'attachments', 'status', 'provider_code',
         'provider_ref', 'last_error', 'queued_at', 'sent_at', 'created_by',
     ];
@@ -52,6 +53,12 @@ class OutboxMessage extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(SalesOrder::class, 'sales_order_id');
+    }
+
+    /** §11: the campaign this message came from, when it came from one. */
+    public function campaign(): BelongsTo
+    {
+        return $this->belongsTo(\App\Domain\Marketing\MarketingCampaign::class, 'marketing_campaign_id');
     }
 
     public function deliveryLogs(): HasMany

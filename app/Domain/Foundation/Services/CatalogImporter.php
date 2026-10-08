@@ -600,6 +600,138 @@ class CatalogImporter
         'business management > visitors > pre-registration' => ['/app/visitors/expected', 'business.visitors.view'],
         'business management > visitors > visitor reports' => ['/app/visitors/reports', 'business.visitors.view'],
 
+        // §11: the marketing desk. The four channel groups are one campaign
+        // table filtered by `channel`; the templates, contacts, delivery states and
+        // cost-against-revenue lenses are filtered the same way, so a leaf that says
+        // “SMS Delivery Reports” opens the delivery lens already limited to SMS
+        // rather than a fifth copy of the same screen.
+        //
+        // Leaves that need something this deployment does not have — a tracking
+        // pixel, an ad account, an analytics property, a WhatsApp sender, a drip
+        // engine, a provider balance — pin to the capability page that says so in
+        // plain words. Nothing here is pinned to a screen that would pretend.
+        'marketing > sms marketing > all sms campaigns' => ['/app/marketing/campaigns?channel=sms', 'marketing.campaigns.view'],
+        'marketing > sms marketing > create sms campaign' => ['/app/marketing/campaigns/create?channel=sms', 'marketing.campaigns.manage'],
+        'marketing > sms marketing > broadcast sms' => ['/app/marketing/campaigns?channel=sms&audience=all', 'marketing.campaigns.view'],
+        'marketing > sms marketing > triggered sms' => ['/app/marketing/capabilities/triggered-messages', 'marketing.campaigns.view'],
+        'marketing > sms marketing > scheduled sms' => ['/app/marketing/campaigns?channel=sms&status=scheduled', 'marketing.campaigns.view'],
+        'marketing > sms marketing > sms templates' => ['/app/marketing/templates?channel=sms', 'marketing.campaigns.view'],
+        'marketing > sms marketing > sms contacts' => ['/app/marketing/contacts?channel=sms', 'marketing.campaigns.view'],
+        'marketing > sms marketing > sms delivery reports' => ['/app/marketing/deliveries?channel=sms', 'marketing.campaigns.view'],
+        'marketing > sms marketing > sms cost reports' => ['/app/marketing/reports?channel=sms', 'marketing.campaigns.view'],
+        'marketing > sms marketing > sms opt-out management' => ['/app/marketing/optouts?channel=sms', 'marketing.campaigns.view'],
+        'marketing > sms marketing > sms balance' => ['/app/marketing/capabilities/sms-balance', 'marketing.campaigns.view'],
+        'marketing > sms marketing > sms settings' => ['/app/settings/notifications', 'settings.view'],
+
+        'marketing > email marketing > all email campaigns' => ['/app/marketing/campaigns?channel=email', 'marketing.campaigns.view'],
+        'marketing > email marketing > create email campaign' => ['/app/marketing/campaigns/create?channel=email', 'marketing.campaigns.manage'],
+        'marketing > email marketing > email templates' => ['/app/marketing/templates?channel=email', 'marketing.campaigns.view'],
+        'marketing > email marketing > email sequences' => ['/app/marketing/capabilities/sequences-and-drips', 'marketing.campaigns.view'],
+        'marketing > email marketing > drip campaigns' => ['/app/marketing/capabilities/sequences-and-drips', 'marketing.campaigns.view'],
+        'marketing > email marketing > email a/b testing' => ['/app/marketing/capabilities/ab-testing', 'marketing.campaigns.view'],
+        'marketing > email marketing > email reports' => ['/app/marketing/reports?channel=email', 'marketing.campaigns.view'],
+        'marketing > email marketing > email open tracking' => ['/app/marketing/capabilities/open-and-click-tracking', 'marketing.campaigns.view'],
+        'marketing > email marketing > email click tracking' => ['/app/marketing/capabilities/open-and-click-tracking', 'marketing.campaigns.view'],
+        'marketing > email marketing > email bounce management' => ['/app/marketing/deliveries?channel=email&state=failed', 'marketing.campaigns.view'],
+        'marketing > email marketing > unsubscribe management' => ['/app/marketing/optouts?channel=email', 'marketing.campaigns.view'],
+        'marketing > email marketing > email settings' => ['/app/settings/notifications', 'settings.view'],
+
+        'marketing > whatsapp marketing > all wa campaigns' => ['/app/marketing/campaigns?channel=whatsapp', 'marketing.campaigns.view'],
+        'marketing > whatsapp marketing > create wa campaign' => ['/app/marketing/campaigns/create?channel=whatsapp', 'marketing.campaigns.manage'],
+        'marketing > whatsapp marketing > wa templates' => ['/app/marketing/templates?channel=whatsapp', 'marketing.campaigns.view'],
+        'marketing > whatsapp marketing > wa contacts' => ['/app/marketing/contacts?channel=whatsapp', 'marketing.campaigns.view'],
+        'marketing > whatsapp marketing > wa broadcast' => ['/app/marketing/campaigns?channel=whatsapp&audience=all', 'marketing.campaigns.view'],
+        'marketing > whatsapp marketing > wa chat inbox' => ['/app/marketing/capabilities/whatsapp-chat', 'marketing.campaigns.view'],
+        'marketing > whatsapp marketing > wa read receipts' => ['/app/marketing/capabilities/read-receipts', 'marketing.campaigns.view'],
+        'marketing > whatsapp marketing > wa opt-out management' => ['/app/marketing/optouts?channel=whatsapp', 'marketing.campaigns.view'],
+        'marketing > whatsapp marketing > wa reports' => ['/app/marketing/reports?channel=whatsapp', 'marketing.campaigns.view'],
+
+        'marketing > push notifications > all push campaigns' => ['/app/marketing/campaigns?channel=push', 'marketing.campaigns.view'],
+        'marketing > push notifications > create push' => ['/app/marketing/campaigns/create?channel=push', 'marketing.campaigns.manage'],
+        'marketing > push notifications > segment-based push' => ['/app/marketing/contacts?channel=push', 'marketing.campaigns.view'],
+        'marketing > push notifications > triggered push' => ['/app/marketing/capabilities/triggered-messages', 'marketing.campaigns.view'],
+        'marketing > push notifications > push history' => ['/app/marketing/deliveries?channel=push', 'marketing.campaigns.view'],
+        'marketing > push notifications > push reports' => ['/app/marketing/reports?channel=push', 'marketing.campaigns.view'],
+
+        // §11 social: there is no pixel, no ad account and no connected social
+        // profile in this application, and no screen here claims otherwise. The one
+        // real thing in this group is the schedule of messages on the clock.
+        'marketing > social media > facebook pixel' => ['/app/marketing/capabilities/meta-platform', 'marketing.campaigns.view'],
+        'marketing > social media > facebook capi' => ['/app/marketing/capabilities/meta-platform', 'marketing.campaigns.view'],
+        'marketing > social media > facebook ads' => ['/app/marketing/capabilities/meta-platform', 'marketing.campaigns.view'],
+        'marketing > social media > facebook product catalog' => ['/app/marketing/capabilities/meta-platform', 'marketing.campaigns.view'],
+        'marketing > social media > instagram shopping' => ['/app/marketing/capabilities/meta-platform', 'marketing.campaigns.view'],
+        'marketing > social media > google ads' => ['/app/marketing/capabilities/google-platform', 'marketing.campaigns.view'],
+        'marketing > social media > google analytics 4' => ['/app/marketing/capabilities/google-platform', 'marketing.campaigns.view'],
+        'marketing > social media > tiktok pixel' => ['/app/marketing/capabilities/tiktok-platform', 'marketing.campaigns.view'],
+        'marketing > social media > social calendar' => ['/app/marketing/campaigns?status=scheduled', 'marketing.campaigns.view'],
+        'marketing > social media > social reports' => ['/app/marketing/capabilities/social-media', 'marketing.campaigns.view'],
+
+        // §11 promotions and coupons: the desks already exist under Sales (02-101…107),
+        // where the discount has to be applied to a real bill. These leaves open the
+        // same screens with the festival or kind already chosen, instead of a second
+        // promotions engine that could disagree with the one the till uses.
+        'marketing > promotions > all promotions' => ['/app/sales/promotions', 'sales.promotions.view'],
+        'marketing > promotions > create promotion' => ['/app/sales/promotions', 'sales.promotions.create'],
+        'marketing > promotions > seasonal offers' => ['/app/sales/promotions?kind=seasonal', 'sales.promotions.view'],
+        'marketing > promotions > eid campaigns' => ['/app/sales/promotions?kind=seasonal&q=Eid', 'sales.promotions.view'],
+        'marketing > promotions > pohela boishakh campaigns' => ['/app/sales/promotions?kind=seasonal&q=Boishakh', 'sales.promotions.view'],
+        'marketing > promotions > durga puja campaigns' => ['/app/sales/promotions?kind=seasonal&q=Puja', 'sales.promotions.view'],
+        'marketing > promotions > flash sales' => ['/app/sales/promotions/flash', 'sales.promotions.view'],
+        'marketing > promotions > promotion reports' => ['/app/reports/sales/promotions', 'sales.promotions.view'],
+        'marketing > promotions > festival calendar' => ['/app/sales/promotions?kind=seasonal', 'sales.promotions.view'],
+
+        'marketing > coupons > all coupons' => ['/app/sales/coupons', 'sales.coupons.view'],
+        'marketing > coupons > create coupon' => ['/app/sales/coupons', 'sales.coupons.create'],
+        'marketing > coupons > coupon usage' => ['/app/sales/coupons/usage', 'sales.coupons.view'],
+        'marketing > coupons > coupon analytics' => ['/app/sales/coupons/usage?view=analytics', 'sales.coupons.view'],
+        'marketing > coupons > bulk coupon generation' => ['/app/sales/coupons', 'sales.coupons.bulk'],
+
+        // §11 customer campaigns: a preset is the campaign desk with the audience
+        // already chosen and the note that says what the list is. The ones that need
+        // data this application does not hold (a cart, a date of birth) say so.
+        'marketing > customer campaigns > abandoned cart recovery' => ['/app/marketing/capabilities/abandoned-cart', 'marketing.campaigns.view'],
+        'marketing > customer campaigns > win-back campaigns' => ['/app/marketing/campaigns?preset=win-back', 'marketing.campaigns.view'],
+        'marketing > customer campaigns > birthday campaigns' => ['/app/marketing/capabilities/birthday-and-anniversary', 'marketing.campaigns.view'],
+        'marketing > customer campaigns > anniversary campaigns' => ['/app/marketing/capabilities/birthday-and-anniversary', 'marketing.campaigns.view'],
+        'marketing > customer campaigns > review requests' => ['/app/marketing/campaigns?preset=review', 'marketing.campaigns.view'],
+        'marketing > customer campaigns > google review request' => ['/app/marketing/capabilities/google-review', 'marketing.campaigns.view'],
+        'marketing > customer campaigns > customer feedback / nps' => ['/app/marketing/campaigns?preset=nps', 'marketing.campaigns.view'],
+        'marketing > customer campaigns > referral campaigns' => ['/app/marketing/campaigns?preset=referral', 'marketing.campaigns.view'],
+        'marketing > customer campaigns > campaign analytics' => ['/app/marketing/reports', 'marketing.campaigns.view'],
+
+        // §11 cost against revenue and marketing reports are one lens: what was
+        // handed over, what it cost, and what the recipients actually bought.
+        'marketing > campaign cost vs revenue' => ['/app/marketing/reports', 'marketing.campaigns.view'],
+        'marketing > marketing reports' => ['/app/marketing/reports', 'marketing.campaigns.view'],
+
+        /* §11 leads, affiliates and influencers: three groups this build does not
+         * model — an enquiry, an affiliate account and a collaboration each have no
+         * record here. Every leaf opens the page that says what is missing and
+         * points at the real screen doing part of the same job, so the sidebar
+         * never sends somebody to a pipeline of invented cards. */
+        'marketing > leads' => ['/app/marketing/capabilities/lead-pipeline', 'marketing.campaigns.view'],
+        'marketing > leads > all leads' => ['/app/marketing/capabilities/lead-pipeline', 'marketing.campaigns.view'],
+        'marketing > leads > add lead' => ['/app/marketing/capabilities/lead-pipeline', 'marketing.campaigns.view'],
+        'marketing > leads > lead pipeline' => ['/app/marketing/capabilities/lead-pipeline', 'marketing.campaigns.view'],
+        'marketing > leads > lead follow-up' => ['/app/marketing/capabilities/lead-pipeline', 'marketing.campaigns.view'],
+        'marketing > leads > lead activity log' => ['/app/marketing/capabilities/lead-pipeline', 'marketing.campaigns.view'],
+        'marketing > leads > lead response time' => ['/app/marketing/capabilities/lead-pipeline', 'marketing.campaigns.view'],
+        'marketing > leads > lead scoring' => ['/app/marketing/capabilities/lead-pipeline', 'marketing.campaigns.view'],
+        'marketing > leads > lead conversion' => ['/app/marketing/capabilities/lead-pipeline', 'marketing.campaigns.view'],
+        'marketing > leads > missed call / callback log' => ['/app/marketing/capabilities/lead-pipeline', 'marketing.campaigns.view'],
+        'marketing > leads > lead analytics' => ['/app/marketing/capabilities/lead-pipeline', 'marketing.campaigns.view'],
+
+        'marketing > affiliates' => ['/app/marketing/capabilities/affiliate-tracking', 'marketing.campaigns.view'],
+        'marketing > affiliates > all affiliates' => ['/app/marketing/capabilities/affiliate-tracking', 'marketing.campaigns.view'],
+        'marketing > affiliates > add affiliate' => ['/app/marketing/capabilities/affiliate-tracking', 'marketing.campaigns.view'],
+        'marketing > affiliates > affiliate reports' => ['/app/marketing/capabilities/affiliate-tracking', 'marketing.campaigns.view'],
+
+        'marketing > influencers' => ['/app/marketing/capabilities/influencer-campaigns', 'marketing.campaigns.view'],
+        'marketing > influencers > all influencers' => ['/app/marketing/capabilities/influencer-campaigns', 'marketing.campaigns.view'],
+        'marketing > influencers > add influencer' => ['/app/marketing/capabilities/influencer-campaigns', 'marketing.campaigns.view'],
+        'marketing > influencers > influencer campaigns' => ['/app/marketing/capabilities/influencer-campaigns', 'marketing.campaigns.view'],
+
         // §12-03/04: the company's own papers, and the two screens that already
         // existed for its identity and its preferences.
         'business management > company > company profile' => ['/app/settings/company', 'settings.company'],

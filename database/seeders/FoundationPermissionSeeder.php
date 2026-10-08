@@ -205,6 +205,14 @@ class FoundationPermissionSeeder extends Seeder
             ['business', 'visitors', 'view', 'business.visitors.view', 'Read the visitor log, the gate diary and the register of people'],
             ['business', 'visitors', 'manage', 'business.visitors.manage', 'Admit and check out visitors, book visits ahead of time, and keep the register and the blacklist'],
 
+            // §11: the marketing desk. Reading the campaigns, the templates and the
+            // delivery states is an office job — whoever answers the phone needs to
+            // know what was sent to whom. Writing a campaign, launching it, putting
+            // it on the clock and keeping the opt-out register are the manager's,
+            // because a launched campaign writes to customers and cannot be unsent.
+            ['marketing', 'campaigns', 'view', 'marketing.campaigns.view', 'Read marketing campaigns, templates, contacts, delivery states and the opt-out register'],
+            ['marketing', 'campaigns', 'manage', 'marketing.campaigns.manage', 'Write, launch, schedule and cancel campaigns, keep templates, and keep the opt-out register'],
+
             ['settings', 'company', 'manage', 'settings.company', 'Edit company profile'],
 
             // Phase H — HRM (§10): attendance, leave, structure

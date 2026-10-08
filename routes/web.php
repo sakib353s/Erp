@@ -8,6 +8,7 @@ use App\Http\Controllers\AuditController;
 use App\Http\Controllers\UtilityBillController;
 use App\Http\Controllers\VisitorController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MarketingCampaignController;
 use App\Http\Controllers\BankChargeController;
 use App\Http\Controllers\BankReconciliationController;
 use App\Http\Controllers\BranchController;
@@ -2483,6 +2484,91 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
         Route::post('/app/visitors/{visit}/no-show', [VisitorController::class, 'noShow'])
             ->whereNumber('visit')
             ->name('business.visitors.no-show');
+    });
+
+    /* ---- §11 Marketing: the campaign desk (11-01…11-06) ----
+     *
+     * Four channel groups in the catalogue — SMS, email, WhatsApp and push — are
+     * one desk filtered by `channel`, because “who did we write to, what did it
+     * cost and what came back” is one question asked four ways. The channel leaves
+     * pin here with `?channel=…`; the contacts, delivery, template and cost lenses
+     * pin here too, filtered the same way.
+     *
+     * Reading is `marketing.campaigns.view` — whoever answers the phone needs to
+     * know what was sent to whom. Writing, launching, scheduling, cancelling and
+     * keeping the opt-out register are `marketing.campaigns.manage`, because a
+     * launched campaign writes to customers and cannot be unsent.
+     *
+     * Literal segments come first and `{campaign}` is constrained to digits, so
+     * `/app/marketing/campaigns/create` is the form and `/app/marketing/campaigns/12`
+     * is a campaign.
+     */
+    Route::middleware('permission:marketing.campaigns.view')->group(function () {
+        Route::get('/app/marketing/campaigns', [MarketingCampaignController::class, 'index'])
+            ->name('marketing.campaigns.index');
+        Route::get('/app/marketing/templates', [MarketingCampaignController::class, 'templates'])
+            ->name('marketing.templates');
+        Route::get('/app/marketing/optouts', [MarketingCampaignController::class, 'optOuts'])
+            ->name('marketing.optouts');
+        Route::get('/app/marketing/deliveries', [MarketingCampaignController::class, 'deliveries'])
+            ->name('marketing.deliveries');
+        Route::get('/app/marketing/contacts', [MarketingCampaignController::class, 'contacts'])
+            ->name('marketing.contacts');
+        Route::get('/app/marketing/reports', [MarketingCampaignController::class, 'reports'])
+            ->name('marketing.reports');
+
+        // The leaves this application will not fake: pixels, ad platforms,
+        // analytics, drip journeys, A/B tests, chat inboxes and provider balances
+        // each open a page saying what is not built, why, and what to use instead.
+        Route::get('/app/marketing/capabilities/{topic}', [MarketingCampaignController::class, 'capability'])
+            ->where('topic', '[a-z0-9\-]+')
+            ->name('marketing.capability');
+
+        Route::get('/app/marketing/campaigns/{campaign}', [MarketingCampaignController::class, 'show'])
+            ->whereNumber('campaign')
+            ->name('marketing.campaigns.show');
+    });
+
+    Route::middleware('permission:marketing.campaigns.manage')->group(function () {
+        Route::get('/app/marketing/campaigns/create', [MarketingCampaignController::class, 'create'])
+            ->name('marketing.campaigns.create');
+        Route::post('/app/marketing/campaigns', [MarketingCampaignController::class, 'store'])
+            ->name('marketing.campaigns.store');
+        Route::get('/app/marketing/campaigns/{campaign}/edit', [MarketingCampaignController::class, 'edit'])
+            ->whereNumber('campaign')
+            ->name('marketing.campaigns.edit');
+        Route::put('/app/marketing/campaigns/{campaign}', [MarketingCampaignController::class, 'update'])
+            ->whereNumber('campaign')
+            ->name('marketing.campaigns.update');
+        Route::post('/app/marketing/campaigns/{campaign}/launch', [MarketingCampaignController::class, 'launch'])
+            ->whereNumber('campaign')
+            ->name('marketing.campaigns.launch');
+        Route::post('/app/marketing/campaigns/{campaign}/schedule', [MarketingCampaignController::class, 'schedule'])
+            ->whereNumber('campaign')
+            ->name('marketing.campaigns.schedule');
+        Route::post('/app/marketing/campaigns/{campaign}/unschedule', [MarketingCampaignController::class, 'unschedule'])
+            ->whereNumber('campaign')
+            ->name('marketing.campaigns.unschedule');
+        Route::post('/app/marketing/campaigns/{campaign}/cancel', [MarketingCampaignController::class, 'cancel'])
+            ->whereNumber('campaign')
+            ->name('marketing.campaigns.cancel');
+
+        Route::get('/app/marketing/templates/create', [MarketingCampaignController::class, 'createTemplate'])
+            ->name('marketing.templates.create');
+        Route::post('/app/marketing/templates', [MarketingCampaignController::class, 'storeTemplate'])
+            ->name('marketing.templates.store');
+        Route::get('/app/marketing/templates/{template}/edit', [MarketingCampaignController::class, 'editTemplate'])
+            ->whereNumber('template')
+            ->name('marketing.templates.edit');
+        Route::put('/app/marketing/templates/{template}', [MarketingCampaignController::class, 'updateTemplate'])
+            ->whereNumber('template')
+            ->name('marketing.templates.update');
+
+        Route::post('/app/marketing/optouts', [MarketingCampaignController::class, 'storeOptOut'])
+            ->name('marketing.optouts.store');
+        Route::delete('/app/marketing/optouts/{optout}', [MarketingCampaignController::class, 'liftOptOut'])
+            ->whereNumber('optout')
+            ->name('marketing.optouts.destroy');
     });
 
     /* ---- Audit trail ---- */

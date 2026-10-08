@@ -1544,6 +1544,24 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
     color: var(--warn);
 }
 
+/* §11: the marketing desk. A message handed to a transport is *in flight* — the
+   outbox has it and no provider has confirmed anything, so it reads as live
+   information rather than as success. A message held because no transport is
+   configured for its channel is a caution worth reading: nothing was sent, and
+   nothing was lost either. A launched campaign is in the same in-flight family —
+   it has gone out, and what came back is what the report is for. */
+.erp-status-queued,
+.erp-status-launched {
+    background: var(--info-soft);
+    color: var(--info);
+}
+
+.erp-status-not_configured,
+.erp-status-not-configured {
+    background: var(--warn-soft);
+    color: var(--warn);
+}
+
 /* Terminal / void / archived — deliberately quiet */
 .erp-status-cancelled,
 .erp-status-released,
@@ -3275,4 +3293,28 @@ hr { border-color: var(--line); opacity: 1; }
     .erp-cal-cell {
         min-height: 78px;
     }
+}
+
+/* §11: a panel inside a card — the launch/schedule/cancel decisions sit in one
+   card each so that "send it now" and "send it later" never look like the same
+   choice wearing two labels. */
+.erp-subcard {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+    height: 100%;
+    background: var(--surface-1);
+}
+
+.erp-subcard-title {
+    font-size: .95rem;
+    font-weight: 650;
+    color: var(--ink-1);
+    margin: 0 0 .5rem;
+}
+
+/* §11: a table cell holding a paragraph — the campaign body preview. */
+.erp-td-wrap {
+    max-width: 34rem;
+    white-space: normal;
 }

@@ -191,6 +191,10 @@ class SystemRoleSeeder extends Seeder
                 // §12-16: the manager runs the gate — booking people in,
                 // admitting them and keeping the register honest.
                 'business.visitors.view', 'business.visitors.manage',
+                // §11: the marketing desk is a manager's job end to end —
+                // writing to customers is the part of this system that cannot be
+                // recalled once it has gone out.
+                'marketing.campaigns.view', 'marketing.campaigns.manage',
             ]],
             ['slug' => 'employee', 'name' => 'Employee', 'description' => 'Staff account: own portal access only — own leave, own payslips.', 'keys' => [
                 'dashboard.view', 'employees.view', 'documents.view', 'search.view',
@@ -215,6 +219,9 @@ class SystemRoleSeeder extends Seeder
                 // that is what a front desk is for — but the gate's decisions
                 // are not everybody's to make.
                 'business.visitors.view',
+                // §11: everybody may read what marketing has sent and what it
+                // cost — but writing to a customer list is not everybody's call.
+                'marketing.campaigns.view',
             ]],
             ['slug' => 'technician', 'name' => 'Technician', 'description' => 'Service technician (portal-capable).', 'keys' => [
                 'dashboard.view', 'documents.view', 'documents.upload', 'search.view',

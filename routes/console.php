@@ -48,6 +48,12 @@ Schedule::command('erp:business:utility-reminders')->dailyAt('07:00');
 // and whether any row was left open yesterday.
 Schedule::command('erp:business:visitor-watch')->dailyAt('08:00');
 
+// §11 — the marketing dispatcher. Scheduled campaigns go out on the day, with the
+// audience expanded then rather than when they were written; the run is once an
+// hour so a campaign set for "this afternoon" is not a campaign set for tomorrow.
+// Nothing is ever marked sent by this command: the outbox decides that.
+Schedule::command('erp:marketing:dispatch')->hourly();
+
 /*
  | The bell before the meeting (§12-11). Every quarter of an hour, because a
  | reminder that arrives an hour late is not a reminder — and once per meeting per
