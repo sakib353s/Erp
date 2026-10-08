@@ -83,6 +83,7 @@ use App\Domain\Sales\Services\SuspiciousOrderFlagger;
 use App\Domain\Sales\SuspiciousOrderFlag;
 use App\Domain\Sales\Territory;
 use App\Domain\Settings\Services\LocalizationService;
+use App\Domain\Tax\Services\TaxPolicy;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -151,6 +152,7 @@ class SalesController extends Controller
         protected DocumentRenderer $renderer,
         protected TaxService $taxService,
         protected LocalizationService $localization,
+        protected TaxPolicy $taxPolicy,
     ) {}
 
     /**
@@ -865,6 +867,7 @@ class SalesController extends Controller
     {
         return view('sales.invoices.show', [
             'invoice' => $invoice->load(['lines.product', 'customer', 'salesOrder']),
+            'taxInclusive' => $this->taxPolicy->pricesIncludeTax(),
         ]);
     }
 
@@ -899,6 +902,7 @@ class SalesController extends Controller
             'type' => $type,
             'rate' => $rate,
             'localization' => $this->localization,
+            'formRevision' => $this->taxPolicy->mushakFormRevision(),
         ])->render();
 
         $document = $this->renderer->storeGenerated(

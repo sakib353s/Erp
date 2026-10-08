@@ -64,12 +64,30 @@ class CreateInvoiceFromOrder
             $taxCode = $payload['tax_code'] ?? null;
 
             $lineDiscountTotal = 0.0;
+            $taxable = 0.0;
             foreach ($order->lines as $orderLine) {
                 $lineDiscountTotal += (float) $orderLine->discount;
+
+                $lineNet = round(
+                    (float) $orderLine->qty * (float) $orderLine->unit_price - (float) $orderLine->discount,
+                    4,
+                );
+
+                /*
+                 * §15-14: the taxable value is what is left in the line after the
+                 * tax that is *inside* it. With exclusive pricing that is the
+                 * line's own net, which is what this used to compute from the
+                 * order's subtotal; with inclusive pricing the order's subtotal is
+                 * the figure the customer pays, and copying it here would print an
+                 * invoice whose taxable value plus VAT did not add up to its total.
+                 */
+                $taxable += $taxApplicable
+                    ? max(0, round($lineNet - (float) $orderLine->tax, 4))
+                    : $lineNet;
             }
             $lineDiscountTotal = round($lineDiscountTotal, 4);
             $docDiscount = round(max(0, (float) $order->discount - $lineDiscountTotal), 4);
-            $taxableBase = round(max(0, (float) $order->subtotal - $lineDiscountTotal - $docDiscount), 4);
+            $taxableBase = round(max(0, round($taxable, 4) - $docDiscount), 4);
 
             // Preserve order grand (includes coupon/promo doc discount). Without tax,
             // recompute the same way TotalsCalculator does: nets − doc + shipping.

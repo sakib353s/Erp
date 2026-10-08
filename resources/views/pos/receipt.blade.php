@@ -50,9 +50,16 @@
 
         <div class="border-top pt-1">
             @if ($invoice)
-                <div class="d-flex justify-content-between"><span>Subtotal</span><span>{{ $loc->number((float) $invoice->subtotal) }}</span></div>
-                @if ((float) $invoice->tax > 0)
-                    <div class="d-flex justify-content-between"><span>Tax</span><span>{{ $loc->number((float) $invoice->tax) }}</span></div>
+                @if ($taxInclusive ?? false)
+                    <div class="d-flex justify-content-between"><span>Value (excl. VAT)</span><span>{{ $loc->number((float) $invoice->taxable_base) }}</span></div>
+                    @if ((float) $invoice->tax > 0)
+                        <div class="d-flex justify-content-between"><span>VAT (included)</span><span>{{ $loc->number((float) $invoice->tax) }}</span></div>
+                    @endif
+                @else
+                    <div class="d-flex justify-content-between"><span>Subtotal</span><span>{{ $loc->number((float) $invoice->subtotal) }}</span></div>
+                    @if ((float) $invoice->tax > 0)
+                        <div class="d-flex justify-content-between"><span>Tax</span><span>{{ $loc->number((float) $invoice->tax) }}</span></div>
+                    @endif
                 @endif
                 @if ((float) $invoice->rounding != 0.0)
                     <div class="d-flex justify-content-between"><span>Rounding</span><span>{{ $loc->number((float) $invoice->rounding) }}</span></div>

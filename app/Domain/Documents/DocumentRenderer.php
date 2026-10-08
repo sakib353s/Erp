@@ -7,6 +7,7 @@ use App\Domain\Foundation\User;
 use App\Domain\Sales\Invoice;
 use App\Domain\Sales\SalesOrder;
 use App\Domain\Settings\Services\LocalizationService;
+use App\Domain\Tax\Services\TaxPolicy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -21,7 +22,10 @@ use Illuminate\Support\Str;
  */
 class DocumentRenderer
 {
-    public function __construct(protected LocalizationService $localization) {}
+    public function __construct(
+        protected LocalizationService $localization,
+        protected TaxPolicy $taxPolicy,
+    ) {}
 
     public function renderInvoice(Invoice $invoice, User $user): Document
     {
@@ -32,6 +36,8 @@ class DocumentRenderer
         $html = view('sales.invoices.print', [
             'invoice' => $invoice,
             'localization' => $this->localization,
+            // §15-14: what the document may claim about its own totals.
+            'taxInclusive' => $this->taxPolicy->pricesIncludeTax(),
         ])->render();
 
         return $this->storeGenerated(

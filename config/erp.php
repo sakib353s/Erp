@@ -502,6 +502,46 @@ return [
                 ],
             ],
 
+            /*
+             * §15-14 — VAT & tax settings. These five values decide how every
+             * taxable document in the system computes and prints its tax, so
+             * they are read by the engine (`TaxPolicy`), never by a form alone.
+             */
+            'tax' => [
+                'key' => 'tax.manage',
+                'label' => 'VAT & Tax Settings',
+                'description' => 'Whether your prices already include VAT, how tax is rounded, which rate an untagged sale uses, and the form revision printed on the statutory tax invoice.',
+                'fields' => [
+                    'prices_include_tax' => [
+                        'label' => 'My prices already include VAT', 'type' => 'boolean', 'default' => false,
+                        'help' => 'Retail counters in Bangladesh usually quote a price the customer pays. With this on, the tax is taken out of that figure instead of added to it: a ৳115 item at 15% is ৳100 taxable + ৳15 VAT, and the customer still pays ৳115.',
+                    ],
+                    'default_code' => [
+                        'label' => 'Default tax code', 'type' => 'text', 'max' => 32,
+                        'default' => '',
+                        'help' => 'Used when a taxable sale names no rate of its own. Leave empty and an untagged sale carries no tax — which is a decision, so the screen says so. A code that names no active rate is refused.',
+                    ],
+                    'rounding_mode' => [
+                        'label' => 'Round VAT', 'type' => 'select',
+                        'options' => [
+                            'document' => 'Once, on the document total',
+                            'line' => 'On every line, then added up',
+                        ],
+                        'default' => 'document',
+                        'help' => 'The two differ by a paisa or two on an order with fractions in it. Whichever you choose, the figure stored on the invoice is the figure that was printed.',
+                    ],
+                    'round_to_nearest_taka' => [
+                        'label' => 'Round the grand total to the nearest taka', 'type' => 'boolean', 'default' => false,
+                        'help' => 'Convenient at a counter and awkward in a ledger: the difference is recorded in the invoice’s own rounding column, so the books still add up.',
+                    ],
+                    'mushak_form_revision' => [
+                        'label' => 'Mushak 9.1 form revision', 'type' => 'text', 'max' => 32,
+                        'default' => '',
+                        'help' => 'Printed on the statutory tax invoice beside the form code, when your form has a revision marker. Left empty, the form prints no revision rather than one this system made up.',
+                    ],
+                ],
+            ],
+
             'dashboard' => [
                 'key' => 'settings.dashboard',
                 'label' => 'Dashboard Settings',

@@ -63,8 +63,16 @@
             <div class="erp-card">
                 <h2 class="erp-h3 mb-3">Totals</h2>
                 <dl class="mb-0">
-                    <div class="d-flex justify-content-between"><dt>Subtotal</dt><dd>{{ number_format((float) $invoice->subtotal, 2) }}</dd></div>
-                    <div class="d-flex justify-content-between"><dt>Tax</dt><dd>{{ number_format((float) $invoice->tax, 2) }}</dd></div>
+                    {{-- §15-14: with inclusive pricing the figures shown are the
+                         taxable value and the VAT inside the total, not a
+                         subtotal the tax is added to. --}}
+                    @if ($taxInclusive ?? false)
+                        <div class="d-flex justify-content-between"><dt>Taxable value</dt><dd>{{ number_format((float) $invoice->taxable_base, 2) }}</dd></div>
+                        <div class="d-flex justify-content-between"><dt>VAT (included)</dt><dd>{{ number_format((float) $invoice->tax, 2) }}</dd></div>
+                    @else
+                        <div class="d-flex justify-content-between"><dt>Subtotal</dt><dd>{{ number_format((float) $invoice->subtotal, 2) }}</dd></div>
+                        <div class="d-flex justify-content-between"><dt>Tax</dt><dd>{{ number_format((float) $invoice->tax, 2) }}</dd></div>
+                    @endif
                     <div class="d-flex justify-content-between"><dt>Paid</dt><dd>{{ number_format((float) $invoice->paid_amount, 2) }}</dd></div>
                     <div class="d-flex justify-content-between fw-bold border-top pt-2 mt-2">
                         <dt>Due</dt>

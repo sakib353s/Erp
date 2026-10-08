@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Domain\Foundation\Permission;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use RuntimeException;
 
 /**
  * Foundation permission matrix (Rule 6): system resources that are not
@@ -25,6 +26,14 @@ class FoundationPermissionSeeder extends Seeder
     {
         $rows = [
             // module, resource, action, key, label
+            //
+            // One key, one row. `updateOrCreate` is keyed by the permission key,
+            // so a second row for the same key silently overwrites the first
+            // one's resource and label — the matrix then lists a permission whose
+            // name does not describe the screen it opens. This catalogue has
+            // carried `tax.manage`, `masters.view`, `maintenance.index` and seven
+            // more twice (some of them with different labels), so a duplicate is
+            // refused here instead of being settled by whichever row came last.
             ['dashboard', 'dashboard', 'view', 'dashboard.view', 'View dashboard'],
 
             ['settings', 'users', 'view', 'users.view', 'View users'],
@@ -37,9 +46,9 @@ class FoundationPermissionSeeder extends Seeder
             ['employee', 'employees', 'edit', 'employees.edit', 'Edit employees'],
             ['employee', 'employees', 'delete', 'employees.delete', 'Delete employees'],
 
-            ['masters', 'masters', 'view', 'masters.view', 'View geo masters'],
+            ['masters', 'masters', 'view', 'masters.view', 'View master data (geo)'],
             ['masters', 'masters', 'manage', 'masters.manage', 'Manage master data'],
-            ['masters', 'tax', 'manage', 'tax.manage', 'Manage tax rates'],
+            ['masters', 'tax_rates', 'manage', 'tax.manage', 'Manage tax rates'],
 
             // Phase F — party / price-list masters
             ['masters', 'customers', 'manage', 'customers.manage', 'Manage customer masters'],
@@ -121,7 +130,7 @@ class FoundationPermissionSeeder extends Seeder
             // §15-23…§15-33 — the maintenance desk. One key per kind of work:
             // an operator who may clear a cache is not automatically somebody
             // who may repair a table or reset the company's settings.
-            ['maintenance', 'desk', 'index', 'maintenance.index', 'Open the system maintenance desk'],
+            ['maintenance', 'desk', 'index', 'maintenance.index', 'Open the maintenance desk and rebuild the search index'],
             ['maintenance', 'cache', 'clear', 'maintenance.cache', 'Clear cache and compiled templates'],
             ['maintenance', 'sessions', 'clear', 'maintenance.sessions', 'End other people’s sessions'],
             ['maintenance', 'temp', 'clear', 'maintenance.temp', 'Remove temporary files'],
@@ -147,7 +156,6 @@ class FoundationPermissionSeeder extends Seeder
             ['settings', 'notifications', 'view', 'notifications.view', 'View notifications'],
             ['settings', 'security', 'view', 'security.alerts.view', 'View security alerts'],
 
-            ['settings', 'maintenance', 'index', 'maintenance.index', 'Rebuild search index / run maintenance'],
             ['settings', 'search', 'view', 'search.view', 'Use global search'],
 
             ['system', 'portal', 'access', 'portal.erp.access', 'Access the ERP portal'],
@@ -155,18 +163,6 @@ class FoundationPermissionSeeder extends Seeder
             ['system', 'portal', 'access', 'portal.supplier.access', 'Access the supplier portal'],
 
             ['settings', 'company', 'manage', 'settings.company', 'Edit company profile'],
-            ['settings', 'company', 'manage', 'company.manage', 'Edit company profile (alias)'],
-
-            ['masters', 'masters', 'view', 'masters.view', 'View master data (geo)'],
-            ['masters', 'masters', 'manage', 'masters.manage', 'Manage master data'],
-            ['masters', 'tax_rates', 'manage', 'tax.manage', 'Manage tax rates'],
-            ['masters', 'customers', 'manage', 'customers.manage', 'Manage customer masters'],
-            ['masters', 'suppliers', 'manage', 'suppliers.manage', 'Manage supplier masters'],
-            ['masters', 'price_lists', 'manage', 'pricing.manage', 'Manage price lists'],
-
-            ['hr', 'employees', 'view', 'employees.view', 'View employees'],
-            ['hr', 'employees', 'create', 'employees.create', 'Create employees'],
-            ['hr', 'employees', 'edit', 'employees.edit', 'Edit employees'],
 
             // Phase H — HRM (§10): attendance, leave, structure
             ['hr', 'attendance', 'view', 'attendance.view', 'View attendance'],
@@ -425,6 +421,19 @@ class FoundationPermissionSeeder extends Seeder
             ['pos', 'customer_display', 'view', 'pos.customer_display', 'Use POS customer display'],
             ['pos', 'settings', 'configure', 'pos.settings.configure', 'Configure POS settings'],
         ];
+
+        $duplicates = collect($rows)
+            ->groupBy(fn (array $row): string => $row[3])
+            ->filter(fn ($group): bool => $group->count() > 1)
+            ->keys();
+
+        if ($duplicates->isNotEmpty()) {
+            throw new RuntimeException(sprintf(
+                'This catalogue defines %s more than once: %s. A permission key is defined once — a second row overwrites the first one\'s resource and label.',
+                $duplicates->count() === 1 ? 'one key' : $duplicates->count().' keys',
+                $duplicates->implode(', '),
+            ));
+        }
 
         foreach ($rows as [$module, $resource, $action, $key, $label]) {
             Permission::updateOrCreate(

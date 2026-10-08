@@ -2,6 +2,8 @@
 
 namespace App\Domain\Settings\Services;
 
+use App\Domain\Foundation\Company;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -65,6 +67,29 @@ class InvariantGuard
     public const COMPANY_ONLY_GROUPS = ['security', 'audit', 'workflow', 'notifications'];
 
     /**
+     * Values that must name something that exists, per group and key.
+     *
+     * The tax default code is the reason this list exists: it is a convenience
+     * with a sharp edge. A code that names no active rate would make every
+     * taxable sale that does not carry its own rate tax-free — a silent
+     * hole in the books opened by a typo in a settings field. So the code is
+     * checked against the company's own rates when it is written, and refused
+     * with the words that say why.
+     *
+     * @var array<string, array<string, array{table: string, column: string, active_column?: string, why: string}>>
+     */
+    public const REFERENCES = [
+        'tax' => [
+            'default_code' => [
+                'table' => 'tax_rates',
+                'column' => 'code',
+                'active_column' => 'is_active',
+                'why' => 'A default tax code that names no active rate would make every untagged taxable sale tax-free.',
+            ],
+        ],
+    ];
+
+    /**
      * Check one write. Returns normally when the value is allowed and throws a
      * field-scoped ValidationException when it is not.
      *
@@ -75,6 +100,7 @@ class InvariantGuard
         $this->assertNotProtected($key);
         $this->assertBranchScope($group, $branchId);
         $this->assertFloor($group, $key, $value);
+        $this->assertReference($group, $key, $value);
     }
 
     /** True when the key is one of the instance's protected identities. */
@@ -98,6 +124,45 @@ class InvariantGuard
     public function floors(): array
     {
         return self::FLOORS;
+    }
+
+    /**
+     * A value that has to name a row that exists. Empty is always allowed: not
+     * choosing a default is a decision, and the screen says what it means.
+     *
+     * @throws ValidationException
+     */
+    protected function assertReference(string $group, string $key, mixed $value): void
+    {
+        $rule = self::REFERENCES[$group][$key] ?? null;
+
+        if ($rule === null || $value === null || $value === '') {
+            return;
+        }
+
+        $companyId = Company::current()?->id;
+
+        $exists = DB::table($rule['table'])
+            ->where($rule['column'], (string) $value)
+            // “Names a rate” has to mean the rate a sale would actually resolve:
+            // a switched-off row prices nothing, so it is not a default.
+            ->when(
+                isset($rule['active_column']),
+                fn ($query) => $query->where($rule['active_column'], true),
+            )
+            ->when($companyId !== null, fn ($query) => $query->where('company_id', $companyId))
+            ->exists();
+
+        if (! $exists) {
+            throw ValidationException::withMessages([
+                'settings.'.$key => sprintf(
+                    '%s No %s with the code “%s” belongs to this company — add the rate first.',
+                    $rule['why'],
+                    str_replace('_', ' ', $rule['table']),
+                    (string) $value,
+                ),
+            ]);
+        }
     }
 
     /** @throws ValidationException */

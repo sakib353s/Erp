@@ -130,5 +130,11 @@
         </div>
     @endif
 </div>
+
+@if (! empty($formRevision))
+    {{-- §15-14: the statutory form's own revision marker. Left unset by the
+         company, the form prints none rather than an invented one. --}}
+    <div class="muted" style="margin-top:.5rem;font-size:12px;">Form revision: {{ $formRevision }}</div>
+@endif
 </body>
 </html>

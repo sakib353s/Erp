@@ -18,6 +18,7 @@ use App\Domain\Sales\Actions\CreateInvoiceFromOrder;
 use App\Domain\Sales\Actions\CreateSalesOrder;
 use App\Domain\Sales\Actions\IssueInvoice;
 use App\Domain\Sales\Invoice;
+use App\Domain\Settings\Services\SettingService;
 use Database\Seeders\AccountingCoreSeeder;
 use Database\Seeders\DocumentTypeSeeder;
 use Database\Seeders\FoundationPermissionSeeder;
@@ -211,6 +212,28 @@ class Mushak91DocumentTest extends TestCase
         $this->assertSame('invoice', $audit->entity_type);
         $this->assertSame($invoice->invoice_no, $audit->after['invoice_no'] ?? null);
         $this->assertSame(1, (int) ($audit->after['document_version'] ?? 0));
+    }
+
+    /**
+     * §15-14: the statutory form's revision marker is the company's own, printed
+     * when it has declared one and absent when it has not — a form revision this
+     * system invented would be a legal claim nobody made.
+     */
+    public function test_the_form_revision_is_printed_only_when_the_company_declared_one(): void
+    {
+        $invoice = $this->makeTaxInvoice();
+
+        $this->actingAs($this->admin)
+            ->get(route('sales.invoices.mushak-91', $invoice))
+            ->assertOk()
+            ->assertDontSee('Form revision');
+
+        app(SettingService::class)->set('tax', 'mushak_form_revision', '2019 (NBR)', null, $this->admin);
+
+        $this->actingAs($this->admin)
+            ->get(route('sales.invoices.mushak-91', $invoice))
+            ->assertOk()
+            ->assertSee('Form revision: 2019 (NBR)');
     }
 
     public function test_effective_dated_rate_resolves_for_the_invoice_date(): void

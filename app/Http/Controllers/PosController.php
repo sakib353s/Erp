@@ -26,6 +26,7 @@ use App\Domain\Sales\Services\PosReportService;
 use App\Domain\Sales\Services\PricingService;
 use App\Domain\Settings\Services\LocalizationService;
 use App\Domain\Settings\Services\SettingService;
+use App\Domain\Tax\Services\TaxPolicy;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -55,6 +56,7 @@ class PosController extends Controller
         protected CreateLayaway $createLayaway,
         protected SettingService $settings,
         protected LocalizationService $localization,
+        protected TaxPolicy $taxPolicy,
     ) {}
 
     public function terminal(Request $request): View
@@ -290,6 +292,7 @@ class PosController extends Controller
             // §15-07: the slip is a document, so it obeys the same switches the
             // invoices do — grouping, numerals and amount in words.
             'localization' => $this->localization,
+            'taxInclusive' => $this->taxPolicy->pricesIncludeTax(),
         ]);
     }
 

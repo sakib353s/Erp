@@ -19,6 +19,11 @@
 @php
     // §15-07: the commercial print obeys the same switches as the statutory one.
     $loc = $localization ?? app(\App\Domain\Settings\Services\LocalizationService::class);
+    // §15-14: when prices already include VAT, the document may not print a
+    // subtotal that the tax is then added to — the customer would read two
+    // different totals. It prints the taxable value, the VAT inside it, and the
+    // figure actually being asked for.
+    $taxInclusive = $taxInclusive ?? false;
 @endphp
 @php
     $company = $invoice->company;
@@ -71,9 +76,16 @@
 </table>
 
 <div class="totals">
-    <div><span>Subtotal</span><span>{{ $loc->number((float) $invoice->subtotal) }}</span></div>
-    @if ($showTax)
-        <div><span>Tax</span><span>{{ number_format((float) $invoice->tax, 2) }}</span></div>
+    @if ($taxInclusive)
+        <div><span>Taxable value</span><span>{{ $loc->number((float) $invoice->taxable_base) }}</span></div>
+        @if ($showTax)
+            <div><span>VAT (included in the prices)</span><span>{{ $loc->number((float) $invoice->tax) }}</span></div>
+        @endif
+    @else
+        <div><span>Subtotal</span><span>{{ $loc->number((float) $invoice->subtotal) }}</span></div>
+        @if ($showTax)
+            <div><span>Tax</span><span>{{ $loc->number((float) $invoice->tax) }}</span></div>
+        @endif
     @endif
     @if ((float) $invoice->shipping > 0)
         <div><span>Shipping</span><span>{{ $loc->number((float) $invoice->shipping) }}</span></div>
