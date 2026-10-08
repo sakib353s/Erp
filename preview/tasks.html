@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#ffffff">
-    <title>Order workspace · BD ERP — UI redesign preview</title>
+    <title>Tasks &amp; projects · BD ERP — UI redesign preview</title>
     <link rel="stylesheet" href="./assets/preview.css">
 </head>
 <body class="erp-body">
@@ -15,11 +15,11 @@
 <div class="erp-preview-bar">
     <i class="bi bi-easel2" aria-hidden="true"></i>
     <strong>UI redesign preview</strong>
-    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html" style="color:#fff;text-decoration:underline">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html">Labels</a><span style="opacity:.4">·</span><a href="./cash-bank.html">Cash & bank</a><span style="opacity:.4">·</span><a href="./bank-recon.html">Reconciliation</a><span style="opacity:.4">·</span><a href="./cash-counts.html">Cash count</a><span style="opacity:.4">·</span><a href="./bank-charges.html">Bank charges</a><span style="opacity:.4">·</span><a href="./expense-report.html">Expense report</a><span style="opacity:.4">·</span><a href="./cash-reports.html">Cash reports</a><span style="opacity:.4">·</span><a href="./cheques.html">Cheques</a><span style="opacity:.4">·</span><a href="./expenses.html">Expenses</a><span style="opacity:.4">·</span><a href="./expense-recurring.html">Recurring</a><span style="opacity:.4">·</span><a href="./petty-cash.html">Petty cash</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
+    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html">Labels</a><span style="opacity:.4">·</span><a href="./cash-bank.html">Cash & bank</a><span style="opacity:.4">·</span><a href="./bank-recon.html">Reconciliation</a><span style="opacity:.4">·</span><a href="./cash-counts.html">Cash count</a><span style="opacity:.4">·</span><a href="./bank-charges.html">Bank charges</a><span style="opacity:.4">·</span><a href="./expense-report.html">Expense report</a><span style="opacity:.4">·</span><a href="./cash-reports.html">Cash reports</a><span style="opacity:.4">·</span><a href="./cheques.html">Cheques</a><span style="opacity:.4">·</span><a href="./expenses.html">Expenses</a><span style="opacity:.4">·</span><a href="./expense-recurring.html">Recurring</a><span style="opacity:.4">·</span><a href="./petty-cash.html">Petty cash</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
     <span class="erp-preview-note">Static render of the new shell — same CSS + JS the Laravel app ships. Press ⌘K / Ctrl+K.</span>
 </div>
-<div class="erp-shell" data-rail="expanded">
-
+<div class="erp-shell">
+    
 <aside class="erp-sidebar" id="erpSidebar" aria-label="Primary navigation">
     <div class="erp-sidebar-head">
         <a class="erp-brand" href="./dashboard.html">
@@ -107,15 +107,15 @@
             </p>
             
     <div class="erp-nav-group">
-        <button class="erp-nav-group-btn is-active has-active-trail" type="button"
-                data-bs-toggle="collapse" data-bs-target="#nav-crm-0" aria-expanded="true">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-crm-0" aria-expanded="false">
             <i class="bi bi-cart3 erp-nav-icon" aria-hidden="true"></i>
             <span>Sales</span>
             <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
         </button>
-        <div class="collapse show" id="nav-crm-0">
+        <div class="collapse" id="nav-crm-0">
             <div class="erp-nav-sub">
-        <a class="erp-nav-link active" href="./orders.html" aria-current="page">
+        <a class="erp-nav-link" href="./orders.html">
             <span>Orders</span>
         </a>
         <a class="erp-nav-link" href="./order-detail.html">
@@ -602,8 +602,8 @@
         <span class="erp-version">Build 2026.10 · v2</span>
     </div>
 </aside>
-    <div class="erp-main">
-
+    <main class="erp-main">
+        
 <header class="erp-topbar">
     <button class="erp-icon-btn d-lg-none" type="button" data-erp-sidebar-open aria-label="Open navigation">
         <i class="bi bi-list" aria-hidden="true"></i>
@@ -612,19 +612,13 @@
     <div class="erp-topbar-crumbs">
         <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb">
         <li>
-            <span class="is-current" aria-current="page">Sell</span>
+            <span class="is-current" aria-current="page">Business management</span>
         </li>
         <li>
-            <span class="is-current" aria-current="page">Sales</span>
-        </li>
-        <li>
-            <a href="./orders.html">Orders</a><i class="bi bi-chevron-right" aria-hidden="true"></i>
-        </li>
-        <li>
-            <span class="is-current" aria-current="page">SO-2026-01845</span>
+            <span class="is-current" aria-current="page">Tasks &amp; projects</span>
         </li></ol></nav>
         <div class="erp-topbar-title">
-            <strong class="d-none d-md-inline">SO-2026-01845</strong>
+            <strong class="d-none d-md-inline">Tasks &amp; projects</strong>
             <span class="erp-chip erp-chip-outline d-none d-xl-inline-flex" title="Current branch context">
                 <i class="bi bi-geo-alt" aria-hidden="true"></i>Dhaka HQ
             </span>
@@ -698,155 +692,253 @@
         </div>
     </div>
 </header>
-        <main class="erp-content" id="erpContent">
+        <div class="erp-content">
+
             <header class="erp-page-head">
                 <div class="erp-page-head-main">
-                    <p class="erp-eyebrow">Sales order</p>
-                    <h1 class="erp-h1">SO-2026-01845 <span class="erp-status erp-status-confirmed">confirmed</span></h1>
-                    <p class="erp-page-sub">Nusrat Jahan · 01711-000000 · Dhaka, Mirpur 10 · placed 07 Oct 2026, 11:42 AM by counter staff (Rakib).</p>
-                    <div class="erp-meta-row">
-                        <span class="erp-chip erp-chip-outline"><i class="bi bi-geo-alt" aria-hidden="true"></i>Dhaka HQ</span>
-                        <span class="erp-chip erp-chip-outline"><i class="bi bi-person" aria-hidden="true"></i>Salesperson: Rakib</span>
-                        <span class="erp-chip erp-chip-outline"><i class="bi bi-truck" aria-hidden="true"></i>Pathao · pickup scheduled</span>
-                        <span class="erp-chip erp-chip-ok"><i class="bi bi-shield-check" aria-hidden="true"></i>Stock reserved</span>
-                    </div>
+                    <p class="erp-eyebrow">Business Management · Tasks</p>
+                    <h1 class="erp-h1">The board</h1>
+                    <p class="erp-page-sub">One column per state, drawn from the task state machine itself — todo, in progress, blocked, in review, done — so a column cannot appear that no task may be in. A card only offers the moves that state allows: done can be reopened, cancelled cannot. Overdue is computed from the clock, so a task that became late a minute ago is already late.</p>
                 </div>
                 <div class="erp-page-head-actions">
-                    <button class="btn btn-outline-secondary" type="button"><i class="bi bi-printer" aria-hidden="true"></i> Print invoice</button>
-                    <button class="btn btn-outline-secondary" type="button"><i class="bi bi-pencil" aria-hidden="true"></i> Edit</button>
-                    <button class="btn btn-primary" type="button"><i class="bi bi-check2" aria-hidden="true"></i> Confirm shipment</button>
-                    <button class="erp-icon-btn" type="button" title="More actions" aria-label="More actions"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
+                    <a class="btn btn-outline-secondary" href="#mine"><i class="bi bi-list-task" aria-hidden="true"></i> My tasks</a>
+                    <a class="btn btn-outline-secondary" href="./tasks.html"><i class="bi bi-people" aria-hidden="true"></i> Everybody’s</a>
+                    <a class="btn btn-primary" href="#new"><i class="bi bi-plus-lg" aria-hidden="true"></i> New task</a>
                 </div>
             </header>
 
+            <div class="erp-kpi-grid">
+                <div class="erp-kpi"><p class="erp-kpi-label"><i class="bi bi-list-task" aria-hidden="true"></i> Open, mine</p><p class="erp-kpi-value">3</p><p class="erp-kpi-foot">Everything assigned to you that is not done or cancelled</p></div>
+                <div class="erp-kpi"><p class="erp-kpi-label"><i class="bi bi-alarm" aria-hidden="true"></i> Overdue, mine</p><p class="erp-kpi-value">1</p><p class="erp-kpi-foot">Past the due date and still open</p></div>
+                <div class="erp-kpi"><p class="erp-kpi-label"><i class="bi bi-check2-circle" aria-hidden="true"></i> Completed this week</p><p class="erp-kpi-value">4</p><p class="erp-kpi-foot">Company-wide, marked done since Monday</p></div>
+                <div class="erp-kpi"><p class="erp-kpi-label"><i class="bi bi-people" aria-hidden="true"></i> Open, everybody</p><p class="erp-kpi-value">9</p><p class="erp-kpi-foot">Across the company, including yours</p></div>
+            </div>
+
+            <p class="erp-filter-note">
+                <i class="bi bi-eye" aria-hidden="true"></i>
+                A person with only <span class="font-monospace">tasks.view_own</span> sees this board scoped to their own cards —
+                the query never returns the rest. Seeing everybody’s work needs <span class="font-monospace">tasks.view_all</span>.
+            </p>
+
             <div class="row g-3">
-                <div class="col-xl-8">
-                    <section class="erp-card mb-3">
+                
+                <div class="col-xl col-lg-4 col-md-6">
+                    <section class="erp-card h-100">
                         <header class="erp-card-head">
-                            <h2 class="erp-card-title"><i class="bi bi-list-ul" aria-hidden="true"></i> Line items</h2>
-                            <span class="erp-chip erp-chip-outline">3 lines · 66 units</span>
+                            <div>
+                                <h2 class="erp-card-title">To do</h2>
+                                <p class="erp-card-sub">2 card(s)</p>
+                            </div>
+                            <div class="erp-card-actions"><span class="erp-status erp-status-todo">To do</span></div>
                         </header>
-                        <div class="erp-table-scroll">
-                            <table class="table erp-table erp-table-stack">
-                                <thead>
-                                    <tr>
-                                        <th>Item</th>
-                                        <th class="erp-th-num">Qty</th>
-                                        <th class="erp-th-num">Unit price</th>
-                                        <th class="erp-th-num">Line total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    
-                                    <tr>
-                                        <td data-label="Item">Rice — Miniket 5kg (SKU RM-5KG)</td>
-                                        <td data-label="Qty" class="erp-td-num">12</td>
-                                        <td data-label="Unit" class="erp-td-num"><span class="erp-amount">৳ 1180</span></td>
-                                        <td data-label="Total" class="erp-td-num"><strong><span class="erp-amount">৳ 14,160</span></strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td data-label="Item">Soybean oil 2L (SKU SO-2L)</td>
-                                        <td data-label="Qty" class="erp-td-num">24</td>
-                                        <td data-label="Unit" class="erp-td-num"><span class="erp-amount">৳ 335</span></td>
-                                        <td data-label="Total" class="erp-td-num"><strong><span class="erp-amount">৳ 8,040</span></strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td data-label="Item">Sugar — fresh 1kg (SKU SG-1KG)</td>
-                                        <td data-label="Qty" class="erp-td-num">30</td>
-                                        <td data-label="Unit" class="erp-td-num"><span class="erp-amount">৳ 128</span></td>
-                                        <td data-label="Total" class="erp-td-num"><strong><span class="erp-amount">৳ 3,840</span></strong></td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="3" class="text-end">Subtotal</td>
-                                        <td class="erp-td-num">৳ 26,040</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3" class="text-end">Discount (customer group: retailer)</td>
-                                        <td class="erp-td-num erp-amount-neg">− ৳ 1,460</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3" class="text-end">Grand total</td>
-                                        <td class="erp-td-num erp-amount-lg">৳ 24,580</td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                        <div class="p-2">
+                            
+                            <article class="erp-list-row erp-list-row-top">
+                                <div class="erp-list-row-main">
+                                    <a class="erp-cell-strong" href="#task">Count aisle four before Friday</a>
+                                    <div class="erp-td-muted">Warehouse Helper · Annual stock take</div>
+                                    <div class="mt-1 d-flex gap-1 flex-wrap">
+                                        <span class="erp-chip erp-chip-warn">high</span>
+                                        <span class="erp-chip erp-chip-outline">23 Oct</span>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <button class="btn btn-outline-secondary btn-sm" type="button" title="Move to the next state"><i class="bi bi-arrow-right" aria-hidden="true"></i></button>
+                                </div>
+                            </article>
+                            <article class="erp-list-row erp-list-row-top">
+                                <div class="erp-list-row-main">
+                                    <a class="erp-cell-strong" href="#task">Renew the Narayanganj trade licence</a>
+                                    <div class="erp-td-muted">Counter Manager, Dhanmondi</div>
+                                    <div class="mt-1 d-flex gap-1 flex-wrap">
+                                        <span class="erp-chip erp-chip-soft">normal</span>
+                                        <span class="erp-chip erp-chip-outline">30 Oct</span>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <button class="btn btn-outline-secondary btn-sm" type="button" title="Move to the next state"><i class="bi bi-arrow-right" aria-hidden="true"></i></button>
+                                </div>
+                            </article>
                         </div>
                     </section>
-
-                    <section class="erp-card mb-3">
+                </div>
+                <div class="col-xl col-lg-4 col-md-6">
+                    <section class="erp-card h-100">
                         <header class="erp-card-head">
-                            <h2 class="erp-card-title"><i class="bi bi-clock-history" aria-hidden="true"></i> Activity</h2>
-                            <button class="btn btn-sm btn-outline-secondary" type="button">Audit trail</button>
+                            <div>
+                                <h2 class="erp-card-title">In progress</h2>
+                                <p class="erp-card-sub">2 card(s)</p>
+                            </div>
+                            <div class="erp-card-actions"><span class="erp-status erp-status-in_progress">In progress</span></div>
                         </header>
-                        <ol class="erp-timeline">
-                            <li class="erp-timeline-item erp-timeline-approved">
-                                <span class="erp-timeline-marker"><i class="bi bi-check2" aria-hidden="true"></i></span>
-                                <div class="erp-timeline-body">
-                                    <p class="erp-timeline-title mb-0">Order confirmed — stock reserved (66 units)</p>
-                                    <p class="erp-timeline-meta mb-0">07 Oct 2026, 11:44 AM · Rakib (counter staff) · SO-2026-01845</p>
+                        <div class="p-2">
+                            
+                            <article class="erp-list-row erp-list-row-top">
+                                <div class="erp-list-row-main">
+                                    <a class="erp-cell-strong" href="#task">Reconcile the bank statement to 30 September</a>
+                                    <div class="erp-td-muted">Head of Accounts</div>
+                                    <div class="mt-1 d-flex gap-1 flex-wrap">
+                                        <span class="erp-chip erp-chip-danger">urgent</span>
+                                        <span class="erp-chip erp-chip-danger">19 Oct · overdue</span>
+                                    </div>
                                 </div>
-                            </li>
-                            <li class="erp-timeline-item erp-timeline-pending">
-                                <span class="erp-timeline-marker"><i class="bi bi-hourglass" aria-hidden="true"></i></span>
-                                <div class="erp-timeline-body">
-                                    <p class="erp-timeline-title mb-0">Awaiting courier pickup</p>
-                                    <p class="erp-timeline-meta mb-0">Pathao · consignment requested at 11:46 AM</p>
+                                <div class="text-end">
+                                    <button class="btn btn-outline-secondary btn-sm" type="button" title="Move to the next state"><i class="bi bi-arrow-right" aria-hidden="true"></i></button> <button class="btn btn-outline-secondary btn-sm" type="button" title="Move to the next state"><i class="bi bi-arrow-right" aria-hidden="true"></i></button>
                                 </div>
-                            </li>
-                            <li class="erp-timeline-item">
-                                <span class="erp-timeline-marker"><i class="bi bi-receipt" aria-hidden="true"></i></span>
-                                <div class="erp-timeline-body">
-                                    <p class="erp-timeline-title mb-0">Order created</p>
-                                    <p class="erp-timeline-meta mb-0">07 Oct 2026, 11:42 AM · counter POS, session CS-00091</p>
+                            </article>
+                            <article class="erp-list-row erp-list-row-top">
+                                <div class="erp-list-row-main">
+                                    <a class="erp-cell-strong" href="#task">Write the October promotion on the Dhanmondi counter</a>
+                                    <div class="erp-td-muted">Instance Owner · Winter promotion</div>
+                                    <div class="mt-1 d-flex gap-1 flex-wrap">
+                                        <span class="erp-chip erp-chip-warn">high</span>
+                                        <span class="erp-chip erp-chip-outline">21 Oct</span>
+                                    </div>
                                 </div>
-                            </li>
-                        </ol>
+                                <div class="text-end">
+                                    <button class="btn btn-outline-secondary btn-sm" type="button" title="Move to the next state"><i class="bi bi-arrow-right" aria-hidden="true"></i></button> <button class="btn btn-outline-secondary btn-sm" type="button" title="Move to the next state"><i class="bi bi-arrow-right" aria-hidden="true"></i></button>
+                                </div>
+                            </article>
+                        </div>
                     </section>
                 </div>
-
-                <div class="col-xl-4">
-                    <section class="erp-card mb-3">
+                <div class="col-xl col-lg-4 col-md-6">
+                    <section class="erp-card h-100">
                         <header class="erp-card-head">
-                            <h2 class="erp-card-title"><i class="bi bi-credit-card" aria-hidden="true"></i> Payment</h2>
-                            <span class="erp-status erp-status-paid">paid</span>
+                            <div>
+                                <h2 class="erp-card-title">Blocked</h2>
+                                <p class="erp-card-sub">1 card(s)</p>
+                            </div>
+                            <div class="erp-card-actions"><span class="erp-status erp-status-blocked">Blocked</span></div>
                         </header>
-                        <dl class="erp-dl erp-dl-striped">
-                            <dt>Method</dt><dd>bKash merchant</dd>
-                            <dt>Received</dt><dd><span class="erp-amount">৳ 24,580</span></dd>
-                            <dt>Due</dt><dd><span class="erp-amount">৳ 0</span></dd>
-                            <dt>Reference</dt><dd class="erp-hash">TRX-9F31-8820</dd>
-                        </dl>
+                        <div class="p-2">
+                            
+                            <article class="erp-list-row erp-list-row-top">
+                                <div class="erp-list-row-main">
+                                    <a class="erp-cell-strong" href="#task">Migrate the old supplier ledger</a>
+                                    <div class="erp-td-muted">Accounts Assistant</div>
+                                    <div class="mt-1 d-flex gap-1 flex-wrap">
+                                        <span class="erp-chip erp-chip-soft">normal</span>
+                                        <span class="erp-chip erp-chip-outline">28 Oct</span>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <button class="btn btn-outline-secondary btn-sm" type="button" title="Move to the next state"><i class="bi bi-arrow-right" aria-hidden="true"></i></button>
+                                </div>
+                            </article>
+                        </div>
                     </section>
-
-                    <section class="erp-card mb-3">
+                </div>
+                <div class="col-xl col-lg-4 col-md-6">
+                    <section class="erp-card h-100">
                         <header class="erp-card-head">
-                            <h2 class="erp-card-title"><i class="bi bi-truck" aria-hidden="true"></i> Delivery</h2>
-                            <span class="erp-chip erp-chip-outline">tracking</span>
+                            <div>
+                                <h2 class="erp-card-title">In review</h2>
+                                <p class="erp-card-sub">1 card(s)</p>
+                            </div>
+                            <div class="erp-card-actions"><span class="erp-status erp-status-review">In review</span></div>
                         </header>
-                        <ul class="erp-stepper">
-                            <li class="is-done"><span class="erp-stepper-mark"><i class="bi bi-check2"></i></span>Reserved</li>
-                            <li class="is-current"><span class="erp-stepper-mark">2</span>Picked up</li>
-                            <li><span class="erp-stepper-mark">3</span>In transit</li>
-                            <li><span class="erp-stepper-mark">4</span>Delivered</li>
-                        </ul>
+                        <div class="p-2">
+                            
+                            <article class="erp-list-row erp-list-row-top">
+                                <div class="erp-list-row-main">
+                                    <a class="erp-cell-strong" href="#task">Sign off the packaging cost sheet</a>
+                                    <div class="erp-td-muted">Store Keeper · Packaging audit</div>
+                                    <div class="mt-1 d-flex gap-1 flex-wrap">
+                                        <span class="erp-chip erp-chip-soft">normal</span>
+                                        <span class="erp-chip erp-chip-outline">20 Oct</span>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <button class="btn btn-outline-secondary btn-sm" type="button" title="Move to the next state"><i class="bi bi-arrow-right" aria-hidden="true"></i></button> <button class="btn btn-outline-secondary btn-sm" type="button" title="Move to the next state"><i class="bi bi-arrow-right" aria-hidden="true"></i></button>
+                                </div>
+                            </article>
+                        </div>
                     </section>
-
-                    <section class="erp-card">
+                </div>
+                <div class="col-xl col-lg-4 col-md-6">
+                    <section class="erp-card h-100">
                         <header class="erp-card-head">
-                            <h2 class="erp-card-title"><i class="bi bi-shield-lock" aria-hidden="true"></i> Controls</h2>
+                            <div>
+                                <h2 class="erp-card-title">Done</h2>
+                                <p class="erp-card-sub">1 card(s)</p>
+                            </div>
+                            <div class="erp-card-actions"><span class="erp-status erp-status-done">Done</span></div>
                         </header>
-                        <ul class="erp-levels">
-                            <li><strong class="d-block">Approval required above ৳ 5,00,000</strong><span class="text-body-secondary">Not triggered — this order is ৳ 24,580.</span></li>
-                            <li><strong class="d-block">Credit limit</strong><span class="text-body-secondary">Customer limit ৳ 2,00,000 · used ৳ 48,300. This order is prepaid.</span></li>
-                            <li><strong class="d-block">Branch scope</strong><span class="text-body-secondary">Dhaka HQ only. Chattogram staff cannot see this document.</span></li>
-                        </ul>
+                        <div class="p-2">
+                            
+                            <article class="erp-list-row erp-list-row-top">
+                                <div class="erp-list-row-main">
+                                    <a class="erp-cell-strong" href="#task">Close the September cash book</a>
+                                    <div class="erp-td-muted">Head of Accounts</div>
+                                    <div class="mt-1 d-flex gap-1 flex-wrap">
+                                        <span class="erp-chip erp-chip-warn">high</span>
+                                        <span class="erp-chip erp-chip-outline">05 Oct</span>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <button class="btn btn-outline-secondary btn-sm" type="button" title="Move to the next state"><i class="bi bi-arrow-right" aria-hidden="true"></i></button>
+                                </div>
+                            </article>
+                        </div>
                     </section>
                 </div>
             </div>
-        </main>
 
+            <section class="erp-card mt-3" id="mine">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">My tasks, in the order it hurts</h2>
+                        <p class="erp-card-sub">Overdue first, then by priority, then by the soonest due date — sorted when the page is read.</p>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="erp-table">
+                        <thead>
+                            <tr>
+                                <th>Task</th><th>Project</th><th>Priority</th><th>Due</th><th>State</th><th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr>
+                                <td><a class="erp-cell-strong" href="#task">Reconcile the bank statement to 30 September</a></td>
+                                <td class="erp-td-muted">—</td>
+                                <td><span class="erp-chip erp-chip-danger">Urgent</span></td>
+                                <td class="erp-td-muted">19 Oct 2026, 17:00<div><span class="erp-chip erp-chip-danger">overdue</span></div></td>
+                                <td><span class="erp-status erp-status-in_progress">In progress</span></td>
+                                <td class="text-end"><a class="btn btn-outline-secondary btn-sm" href="#task">Open</a></td>
+                            </tr>
+                            <tr>
+                                <td><a class="erp-cell-strong" href="#task">Write the October promotion on the Dhanmondi counter</a></td>
+                                <td class="erp-td-muted">Winter promotion</td>
+                                <td><span class="erp-chip erp-chip-warn">High</span></td>
+                                <td class="erp-td-muted">21 Oct 2026, 12:00</td>
+                                <td><span class="erp-status erp-status-in_progress">In progress</span></td>
+                                <td class="text-end"><a class="btn btn-outline-secondary btn-sm" href="#task">Open</a></td>
+                            </tr>
+                            <tr>
+                                <td><a class="erp-cell-strong" href="#task">Approve the store keeper’s leave request</a></td>
+                                <td class="erp-td-muted">—</td>
+                                <td><span class="erp-chip erp-chip-soft">Normal</span></td>
+                                <td class="erp-td-muted">24 Oct 2026, 10:00</td>
+                                <td><span class="erp-status erp-status-todo">To do</span></td>
+                                <td class="text-end"><a class="btn btn-outline-secondary btn-sm" href="#task">Open</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-3">
+                    <p class="erp-filter-note mb-0">
+                        <i class="bi bi-diagram-3" aria-hidden="true"></i>
+                        Every move, assignment, due-date change and comment writes a row on the task’s own timeline <em>and</em> an audit
+                        event; only the assignee, the creator, or somebody with <span class="font-monospace">tasks.manage</span> may move it.
+                    </p>
+                </div>
+            </section>
+
+        </div>
+        
 <footer class="erp-footer">
     <span>BD ERP · Rafshan Trading Ltd.</span>
     <span class="erp-footer-meta">
@@ -854,7 +946,7 @@
         <span class="d-none d-md-inline">Press <kbd>⌘</kbd><kbd>K</kbd> to jump anywhere</span>
     </span>
 </footer>
-    </div>
+    </main>
 </div>
 
 <div class="erp-backdrop" data-erp-backdrop hidden></div>

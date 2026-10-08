@@ -11,6 +11,7 @@ import { shellHeader, shellFooter } from './shell.mjs';
 import { designSystem, dashboard, orders, orderDetail, customers, customerProfile, pos, packaging, labels, cashBank, bankRecon, cheques, expenses, recurringExpenses, pettyCash, pettyCashExpenses, pettyCashRequests, pettyCashReplenishment, cashCounts, cashCountSheet, bankCharges, expenseReport, cashReports, reportCentre, reportFamily,
     reportsCustom, reportsScheduled, settingsDesk, settingsBranch, maintenanceDesk,
     settingsLocalization, settingsTax,
+    noticeBoard, taskBoard,
     login, notFound } from './pages.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -45,6 +46,8 @@ const shellPages = [
     ['settings-localization.html', 'Bengali settings', settingsLocalization],
     ['settings-tax.html', 'VAT & tax settings', settingsTax],
     ['maintenance.html', 'System maintenance', maintenanceDesk],
+    ['notices.html', 'Notice board', noticeBoard],
+    ['tasks.html', 'Tasks & projects', taskBoard],
     ['petty-cash.html', 'Petty cash', pettyCash],
     ['petty-cash-requests.html', 'Petty cash requests', pettyCashRequests],
     ['petty-cash-expenses.html', 'Petty cash expenses', pettyCashExpenses],

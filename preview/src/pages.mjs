@@ -6369,3 +6369,321 @@ ${previewBar('settings-tax.html')}
 </div>`;
 }
 
+/* --------------------------------------------------- 12-12. the notice board */
+
+export function noticeBoard() {
+    const board = [
+        {
+            title: 'Safety drill on the 24th — counter staff',
+            category: 'Policy',
+            tone: 'erp-chip-warn',
+            published: '07 Oct 2026, 09:20',
+            by: 'Instance Owner',
+            audience: 'Everybody in the company (12)',
+            waiting: true,
+            body: 'The fire drill runs at 10:00 and takes about twenty minutes. Please read the evacuation route for your floor and confirm that you have read this notice — the register has to show the office was told.',
+        },
+        {
+            title: 'Eid bonus paid with the October salary',
+            category: 'Finance',
+            tone: 'erp-chip-soft',
+            published: '02 Oct 2026, 16:05',
+            by: 'Head of Accounts',
+            audience: 'Everybody in the company (12)',
+            waiting: false,
+            body: 'The bonus has been processed with this month’s payroll. Payslips are in the employee portal; the figure is the one on your own payslip, not a company-wide number.',
+        },
+        {
+            title: 'Narayanganj outlet opens at 11:00 on Fridays',
+            category: 'General',
+            tone: 'erp-chip-outline',
+            published: '28 Sep 2026, 11:40',
+            by: 'Head of Retail',
+            audience: 'People of 1 branch (4)',
+            waiting: false,
+            body: 'From next week the outlet opens an hour later on Fridays and closes at the same time. The change does not affect head office or the Dhanmondi counter.',
+        },
+    ];
+
+    const ledger = [
+        { name: 'Instance Owner', at: '07 Oct 2026, 09:22', done: true },
+        { name: 'Head of Accounts', at: '07 Oct 2026, 09:31', done: true },
+        { name: 'Counter Manager, Dhanmondi', at: '07 Oct 2026, 10:02', done: true },
+        { name: 'Store Keeper', at: '07 Oct 2026, 10:14', done: true },
+        { name: 'Narayanganj Supervisor', at: '07 Oct 2026, 11:20', done: true },
+        { name: 'Accounts Assistant', at: null, done: false },
+        { name: 'Warehouse Helper', at: null, done: false },
+    ];
+
+    return `
+${previewBar('notices.html')}
+<div class="erp-shell">
+    ${sidebar('govern')}
+    <main class="erp-main">
+        ${topbar({ title: 'Notice board', trail: [{ label: 'Business management' }, { label: 'Notice board' }] })}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div class="erp-page-head-main">
+                    <p class="erp-eyebrow">Business Management · Notice board</p>
+                    <h1 class="erp-h1">What the company has told everybody</h1>
+                    <p class="erp-page-sub">A notice is addressed to an audience — everybody, the people holding certain roles, the people of certain branches, or named people — and that audience is written down when it is published, not guessed at later. A notice that asks for acknowledgement keeps a ledger of who has read it, and a row in that ledger survives a refresh, a new login and somebody emptying their inbox.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./notices.html"><i class="bi bi-card-list" aria-hidden="true"></i> Register</a>
+                    <a class="btn btn-outline-secondary" href="#acknowledgements"><i class="bi bi-clipboard2-check" aria-hidden="true"></i> Acknowledgement tracking</a>
+                    <a class="btn btn-primary" href="#new"><i class="bi bi-megaphone" aria-hidden="true"></i> New notice</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-pen" aria-hidden="true"></i> Waiting for you</p>
+                    <p class="erp-kpi-value">1 notice</p>
+                    <p class="erp-kpi-foot">Notices that ask for an acknowledgement and do not have yours yet</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-megaphone" aria-hidden="true"></i> Live notices</p>
+                    <p class="erp-kpi-value">3</p>
+                    <p class="erp-kpi-foot">Published, addressed to you, and not expired</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-tags" aria-hidden="true"></i> Categories</p>
+                    <p class="erp-kpi-value">5</p>
+                    <p class="erp-kpi-foot">General, policy, urgent, people and finance</p>
+                </div>
+            </div>
+
+            <form class="erp-filterbar" method="GET" action="#">
+                <div class="erp-filter">
+                    <label class="form-label" for="category">Category</label>
+                    <select class="form-select" name="category" id="category">
+                        <option value="">Everything</option>
+                        <option>General</option><option>Policy</option><option>Urgent</option><option>People &amp; HR</option><option>Finance</option>
+                    </select>
+                </div>
+                <div class="erp-filterbar-actions">
+                    <button class="btn btn-outline-secondary" type="button"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                </div>
+            </form>
+
+            ${board.map((notice) => `
+            <article class="erp-card mt-3">
+                <div class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title"><a href="#notice">${notice.title}</a></h2>
+                        <p class="erp-card-sub">
+                            <span class="erp-chip ${notice.tone}">${notice.category}</span>
+                            published ${notice.published} · by ${notice.by} · ${notice.audience}
+                        </p>
+                    </div>
+                    <div class="erp-card-actions">
+                        ${notice.waiting
+                            ? '<span class="erp-chip erp-chip-warn"><i class="bi bi-pen" aria-hidden="true"></i> Waiting for you</span>'
+                            : '<span class="erp-chip erp-chip-ok"><i class="bi bi-check2" aria-hidden="true"></i> Acknowledged</span>'}
+                    </div>
+                </div>
+                <div class="p-3 pt-0">
+                    <p class="mb-2">${notice.body}</p>
+                    ${notice.waiting ? `
+                        <div class="row g-2 align-items-end">
+                            <div class="col-md-6">
+                                <label class="form-label" for="note">Note (optional)</label>
+                                <input class="form-control" type="text" id="note" placeholder="anything you want on the record beside your name">
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-primary" type="button"><i class="bi bi-pen" aria-hidden="true"></i> I have read this</button>
+                            </div>
+                        </div>` : `
+                        <a class="btn btn-outline-secondary btn-sm" href="#notice">Read it <i class="bi bi-arrow-right" aria-hidden="true"></i></a>`}
+                </div>
+            </article>`).join('')}
+
+            <section class="erp-card mt-3" id="acknowledgements">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Who has not read it yet</h2>
+                        <p class="erp-card-sub">Safety drill on the 24th — 5 of 7 acknowledged · 2 still to read it. A name here is a name, not a count of emails that were sent.</p>
+                    </div>
+                    <div class="erp-card-actions"><span class="erp-chip erp-chip-soft">71.4%</span></div>
+                </header>
+                <div class="p-3 pt-0">
+                    <div class="erp-progress mb-3"><span style="width: 71.4%"></span></div>
+                    <div class="erp-table-scroll">
+                        <table class="erp-table erp-table-compact">
+                            <thead><tr><th>Person</th><th>When</th></tr></thead>
+                            <tbody>
+                                ${ledger.map((row) => `
+                                <tr>
+                                    <td>${row.name}</td>
+                                    <td class="erp-td-muted">${row.done ? row.at : '<span class="erp-chip erp-chip-warn">waiting</span>'}</td>
+                                </tr>`).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="erp-filter-note mt-3 mb-0">
+                        <i class="bi bi-info-circle" aria-hidden="true"></i>
+                        The audience is enforced on the notice’s own page too: a reader outside it gets a 403 by typing the address,
+                        and a draft is a 404 for anybody who may not publish. A notice without “acknowledge” switched on records nothing,
+                        and says so rather than pretending.
+                    </p>
+                </div>
+            </section>
+
+        </div>
+        ${footer()}
+    </main>
+</div>`;
+}
+
+/* --------------------------------------------------- 12-13. tasks & projects */
+
+export function taskBoard() {
+    const columns = [
+        {
+            status: 'todo', label: 'To do',
+            cards: [
+                { title: 'Count aisle four before Friday', who: 'Warehouse Helper', project: 'Annual stock take', priority: 'high', due: '23 Oct', overdue: false, moves: ['In progress'] },
+                { title: 'Renew the Narayanganj trade licence', who: 'Counter Manager, Dhanmondi', project: null, priority: 'normal', due: '30 Oct', overdue: false, moves: ['In progress'] },
+            ],
+        },
+        {
+            status: 'in_progress', label: 'In progress',
+            cards: [
+                { title: 'Reconcile the bank statement to 30 September', who: 'Head of Accounts', project: null, priority: 'urgent', due: '19 Oct', overdue: true, moves: ['In review', 'Blocked'] },
+                { title: 'Write the October promotion on the Dhanmondi counter', who: 'Instance Owner', project: 'Winter promotion', priority: 'high', due: '21 Oct', overdue: false, moves: ['In review', 'Blocked'] },
+            ],
+        },
+        {
+            status: 'blocked', label: 'Blocked',
+            cards: [
+                { title: 'Migrate the old supplier ledger', who: 'Accounts Assistant', project: null, priority: 'normal', due: '28 Oct', overdue: false, moves: ['In progress'] },
+            ],
+        },
+        {
+            status: 'review', label: 'In review',
+            cards: [
+                { title: 'Sign off the packaging cost sheet', who: 'Store Keeper', project: 'Packaging audit', priority: 'normal', due: '20 Oct', overdue: false, moves: ['In progress', 'Done'] },
+            ],
+        },
+        {
+            status: 'done', label: 'Done',
+            cards: [
+                { title: 'Close the September cash book', who: 'Head of Accounts', project: null, priority: 'high', due: '05 Oct', overdue: false, moves: ['In progress'] },
+            ],
+        },
+    ];
+
+    const mine = [
+        { title: 'Reconcile the bank statement to 30 September', project: '—', priority: 'Urgent', tone: 'erp-chip-danger', due: '19 Oct 2026, 17:00', overdue: true, status: 'in_progress', statusLabel: 'In progress' },
+        { title: 'Write the October promotion on the Dhanmondi counter', project: 'Winter promotion', priority: 'High', tone: 'erp-chip-warn', due: '21 Oct 2026, 12:00', overdue: false, status: 'in_progress', statusLabel: 'In progress' },
+        { title: 'Approve the store keeper’s leave request', project: '—', priority: 'Normal', tone: 'erp-chip-soft', due: '24 Oct 2026, 10:00', overdue: false, status: 'todo', statusLabel: 'To do' },
+    ];
+
+    return `
+${previewBar('tasks.html')}
+<div class="erp-shell">
+    ${sidebar('govern')}
+    <main class="erp-main">
+        ${topbar({ title: 'Tasks & projects', trail: [{ label: 'Business management' }, { label: 'Tasks & projects' }] })}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div class="erp-page-head-main">
+                    <p class="erp-eyebrow">Business Management · Tasks</p>
+                    <h1 class="erp-h1">The board</h1>
+                    <p class="erp-page-sub">One column per state, drawn from the task state machine itself — todo, in progress, blocked, in review, done — so a column cannot appear that no task may be in. A card only offers the moves that state allows: done can be reopened, cancelled cannot. Overdue is computed from the clock, so a task that became late a minute ago is already late.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="#mine"><i class="bi bi-list-task" aria-hidden="true"></i> My tasks</a>
+                    <a class="btn btn-outline-secondary" href="./tasks.html"><i class="bi bi-people" aria-hidden="true"></i> Everybody’s</a>
+                    <a class="btn btn-primary" href="#new"><i class="bi bi-plus-lg" aria-hidden="true"></i> New task</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid">
+                <div class="erp-kpi"><p class="erp-kpi-label"><i class="bi bi-list-task" aria-hidden="true"></i> Open, mine</p><p class="erp-kpi-value">3</p><p class="erp-kpi-foot">Everything assigned to you that is not done or cancelled</p></div>
+                <div class="erp-kpi"><p class="erp-kpi-label"><i class="bi bi-alarm" aria-hidden="true"></i> Overdue, mine</p><p class="erp-kpi-value">1</p><p class="erp-kpi-foot">Past the due date and still open</p></div>
+                <div class="erp-kpi"><p class="erp-kpi-label"><i class="bi bi-check2-circle" aria-hidden="true"></i> Completed this week</p><p class="erp-kpi-value">4</p><p class="erp-kpi-foot">Company-wide, marked done since Monday</p></div>
+                <div class="erp-kpi"><p class="erp-kpi-label"><i class="bi bi-people" aria-hidden="true"></i> Open, everybody</p><p class="erp-kpi-value">9</p><p class="erp-kpi-foot">Across the company, including yours</p></div>
+            </div>
+
+            <p class="erp-filter-note">
+                <i class="bi bi-eye" aria-hidden="true"></i>
+                A person with only <span class="font-monospace">tasks.view_own</span> sees this board scoped to their own cards —
+                the query never returns the rest. Seeing everybody’s work needs <span class="font-monospace">tasks.view_all</span>.
+            </p>
+
+            <div class="row g-3">
+                ${columns.map((column) => `
+                <div class="col-xl col-lg-4 col-md-6">
+                    <section class="erp-card h-100">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">${column.label}</h2>
+                                <p class="erp-card-sub">${column.cards.length} card(s)</p>
+                            </div>
+                            <div class="erp-card-actions">${statusChip(column.status, column.label)}</div>
+                        </header>
+                        <div class="p-2">
+                            ${column.cards.map((card) => `
+                            <article class="erp-list-row erp-list-row-top">
+                                <div class="erp-list-row-main">
+                                    <a class="erp-cell-strong" href="#task">${card.title}</a>
+                                    <div class="erp-td-muted">${card.who}${card.project ? ' · ' + card.project : ''}</div>
+                                    <div class="mt-1 d-flex gap-1 flex-wrap">
+                                        <span class="erp-chip ${card.priority === 'urgent' ? 'erp-chip-danger' : (card.priority === 'high' ? 'erp-chip-warn' : 'erp-chip-soft')}">${card.priority}</span>
+                                        <span class="erp-chip ${card.overdue ? 'erp-chip-danger' : 'erp-chip-outline'}">${card.due}${card.overdue ? ' · overdue' : ''}</span>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    ${card.moves.map(() => `<button class="btn btn-outline-secondary btn-sm" type="button" title="Move to the next state"><i class="bi bi-arrow-right" aria-hidden="true"></i></button>`).join(' ')}
+                                </div>
+                            </article>`).join('')}
+                        </div>
+                    </section>
+                </div>`).join('')}
+            </div>
+
+            <section class="erp-card mt-3" id="mine">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">My tasks, in the order it hurts</h2>
+                        <p class="erp-card-sub">Overdue first, then by priority, then by the soonest due date — sorted when the page is read.</p>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="erp-table">
+                        <thead>
+                            <tr>
+                                <th>Task</th><th>Project</th><th>Priority</th><th>Due</th><th>State</th><th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${mine.map((task) => `
+                            <tr>
+                                <td><a class="erp-cell-strong" href="#task">${task.title}</a></td>
+                                <td class="erp-td-muted">${task.project}</td>
+                                <td><span class="erp-chip ${task.tone}">${task.priority}</span></td>
+                                <td class="erp-td-muted">${task.due}${task.overdue ? '<div><span class="erp-chip erp-chip-danger">overdue</span></div>' : ''}</td>
+                                <td>${statusChip(task.status, task.statusLabel)}</td>
+                                <td class="text-end"><a class="btn btn-outline-secondary btn-sm" href="#task">Open</a></td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-3">
+                    <p class="erp-filter-note mb-0">
+                        <i class="bi bi-diagram-3" aria-hidden="true"></i>
+                        Every move, assignment, due-date change and comment writes a row on the task’s own timeline <em>and</em> an audit
+                        event; only the assignee, the creator, or somebody with <span class="font-monospace">tasks.manage</span> may move it.
+                    </p>
+                </div>
+            </section>
+
+        </div>
+        ${footer()}
+    </main>
+</div>`;
+}
+
