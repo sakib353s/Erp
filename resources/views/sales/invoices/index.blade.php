@@ -92,7 +92,9 @@
                     @empty
                         <tr>
                             <td colspan="7" class="text-center text-muted py-4">
-                                {{ $overdue ? 'No overdue invoices.' : 'No invoices yet.' }}
+                                <x-ui.empty :title="$overdue ? 'No overdue invoices.' : 'No invoices yet.'"
+                                            text="Invoices appear here once a sale is issued."
+                                            icon="bi-receipt" />
                             </td>
                         </tr>
                     @endforelse

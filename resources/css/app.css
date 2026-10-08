@@ -3355,3 +3355,34 @@ hr { border-color: var(--line); opacity: 1; }
     max-width: 34rem;
     white-space: normal;
 }
+
+/* §16-51 — page-state contract: empty, loading and notice states. */
+.erp-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .4rem;
+    padding: 2.5rem 1rem;
+    text-align: center;
+    color: var(--erp-muted, #6b7280);
+}
+.erp-empty-icon { font-size: 1.8rem; opacity: .7; }
+.erp-empty p { margin: 0; font-weight: 600; color: var(--erp-text, #1f2937); }
+.erp-empty small { display: block; max-width: 32rem; }
+.erp-empty-actions { margin-top: .5rem; }
+
+.erp-loading { display: flex; flex-direction: column; gap: .6rem; padding: 1rem 0; }
+.erp-skeleton-row { display: flex; align-items: center; gap: .75rem; }
+.erp-skeleton { background: linear-gradient(90deg, #eceef1 25%, #f5f6f8 37%, #eceef1 63%); background-size: 400% 100%; animation: erp-shimmer 1.4s ease infinite; border-radius: .35rem; }
+.erp-skeleton-thumb { width: 2.25rem; height: 2.25rem; border-radius: 50%; flex: 0 0 auto; }
+.erp-skeleton-line { height: .85rem; flex: 1 1 auto; max-width: 22rem; }
+@keyframes erp-shimmer { 0% { background-position: 100% 0; } 100% { background-position: 0 0; } }
+
+.erp-notice { display: flex; gap: .75rem; align-items: flex-start; padding: .75rem 1rem; border-radius: .5rem; border: 1px solid transparent; margin-bottom: 1rem; }
+.erp-notice-title { margin: 0 0 .15rem; font-weight: 700; }
+.erp-notice-body { flex: 1 1 auto; }
+.erp-notice-close { margin-left: auto; border: 0; background: transparent; font-size: 1.1rem; line-height: 1; cursor: pointer; color: inherit; opacity: .7; }
+.erp-notice-info { background: #eef4ff; border-color: #cfe0ff; }
+.erp-notice-success { background: #ecfdf3; border-color: #b6ebc8; }
+.erp-notice-warning { background: #fff7e6; border-color: #ffe2a8; }
+.erp-notice-danger { background: #fdecec; border-color: #f6c9c9; }
