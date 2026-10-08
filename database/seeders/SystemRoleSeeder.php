@@ -157,12 +157,22 @@ class SystemRoleSeeder extends Seeder
                 // which is what the company's own values are written with.
                 'settings.general', 'settings.localization', 'settings.labels',
                 'settings.barcode', 'settings.branch',
+                // §12: a manager runs the office as well as the department — the
+                // notice board they publish to, their own work, and everybody's
+                // work, because assigning it is the job. Projects come with it:
+                // a project with nobody accountable is a folder.
+                'business.notices.view', 'business.notices.create',
+                'tasks.view_own', 'tasks.view_all', 'tasks.manage',
             ]],
             ['slug' => 'employee', 'name' => 'Employee', 'description' => 'Staff account: own portal access only — own leave, own payslips.', 'keys' => [
                 'dashboard.view', 'employees.view', 'documents.view', 'search.view',
                 // Own leave only: the leave screen self-scopes when the user
                 // cannot approve, so leave.view here never exposes the company.
                 'leave.view', 'leave.request',
+                // §12: everybody reads the notices addressed to them and sees
+                // their own tasks. Not `tasks.view_all` — that is the line
+                // between “my work” and “the company's work”.
+                'business.notices.view', 'tasks.view_own',
             ]],
             ['slug' => 'technician', 'name' => 'Technician', 'description' => 'Service technician (portal-capable).', 'keys' => [
                 'dashboard.view', 'documents.view', 'documents.upload', 'search.view',

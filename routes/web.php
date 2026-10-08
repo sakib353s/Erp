@@ -52,6 +52,9 @@ use App\Http\Controllers\MasterDataController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PackagingController;
+use App\Http\Controllers\NoticeController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\PosController;
 use App\Http\Controllers\PosCustomerDisplayController;
 use App\Http\Controllers\PosSettingsController;
@@ -2079,6 +2082,99 @@ Route::middleware(['auth', 'setup.complete', 'tenant', 'portal:erp'])->group(fun
     Route::post('/pos/customer-display/push', [PosCustomerDisplayController::class, 'push'])
         ->middleware('permission:pos.customer_display')
         ->name('pos.customer-display.push');
+
+    /* ---- §12 Business Management: the notice board (12-12) ----
+     *
+     * Reading the board is one key and writing is another, because everybody
+     * reads notices and few write them. The register and the tracking page are
+     * behind the writing key: they show drafts and gather names, which is a
+     * publisher's view of the same rows.
+     */
+    Route::get('/app/notices', [NoticeController::class, 'index'])
+        ->middleware('permission:business.notices.view')
+        ->name('notices.index');
+    Route::get('/app/notices/create', [NoticeController::class, 'create'])
+        ->middleware('permission:business.notices.create')
+        ->name('notices.create');
+    Route::post('/app/notices', [NoticeController::class, 'store'])
+        ->middleware('permission:business.notices.create')
+        ->name('notices.store');
+    Route::get('/app/notices/register', [NoticeController::class, 'register'])
+        ->middleware('permission:business.notices.create')
+        ->name('notices.register');
+    Route::get('/app/notices/tracking', [NoticeController::class, 'tracking'])
+        ->middleware('permission:business.notices.create')
+        ->name('notices.tracking');
+    // The literal segments above must stay ahead of this binding.
+    Route::get('/app/notices/{notice}', [NoticeController::class, 'show'])
+        ->middleware('permission:business.notices.view')
+        ->name('notices.show');
+    Route::post('/app/notices/{notice}/publish', [NoticeController::class, 'publish'])
+        ->middleware('permission:business.notices.create')
+        ->name('notices.publish');
+    Route::post('/app/notices/{notice}/archive', [NoticeController::class, 'archive'])
+        ->middleware('permission:business.notices.create')
+        ->name('notices.archive');
+    // Acknowledging is everybody's own act: it needs no key of its own beyond
+    // being able to read the notice.
+    Route::post('/app/notices/{notice}/acknowledge', [NoticeController::class, 'acknowledge'])
+        ->middleware('permission:business.notices.view')
+        ->name('notices.acknowledge');
+
+    /* ---- §12 Business Management: tasks & projects (12-13) ----
+     *
+     * “My tasks” needs only tasks.view_own; “everybody's” needs tasks.view_all,
+     * and the two are separate routes so the scope is decided by the door a
+     * person came through rather than by a flag the view might forget. Moving a
+     * card and commenting are open to the assignee — the state machine decides
+     * what is legal — while assignment, due dates and creation are tasks.manage.
+     */
+    Route::get('/app/tasks', [TaskController::class, 'index'])
+        ->middleware('permission:tasks.view_own')
+        ->name('tasks.index');
+    Route::get('/app/tasks/all', [TaskController::class, 'all'])
+        ->middleware('permission:tasks.view_all')
+        ->name('tasks.all');
+    Route::get('/app/tasks/kanban', [TaskController::class, 'kanban'])
+        ->middleware('permission:tasks.view_own')
+        ->name('tasks.kanban');
+    Route::get('/app/tasks/create', [TaskController::class, 'create'])
+        ->middleware('permission:tasks.manage')
+        ->name('tasks.create');
+    Route::post('/app/tasks', [TaskController::class, 'store'])
+        ->middleware('permission:tasks.manage')
+        ->name('tasks.store');
+    Route::get('/app/tasks/{task}', [TaskController::class, 'show'])
+        ->middleware('permission:tasks.view_own')
+        ->name('tasks.show');
+    Route::put('/app/tasks/{task}', [TaskController::class, 'update'])
+        ->middleware('permission:tasks.manage')
+        ->name('tasks.update');
+    Route::post('/app/tasks/{task}/assign', [TaskController::class, 'assign'])
+        ->middleware('permission:tasks.manage')
+        ->name('tasks.assign');
+    Route::post('/app/tasks/{task}/due', [TaskController::class, 'reschedule'])
+        ->middleware('permission:tasks.view_own')
+        ->name('tasks.reschedule');
+    Route::post('/app/tasks/{task}/status', [TaskController::class, 'transition'])
+        ->middleware('permission:tasks.view_own')
+        ->name('tasks.transition');
+    Route::post('/app/tasks/{task}/comments', [TaskController::class, 'comment'])
+        ->middleware('permission:tasks.view_own')
+        ->name('tasks.comment');
+
+    Route::get('/app/projects', [ProjectController::class, 'index'])
+        ->middleware('permission:tasks.view_own')
+        ->name('projects.index');
+    Route::post('/app/projects', [ProjectController::class, 'store'])
+        ->middleware('permission:tasks.manage')
+        ->name('projects.store');
+    Route::get('/app/projects/{project}', [ProjectController::class, 'show'])
+        ->middleware('permission:tasks.view_own')
+        ->name('projects.show');
+    Route::put('/app/projects/{project}', [ProjectController::class, 'update'])
+        ->middleware('permission:tasks.manage')
+        ->name('projects.update');
 
     /* ---- Audit trail ---- */
     Route::middleware('permission:audit.view')->group(function () {

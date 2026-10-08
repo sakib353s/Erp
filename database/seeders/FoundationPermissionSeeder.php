@@ -162,6 +162,13 @@ class FoundationPermissionSeeder extends Seeder
             ['system', 'portal', 'access', 'portal.technician.access', 'Access the technician portal'],
             ['system', 'portal', 'access', 'portal.supplier.access', 'Access the supplier portal'],
 
+            // Phase N — §12 Business Management (§12-12 notice board, §12-13 tasks & projects)
+            ['business', 'notices', 'view', 'business.notices.view', 'Read the notice board'],
+            ['business', 'notices', 'create', 'business.notices.create', 'Write, publish and archive notices'],
+            ['business', 'tasks', 'view_own', 'tasks.view_own', 'See your own tasks'],
+            ['business', 'tasks', 'view_all', 'tasks.view_all', 'See everybody’s tasks'],
+            ['business', 'tasks', 'manage', 'tasks.manage', 'Create, assign, move and comment on tasks and projects'],
+
             ['settings', 'company', 'manage', 'settings.company', 'Edit company profile'],
 
             // Phase H — HRM (§10): attendance, leave, structure

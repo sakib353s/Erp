@@ -543,6 +543,13 @@ class CatalogImporter
         'sales > coupons & discounts > create flash sale' => ['/app/sales/promotions/flash', 'sales.promotions.create'],
         'sales > coupons & discounts > flash sale countdown' => ['/app/sales/promotions/flash', 'sales.promotions.view'],
         'sales > coupons & discounts > promotion reports' => ['/app/reports/sales/promotions', 'sales.reports.view'],
+        'business management > notice board > all announcements' => ['/app/notices', 'business.notices.view'],
+        'business management > notice board > create announcement' => ['/app/notices/create', 'business.notices.create'],
+        'business management > notice board > acknowledgment tracking' => ['/app/notices/tracking', 'business.notices.create'],
+        'business management > tasks & projects > my tasks' => ['/app/tasks', 'tasks.view_own'],
+        'business management > tasks & projects > all tasks' => ['/app/tasks/all', 'tasks.view_all'],
+        'business management > tasks & projects > kanban board' => ['/app/tasks/kanban', 'tasks.view_own'],
+        'business management > tasks & projects > projects' => ['/app/projects', 'tasks.view_own'],
     ];
 
     /** @return array{modules:int,items:int,active:int,planned:int,permissions:int} */

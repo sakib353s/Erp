@@ -107,10 +107,11 @@
       "trace": "docs/TRACEABILITY/11-marketing.md"
     },
     "12_business_management": {
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "rows_total": 16,
-      "rows_done": 0,
-      "trace": "docs/TRACEABILITY/12-business-management.md"
+      "rows_done": 2,
+      "trace": "docs/TRACEABILITY/12-business-management.md",
+      "notes": "§12-12 notice board: audience stored at publish time (all/roles/branches/people) and enforced on the notice's own page; notifications fanned out through NotificationCenter with a stable dedupe key; acknowledgements are rows in `notice_acknowledgements` (one per person per notice, surviving refresh/login) with a tracking page naming who has not read it, and a ledger that keeps acknowledgements from people who have since left the audience. §12-13 tasks & projects: a legal-transition state machine (`todo|in_progress|blocked|review|done|cancelled`, done reopenable, cancelled final), a `task_events` log beside the audit chain, separate doors for own (`tasks.view_own`) and everybody's (`tasks.view_all`) work so scope is a query, kanban columns from `Task::BOARD_ORDER`, assignment/comments notified once, overdue computed from the clock, and projects whose counts come from their tasks. Still PLANNED: compliance registers, document library, meetings, assets & vehicles, utility bills, visitors, branch comparison/transfer."
     },
     "13_reports": {
       "status": "PARTIAL",

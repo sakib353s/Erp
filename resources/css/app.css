@@ -1351,6 +1351,32 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
     color: var(--warn);
 }
 
+/* §12-13: the task board's states. A task that is “done” is the same kind of
+   news as an approved document, “blocked” is a caution that needs somebody, and
+   “todo”/“cancelled” are neutral — work that has not started or has stopped. */
+.erp-status-todo,
+.erp-status-cancelled {
+    background: var(--surface-3);
+    color: var(--ink-2);
+}
+
+.erp-status-in_progress,
+.erp-status-in-progress,
+.erp-status-review {
+    background: var(--info-soft);
+    color: var(--info);
+}
+
+.erp-status-blocked {
+    background: var(--warn-soft);
+    color: var(--warn);
+}
+
+.erp-status-done {
+    background: var(--ok-soft);
+    color: var(--ok);
+}
+
 /* Waiting on someone / partially done */
 .erp-status-pending,
 .erp-status-pending_dispatch,
