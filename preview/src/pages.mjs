@@ -5381,3 +5381,316 @@ ${previewBar('reports-scheduled.html')}
     </main>
 </div>`;
 }
+
+/**
+ * §15 — the settings desk. Two pages: the module's own index (every group, what
+ * is set, who set it, the key it needs) and one branch's scope, where the
+ * company's value is shown beside the branch's — and the policy groups are listed
+ * with the reason they cannot be overridden rather than hidden.
+ */
+export function settingsDesk() {
+    const groups = [
+        { key: 'general', label: 'General Settings', what: 'Company-wide display and formatting defaults.', fields: 5, set: 3, scope: 'per branch', changed: '2026-10-06 09:14', who: 'Instance Owner', permission: 'settings.general' },
+        { key: 'localization', label: 'Bengali / Localization Settings', what: 'Language toggle, Bengali numerals and amount-in-words behaviour.', fields: 4, set: 2, scope: 'per branch', changed: '2026-09-30 17:02', who: 'Instance Owner', permission: 'settings.localization' },
+        { key: 'security', label: 'Security Settings', what: 'Password policy, lockout policy and session policy.', fields: 10, set: 10, scope: 'company policy', changed: '2026-10-04 11:20', who: 'Instance Owner', permission: 'settings.security' },
+        { key: 'notifications', label: 'Notification Settings', what: 'Channel defaults. External channels stay disabled until a real provider is configured.', fields: 5, set: 2, scope: 'company policy', changed: '2026-09-28 08:41', who: 'Instance Owner', permission: 'settings.notifications' },
+        { key: 'workflow', label: 'Workflow & Approval Settings', what: 'Defaults for the generic database-driven approval engine.', fields: 3, set: 3, scope: 'company policy', changed: '2026-10-01 15:08', who: 'Instance Owner', permission: 'settings.workflow' },
+        { key: 'numbering', label: 'Document Numbering', what: 'How every numbered document in the system is numbered.', fields: 4, set: 4, scope: 'per branch', changed: '2026-09-22 10:03', who: 'Instance Owner', permission: 'settings.numbering' },
+        { key: 'audit', label: 'Audit Log Retention', what: 'How long evidence is kept online, and whether it may be exported.', fields: 3, set: 1, scope: 'company policy', changed: '2026-09-22 10:03', who: 'Instance Owner', permission: 'settings.audit' },
+        { key: 'pos', label: 'POS Settings', what: 'Receipt paper, footer, rounding and offline behaviour.', fields: 4, set: 3, scope: 'per branch', changed: '2026-10-07 08:30', who: 'Manager', permission: 'pos.settings.configure' },
+        { key: 'labels', label: 'Label & Barcode Printing', what: 'Sheet geometry and QR density for the label desk.', fields: 3, set: 2, scope: 'per branch', changed: '2026-10-02 19:55', who: 'Store keeper', permission: 'settings.labels' },
+        { key: 'appearance', label: 'Appearance', what: 'Accent colour, density and sidebar behaviour.', fields: 4, set: 1, scope: 'per branch', changed: 'never — still on defaults', who: null, permission: 'settings.appearance' },
+    ];
+
+    return `
+${previewBar('settings.html')}
+<div class="erp-shell">
+    ${sidebar('configure')}
+    <main class="erp-main">
+        ${topbar('Settings')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-sliders" aria-hidden="true"></i> Settings</p>
+                    <h1 class="erp-h1">What this company has decided</h1>
+                    <p class="erp-page-sub">One row per group of settings, with how many of its values are actually set rather than left at their default, who last touched them, and the key each group needs. Nothing here is decorative: every group on this page is read somewhere in the application — a value nobody reads would be a promise the screen cannot keep.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./settings-branch.html"><i class="bi bi-diagram-3" aria-hidden="true"></i> Branch settings</a>
+                    <a class="btn btn-outline-secondary" href="./settings.html"><i class="bi bi-sliders" aria-hidden="true"></i> General</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-sliders" aria-hidden="true"></i> Setting groups</p>
+                    <p class="erp-kpi-value">15</p>
+                    <p class="erp-kpi-foot">12 of them are open to you</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-toggle-on" aria-hidden="true"></i> Values set</p>
+                    <p class="erp-kpi-value">41</p>
+                    <p class="erp-kpi-foot">Explicit rows in the settings table — everything else is still its declared default</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-diagram-3" aria-hidden="true"></i> Branch overrides</p>
+                    <p class="erp-kpi-value">6</p>
+                    <p class="erp-kpi-foot">3 branch(es); company values are untouched</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-shield-lock" aria-hidden="true"></i> Invariant floors</p>
+                    <p class="erp-kpi-value">7</p>
+                    <p class="erp-kpi-foot">Numbers this system will not go below, whatever a form says</p>
+                </div>
+            </div>
+
+            <div class="erp-note mb-3">
+                <i class="bi bi-shield-check" aria-hidden="true"></i>
+                <div>
+                    <strong class="d-block mb-1">Some values are floors, not preferences</strong>
+                    A password minimum, a lockout threshold, the audit retention window: these are refused below a
+                    fixed floor whichever screen asks, and the refusal is written to the audit trail. Company policy
+                    (security, audit, workflow, notifications) also cannot be overridden per branch — money and access
+                    decisions are the same in every outlet.
+                </div>
+            </div>
+
+            <div class="erp-table-shell" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">The groups<span class="erp-chip erp-chip-outline">15 group(s)</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-stack">
+                        <thead>
+                            <tr>
+                                <th>Group</th><th>What it decides</th><th class="erp-th-num">Fields</th><th class="erp-th-num">Set</th>
+                                <th>Scope</th><th>Last changed</th><th>Permission</th><th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${groups.map((g) => `
+                            <tr>
+                                <td><span class="erp-cell-strong">${g.label}</span><div class="erp-td-muted font-monospace">${g.key}</div></td>
+                                <td class="erp-td-muted">${g.what}</td>
+                                <td class="erp-td-num">${g.fields}</td>
+                                <td class="erp-td-num">${g.set}${g.set === 0 ? '<div class="erp-td-muted">defaults</div>' : ''}</td>
+                                <td>
+                                    ${g.scope === 'per branch'
+                                        ? '<span class="erp-chip erp-chip-soft">per branch</span>'
+                                        : '<span class="erp-chip erp-chip-outline">company policy</span>'}
+                                </td>
+                                <td class="erp-td-muted">
+                                    ${g.who ? `${g.changed}<div class="erp-td-muted">${g.who}</div>` : g.changed}
+                                </td>
+                                <td class="font-monospace erp-td-muted">${g.permission}</td>
+                                <td class="text-end">
+                                    <a class="btn btn-outline-secondary btn-sm" href="./settings.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-3 pt-0">
+                    <p class="erp-filter-note mb-0">
+                        <i class="bi bi-info-circle" aria-hidden="true"></i>
+                        “Set” counts the values this company has actually chosen. A group that reads
+                        <strong>never — still on defaults</strong> has never been edited, which is a useful thing to know
+                        before changing one of its numbers: whatever is in force there came from the system's own defaults,
+                        not from a decision somebody made.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>`;
+}
+
+/**
+ * §15-03 — one branch's scope: the company's value beside the branch's, and the
+ * policy groups that cannot be overridden, with the reason on the row.
+ */
+export function settingsBranch() {
+    const writable = [
+        {
+            label: 'Label & Barcode Printing',
+            what: 'Sheet geometry and QR density for the label desk.',
+            own: 1,
+            fields: [
+                { label: 'Sheet template', company: 'A4 · 3 × 8 (24 per sheet)', value: 'A4 · 3 × 7 (21 per sheet)', overridden: true },
+                { label: 'QR error-correction level', company: 'M', value: 'M', overridden: false },
+            ],
+        },
+        {
+            label: 'POS Settings',
+            what: 'Receipt paper, footer, rounding and offline behaviour.',
+            own: 1,
+            fields: [
+                { label: 'Receipt paper width', company: '80 mm', value: '58 mm', overridden: false },
+                { label: 'Receipt footer', company: 'Thank you for shopping with us.', value: 'Thank you for shopping with us.', overridden: false },
+            ],
+        },
+        {
+            label: 'General Settings',
+            what: 'Company-wide display and formatting defaults.',
+            own: 0,
+            fields: [
+                { label: 'Decimal places for amounts', company: '2', value: '2', overridden: false },
+                { label: 'Default landing page after login', company: 'Dashboard', value: 'Dashboard', overridden: false },
+            ],
+        },
+    ];
+
+    const policy = [
+        { label: 'Security Settings', key: 'security', why: 'Who may log in and how: a weak outlet would be a weak door into the same books.' },
+        { label: 'Audit Log Retention', key: 'audit', why: 'How long evidence is kept. A branch may not shorten the trail its own mistakes are written to.' },
+        { label: 'Workflow & Approval Settings', key: 'workflow', why: 'What has to be approved. Approval thresholds are a company\'s control, not a branch\'s preference.' },
+        { label: 'Notification Settings', key: 'notifications', why: 'Which channels notify whom. One branch silencing an alert would silence it for the company.' },
+    ];
+
+    return `
+${previewBar('settings-branch.html')}
+<div class="erp-shell">
+    ${sidebar('configure')}
+    <main class="erp-main">
+        ${topbar('Branch settings')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-diagram-3" aria-hidden="true"></i> Settings · Branch Settings</p>
+                    <h1 class="erp-h1">Uttara depot</h1>
+                    <p class="erp-page-sub">Each row shows what this branch uses beside the company's own value. A value written here replaces the company's for this branch only; the company value is never touched, and removing an override is how this branch goes back to following it.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./settings.html"><i class="bi bi-diagram-3" aria-hidden="true"></i> All branches</a>
+                    <a class="btn btn-outline-secondary" href="./settings.html"><i class="bi bi-sliders" aria-hidden="true"></i> Company settings</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-diagram-3" aria-hidden="true"></i> Branch</p>
+                    <p class="erp-kpi-value">UTT</p>
+                    <p class="erp-kpi-foot">Uttara depot</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-list-check" aria-hidden="true"></i> Own values</p>
+                    <p class="erp-kpi-value">2</p>
+                    <p class="erp-kpi-foot">Settings this branch has decided for itself</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-arrow-down-left" aria-hidden="true"></i> Inherited</p>
+                    <p class="erp-kpi-value">4</p>
+                    <p class="erp-kpi-foot">Values this branch takes from the company</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-shield-lock" aria-hidden="true"></i> Policy groups</p>
+                    <p class="erp-kpi-value">4</p>
+                    <p class="erp-kpi-foot">The same in every outlet — listed below, with the reason</p>
+                </div>
+            </div>
+
+            <div class="erp-note mb-3">
+                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                <div>
+                    <strong class="d-block mb-1">2 value(s) here come from this branch, not the company</strong>
+                    If a figure on this branch's documents looks wrong to somebody reading the company settings, this is
+                    the page that explains it: the branch's own value wins, and the row says so.
+                </div>
+            </div>
+
+            <form class="erp-form" onsubmit="return false">
+                <div class="row row-cols-1 row-cols-xl-2 g-3">
+                    ${writable.map((group) => `
+                    <div class="col">
+                        <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                            <header class="erp-card-head">
+                                <div>
+                                    <h2 class="erp-card-title">${group.label}</h2>
+                                    <p class="erp-card-sub">${group.what}</p>
+                                </div>
+                                ${group.own > 0 ? `<span class="erp-chip erp-chip-warn">${group.own} own value(s)</span>` : ''}
+                            </header>
+                            <div class="p-3">
+                                ${group.fields.map((field) => `
+                                <div class="mb-3">
+                                    <label class="erp-field-label d-flex align-items-center gap-2">
+                                        ${field.label}
+                                        ${field.overridden ? '<span class="erp-chip erp-chip-soft">this branch</span>' : ''}
+                                    </label>
+                                    ${field.value === '58 mm' || field.value === '80 mm'
+                                        ? `<select class="form-select"><option${field.value === '58 mm' ? ' selected' : ''}>58 mm</option><option${field.value === '80 mm' ? ' selected' : ''}>80 mm</option></select>`
+                                        : field.value === 'A4 · 3 × 8 (24 per sheet)' || field.value === 'A4 · 3 × 7 (21 per sheet)'
+                                            ? `<select class="form-select"><option${field.value.startsWith('A4 · 3 × 8') ? ' selected' : ''}>A4 · 3 × 8 (24 per sheet)</option><option${field.value.startsWith('A4 · 3 × 7') ? ' selected' : ''}>A4 · 3 × 7 (21 per sheet)</option></select>`
+                                            : `<input class="form-control" type="text" value="${field.value}">`}
+                                    <p class="form-text mb-0">Company value: <strong>${field.company}</strong></p>
+                                </div>`).join('')}
+                            </div>
+                        </section>
+                    </div>`).join('')}
+                </div>
+
+                <div class="d-flex gap-2 mt-3">
+                    <button class="btn btn-primary" type="button"><i class="bi bi-check-lg" aria-hidden="true"></i> Save Uttara depot's values</button>
+                    <span class="erp-filter-note align-self-center mb-0">Empty fields mean “follow the company” — they are not stored as blanks.</span>
+                </div>
+            </form>
+
+            <section class="erp-card mt-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">This branch's own values</h2>
+                        <p class="erp-card-sub">Removing one deletes the branch's row, so the company's value takes over again. The history of the change stays in the settings trail.</p>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead><tr><th>Group</th><th>Setting</th><th>Branch value</th><th>Company value</th><th></th></tr></thead>
+                        <tbody>
+                            <tr>
+                                <td class="erp-td-muted">Label &amp; Barcode Printing</td>
+                                <td><span class="erp-cell-strong">Sheet template</span></td>
+                                <td>A4 · 3 × 7 (21 per sheet)</td>
+                                <td class="erp-td-muted">A4 · 3 × 8 (24 per sheet)</td>
+                                <td class="text-end"><button class="btn btn-outline-secondary btn-sm" type="button"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Follow the company</button></td>
+                            </tr>
+                            <tr>
+                                <td class="erp-td-muted">POS Settings</td>
+                                <td><span class="erp-cell-strong">Receipt paper width</span></td>
+                                <td>58 mm</td>
+                                <td class="erp-td-muted">80 mm</td>
+                                <td class="text-end"><button class="btn btn-outline-secondary btn-sm" type="button"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Follow the company</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="erp-card mt-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Company policy — the same in every outlet</h2>
+                        <p class="erp-card-sub">These groups cannot be overridden per branch, and the reason is not tidiness: they are the rules that make the rest of the books trustworthy.</p>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead><tr><th>Group</th><th>Why it is company-wide</th><th></th></tr></thead>
+                        <tbody>
+                            ${policy.map((p) => `
+                            <tr>
+                                <td><span class="erp-cell-strong">${p.label}</span><div class="erp-td-muted font-monospace">${p.key}</div></td>
+                                <td class="erp-td-muted">${p.why}</td>
+                                <td class="text-end"><span class="erp-chip erp-chip-soft"><i class="bi bi-shield-lock" aria-hidden="true"></i> company-wide</span></td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+    </main>
+</div>`;
+}

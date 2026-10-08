@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#ffffff">
-    <title>Recurring expenses · BD ERP — UI redesign preview</title>
+    <title>Settings desk · BD ERP — UI redesign preview</title>
     <link rel="stylesheet" href="./assets/preview.css">
 </head>
 <body class="erp-body">
@@ -15,7 +15,7 @@
 <div class="erp-preview-bar">
     <i class="bi bi-easel2" aria-hidden="true"></i>
     <strong>UI redesign preview</strong>
-    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html">Labels</a><span style="opacity:.4">·</span><a href="./cash-bank.html">Cash & bank</a><span style="opacity:.4">·</span><a href="./bank-recon.html">Reconciliation</a><span style="opacity:.4">·</span><a href="./cash-counts.html">Cash count</a><span style="opacity:.4">·</span><a href="./bank-charges.html">Bank charges</a><span style="opacity:.4">·</span><a href="./expense-report.html">Expense report</a><span style="opacity:.4">·</span><a href="./cash-reports.html">Cash reports</a><span style="opacity:.4">·</span><a href="./cheques.html">Cheques</a><span style="opacity:.4">·</span><a href="./expenses.html">Expenses</a><span style="opacity:.4">·</span><a href="./expense-recurring.html" style="color:#fff;text-decoration:underline">Recurring</a><span style="opacity:.4">·</span><a href="./petty-cash.html">Petty cash</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
+    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html">Labels</a><span style="opacity:.4">·</span><a href="./cash-bank.html">Cash & bank</a><span style="opacity:.4">·</span><a href="./bank-recon.html">Reconciliation</a><span style="opacity:.4">·</span><a href="./cash-counts.html">Cash count</a><span style="opacity:.4">·</span><a href="./bank-charges.html">Bank charges</a><span style="opacity:.4">·</span><a href="./expense-report.html">Expense report</a><span style="opacity:.4">·</span><a href="./cash-reports.html">Cash reports</a><span style="opacity:.4">·</span><a href="./cheques.html">Cheques</a><span style="opacity:.4">·</span><a href="./expenses.html">Expenses</a><span style="opacity:.4">·</span><a href="./expense-recurring.html">Recurring</a><span style="opacity:.4">·</span><a href="./petty-cash.html">Petty cash</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
     <span class="erp-preview-note">Static render of the new shell — same CSS + JS the Laravel app ships. Press ⌘K / Ctrl+K.</span>
 </div>
 <div class="erp-shell">
@@ -509,15 +509,15 @@
             </p>
             
     <div class="erp-nav-group">
-        <button class="erp-nav-group-btn" type="button"
-                data-bs-toggle="collapse" data-bs-target="#nav-configure-0" aria-expanded="false">
+        <button class="erp-nav-group-btn is-active has-active-trail" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-configure-0" aria-expanded="true">
             <i class="bi bi-sliders erp-nav-icon" aria-hidden="true"></i>
             <span>Settings</span>
             <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
         </button>
-        <div class="collapse" id="nav-configure-0">
+        <div class="collapse show" id="nav-configure-0">
             <div class="erp-nav-sub">
-        <a class="erp-nav-link" href="./settings.html">
+        <a class="erp-nav-link active" href="./settings.html" aria-current="page">
             <span>Settings Desk</span>
         </a>
         <a class="erp-nav-link" href="./settings.html">
@@ -672,369 +672,241 @@
 
             <header class="erp-page-head">
                 <div>
-                    <p class="erp-eyebrow"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Cash &amp; bank · Expenses</p>
-                    <h1 class="erp-h1">The expenses that come round again</h1>
-                    <p class="erp-page-sub">Rent, salaries and the internet line do not need discovering — they are known in advance, and a desk that retypes them every month eventually forgets one. A schedule here records nothing by itself: on its own day it produces an expense through the ordinary desk, approval limit and all.</p>
+                    <p class="erp-eyebrow"><i class="bi bi-sliders" aria-hidden="true"></i> Settings</p>
+                    <h1 class="erp-h1">What this company has decided</h1>
+                    <p class="erp-page-sub">One row per group of settings, with how many of its values are actually set rather than left at their default, who last touched them, and the key each group needs. Nothing here is decorative: every group on this page is read somewhere in the application — a value nobody reads would be a promise the screen cannot keep.</p>
                 </div>
                 <div class="erp-page-head-actions">
-                    <a class="btn btn-outline-secondary" href="./expenses.html"><i class="bi bi-receipt" aria-hidden="true"></i> The register</a>
-                    <a class="btn btn-outline-secondary" href="./expenses.html"><i class="bi bi-diagram-3" aria-hidden="true"></i> Categories</a>
-                    <button class="erp-icon-btn" type="button" title="Pin this page" aria-label="Pin this page"><i class="bi bi-star" aria-hidden="true"></i></button>
+                    <a class="btn btn-outline-secondary" href="./settings-branch.html"><i class="bi bi-diagram-3" aria-hidden="true"></i> Branch settings</a>
+                    <a class="btn btn-outline-secondary" href="./settings.html"><i class="bi bi-sliders" aria-hidden="true"></i> General</a>
                 </div>
             </header>
 
-            <div class="erp-note erp-note-warn mb-3">
-                <i class="bi bi-clock-history" aria-hidden="true"></i>
-                <div>
-                    <strong class="d-block mb-1">1 schedule has come due</strong>
-                    The oldest is Aarong Dairy — every month on the 5th, due 2026-10-05, 3 day(s) late. The scheduled run does this every morning; a schedule refused there keeps its date, so nothing is skipped silently.
-                </div>
-            </div>
-
             <div class="erp-kpi-grid mb-3">
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Active schedules</p>
-                    <p class="erp-kpi-value">4</p>
-                    <p class="erp-kpi-foot">1 paused</p>
+                    <p class="erp-kpi-label"><i class="bi bi-sliders" aria-hidden="true"></i> Setting groups</p>
+                    <p class="erp-kpi-value">15</p>
+                    <p class="erp-kpi-foot">12 of them are open to you</p>
                 </div>
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-clock-history" aria-hidden="true"></i> Due today or earlier</p>
-                    <p class="erp-kpi-value">1</p>
-                    <p class="erp-kpi-foot">Nothing posts until the day arrives — and then the approval limit still applies</p>
+                    <p class="erp-kpi-label"><i class="bi bi-toggle-on" aria-hidden="true"></i> Values set</p>
+                    <p class="erp-kpi-value">41</p>
+                    <p class="erp-kpi-foot">Explicit rows in the settings table — everything else is still its declared default</p>
                 </div>
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-journal-check" aria-hidden="true"></i> Generated this month</p>
-                    <p class="erp-kpi-value">৳ 62,600.00</p>
-                    <p class="erp-kpi-foot">3 expense(s) produced by a schedule</p>
+                    <p class="erp-kpi-label"><i class="bi bi-diagram-3" aria-hidden="true"></i> Branch overrides</p>
+                    <p class="erp-kpi-value">6</p>
+                    <p class="erp-kpi-foot">3 branch(es); company values are untouched</p>
                 </div>
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-calendar-event" aria-hidden="true"></i> Next to run</p>
-                    <p class="erp-kpi-value">2026-10-15</p>
-                    <p class="erp-kpi-foot">Security guard, night shift</p>
+                    <p class="erp-kpi-label"><i class="bi bi-shield-lock" aria-hidden="true"></i> Invariant floors</p>
+                    <p class="erp-kpi-value">7</p>
+                    <p class="erp-kpi-foot">Numbers this system will not go below, whatever a form says</p>
                 </div>
             </div>
 
-            <section class="erp-card erp-card-flush">
-                <header class="erp-card-head">
-                    <h2 class="erp-card-title">Schedules <span class="erp-chip erp-chip-outline">5 schedule(s)</span></h2>
-                </header>
+            <div class="erp-note mb-3">
+                <i class="bi bi-shield-check" aria-hidden="true"></i>
+                <div>
+                    <strong class="d-block mb-1">Some values are floors, not preferences</strong>
+                    A password minimum, a lockout threshold, the audit retention window: these are refused below a
+                    fixed floor whichever screen asks, and the refusal is written to the audit trail. Company policy
+                    (security, audit, workflow, notifications) also cannot be overridden per branch — money and access
+                    decisions are the same in every outlet.
+                </div>
+            </div>
+
+            <div class="erp-table-shell" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">The groups<span class="erp-chip erp-chip-outline">15 group(s)</span></h2>
+                </div>
                 <div class="erp-table-scroll">
-                    <table class="erp-table">
+                    <table class="table erp-table erp-table-stack">
                         <thead>
                             <tr>
-                                <th>What it is</th><th>Account it books to</th><th class="erp-th-num">Amount</th>
-                                <th>Rhythm</th><th>Next due</th><th>State</th><th></th>
+                                <th>Group</th><th>What it decides</th><th class="erp-th-num">Fields</th><th class="erp-th-num">Set</th>
+                                <th>Scope</th><th>Last changed</th><th>Permission</th><th></th>
                             </tr>
                         </thead>
                         <tbody>
                             
                             <tr>
-                                <td data-label="What it is">
-                                    <span class="erp-cell-strong">Khan Properties</span>
-                                    <span class="d-block erp-td-muted">Office rent · paid — 1120 — Islami Bank, current</span>
+                                <td><span class="erp-cell-strong">General Settings</span><div class="erp-td-muted font-monospace">general</div></td>
+                                <td class="erp-td-muted">Company-wide display and formatting defaults.</td>
+                                <td class="erp-td-num">5</td>
+                                <td class="erp-td-num">3</td>
+                                <td>
+                                    <span class="erp-chip erp-chip-soft">per branch</span>
                                 </td>
-                                <td data-label="Account" class="erp-td-muted">5220 — Rent Expense</td>
-                                <td data-label="Amount" class="erp-td-num">
-                                    <input class="form-control form-control-sm erp-num text-end" type="number" step="0.01" value="35000.00" aria-label="Amount for Khan Properties">
+                                <td class="erp-td-muted">
+                                    2026-10-06 09:14<div class="erp-td-muted">Instance Owner</div>
                                 </td>
-                                <td data-label="Rhythm">
-                                    <select class="form-select form-select-sm" aria-label="Frequency for Khan Properties">
-                                        <option selected>Every month</option>
-                                        <option>Every week</option>
-                                        <option>Every quarter</option>
-                                        <option>Every year</option>
-                                    </select>
-                                    <input class="form-control form-control-sm erp-num mt-1" type="number" min="1" max="31" value="3" placeholder="day" aria-label="Day of the month for Khan Properties">
-                                    <span class="d-block erp-td-muted mt-1">every month on the 3rd</span>
-                                </td>
-                                <td data-label="Next due">
-                                    <span class="erp-cell-strong">2026-11-03</span>
-                                    <span class="d-block erp-td-muted">last ran 2026-10-03</span>
-                                    <input class="form-control form-control-sm mt-1" type="date" placeholder="no end date" aria-label="Last date for Khan Properties">
-                                </td>
-                                <td data-label="State">
-                                    <span class="erp-status erp-status-active">Active</span>
-                                    <span class="d-block erp-td-muted">7 generated</span>
-                                </td>
-                                <td class="erp-td-actions">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-check2" aria-hidden="true"></i> Save</button>
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">
-                                        <i class="bi bi-pause" aria-hidden="true"></i> Pause
-                                    </button>
+                                <td class="font-monospace erp-td-muted">settings.general</td>
+                                <td class="text-end">
+                                    <a class="btn btn-outline-secondary btn-sm" href="./settings.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
                                 </td>
                             </tr>
                             <tr>
-                                <td data-label="What it is">
-                                    <span class="erp-cell-strong">Aarong Dairy</span>
-                                    <span class="d-block erp-td-muted">Office supplies · paid — 1110 — Cash in Hand</span>
+                                <td><span class="erp-cell-strong">Bengali / Localization Settings</span><div class="erp-td-muted font-monospace">localization</div></td>
+                                <td class="erp-td-muted">Language toggle, Bengali numerals and amount-in-words behaviour.</td>
+                                <td class="erp-td-num">4</td>
+                                <td class="erp-td-num">2</td>
+                                <td>
+                                    <span class="erp-chip erp-chip-soft">per branch</span>
                                 </td>
-                                <td data-label="Account" class="erp-td-muted">5240 — Office Supplies</td>
-                                <td data-label="Amount" class="erp-td-num">
-                                    <input class="form-control form-control-sm erp-num text-end" type="number" step="0.01" value="2500.00" aria-label="Amount for Aarong Dairy">
+                                <td class="erp-td-muted">
+                                    2026-09-30 17:02<div class="erp-td-muted">Instance Owner</div>
                                 </td>
-                                <td data-label="Rhythm">
-                                    <select class="form-select form-select-sm" aria-label="Frequency for Aarong Dairy">
-                                        <option selected>Every month</option>
-                                        <option>Every week</option>
-                                        <option>Every quarter</option>
-                                        <option>Every year</option>
-                                    </select>
-                                    <input class="form-control form-control-sm erp-num mt-1" type="number" min="1" max="31" value="5" placeholder="day" aria-label="Day of the month for Aarong Dairy">
-                                    <span class="d-block erp-td-muted mt-1">every month on the 5th</span>
-                                </td>
-                                <td data-label="Next due">
-                                    <span class="erp-cell-strong">2026-10-05</span>
-                                    <span class="d-block erp-td-muted">due — 3 day(s) late</span>
-                                    <input class="form-control form-control-sm mt-1" type="date" placeholder="no end date" aria-label="Last date for Aarong Dairy">
-                                </td>
-                                <td data-label="State">
-                                    <span class="erp-status erp-status-active">Active</span>
-                                    <span class="d-block erp-td-muted">12 generated</span>
-                                </td>
-                                <td class="erp-td-actions">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-check2" aria-hidden="true"></i> Save</button>
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">
-                                        <i class="bi bi-pause" aria-hidden="true"></i> Pause
-                                    </button>
+                                <td class="font-monospace erp-td-muted">settings.localization</td>
+                                <td class="text-end">
+                                    <a class="btn btn-outline-secondary btn-sm" href="./settings.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
                                 </td>
                             </tr>
                             <tr>
-                                <td data-label="What it is">
-                                    <span class="erp-cell-strong">Link3 Technologies</span>
-                                    <span class="d-block erp-td-muted">Utilities · paid — 1130 — Dutch-Bangla Bank</span>
+                                <td><span class="erp-cell-strong">Security Settings</span><div class="erp-td-muted font-monospace">security</div></td>
+                                <td class="erp-td-muted">Password policy, lockout policy and session policy.</td>
+                                <td class="erp-td-num">10</td>
+                                <td class="erp-td-num">10</td>
+                                <td>
+                                    <span class="erp-chip erp-chip-outline">company policy</span>
                                 </td>
-                                <td data-label="Account" class="erp-td-muted">5230 — Utilities Expense</td>
-                                <td data-label="Amount" class="erp-td-num">
-                                    <input class="form-control form-control-sm erp-num text-end" type="number" step="0.01" value="4200.00" aria-label="Amount for Link3 Technologies">
+                                <td class="erp-td-muted">
+                                    2026-10-04 11:20<div class="erp-td-muted">Instance Owner</div>
                                 </td>
-                                <td data-label="Rhythm">
-                                    <select class="form-select form-select-sm" aria-label="Frequency for Link3 Technologies">
-                                        <option>Every month</option>
-                                        <option>Every week</option>
-                                        <option selected>Every quarter</option>
-                                        <option>Every year</option>
-                                    </select>
-                                    <input class="form-control form-control-sm erp-num mt-1" type="number" min="1" max="31" value="10" placeholder="day" aria-label="Day of the month for Link3 Technologies">
-                                    <span class="d-block erp-td-muted mt-1">every quarter on the 10th</span>
-                                </td>
-                                <td data-label="Next due">
-                                    <span class="erp-cell-strong">2026-12-10</span>
-                                    <span class="d-block erp-td-muted">last ran 2026-09-10</span>
-                                    <input class="form-control form-control-sm mt-1" type="date" placeholder="no end date" aria-label="Last date for Link3 Technologies">
-                                </td>
-                                <td data-label="State">
-                                    <span class="erp-status erp-status-active">Active</span>
-                                    <span class="d-block erp-td-muted">4 generated</span>
-                                </td>
-                                <td class="erp-td-actions">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-check2" aria-hidden="true"></i> Save</button>
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">
-                                        <i class="bi bi-pause" aria-hidden="true"></i> Pause
-                                    </button>
+                                <td class="font-monospace erp-td-muted">settings.security</td>
+                                <td class="text-end">
+                                    <a class="btn btn-outline-secondary btn-sm" href="./settings.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
                                 </td>
                             </tr>
                             <tr>
-                                <td data-label="What it is">
-                                    <span class="erp-cell-strong">DESCO</span>
-                                    <span class="d-block erp-td-muted">Utilities · owed to a supplier</span>
+                                <td><span class="erp-cell-strong">Notification Settings</span><div class="erp-td-muted font-monospace">notifications</div></td>
+                                <td class="erp-td-muted">Channel defaults. External channels stay disabled until a real provider is configured.</td>
+                                <td class="erp-td-num">5</td>
+                                <td class="erp-td-num">2</td>
+                                <td>
+                                    <span class="erp-chip erp-chip-outline">company policy</span>
                                 </td>
-                                <td data-label="Account" class="erp-td-muted">5230 — Utilities Expense</td>
-                                <td data-label="Amount" class="erp-td-num">
-                                    <input class="form-control form-control-sm erp-num text-end" type="number" step="0.01" value="18400.00" aria-label="Amount for DESCO">
+                                <td class="erp-td-muted">
+                                    2026-09-28 08:41<div class="erp-td-muted">Instance Owner</div>
                                 </td>
-                                <td data-label="Rhythm">
-                                    <select class="form-select form-select-sm" aria-label="Frequency for DESCO">
-                                        <option selected>Every month</option>
-                                        <option>Every week</option>
-                                        <option>Every quarter</option>
-                                        <option>Every year</option>
-                                    </select>
-                                    <input class="form-control form-control-sm erp-num mt-1" type="number" min="1" max="31" value="28" placeholder="day" aria-label="Day of the month for DESCO">
-                                    <span class="d-block erp-td-muted mt-1">every month on the 28th</span>
-                                </td>
-                                <td data-label="Next due">
-                                    <span class="erp-cell-strong">2026-10-28</span>
-                                    <span class="d-block erp-td-muted">never generated yet</span>
-                                    <input class="form-control form-control-sm mt-1" type="date" placeholder="no end date" aria-label="Last date for DESCO">
-                                </td>
-                                <td data-label="State">
-                                    <span class="erp-status erp-status-active">Active</span>
-                                    <span class="d-block erp-td-muted">0 generated</span>
-                                </td>
-                                <td class="erp-td-actions">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-check2" aria-hidden="true"></i> Save</button>
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">
-                                        <i class="bi bi-pause" aria-hidden="true"></i> Pause
-                                    </button>
+                                <td class="font-monospace erp-td-muted">settings.notifications</td>
+                                <td class="text-end">
+                                    <a class="btn btn-outline-secondary btn-sm" href="./settings.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
                                 </td>
                             </tr>
                             <tr>
-                                <td data-label="What it is">
-                                    <span class="erp-cell-strong">Security guard, night shift</span>
-                                    <span class="d-block erp-td-muted">Salaries & wages · paid — 1110 — Cash in Hand</span>
+                                <td><span class="erp-cell-strong">Workflow & Approval Settings</span><div class="erp-td-muted font-monospace">workflow</div></td>
+                                <td class="erp-td-muted">Defaults for the generic database-driven approval engine.</td>
+                                <td class="erp-td-num">3</td>
+                                <td class="erp-td-num">3</td>
+                                <td>
+                                    <span class="erp-chip erp-chip-outline">company policy</span>
                                 </td>
-                                <td data-label="Account" class="erp-td-muted">5210 — Salaries & Wages</td>
-                                <td data-label="Amount" class="erp-td-num">
-                                    <input class="form-control form-control-sm erp-num text-end" type="number" step="0.01" value="9000.00" aria-label="Amount for Security guard, night shift">
+                                <td class="erp-td-muted">
+                                    2026-10-01 15:08<div class="erp-td-muted">Instance Owner</div>
                                 </td>
-                                <td data-label="Rhythm">
-                                    <select class="form-select form-select-sm" aria-label="Frequency for Security guard, night shift">
-                                        <option>Every month</option>
-                                        <option selected>Every week</option>
-                                        <option>Every quarter</option>
-                                        <option>Every year</option>
-                                    </select>
-                                    <input class="form-control form-control-sm erp-num mt-1" type="number" min="1" max="31" value="" placeholder="day" aria-label="Day of the month for Security guard, night shift">
-                                    <span class="d-block erp-td-muted mt-1">every week</span>
+                                <td class="font-monospace erp-td-muted">settings.workflow</td>
+                                <td class="text-end">
+                                    <a class="btn btn-outline-secondary btn-sm" href="./settings.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
                                 </td>
-                                <td data-label="Next due">
-                                    <span class="erp-cell-strong">2026-10-15</span>
-                                    <span class="d-block erp-td-muted">paused by the owner — nothing generated for it</span>
-                                    <input class="form-control form-control-sm mt-1" type="date" placeholder="no end date" aria-label="Last date for Security guard, night shift">
+                            </tr>
+                            <tr>
+                                <td><span class="erp-cell-strong">Document Numbering</span><div class="erp-td-muted font-monospace">numbering</div></td>
+                                <td class="erp-td-muted">How every numbered document in the system is numbered.</td>
+                                <td class="erp-td-num">4</td>
+                                <td class="erp-td-num">4</td>
+                                <td>
+                                    <span class="erp-chip erp-chip-soft">per branch</span>
                                 </td>
-                                <td data-label="State">
-                                    <span class="erp-status erp-status-paused">Paused</span>
-                                    <span class="d-block erp-td-muted">3 generated</span>
+                                <td class="erp-td-muted">
+                                    2026-09-22 10:03<div class="erp-td-muted">Instance Owner</div>
                                 </td>
-                                <td class="erp-td-actions">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-check2" aria-hidden="true"></i> Save</button>
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">
-                                        <i class="bi bi-play" aria-hidden="true"></i> Resume
-                                    </button>
+                                <td class="font-monospace erp-td-muted">settings.numbering</td>
+                                <td class="text-end">
+                                    <a class="btn btn-outline-secondary btn-sm" href="./settings.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="erp-cell-strong">Audit Log Retention</span><div class="erp-td-muted font-monospace">audit</div></td>
+                                <td class="erp-td-muted">How long evidence is kept online, and whether it may be exported.</td>
+                                <td class="erp-td-num">3</td>
+                                <td class="erp-td-num">1</td>
+                                <td>
+                                    <span class="erp-chip erp-chip-outline">company policy</span>
+                                </td>
+                                <td class="erp-td-muted">
+                                    2026-09-22 10:03<div class="erp-td-muted">Instance Owner</div>
+                                </td>
+                                <td class="font-monospace erp-td-muted">settings.audit</td>
+                                <td class="text-end">
+                                    <a class="btn btn-outline-secondary btn-sm" href="./settings.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="erp-cell-strong">POS Settings</span><div class="erp-td-muted font-monospace">pos</div></td>
+                                <td class="erp-td-muted">Receipt paper, footer, rounding and offline behaviour.</td>
+                                <td class="erp-td-num">4</td>
+                                <td class="erp-td-num">3</td>
+                                <td>
+                                    <span class="erp-chip erp-chip-soft">per branch</span>
+                                </td>
+                                <td class="erp-td-muted">
+                                    2026-10-07 08:30<div class="erp-td-muted">Manager</div>
+                                </td>
+                                <td class="font-monospace erp-td-muted">pos.settings.configure</td>
+                                <td class="text-end">
+                                    <a class="btn btn-outline-secondary btn-sm" href="./settings.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="erp-cell-strong">Label & Barcode Printing</span><div class="erp-td-muted font-monospace">labels</div></td>
+                                <td class="erp-td-muted">Sheet geometry and QR density for the label desk.</td>
+                                <td class="erp-td-num">3</td>
+                                <td class="erp-td-num">2</td>
+                                <td>
+                                    <span class="erp-chip erp-chip-soft">per branch</span>
+                                </td>
+                                <td class="erp-td-muted">
+                                    2026-10-02 19:55<div class="erp-td-muted">Store keeper</div>
+                                </td>
+                                <td class="font-monospace erp-td-muted">settings.labels</td>
+                                <td class="text-end">
+                                    <a class="btn btn-outline-secondary btn-sm" href="./settings.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="erp-cell-strong">Appearance</span><div class="erp-td-muted font-monospace">appearance</div></td>
+                                <td class="erp-td-muted">Accent colour, density and sidebar behaviour.</td>
+                                <td class="erp-td-num">4</td>
+                                <td class="erp-td-num">1</td>
+                                <td>
+                                    <span class="erp-chip erp-chip-soft">per branch</span>
+                                </td>
+                                <td class="erp-td-muted">
+                                    never — still on defaults
+                                </td>
+                                <td class="font-monospace erp-td-muted">settings.appearance</td>
+                                <td class="text-end">
+                                    <a class="btn btn-outline-secondary btn-sm" href="./settings.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
                                 </td>
                             </tr>
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="7">
-                                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
-                                        <span class="erp-td-muted">The scheduled run does this every morning at 06:20. This button is for when today's rent cannot wait for tomorrow.</span>
-                                        <button class="btn btn-outline-secondary btn-sm" type="button"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Generate what is due</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
-            </section>
-
-            <div class="erp-filter-note mt-2">
-                <i class="bi bi-info-circle" aria-hidden="true"></i>
-                <span>A schedule never posts anything itself. On its day it produces an expense through the ordinary desk — so the approval limit applies, the category decides the account, and the person who created the schedule is the one who cannot approve what it generated.</span>
+                <div class="p-3 pt-0">
+                    <p class="erp-filter-note mb-0">
+                        <i class="bi bi-info-circle" aria-hidden="true"></i>
+                        “Set” counts the values this company has actually chosen. A group that reads
+                        <strong>never — still on defaults</strong> has never been edited, which is a useful thing to know
+                        before changing one of its numbers: whatever is in force there came from the system's own defaults,
+                        not from a decision somebody made.
+                    </p>
+                </div>
             </div>
 
-            <section class="erp-card mt-3">
-                <header class="erp-card-head">
-                    <div>
-                        <h2 class="erp-card-title">Schedule an expense</h2>
-                        <p class="erp-card-sub">The category decides which account it books to; the account below is where the money leaves from. Nothing is generated before the first date.</p>
-                    </div>
-                </header>
-                <form onsubmit="return false">
-                    <div class="erp-form-grid">
-                        <div class="erp-form-field">
-                            <label class="form-label" for="r-category">Category</label>
-                            <select class="form-select" id="r-category">
-                                <option>Office rent — books to 5220 — Rent Expense</option>
-                                <option>Utilities — books to 5230 — Utilities Expense</option>
-                                <option>Salaries &amp; wages — books to 5210 — Salaries &amp; Wages</option>
-                            </select>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="r-payee">Paid to</label>
-                            <input class="form-control" type="text" id="r-payee" placeholder="Khan Properties">
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="r-amount">Amount each time</label>
-                            <div class="erp-input-group">
-                                <span class="input-group-text">৳</span>
-                                <input class="form-control erp-num" type="number" step="0.01" id="r-amount" placeholder="35,000.00">
-                            </div>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="r-frequency">How often</label>
-                            <select class="form-select" id="r-frequency">
-                                <option>Every month</option><option>Every week</option>
-                                <option>Every quarter</option><option>Every year</option>
-                            </select>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="r-day">Day of the month</label>
-                            <input class="form-control erp-num" type="number" min="1" max="31" id="r-day" placeholder="blank — the day it starts">
-                            <div class="form-text">A month that is too short clamps to its last day: the 31st means the 28th in February and the 31st again in March.</div>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="r-start">First on</label>
-                            <input class="form-control" type="date" id="r-start" value="2026-10-08">
-                            <div class="form-text">The first run is this date itself, not one period later.</div>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="r-end">Last on (optional)</label>
-                            <input class="form-control" type="date" id="r-end">
-                            <div class="form-text">A lease with an end date stops itself rather than generating into a period nobody agreed to.</div>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="r-settled">Paid, or owed?</label>
-                            <select class="form-select" id="r-settled">
-                                <option>Paid from an account</option>
-                                <option>Owed to a supplier</option>
-                            </select>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="r-money">Paid from</label>
-                            <select class="form-select" id="r-money">
-                                <option>1110 — Cash in Hand</option>
-                                <option>1120 — Islami Bank, current</option>
-                                <option>1130 — Dutch-Bangla Bank</option>
-                                <option>1140 — bKash merchant wallet</option>
-                            </select>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="r-supplier">Owed to (optional)</label>
-                            <select class="form-select" id="r-supplier">
-                                <option>— no supplier on the books —</option>
-                                <option>Aarong Dairy</option>
-                            </select>
-                        </div>
-                        <div class="erp-form-field erp-form-field-wide">
-                            <label class="form-label" for="r-narration">What it is</label>
-                            <input class="form-control" type="text" id="r-narration" placeholder="Monthly rent — Uttara warehouse">
-                        </div>
-                        <div class="erp-form-field">
-                            <span class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="r-active" checked>
-                                <label class="form-check-label" for="r-active">Start it immediately</label>
-                            </span>
-                            <div class="form-text">Switched off, the schedule is kept and fires nothing — the same state as pausing it later.</div>
-                        </div>
-                    </div>
-                    <div class="erp-card-tight d-flex flex-wrap justify-content-between align-items-center gap-2 px-3 pb-3">
-                        <span class="erp-td-muted">Every generated expense is an ordinary expense: it can be approved, refused or reversed like any other, and it carries the schedule that produced it.</span>
-                        <button class="btn btn-primary" type="button"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Schedule it</button>
-                    </div>
-                </form>
-            </section>
-
-            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
-                <p class="erp-field-label">More in this module</p>
-                <div class="d-flex flex-wrap gap-2">
-                    <a class="erp-chip erp-chip-outline" href="./expenses.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>All Expenses</a>
-                    <a class="erp-chip erp-chip-outline" href="./cheques.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Cheque Register</a>
-                    <a class="erp-chip erp-chip-outline" href="./cash-bank.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Cash in Hand</a>
-                </div>
-            </nav>
-        </main>
-
-<footer class="erp-footer">
-    <span>BD ERP · Rafshan Trading Ltd.</span>
-    <span class="erp-footer-meta">
-        <span>07 Oct 2026, 06:20 PM · Asia/Dhaka</span>
-        <span class="d-none d-md-inline">Press <kbd>⌘</kbd><kbd>K</kbd> to jump anywhere</span>
-    </span>
-</footer>
-    </div>
+        </div>
+    </main>
 </div>
-<script>window.erpNavIndex = [];</script>
 
 <div class="erp-backdrop" data-erp-backdrop hidden></div>
 

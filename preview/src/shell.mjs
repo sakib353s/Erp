@@ -186,14 +186,14 @@ export const SECTIONS = [
         code: 'configure', label: 'Settings & masters', icon: 'bi-sliders', hue: 8,
         groups: [
             {
-                label: 'Settings', icon: 'bi-sliders', items: [
+                label: 'Settings', icon: 'bi-sliders', target: 'configure', items: [
+                    { label: 'Settings Desk', url: './settings.html', icon: 'bi-sliders', target: 'configure' },
+                    { label: 'General Settings', url: './settings.html', icon: 'bi-sliders2' },
+                    { label: 'Security Settings', url: './settings.html', icon: 'bi-shield-lock' },
+                    { label: 'Branch Settings', url: './settings-branch.html', icon: 'bi-diagram-3' },
                     { label: 'Company profile', url: '#', icon: 'bi-building' },
                     { label: 'Users', url: '#', icon: 'bi-person-badge' },
                     { label: 'Roles & permissions', url: '#', icon: 'bi-shield-lock' },
-                    { label: 'Branches', url: '#', icon: 'bi-diagram-3' },
-                    { label: 'Appearance', url: '#', icon: 'bi-palette' },
-                    { label: 'Courier partners', url: '#', icon: 'bi-truck' },
-                    { label: 'POS settings', url: '#', icon: 'bi-upc-scan' },
                     { label: 'System maintenance', url: '#', icon: 'bi-tools' },
                 ],
                 overflow: 38,
