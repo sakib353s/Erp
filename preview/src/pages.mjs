@@ -2216,3 +2216,255 @@ ${footer()}
 </div>
 <script>window.erpNavIndex = [];</script>`;
 }
+
+/**
+ * §08-15…§08-18 — the expense desk, mirrored from
+ * resources/views/cash-bank/expenses.blade.php and expense.blade.php. The one
+ * promise the whole page is built on: a category is a ledger account, and above
+ * the limit nothing reaches the books until somebody else signs it off.
+ */
+export function expenses() {
+    const register = [
+        { no: 'EXP-2026-00031', date: '02 Oct 2026', category: 'Utilities', account: '5230 — Utilities Expense', payee: 'Dhaka WASA · March water bill', money: 'paid', moneyLabel: 'Paid from an account', source: '1110 — Cash in Hand', amount: '6,400.00', owed: false, state: 'posted', stateLabel: 'Posted', entry: 'JV-2026-004418', wait: '' },
+        { no: 'EXP-2026-00032', date: '03 Oct 2026', category: 'Office rent', account: '5220 — Rent Expense', payee: 'Khan Properties · October rent', money: 'owed', moneyLabel: 'Owed to a supplier', source: '', amount: '35,000.00', owed: true, state: 'pending_approval', stateLabel: 'Waiting for approval', entry: '', wait: 'limit ৳ 20,000.00' },
+        { no: 'EXP-2026-00033', date: '04 Oct 2026', category: 'Salaries & wages', account: '5210 — Salaries & Wages', payee: 'Night shift allowance', money: 'paid', moneyLabel: 'Paid from an account', source: '1120 — Islami Bank, current', amount: '12,640.00', owed: false, state: 'posted', stateLabel: 'Posted', entry: 'JV-2026-004421', wait: '' },
+        { no: 'EXP-2026-00034', date: '05 Oct 2026', category: 'Utilities', account: '5230 — Utilities Expense', payee: 'Rickshaw fare, Uttara run', money: 'paid', moneyLabel: 'Paid from an account', source: '1110 — Cash in Hand', amount: '60.00', owed: false, state: 'posted', stateLabel: 'Posted', entry: 'JV-2026-004425', wait: '' },
+        { no: 'EXP-2026-00029', date: '28 Sep 2026', category: 'Office rent', account: '5220 — Rent Expense', payee: 'Khan Properties · September rent', money: 'paid', moneyLabel: 'Paid from an account', source: '1120 — Islami Bank, current', amount: '35,000.00', owed: false, state: 'reversed', stateLabel: 'Reversed', entry: 'JV-2026-004401 → reversed', wait: '' },
+        { no: 'EXP-2026-00030', date: '30 Sep 2026', category: 'Utilities', account: '5230 — Utilities Expense', payee: 'Unitemised agency bill', money: 'owed', moneyLabel: 'Owed to a supplier', source: '', amount: '4,200.00', owed: true, state: 'rejected', stateLabel: 'Rejected', entry: '', wait: '' },
+    ];
+
+    const byCategory = [
+        { category: 'Office rent', account: '5220', rows: 2, total: '70,000.00' },
+        { category: 'Salaries & wages', account: '5210', rows: 1, total: '12,640.00' },
+        { category: 'Utilities', account: '5230', rows: 2, total: '6,460.00' },
+    ];
+
+    return `
+${previewBar('expenses.html')}
+<div class="erp-app-body">
+    ${sidebar('cash_bank')}
+    <main class="erp-main">
+        ${topbar('Expense desk')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-receipt" aria-hidden="true"></i> Cash &amp; bank · Expenses</p>
+                    <h1 class="erp-page-title">What the company spent</h1>
+                    <p class="erp-page-sub">Every expense names what it was for and where the money went — a category that is a real ledger account, and either the account the money left or the supplier it is owed to. Above the approval limit nothing posts until somebody else signs it off.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-primary" href="#"><i class="bi bi-plus-lg" aria-hidden="true"></i> Add expense</a>
+                    <a class="btn btn-outline-secondary" href="#"><i class="bi bi-diagram-3" aria-hidden="true"></i> Categories</a>
+                    <button class="erp-icon-btn" type="button" title="Pin this page" aria-label="Pin this page"><i class="bi bi-star" aria-hidden="true"></i></button>
+                </div>
+            </header>
+
+            <div class="erp-note erp-note-warn mb-3">
+                <i class="bi bi-hourglass-split" aria-hidden="true"></i>
+                <div>
+                    <strong class="d-block mb-1">1 expense is waiting on this desk</strong>
+                    It is worth ৳ 35,000.00 and none of it is in the books. The person who recorded the expense cannot approve it, so somebody else has to look at it.
+                </div>
+            </div>
+
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-journal-check" aria-hidden="true"></i> Posted in this window</p>
+                    <p class="erp-kpi-value">৳ 89,100.00</p>
+                    <p class="erp-kpi-foot">4 expense(s) between 2026-10-01 and 2026-10-08</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Waiting for a signature</p>
+                    <p class="erp-kpi-value">৳ 35,000.00</p>
+                    <p class="erp-kpi-foot">1 expense — and it has not touched the ledger yet</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-sliders" aria-hidden="true"></i> Approval limit</p>
+                    <p class="erp-kpi-value">৳ 20,000.00</p>
+                    <p class="erp-kpi-foot">At or above this an expense waits; below it, it posts as it is recorded</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Given back this window</p>
+                    <p class="erp-kpi-value">৳ 35,000.00</p>
+                    <p class="erp-kpi-foot">1 refused before posting; the figure above was posted and then reversed</p>
+                </div>
+            </div>
+
+            <form class="erp-filterbar" onsubmit="return false" role="search">
+                <div class="erp-filter">
+                    <label class="form-label" for="state">State</label>
+                    <select class="form-select" id="state">
+                        <option>Everything</option>
+                        <option selected>Waiting for approval</option>
+                        <option>Posted</option>
+                        <option>Rejected</option>
+                        <option>Reversed</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="category">Category</label>
+                    <select class="form-select" id="category">
+                        <option>Every category</option>
+                        <option>Office rent</option>
+                        <option>Salaries &amp; wages</option>
+                        <option>Utilities</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="settled">Money</label>
+                    <select class="form-select" id="settled">
+                        <option>Paid and owed</option>
+                        <option>Paid from an account</option>
+                        <option>Owed to a supplier</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="from">From</label>
+                    <input class="form-control" type="date" id="from" value="2026-10-01">
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="to">To</label>
+                    <input class="form-control" type="date" id="to" value="2026-10-08">
+                </div>
+                <div class="erp-filter erp-filter-wide">
+                    <label class="form-label" for="q">Find</label>
+                    <input class="form-control" type="search" id="q" placeholder="Number, payee or narration">
+                </div>
+                <div class="erp-filterbar-actions">
+                    <a class="btn btn-link" href="#">Reset</a>
+                    <button class="btn btn-primary" type="button"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                </div>
+            </form>
+
+            <section class="erp-card erp-card-flush">
+                <header class="erp-card-head">
+                    <h2 class="erp-card-title">The expense register <span class="erp-chip erp-chip-outline">6 expense(s) shown</span></h2>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="erp-table">
+                        <thead>
+                            <tr>
+                                <th>Expense</th><th>Category</th><th>Payee</th><th>Money</th>
+                                <th class="erp-th-num">Amount</th><th>State</th><th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${register.map((row) => `
+                            <tr>
+                                <td data-label="Expense">
+                                    <span class="erp-cell-strong font-monospace">${row.no}</span>
+                                    <span class="d-block erp-td-muted">${row.date}</span>
+                                </td>
+                                <td data-label="Category">
+                                    ${row.category}
+                                    <span class="d-block erp-td-muted">${row.account}</span>
+                                </td>
+                                <td data-label="Payee">${row.payee}</td>
+                                <td data-label="Money">
+                                    <span class="erp-status erp-status-${row.owed ? 'unpaid' : 'paid'}">${row.moneyLabel}</span>
+                                    ${row.source ? `<span class="d-block erp-td-muted">${row.source}</span>` : ''}
+                                </td>
+                                <td data-label="Amount" class="erp-td-num"><span class="${row.owed ? 'erp-money-out' : 'erp-money-flat'}">${row.amount}</span></td>
+                                <td data-label="State">
+                                    <span class="erp-status erp-status-${row.state}">${row.stateLabel}</span>
+                                    ${row.entry ? `<span class="d-block erp-td-muted font-monospace">${row.entry}</span>` : ''}
+                                    ${row.wait ? `<span class="d-block erp-td-muted">${row.wait}</span>` : ''}
+                                </td>
+                                <td class="erp-td-actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-eye" aria-hidden="true"></i> Open</a>
+                                </td>
+                            </tr>`).join('\n')}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div class="erp-split mt-3">
+                <section class="erp-card">
+                    <header class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">Where it went</h2>
+                            <p class="erp-card-sub">Posted expenses in this window, by the account they were booked to.</p>
+                        </div>
+                    </header>
+                    <div class="erp-table-scroll">
+                        <table class="erp-table erp-table-compact">
+                            <thead>
+                                <tr><th>Category</th><th>Account</th><th class="erp-th-num">Expenses</th><th class="erp-th-num">Total</th></tr>
+                            </thead>
+                            <tbody>
+                                ${byCategory.map((row) => `
+                                <tr>
+                                    <td class="erp-cell-strong">${row.category}</td>
+                                    <td class="erp-td-muted"><code>${row.account}</code></td>
+                                    <td class="erp-td-num">${row.rows}</td>
+                                    <td class="erp-td-num erp-num">${row.total}</td>
+                                </tr>`).join('\n')}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <aside>
+                    <div class="erp-card">
+                        <header class="erp-card-head">
+                            <h2 class="erp-card-title">Decide <span class="erp-chip erp-chip-outline">EXP-2026-00032</span></h2>
+                        </header>
+                        <div class="p-3">
+                            <div class="erp-dl erp-dl-tight mb-3">
+                                <dt>Debit</dt>
+                                <dd>5220 — Rent Expense (the category's own account)</dd>
+                                <dt>Credit</dt>
+                                <dd>payables, through the company posting rules</dd>
+                                <dt>Approval limit</dt>
+                                <dd>৳ 20,000.00 when this was recorded</dd>
+                            </div>
+                            <p class="mb-2">Approving posts it now, exactly once. Refusing keeps the record and posts nothing — ever.</p>
+                            <label class="form-label" for="note">Note</label>
+                            <input class="form-control mb-3" type="text" id="note" placeholder="Optional when approving or refusing">
+                            <div class="d-flex flex-wrap gap-2">
+                                <a class="btn btn-primary" href="#"><i class="bi bi-check2-circle" aria-hidden="true"></i> Approve and post</a>
+                                <a class="btn btn-outline-secondary" href="#"><i class="bi bi-x-octagon" aria-hidden="true"></i> Refuse</a>
+                            </div>
+                            <p class="erp-td-muted mt-3 mb-0">You recorded this expense yourself, so this panel is what somebody else sees — the desk refuses a decision from its own author.</p>
+                        </div>
+                    </div>
+
+                    <div class="erp-card mt-3">
+                        <header class="erp-card-head"><h2 class="erp-card-title">Owed, not paid <span class="erp-chip erp-chip-outline">2</span></h2></header>
+                        <ul class="erp-list px-3 pb-3">
+                            <li class="d-flex justify-content-between align-items-start gap-2 border-top py-2">
+                                <span>
+                                    <span class="erp-cell-strong">Khan Properties</span>
+                                    <span class="d-block erp-td-muted">2026-10-03 · Office rent</span>
+                                    <span class="d-block"><span class="erp-status erp-status-pending_approval">Waiting for approval</span></span>
+                                </span>
+                                <span class="erp-money-out">35,000.00</span>
+                            </li>
+                            <li class="d-flex justify-content-between align-items-start gap-2 border-top py-2">
+                                <span>
+                                    <span class="erp-cell-strong">Unitemised agency bill</span>
+                                    <span class="d-block erp-td-muted">2026-09-30 · Utilities</span>
+                                </span>
+                                <span class="erp-money-out">4,200.00</span>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+            </div>
+
+            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
+                <p class="erp-field-label">More in this module</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="erp-chip erp-chip-outline" href="./cash-bank.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Cash in Hand</a>
+                    <a class="erp-chip erp-chip-outline" href="./cheques.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Cheque Register</a>
+                    <a class="erp-chip erp-chip-outline" href="./bank-recon.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Bank Reconciliation</a>
+                </div>
+            </nav>
+        </main>
+${footer()}
+    </div>
+</div>
+<script>window.erpNavIndex = [];</script>`;
+}

@@ -126,6 +126,14 @@ export const SECTIONS = [
                 ],
             },
             {
+                label: 'Expenses', icon: 'bi-receipt', items: [
+                    { label: 'All Expenses', url: './expenses.html', icon: 'bi-receipt', target: 'cash' },
+                    { label: 'Add Expense', url: './expenses.html', icon: 'bi-plus-lg' },
+                    { label: 'Expense Categories', url: './expenses.html', icon: 'bi-diagram-3' },
+                    { label: 'Pending Approval', url: './expenses.html', icon: 'bi-hourglass-split' },
+                ],
+            },
+            {
                 label: 'Mobile Banking', icon: 'bi-phone', items: [
                     { label: 'bKash Account', url: './cash-bank.html', icon: 'bi-phone' },
                     { label: 'Nagad Account', url: './cash-bank.html', icon: 'bi-phone' },
@@ -217,6 +225,10 @@ export const PALETTE = [
     { label: 'Bounced Cheques', url: './cheques.html', icon: 'bi-x-octagon', section: 'Cash & bank', group: 'Cheque Management' },
     { label: 'Post-Dated Cheques', url: './cheques.html', icon: 'bi-calendar-event', section: 'Cash & bank', group: 'Cheque Management' },
     { label: 'Cheque Print', url: './cheques.html', icon: 'bi-printer', section: 'Cash & bank', group: 'Cheque Management' },
+    { label: 'All Expenses', url: './expenses.html', icon: 'bi-receipt', section: 'Cash & bank', group: 'Expenses' },
+    { label: 'Add Expense', url: './expenses.html', icon: 'bi-plus-lg', section: 'Cash & bank', group: 'Expenses' },
+    { label: 'Expense Categories', url: './expenses.html', icon: 'bi-diagram-3', section: 'Cash & bank', group: 'Expenses' },
+    { label: 'Pending Approval', url: './expenses.html', icon: 'bi-hourglass-split', section: 'Cash & bank', group: 'Expenses' },
     { label: 'Print labels', url: './labels.html', icon: 'bi-printer', section: 'Inventory & warehouse', group: 'Barcode & QR' },
     { label: 'Generate barcode', url: './labels.html', icon: 'bi-upc-scan', section: 'Inventory & warehouse', group: 'Barcode & QR' },
     { label: 'Generate QR code', url: './labels.html', icon: 'bi-qr-code', section: 'Inventory & warehouse', group: 'Barcode & QR' },
@@ -525,6 +537,7 @@ export function previewBar(current) {
         ['cash-bank.html', 'Cash & bank'],
         ['bank-recon.html', 'Reconciliation'],
         ['cheques.html', 'Cheques'],
+        ['expenses.html', 'Expenses'],
         ['login.html', 'Sign in'],
     ];
 

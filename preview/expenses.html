@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#ffffff">
-    <title>Design system · BD ERP — UI redesign preview</title>
+    <title>Expense desk · BD ERP — UI redesign preview</title>
     <link rel="stylesheet" href="./assets/preview.css">
 </head>
 <body class="erp-body">
@@ -15,11 +15,11 @@
 <div class="erp-preview-bar">
     <i class="bi bi-easel2" aria-hidden="true"></i>
     <strong>UI redesign preview</strong>
-    <a href="./index.html" style="color:#fff;text-decoration:underline">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html">Labels</a><span style="opacity:.4">·</span><a href="./cash-bank.html">Cash & bank</a><span style="opacity:.4">·</span><a href="./bank-recon.html">Reconciliation</a><span style="opacity:.4">·</span><a href="./cheques.html">Cheques</a><span style="opacity:.4">·</span><a href="./expenses.html">Expenses</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
+    <a href="./index.html">Design system</a><span style="opacity:.4">·</span><a href="./dashboard.html">Dashboard</a><span style="opacity:.4">·</span><a href="./orders.html">Sales orders</a><span style="opacity:.4">·</span><a href="./order-detail.html">Order workspace</a><span style="opacity:.4">·</span><a href="./customers.html">Customers (CRM)</a><span style="opacity:.4">·</span><a href="./customer-profile.html">Customer 360</a><span style="opacity:.4">·</span><a href="./pos.html">POS terminal</a><span style="opacity:.4">·</span><a href="./packaging.html">Packaging</a><span style="opacity:.4">·</span><a href="./labels.html">Labels</a><span style="opacity:.4">·</span><a href="./cash-bank.html">Cash & bank</a><span style="opacity:.4">·</span><a href="./bank-recon.html">Reconciliation</a><span style="opacity:.4">·</span><a href="./cheques.html">Cheques</a><span style="opacity:.4">·</span><a href="./expenses.html" style="color:#fff;text-decoration:underline">Expenses</a><span style="opacity:.4">·</span><a href="./login.html">Sign in</a>
     <span class="erp-preview-note">Static render of the new shell — same CSS + JS the Laravel app ships. Press ⌘K / Ctrl+K.</span>
 </div>
-<div class="erp-shell" data-rail="expanded">
-
+<div class="erp-app-body">
+    
 <aside class="erp-sidebar" id="erpSidebar" aria-label="Primary navigation">
     <div class="erp-sidebar-head">
         <a class="erp-brand" href="./dashboard.html">
@@ -77,15 +77,15 @@
             </p>
             
     <div class="erp-nav-group">
-        <button class="erp-nav-group-btn is-active has-active-trail" type="button"
-                data-bs-toggle="collapse" data-bs-target="#nav-work-0" aria-expanded="true">
+        <button class="erp-nav-group-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-work-0" aria-expanded="false">
             <i class="bi bi-inbox erp-nav-icon" aria-hidden="true"></i>
             <span>Work queue</span>
             <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
         </button>
-        <div class="collapse show" id="nav-work-0">
+        <div class="collapse" id="nav-work-0">
             <div class="erp-nav-sub">
-        <a class="erp-nav-link active" href="./dashboard.html" aria-current="page">
+        <a class="erp-nav-link" href="./dashboard.html">
             <span>Dashboard</span>
         </a>
         <a class="erp-nav-link" href="#">
@@ -545,26 +545,17 @@
         <span class="erp-version">Build 2026.10 · v2</span>
     </div>
 </aside>
-    <div class="erp-main">
-
+    <main class="erp-main">
+        
 <header class="erp-topbar">
     <button class="erp-icon-btn d-lg-none" type="button" data-erp-sidebar-open aria-label="Open navigation">
         <i class="bi bi-list" aria-hidden="true"></i>
     </button>
 
     <div class="erp-topbar-crumbs">
-        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb">
-        <li>
-            <span class="is-current" aria-current="page">Configuration</span>
-        </li>
-        <li>
-            <span class="is-current" aria-current="page">Appearance</span>
-        </li>
-        <li>
-            <span class="is-current" aria-current="page">Design system</span>
-        </li></ol></nav>
+        <nav aria-label="Breadcrumb"><ol class="erp-breadcrumb"></ol></nav>
         <div class="erp-topbar-title">
-            <strong class="d-none d-md-inline">Design system</strong>
+            <strong class="d-none d-md-inline">Dashboard</strong>
             <span class="erp-chip erp-chip-outline d-none d-xl-inline-flex" title="Current branch context">
                 <i class="bi bi-geo-alt" aria-hidden="true"></i>Dhaka HQ
             </span>
@@ -638,252 +629,362 @@
         </div>
     </div>
 </header>
-        <main class="erp-content" id="erpContent">
+        <div class="erp-content">
+
             <header class="erp-page-head">
-                <div class="erp-page-head-main">
-                    <p class="erp-eyebrow">Redesign review</p>
-                    <h1 class="erp-h1">Aperture — the white-first design system</h1>
-                    <p class="erp-page-sub">
-                        One configurable accent, layered near-white surfaces, hairline borders, restrained elevation and tabular numerals for money.
-                        No purple anywhere (§18.1 forbids it) — the sidebar, tokens and components below are exactly what the Laravel views now render.
-                    </p>
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-receipt" aria-hidden="true"></i> Cash &amp; bank · Expenses</p>
+                    <h1 class="erp-page-title">What the company spent</h1>
+                    <p class="erp-page-sub">Every expense names what it was for and where the money went — a category that is a real ledger account, and either the account the money left or the supplier it is owed to. Above the approval limit nothing posts until somebody else signs it off.</p>
                 </div>
                 <div class="erp-page-head-actions">
-                    <button class="btn btn-outline-secondary" type="button" data-erp-density-toggle>Toggle density</button>
-                    <button class="btn btn-primary" type="button" data-erp-theme-toggle>Toggle dark mode</button>
+                    <a class="btn btn-primary" href="#"><i class="bi bi-plus-lg" aria-hidden="true"></i> Add expense</a>
+                    <a class="btn btn-outline-secondary" href="#"><i class="bi bi-diagram-3" aria-hidden="true"></i> Categories</a>
+                    <button class="erp-icon-btn" type="button" title="Pin this page" aria-label="Pin this page"><i class="bi bi-star" aria-hidden="true"></i></button>
                 </div>
             </header>
 
-            <section class="erp-card mb-3">
-                <header class="erp-card-head"><h2 class="erp-card-title">Core tokens</h2></header>
-                <div class="row g-2">
-                    
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#ffffff"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Canvas</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#ffffff</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#fafbfc"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Surface 2</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#fafbfc</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#f1f3f6"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Surface 3</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#f1f3f6</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#0d1117"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Ink</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#0d1117</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#4a5261"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Ink 2</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#4a5261</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#818b9c"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Ink 3</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#818b9c</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#0f766e"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Accent — deep teal</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#0f766e</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#eefaf7"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Accent soft</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#eefaf7</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#0f7b4f"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Success</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#0f7b4f</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#b45309"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Warning</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#b45309</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#b42318"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Danger</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#b42318</code>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-xl-3">
-                        <div class="erp-card erp-card-tight h-100">
-                            <span style="display:block;height:38px;border-radius:8px;border:1px solid var(--line);background:#0f6d8c"></span>
-                            <strong class="d-block mt-2" style="font-size:12.5px">Info</strong>
-                            <code style="font-size:11.5px;color:var(--ink-3)">#0f6d8c</code>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <div class="row g-3 mb-3">
-                <div class="col-lg-6">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head"><h2 class="erp-card-title">Accent presets — all non-purple</h2></header>
-                        <div class="d-flex flex-wrap gap-2 mb-3">
-                            
-                            <button class="erp-chip erp-chip-outline" type="button"
-                                    onclick="document.documentElement.dataset.accent='teal'">
-                                <span style="width:12px;height:12px;border-radius:50%;background:#0f766e;display:inline-block"></span>Deep teal
-                            </button>
-                            <button class="erp-chip erp-chip-outline" type="button"
-                                    onclick="document.documentElement.dataset.accent='azure'">
-                                <span style="width:12px;height:12px;border-radius:50%;background:#0b5cab;display:inline-block"></span>Azure
-                            </button>
-                            <button class="erp-chip erp-chip-outline" type="button"
-                                    onclick="document.documentElement.dataset.accent='forest'">
-                                <span style="width:12px;height:12px;border-radius:50%;background:#1c7c4a;display:inline-block"></span>Forest
-                            </button>
-                            <button class="erp-chip erp-chip-outline" type="button"
-                                    onclick="document.documentElement.dataset.accent='graphite'">
-                                <span style="width:12px;height:12px;border-radius:50%;background:#1f2937;display:inline-block"></span>Graphite
-                            </button>
-                        </div>
-                        <p class="erp-widget-note mb-0">Operators choose the company accent in Settings › Appearance; each user still controls light/dark and row density locally. Try the chips — the whole UI re-themes from tokens.</p>
-                    </section>
-                </div>
-                <div class="col-lg-6">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head"><h2 class="erp-card-title">Status vocabulary — semantic, never rainbow</h2></header>
-                        <div class="d-flex flex-wrap gap-2 mb-3">
-                            <span class="erp-status erp-status-active">active</span><span class="erp-status erp-status-pending">pending</span><span class="erp-status erp-status-approved">approved</span><span class="erp-status erp-status-rejected">rejected</span><span class="erp-status erp-status-processing">processing</span><span class="erp-status erp-status-cancelled">cancelled</span><span class="erp-status erp-status-delivered">delivered</span><span class="erp-status erp-status-overdue">overdue</span>
-                        </div>
-                        <div class="d-flex flex-wrap gap-2">
-                            <span class="erp-chip erp-chip-soft">soft chip</span>
-                            <span class="erp-chip erp-chip-outline">outline chip</span>
-                            <span class="erp-chip erp-chip-warn">needs attention</span>
-                            <span class="erp-chip erp-chip-ok">settled</span>
-                            <span class="erp-chip erp-chip-danger">over limit</span>
-                        </div>
-                    </section>
+            <div class="erp-note erp-note-warn mb-3">
+                <i class="bi bi-hourglass-split" aria-hidden="true"></i>
+                <div>
+                    <strong class="d-block mb-1">1 expense is waiting on this desk</strong>
+                    It is worth ৳ 35,000.00 and none of it is in the books. The person who recorded the expense cannot approve it, so somebody else has to look at it.
                 </div>
             </div>
 
-            <div class="row g-3 mb-3">
-                <div class="col-lg-6">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head"><h2 class="erp-card-title">Buttons &amp; actions</h2></header>
-                        <div class="d-flex flex-wrap gap-2 mb-3">
-                            <button class="btn btn-primary" type="button"><i class="bi bi-check2" aria-hidden="true"></i> Primary</button>
-                            <button class="btn btn-outline-secondary" type="button">Secondary</button>
-                            <button class="btn btn-outline-danger" type="button"><i class="bi bi-x-circle" aria-hidden="true"></i> Destructive</button>
-                            <button class="btn btn-success" type="button">Success</button>
-                            <button class="btn btn-primary" type="button" disabled>Disabled</button>
-                        </div>
-                        <div class="d-flex flex-wrap gap-2 align-items-center">
-                            <button class="btn btn-sm btn-outline-secondary" type="button">Small</button>
-                            <button class="erp-icon-btn" type="button" aria-label="Icon action"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
-                            <kbd>⌘</kbd><kbd>K</kbd>
-                            <span class="erp-status erp-status-approved">approved</span>
-                        </div>
-                    </section>
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-journal-check" aria-hidden="true"></i> Posted in this window</p>
+                    <p class="erp-kpi-value">৳ 89,100.00</p>
+                    <p class="erp-kpi-foot">4 expense(s) between 2026-10-01 and 2026-10-08</p>
                 </div>
-                <div class="col-lg-6">
-                    <section class="erp-card h-100">
-                        <header class="erp-card-head"><h2 class="erp-card-title">Form controls</h2></header>
-                        <div class="mb-3">
-                            <label class="form-label" for="ds-name">Customer name</label>
-                            <input class="form-control" id="ds-name" placeholder="e.g. Nusrat Jahan">
-                            <div class="form-text">Type-ahead resolves duplicates by phone number.</div>
-                        </div>
-                        <div class="row g-2">
-                            <div class="col-6">
-                                <label class="form-label" for="ds-branch">Branch</label>
-                                <select class="form-select" id="ds-branch"><option>Dhaka HQ</option><option>Chattogram</option></select>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label" for="ds-date">Delivery date</label>
-                                <input class="form-control" id="ds-date" value="07/10/2026">
-                            </div>
-                        </div>
-                        <div class="form-check mt-3">
-                            <input class="form-check-input" type="checkbox" id="ds-vat" checked>
-                            <label class="form-check-label" for="ds-vat">Apply VAT from the item tax rate master</label>
-                        </div>
-                    </section>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-hourglass-split" aria-hidden="true"></i> Waiting for a signature</p>
+                    <p class="erp-kpi-value">৳ 35,000.00</p>
+                    <p class="erp-kpi-foot">1 expense — and it has not touched the ledger yet</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-sliders" aria-hidden="true"></i> Approval limit</p>
+                    <p class="erp-kpi-value">৳ 20,000.00</p>
+                    <p class="erp-kpi-foot">At or above this an expense waits; below it, it posts as it is recorded</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Given back this window</p>
+                    <p class="erp-kpi-value">৳ 35,000.00</p>
+                    <p class="erp-kpi-foot">1 refused before posting; the figure above was posted and then reversed</p>
                 </div>
             </div>
 
-            <section class="erp-card mb-3">
+            <form class="erp-filterbar" onsubmit="return false" role="search">
+                <div class="erp-filter">
+                    <label class="form-label" for="state">State</label>
+                    <select class="form-select" id="state">
+                        <option>Everything</option>
+                        <option selected>Waiting for approval</option>
+                        <option>Posted</option>
+                        <option>Rejected</option>
+                        <option>Reversed</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="category">Category</label>
+                    <select class="form-select" id="category">
+                        <option>Every category</option>
+                        <option>Office rent</option>
+                        <option>Salaries &amp; wages</option>
+                        <option>Utilities</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="settled">Money</label>
+                    <select class="form-select" id="settled">
+                        <option>Paid and owed</option>
+                        <option>Paid from an account</option>
+                        <option>Owed to a supplier</option>
+                    </select>
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="from">From</label>
+                    <input class="form-control" type="date" id="from" value="2026-10-01">
+                </div>
+                <div class="erp-filter">
+                    <label class="form-label" for="to">To</label>
+                    <input class="form-control" type="date" id="to" value="2026-10-08">
+                </div>
+                <div class="erp-filter erp-filter-wide">
+                    <label class="form-label" for="q">Find</label>
+                    <input class="form-control" type="search" id="q" placeholder="Number, payee or narration">
+                </div>
+                <div class="erp-filterbar-actions">
+                    <a class="btn btn-link" href="#">Reset</a>
+                    <button class="btn btn-primary" type="button"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                </div>
+            </form>
+
+            <section class="erp-card erp-card-flush">
                 <header class="erp-card-head">
-                    <h2 class="erp-card-title">Page-state contract (§18.6)</h2>
-                    <span class="erp-chip erp-chip-outline">loading · empty · error</span>
+                    <h2 class="erp-card-title">The expense register <span class="erp-chip erp-chip-outline">6 expense(s) shown</span></h2>
                 </header>
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <div class="erp-card erp-card-tight h-100">
-                            <p class="erp-field-label">Loading (skeleton)</p>
-                            <span class="erp-skeleton erp-skeleton-lg mb-2" style="width:60%"></span>
-                            <span class="erp-skeleton mb-2" style="width:100%"></span>
-                            <span class="erp-skeleton mb-2" style="width:88%"></span>
-                            <span class="erp-skeleton" style="width:72%"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="erp-card erp-card-tight h-100 d-flex">
-                            <div class="erp-empty">
-                                <span class="erp-empty-icon"><i class="bi bi-inbox" aria-hidden="true"></i></span>
-                                <p>No orders match these filters</p>
-                                <small>Widen the date range, or clear the branch filter to include Chattogram.</small>
-                                <div class="erp-empty-actions">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button">Clear filters</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="erp-card erp-card-tight h-100">
-                            <p class="erp-field-label">Recoverable error</p>
-                            <div class="erp-inline-error">
-                                <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
-                                <div>
-                                    <strong class="d-block">Courier rate card unavailable</strong>
-                                    Pathao did not respond. The order is saved; charges will resolve on retry.
-                                    <button class="btn btn-sm btn-outline-secondary mt-2" type="button">Retry</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="erp-table-scroll">
+                    <table class="erp-table">
+                        <thead>
+                            <tr>
+                                <th>Expense</th><th>Category</th><th>Payee</th><th>Money</th>
+                                <th class="erp-th-num">Amount</th><th>State</th><th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr>
+                                <td data-label="Expense">
+                                    <span class="erp-cell-strong font-monospace">EXP-2026-00031</span>
+                                    <span class="d-block erp-td-muted">02 Oct 2026</span>
+                                </td>
+                                <td data-label="Category">
+                                    Utilities
+                                    <span class="d-block erp-td-muted">5230 — Utilities Expense</span>
+                                </td>
+                                <td data-label="Payee">Dhaka WASA · March water bill</td>
+                                <td data-label="Money">
+                                    <span class="erp-status erp-status-paid">Paid from an account</span>
+                                    <span class="d-block erp-td-muted">1110 — Cash in Hand</span>
+                                </td>
+                                <td data-label="Amount" class="erp-td-num"><span class="erp-money-flat">6,400.00</span></td>
+                                <td data-label="State">
+                                    <span class="erp-status erp-status-posted">Posted</span>
+                                    <span class="d-block erp-td-muted font-monospace">JV-2026-004418</span>
+                                    
+                                </td>
+                                <td class="erp-td-actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-eye" aria-hidden="true"></i> Open</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td data-label="Expense">
+                                    <span class="erp-cell-strong font-monospace">EXP-2026-00032</span>
+                                    <span class="d-block erp-td-muted">03 Oct 2026</span>
+                                </td>
+                                <td data-label="Category">
+                                    Office rent
+                                    <span class="d-block erp-td-muted">5220 — Rent Expense</span>
+                                </td>
+                                <td data-label="Payee">Khan Properties · October rent</td>
+                                <td data-label="Money">
+                                    <span class="erp-status erp-status-unpaid">Owed to a supplier</span>
+                                    
+                                </td>
+                                <td data-label="Amount" class="erp-td-num"><span class="erp-money-out">35,000.00</span></td>
+                                <td data-label="State">
+                                    <span class="erp-status erp-status-pending_approval">Waiting for approval</span>
+                                    
+                                    <span class="d-block erp-td-muted">limit ৳ 20,000.00</span>
+                                </td>
+                                <td class="erp-td-actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-eye" aria-hidden="true"></i> Open</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td data-label="Expense">
+                                    <span class="erp-cell-strong font-monospace">EXP-2026-00033</span>
+                                    <span class="d-block erp-td-muted">04 Oct 2026</span>
+                                </td>
+                                <td data-label="Category">
+                                    Salaries & wages
+                                    <span class="d-block erp-td-muted">5210 — Salaries & Wages</span>
+                                </td>
+                                <td data-label="Payee">Night shift allowance</td>
+                                <td data-label="Money">
+                                    <span class="erp-status erp-status-paid">Paid from an account</span>
+                                    <span class="d-block erp-td-muted">1120 — Islami Bank, current</span>
+                                </td>
+                                <td data-label="Amount" class="erp-td-num"><span class="erp-money-flat">12,640.00</span></td>
+                                <td data-label="State">
+                                    <span class="erp-status erp-status-posted">Posted</span>
+                                    <span class="d-block erp-td-muted font-monospace">JV-2026-004421</span>
+                                    
+                                </td>
+                                <td class="erp-td-actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-eye" aria-hidden="true"></i> Open</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td data-label="Expense">
+                                    <span class="erp-cell-strong font-monospace">EXP-2026-00034</span>
+                                    <span class="d-block erp-td-muted">05 Oct 2026</span>
+                                </td>
+                                <td data-label="Category">
+                                    Utilities
+                                    <span class="d-block erp-td-muted">5230 — Utilities Expense</span>
+                                </td>
+                                <td data-label="Payee">Rickshaw fare, Uttara run</td>
+                                <td data-label="Money">
+                                    <span class="erp-status erp-status-paid">Paid from an account</span>
+                                    <span class="d-block erp-td-muted">1110 — Cash in Hand</span>
+                                </td>
+                                <td data-label="Amount" class="erp-td-num"><span class="erp-money-flat">60.00</span></td>
+                                <td data-label="State">
+                                    <span class="erp-status erp-status-posted">Posted</span>
+                                    <span class="d-block erp-td-muted font-monospace">JV-2026-004425</span>
+                                    
+                                </td>
+                                <td class="erp-td-actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-eye" aria-hidden="true"></i> Open</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td data-label="Expense">
+                                    <span class="erp-cell-strong font-monospace">EXP-2026-00029</span>
+                                    <span class="d-block erp-td-muted">28 Sep 2026</span>
+                                </td>
+                                <td data-label="Category">
+                                    Office rent
+                                    <span class="d-block erp-td-muted">5220 — Rent Expense</span>
+                                </td>
+                                <td data-label="Payee">Khan Properties · September rent</td>
+                                <td data-label="Money">
+                                    <span class="erp-status erp-status-paid">Paid from an account</span>
+                                    <span class="d-block erp-td-muted">1120 — Islami Bank, current</span>
+                                </td>
+                                <td data-label="Amount" class="erp-td-num"><span class="erp-money-flat">35,000.00</span></td>
+                                <td data-label="State">
+                                    <span class="erp-status erp-status-reversed">Reversed</span>
+                                    <span class="d-block erp-td-muted font-monospace">JV-2026-004401 → reversed</span>
+                                    
+                                </td>
+                                <td class="erp-td-actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-eye" aria-hidden="true"></i> Open</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td data-label="Expense">
+                                    <span class="erp-cell-strong font-monospace">EXP-2026-00030</span>
+                                    <span class="d-block erp-td-muted">30 Sep 2026</span>
+                                </td>
+                                <td data-label="Category">
+                                    Utilities
+                                    <span class="d-block erp-td-muted">5230 — Utilities Expense</span>
+                                </td>
+                                <td data-label="Payee">Unitemised agency bill</td>
+                                <td data-label="Money">
+                                    <span class="erp-status erp-status-unpaid">Owed to a supplier</span>
+                                    
+                                </td>
+                                <td data-label="Amount" class="erp-td-num"><span class="erp-money-out">4,200.00</span></td>
+                                <td data-label="State">
+                                    <span class="erp-status erp-status-rejected">Rejected</span>
+                                    
+                                    
+                                </td>
+                                <td class="erp-td-actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="#"><i class="bi bi-eye" aria-hidden="true"></i> Open</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </section>
 
-            <p class="erp-page-sub">
-                Static preview rendered from the shipped stylesheet and behaviour layer. Screens:
-                <a href="./dashboard.html">Dashboard</a>,
-                <a href="./orders.html">Sales orders</a>,
-                <a href="./order-detail.html">Order workspace</a>,
-                <a href="./pos.html">POS terminal</a>,
-                <a href="./login.html">Sign in</a>.
-            </p>
+            <div class="erp-split mt-3">
+                <section class="erp-card">
+                    <header class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">Where it went</h2>
+                            <p class="erp-card-sub">Posted expenses in this window, by the account they were booked to.</p>
+                        </div>
+                    </header>
+                    <div class="erp-table-scroll">
+                        <table class="erp-table erp-table-compact">
+                            <thead>
+                                <tr><th>Category</th><th>Account</th><th class="erp-th-num">Expenses</th><th class="erp-th-num">Total</th></tr>
+                            </thead>
+                            <tbody>
+                                
+                                <tr>
+                                    <td class="erp-cell-strong">Office rent</td>
+                                    <td class="erp-td-muted"><code>5220</code></td>
+                                    <td class="erp-td-num">2</td>
+                                    <td class="erp-td-num erp-num">70,000.00</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="erp-cell-strong">Salaries & wages</td>
+                                    <td class="erp-td-muted"><code>5210</code></td>
+                                    <td class="erp-td-num">1</td>
+                                    <td class="erp-td-num erp-num">12,640.00</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="erp-cell-strong">Utilities</td>
+                                    <td class="erp-td-muted"><code>5230</code></td>
+                                    <td class="erp-td-num">2</td>
+                                    <td class="erp-td-num erp-num">6,460.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <aside>
+                    <div class="erp-card">
+                        <header class="erp-card-head">
+                            <h2 class="erp-card-title">Decide <span class="erp-chip erp-chip-outline">EXP-2026-00032</span></h2>
+                        </header>
+                        <div class="p-3">
+                            <div class="erp-dl erp-dl-tight mb-3">
+                                <dt>Debit</dt>
+                                <dd>5220 — Rent Expense (the category's own account)</dd>
+                                <dt>Credit</dt>
+                                <dd>payables, through the company posting rules</dd>
+                                <dt>Approval limit</dt>
+                                <dd>৳ 20,000.00 when this was recorded</dd>
+                            </div>
+                            <p class="mb-2">Approving posts it now, exactly once. Refusing keeps the record and posts nothing — ever.</p>
+                            <label class="form-label" for="note">Note</label>
+                            <input class="form-control mb-3" type="text" id="note" placeholder="Optional when approving or refusing">
+                            <div class="d-flex flex-wrap gap-2">
+                                <a class="btn btn-primary" href="#"><i class="bi bi-check2-circle" aria-hidden="true"></i> Approve and post</a>
+                                <a class="btn btn-outline-secondary" href="#"><i class="bi bi-x-octagon" aria-hidden="true"></i> Refuse</a>
+                            </div>
+                            <p class="erp-td-muted mt-3 mb-0">You recorded this expense yourself, so this panel is what somebody else sees — the desk refuses a decision from its own author.</p>
+                        </div>
+                    </div>
+
+                    <div class="erp-card mt-3">
+                        <header class="erp-card-head"><h2 class="erp-card-title">Owed, not paid <span class="erp-chip erp-chip-outline">2</span></h2></header>
+                        <ul class="erp-list px-3 pb-3">
+                            <li class="d-flex justify-content-between align-items-start gap-2 border-top py-2">
+                                <span>
+                                    <span class="erp-cell-strong">Khan Properties</span>
+                                    <span class="d-block erp-td-muted">2026-10-03 · Office rent</span>
+                                    <span class="d-block"><span class="erp-status erp-status-pending_approval">Waiting for approval</span></span>
+                                </span>
+                                <span class="erp-money-out">35,000.00</span>
+                            </li>
+                            <li class="d-flex justify-content-between align-items-start gap-2 border-top py-2">
+                                <span>
+                                    <span class="erp-cell-strong">Unitemised agency bill</span>
+                                    <span class="d-block erp-td-muted">2026-09-30 · Utilities</span>
+                                </span>
+                                <span class="erp-money-out">4,200.00</span>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+            </div>
+
+            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
+                <p class="erp-field-label">More in this module</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="erp-chip erp-chip-outline" href="./cash-bank.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Cash in Hand</a>
+                    <a class="erp-chip erp-chip-outline" href="./cheques.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Cheque Register</a>
+                    <a class="erp-chip erp-chip-outline" href="./bank-recon.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Bank Reconciliation</a>
+                </div>
+            </nav>
         </main>
 
 <footer class="erp-footer">
@@ -895,6 +996,7 @@
 </footer>
     </div>
 </div>
+<script>window.erpNavIndex = [];</script>
 
 <div class="erp-backdrop" data-erp-backdrop hidden></div>
 
