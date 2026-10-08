@@ -7366,3 +7366,617 @@ ${previewBar('compliance.html')}
     </main>
 </div>`;
 }
+
+/* ------------------------------------------------ 12-11. the meeting desk */
+
+const meetingTone = (status) => status === 'cancelled' ? 'erp-chip-outline'
+    : (status === 'held' ? 'erp-chip-soft' : 'erp-chip-warn');
+
+export function meetingsDiary() {
+    const rows = [
+        {
+            title: 'Monthly stock review', agenda: 'Aisle four count, the Narayanganj transfer, and what the audit will ask for.',
+            when: '21 Oct 2026', time: '10:00–11:00', today: false, where: 'Board room',
+            people: '6 on the list', state: 'scheduled', stateLabel: 'Scheduled',
+            record: 'Not held yet', recordTone: 'erp-chip-outline',
+        },
+        {
+            title: 'Supplier negotiation — Meghna Traders', agenda: 'Q1 rice pricing, payment terms, and the delivery window.',
+            when: '22 Oct 2026', time: '15:30–16:30', today: true, where: 'Head office, room 2',
+            people: '4 on the list', state: 'scheduled', stateLabel: 'Scheduled',
+            record: '<span class="erp-chip erp-chip-warn">today</span>', recordTone: null,
+        },
+        {
+            title: 'Quarterly compliance walk-through', agenda: 'VAT returns filed, RJSC return outstanding, insurance renewal.',
+            when: '14 Oct 2026', time: '09:30–10:30', today: false, where: 'Board room',
+            people: '5 on the list · 4 present', state: 'held', stateLabel: 'Held',
+            record: '<a href="#minutes">Minutes on file</a>', recordTone: null,
+        },
+        {
+            title: 'Warehouse layout working session', agenda: 'Aisle numbering, putaway routes, and the pick-face move.',
+            when: '09 Oct 2026', time: '11:00–12:30', today: false, where: 'Narayanganj warehouse',
+            people: '7 on the list · 5 present', state: 'held', stateLabel: 'Held',
+            record: '<span class="erp-chip erp-chip-warn">no minutes yet</span>', recordTone: null,
+        },
+        {
+            title: 'Counter staffing — Eid week', agenda: 'Rota for the three days around Eid.',
+            when: '05 Oct 2026', time: '16:00–16:30', today: false, where: 'Dhanmondi counter',
+            people: '3 on the list', state: 'cancelled', stateLabel: 'Cancelled',
+            record: 'Cancelled: the rota was agreed over the counter.', recordTone: null,
+        },
+    ];
+
+    const timeline = [
+        { action: 'Minutes recorded', tone: 'erp-chip-soft', note: 'Minutes recorded.', when: '14 Oct 2026 11:05', who: 'Head of Accounts' },
+        { action: 'Attendance marked', tone: 'erp-chip-outline', note: 'Attendance marked: 4 present, 0 absent, 1 apology.', when: '14 Oct 2026 10:35', who: 'Head of Accounts' },
+        { action: 'Held', tone: 'erp-chip-soft', note: 'Held on 14 Oct 2026. Minutes are still to be written.', when: '14 Oct 2026 09:30', who: 'Instance Owner' },
+        { action: 'Scheduled', tone: 'erp-chip-outline', note: 'Scheduled for 14 Oct 2026 09:30–10:30, with 5 person(s).', when: '07 Oct 2026 15:12', who: 'Instance Owner' },
+    ];
+
+    const attendees = [
+        { name: 'Instance Owner', role: 'Chairs it', answer: 'Coming', attendance: 'erp-status-present', attendanceLabel: 'Present' },
+        { name: 'Head of Accounts', role: 'Takes the minutes', answer: 'Coming', attendance: 'erp-status-present', attendanceLabel: 'Present' },
+        { name: 'Counter Manager, Dhanmondi', role: 'Attends', answer: 'Coming', attendance: 'erp-status-present', attendanceLabel: 'Present' },
+        { name: 'Warehouse Helper', role: 'Attends', answer: 'Coming', attendance: 'erp-status-present', attendanceLabel: 'Present' },
+        { name: 'Store Keeper, Narayanganj', role: 'Attends', answer: 'Cannot come', attendance: 'erp-status-absent', attendanceLabel: 'Sent apologies' },
+        { name: 'Rahman & Associates (auditor)', role: 'Attends', answer: 'Coming', attendance: null, attendanceLabel: null, external: true },
+    ];
+
+    const items = [
+        { title: 'File the RJSC annual return before 31 October', owner: 'Head of Accounts', due: '31 Oct 2026 17:00', overdue: false, state: 'in_progress', stateLabel: 'In progress' },
+        { title: 'Attach the insurance endorsement to the policy record', owner: 'Counter Manager, Dhanmondi', due: '18 Oct 2026 12:00', overdue: true, state: 'todo', stateLabel: 'To do' },
+        { title: 'Re-mark the pick faces in aisle four', owner: 'Warehouse Helper', due: '24 Oct 2026 10:00', overdue: false, state: 'review', stateLabel: 'In review' },
+    ];
+
+    return `
+${previewBar('meetings.html')}
+<div class="erp-shell">
+    ${sidebar('govern')}
+    <main class="erp-main">
+        ${topbar('Meetings')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-calendar-event" aria-hidden="true"></i> Business Management · Meetings</p>
+                    <h1 class="erp-h1">The diary, and what came out of it</h1>
+                    <p class="erp-page-sub">A meeting is only worth the record it leaves: who was asked, who came, what was said, and the work that followed. The minutes are a page under the meeting, and an action item is a <strong>real task</strong> on the task board — not a line in a document nobody opens again.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="#minutes"><i class="bi bi-journal-check" aria-hidden="true"></i> Minutes register</a>
+                    <a class="btn btn-outline-secondary" href="#action-items"><i class="bi bi-list-check" aria-hidden="true"></i> Action items <span class="erp-chip erp-chip-danger ms-1">1 overdue</span></a>
+                    <a class="btn btn-primary" href="#call"><i class="bi bi-plus-lg" aria-hidden="true"></i> Call a meeting</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-calendar-event" aria-hidden="true"></i> Coming up</p>
+                    <p class="erp-kpi-value">2</p>
+                    <p class="erp-kpi-foot">Across the office, from now on</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-clock-history" aria-hidden="true"></i> Today</p>
+                    <p class="erp-kpi-value">1</p>
+                    <p class="erp-kpi-foot">Scheduled for today</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-pencil" aria-hidden="true"></i> Held, no minutes</p>
+                    <p class="erp-kpi-value">1</p>
+                    <p class="erp-kpi-foot">A meeting nobody wrote down is a meeting that will be re-held</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-list-check" aria-hidden="true"></i> Action items open</p>
+                    <p class="erp-kpi-value">3</p>
+                    <p class="erp-kpi-foot">1 of them is past its date</p>
+                </div>
+            </div>
+
+            <form class="erp-filterbar" method="GET" action="#">
+                <div class="erp-filter">
+                    <label class="form-label" for="scope">Show</label>
+                    <select class="form-select" name="scope" id="scope">
+                        <option value="">Open meetings</option>
+                        <option>Still to come</option>
+                        <option>Held, waiting for minutes</option>
+                        <option>Only the ones I am on</option>
+                        <option>Everything, including cancelled</option>
+                    </select>
+                </div>
+                <div class="erp-filter erp-filter-wide">
+                    <label class="form-label" for="q">Search</label>
+                    <input class="form-control" type="search" name="q" id="q" placeholder="Title, place or agenda">
+                </div>
+                <div class="erp-filterbar-actions">
+                    <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                    <a class="btn btn-link" href="#">Reset</a>
+                </div>
+            </form>
+
+            <section class="erp-table-shell">
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">Meetings <span class="erp-chip erp-chip-outline">5 meeting(s)</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead>
+                            <tr><th>Meeting</th><th>When</th><th>Where</th><th>People</th><th>State</th><th>Record</th><th></th></tr>
+                        </thead>
+                        <tbody>
+                            ${rows.map((row) => `
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="#meeting">${row.title}</a>
+                                    <div class="erp-td-muted">${row.agenda}</div>
+                                </td>
+                                <td class="erp-td-muted">${row.when}
+                                    <div>${row.time} ${row.today ? '<span class="erp-chip erp-chip-warn ms-1">today</span>' : ''}</div>
+                                </td>
+                                <td class="erp-td-muted">${row.where}</td>
+                                <td class="erp-td-muted">${row.people}</td>
+                                <td><span class="erp-status erp-status-${row.state}">${row.stateLabel}</span></td>
+                                <td class="erp-td-muted">${row.record}</td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="#meeting">Open</a></td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div class="erp-split mt-3" id="meeting">
+                <div class="erp-split-main">
+                    <section class="erp-card">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Quarterly compliance walk-through</h2>
+                                <p class="erp-card-sub">14 Oct 2026, 09:30–10:30 · Board room · chaired by Instance Owner</p>
+                            </div>
+                        </header>
+                        <div class="px-3 pb-3">
+                            <div class="erp-note erp-note-ok mb-3">
+                                <i class="bi bi-check2-circle" aria-hidden="true"></i>
+                                <div>
+                                    <div class="mb-1"><span class="erp-status erp-status-held">Held</span></div>
+                                    <div>Held on 14 Oct 2026, chaired by Instance Owner. The minutes are on file.</div>
+                                </div>
+                            </div>
+
+                            <h3 class="erp-card-title">The agenda</h3>
+                            <p class="erp-pre">1. VAT returns — filed, and the acknowledgement numbers filed against each obligation.
+2. RJSC annual return — due 31 October, who is filing it.
+3. Stock insurance renewal — 18 October, and the endorsement for Narayanganj.</p>
+                        </div>
+                    </section>
+
+                    <section class="erp-card mt-3">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Who is on the list</h2>
+                                <p class="erp-card-sub">Invited, answered, and — once the meeting is over — who was actually there. An apology is not an absence.</p>
+                            </div>
+                            <div class="erp-card-actions"><span class="erp-chip erp-chip-outline">6 person(s)</span></div>
+                        </header>
+                        <div class="p-3 pt-2">
+                            <div class="erp-table-scroll">
+                                <table class="table erp-table erp-table-compact">
+                                    <thead><tr><th>Person</th><th>Role</th><th>Answer</th><th>Attendance</th></tr></thead>
+                                    <tbody>
+                                        ${attendees.map((attendee) => `
+                                        <tr>
+                                            <td>
+                                                <span class="erp-cell-strong">${attendee.name}</span>
+                                                ${attendee.external ? '<div class="erp-td-muted">not a user of this company</div>' : ''}
+                                            </td>
+                                            <td class="erp-td-muted">${attendee.role}</td>
+                                            <td><span class="erp-chip ${attendee.answer === 'Coming' ? 'erp-chip-soft' : 'erp-chip-outline'}">${attendee.answer}</span></td>
+                                            <td>
+                                                ${attendee.attendance
+                                                    ? `<span class="erp-status ${attendee.attendance}">${attendee.attendanceLabel}</span>`
+                                                    : '<select class="form-select form-select-sm"><option>Not marked</option></select>'}
+                                            </td>
+                                        </tr>`).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button class="btn btn-outline-secondary mt-2" type="button"><i class="bi bi-check2-square" aria-hidden="true"></i> Save attendance</button>
+                        </div>
+                    </section>
+
+                    <section class="erp-card mt-3" id="minutes">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">The minutes</h2>
+                                <p class="erp-card-sub">Written by Head of Accounts on 14 Oct 2026.</p>
+                            </div>
+                        </header>
+                        <div class="px-3 pb-3">
+                            <p class="erp-pre">Present: Instance Owner (chair), Head of Accounts, Counter Manager Dhanmondi, Warehouse Helper. Apologies: Store Keeper Narayanganj.
+
+1. VAT returns for August and September are filed; the acknowledgement numbers are recorded against the two obligations, so the register can show what was filed under which number.
+2. The RJSC annual return is due 31 October. Head of Accounts will file it; the acknowledgement number goes on the record when it is filed.
+3. The stock insurance policy expires 18 October. The endorsement covering the Narayanganj premises is not yet on file — Counter Manager will attach it to the policy record.
+4. Aisle four will be re-marked before the audit; Warehouse Helper owns it.</p>
+
+                            <form class="erp-inline-form mt-3" method="POST" action="#">
+                                <div class="mb-2">
+                                    <label class="form-label" for="minutes-body">Rewrite the minutes</label>
+                                    <textarea class="form-control" id="minutes-body" rows="4" placeholder="Present: …&#10;1. …"></textarea>
+                                    <div class="form-text">Everybody on the list is told once when the minutes go on file.</div>
+                                </div>
+                                <button class="btn btn-primary" type="submit"><i class="bi bi-journal-check" aria-hidden="true"></i> Put it on file</button>
+                            </form>
+                        </div>
+                    </section>
+
+                    <section class="erp-card mt-3" id="action-items">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">What came out of it</h2>
+                                <p class="erp-card-sub">An action item is a task with a link back to this meeting — the same work on the task board.</p>
+                            </div>
+                            <div class="erp-card-actions"><span class="erp-chip erp-chip-outline">3 item(s)</span></div>
+                        </header>
+                        <div class="px-3 pb-3">
+                            ${items.map((item) => `
+                            <div class="erp-list-row">
+                                <div class="erp-list-row-main">
+                                    <a class="erp-cell-strong" href="./tasks.html">${item.title}</a>
+                                    <div class="erp-td-muted">${item.owner} · due ${item.due}
+                                        ${item.overdue ? '<span class="erp-chip erp-chip-danger ms-1">overdue</span>' : ''}
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="erp-status erp-status-${item.state}">${item.stateLabel}</span>
+                                    <a class="btn btn-sm btn-outline-secondary" href="./tasks.html">Open task</a>
+                                </div>
+                            </div>`).join('')}
+
+                            <form class="erp-inline-form mt-3" method="POST" action="#">
+                                <div class="row g-2 align-items-end">
+                                    <div class="col-md-5">
+                                        <label class="form-label" for="action_title">What has to be done</label>
+                                        <input class="form-control" type="text" id="action_title" placeholder="Recount aisle four before the audit">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label" for="assigned_to">Who owns it</label>
+                                        <select class="form-select" id="assigned_to">
+                                            <option>Nobody yet</option>
+                                            <option>Warehouse Helper</option>
+                                            <option>Head of Accounts</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label" for="due_at">Due</label>
+                                        <input class="form-control" type="datetime-local" id="due_at">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label" for="priority">Priority</label>
+                                        <select class="form-select" id="priority"><option>Low</option><option selected>Normal</option><option>High</option><option>Urgent</option></select>
+                                    </div>
+                                </div>
+                                <button class="btn btn-outline-secondary mt-2" type="submit"><i class="bi bi-plus-lg" aria-hidden="true"></i> Raise it as a task</button>
+                            </form>
+                        </div>
+                    </section>
+
+                    <section class="erp-card mt-3">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">What has happened to this meeting</h2>
+                                <p class="erp-card-sub">Scheduled, moved, held, cancelled, minuted — with the reasons people gave at the time.</p>
+                            </div>
+                        </header>
+                        <div class="px-3 pb-3">
+                            ${timeline.map((event) => `
+                            <div class="erp-list-row erp-list-row-top">
+                                <div class="erp-list-row-main">
+                                    <span class="erp-chip ${event.tone}">${event.action}</span>
+                                    <div>${event.note}</div>
+                                </div>
+                                <div class="erp-td-muted text-nowrap">${event.when}<div>${event.who}</div></div>
+                            </div>`).join('')}
+                        </div>
+                    </section>
+                </div>
+
+                <div class="erp-split-side">
+                    <section class="erp-card">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Your answer</h2>
+                                <p class="erp-card-sub">Right now: <strong>Coming</strong>.</p>
+                            </div>
+                        </header>
+                        <div class="p-3 pt-0 d-flex flex-wrap gap-2">
+                            <button class="btn btn-primary" type="button">I will be there</button>
+                            <button class="btn btn-outline-secondary" type="button">I cannot come</button>
+                        </div>
+                    </section>
+
+                    <section class="erp-card mt-3">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Move it</h2>
+                                <p class="erp-card-sub">Everybody on the list is told the new time, and the calendar clash is checked again.</p>
+                            </div>
+                        </header>
+                        <form class="p-3 pt-0" method="POST" action="#">
+                            <div class="mb-3">
+                                <label class="form-label" for="re_starts_at">New start</label>
+                                <input class="form-control" type="datetime-local" id="re_starts_at" value="2026-10-14T09:30">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="re_reason">Why the change</label>
+                                <input class="form-control" type="text" id="re_reason" placeholder="The auditor is only free on Wednesday">
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="re_allow_clash">
+                                <label class="form-check-label" for="re_allow_clash">Move it even if somebody is booked</label>
+                            </div>
+                            <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Move it</button>
+                        </form>
+                    </section>
+
+                    <section class="erp-card mt-3">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Call it off</h2>
+                                <p class="erp-card-sub">A reason is required: five people have cleared that hour.</p>
+                            </div>
+                        </header>
+                        <form class="p-3 pt-0" method="POST" action="#">
+                            <div class="mb-3">
+                                <label class="form-label" for="cancel_reason">Why</label>
+                                <input class="form-control" type="text" id="cancel_reason" placeholder="The stock take moved to Thursday">
+                            </div>
+                            <button class="btn btn-outline-danger" type="submit"><i class="bi bi-x-octagon" aria-hidden="true"></i> Cancel the meeting</button>
+                        </form>
+                    </section>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>`;
+}
+
+export function minutesRegister() {
+    const rows = [
+        {
+            title: 'Quarterly compliance walk-through', where: 'Board room',
+            held: '14 Oct 2026', time: '09:30–10:30', chair: 'Instance Owner',
+            present: 4, apologies: 1, unmarked: 1,
+            minutes: true, written: '14 Oct 2026', by: 'Head of Accounts',
+        },
+        {
+            title: 'Warehouse layout working session', where: 'Narayanganj warehouse',
+            held: '09 Oct 2026', time: '11:00–12:30', chair: 'Head of Retail',
+            present: 5, apologies: 0, unmarked: 2,
+            minutes: false, written: null, by: null,
+        },
+        {
+            title: 'Supplier negotiation — Meghna Traders', where: 'Head office, room 2',
+            held: '02 Oct 2026', time: '15:30–16:30', chair: 'Instance Owner',
+            present: 3, apologies: 1, unmarked: 0,
+            minutes: true, written: '03 Oct 2026', by: 'Head of Accounts',
+        },
+    ];
+
+    return `
+${previewBar('minutes.html')}
+<div class="erp-shell">
+    ${sidebar('govern')}
+    <main class="erp-main">
+        ${topbar('Meeting minutes')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-journal-check" aria-hidden="true"></i> Business Management · Meetings · Minutes</p>
+                    <h1 class="erp-h1">What was written down</h1>
+                    <p class="erp-page-sub">Every meeting that has been held, with the page it produced — and the ones that still owe one. “What did we decide about the Narayanganj lease?” is answered by the register, not by somebody’s memory of an email.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./meetings.html"><i class="bi bi-arrow-left" aria-hidden="true"></i> The diary</a>
+                    <a class="btn btn-outline-secondary" href="./action-items.html"><i class="bi bi-list-check" aria-hidden="true"></i> Action items</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-journal-check" aria-hidden="true"></i> Meetings held</p>
+                    <p class="erp-kpi-value">3</p>
+                    <p class="erp-kpi-foot">Held meetings on the record</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-pencil" aria-hidden="true"></i> Waiting for minutes</p>
+                    <p class="erp-kpi-value">1</p>
+                    <p class="erp-kpi-foot">Held and not written up yet</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-x-octagon" aria-hidden="true"></i> Cancelled</p>
+                    <p class="erp-kpi-value">1</p>
+                    <p class="erp-kpi-foot">Called off, with the reason kept</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-list-check" aria-hidden="true"></i> Action items open</p>
+                    <p class="erp-kpi-value">3</p>
+                    <p class="erp-kpi-foot">1 past its date</p>
+                </div>
+            </div>
+
+            <form class="erp-filterbar" method="GET" action="#">
+                <div class="erp-filter">
+                    <label class="form-label" for="state">Show</label>
+                    <select class="form-select" name="state" id="state">
+                        <option value="">Everything held</option>
+                        <option>Minutes on file</option>
+                        <option>Still owing minutes</option>
+                    </select>
+                </div>
+                <div class="erp-filterbar-actions">
+                    <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
+                    <a class="btn btn-link" href="#">Reset</a>
+                </div>
+            </form>
+
+            <section class="erp-table-shell">
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">Held meetings <span class="erp-chip erp-chip-outline">3 meeting(s)</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead>
+                            <tr><th>Meeting</th><th>Held</th><th>Chaired by</th><th>Attendance</th><th>Minutes</th><th></th></tr>
+                        </thead>
+                        <tbody>
+                            ${rows.map((row) => `
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="./meetings.html#minutes">${row.title}</a>
+                                    <div class="erp-td-muted">${row.where}</div>
+                                </td>
+                                <td class="erp-td-muted">${row.held}<div>${row.time}</div></td>
+                                <td class="erp-td-muted">${row.chair}</td>
+                                <td class="erp-td-muted">
+                                    ${row.present} present
+                                    ${row.apologies > 0 ? `· ${row.apologies} apology(s)` : ''}
+                                    ${row.unmarked > 0 ? `<div class="erp-td-muted">${row.unmarked} not marked</div>` : ''}
+                                </td>
+                                <td>
+                                    ${row.minutes
+                                        ? `<span class="erp-chip erp-chip-soft">on file</span><div class="erp-td-muted">${row.written} · ${row.by}</div>`
+                                        : '<span class="erp-chip erp-chip-warn">still owing</span>'}
+                                </td>
+                                <td class="erp-td-actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="./meetings.html#minutes">${row.minutes ? 'Read it' : 'Write it'}</a>
+                                </td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+    </main>
+</div>`;
+}
+
+export function meetingActionItems() {
+    const groups = [
+        {
+            title: 'Quarterly compliance walk-through', when: '14 Oct 2026 · 4 present',
+            items: [
+                { title: 'File the RJSC annual return before 31 October', detail: 'Agreed in the meeting: Head of Accounts files it and puts the acknowledgement number on the record.', owner: 'Head of Accounts', due: '31 Oct 2026 17:00', overdue: false, state: 'in_progress', stateLabel: 'In progress' },
+                { title: 'Attach the insurance endorsement to the policy record', detail: 'The Narayanganj premises are not covered on the file we hold.', owner: 'Counter Manager, Dhanmondi', due: '18 Oct 2026 12:00', overdue: true, state: 'todo', stateLabel: 'To do' },
+                { title: 'Re-mark the pick faces in aisle four', detail: null, owner: 'Warehouse Helper', due: '24 Oct 2026 10:00', overdue: false, state: 'review', stateLabel: 'In review' },
+            ],
+        },
+        {
+            title: 'Supplier negotiation — Meghna Traders', when: '02 Oct 2026 · 3 present',
+            items: [
+                { title: 'Send the revised rate sheet to Meghna Traders', detail: null, owner: 'Head of Accounts', due: '20 Oct 2026 12:00', overdue: false, state: 'in_progress', stateLabel: 'In progress' },
+                { title: 'Update the supplier record with the new payment terms', detail: null, owner: 'Unassigned owner', due: null, overdue: false, state: 'todo', stateLabel: 'To do', unassigned: true },
+            ],
+        },
+    ];
+
+    return `
+${previewBar('action-items.html')}
+<div class="erp-shell">
+    ${sidebar('govern')}
+    <main class="erp-main">
+        ${topbar('Action items')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-list-check" aria-hidden="true"></i> Business Management · Meetings · Action items</p>
+                    <h1 class="erp-h1">What came out of the meetings</h1>
+                    <p class="erp-page-sub">An action item is a task that remembers the meeting it came from — it lives on the task board, is assigned like any other work, and closes like any other work. This page is the other view of the same rows: grouped by the meeting that decided them.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./meetings.html"><i class="bi bi-calendar-event" aria-hidden="true"></i> The diary</a>
+                    <a class="btn btn-outline-secondary" href="./minutes.html"><i class="bi bi-journal-check" aria-hidden="true"></i> Minutes</a>
+                    <a class="btn btn-outline-secondary" href="./tasks.html"><i class="bi bi-list-task" aria-hidden="true"></i> My tasks</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-list-check" aria-hidden="true"></i> Open action items</p>
+                    <p class="erp-kpi-value">5</p>
+                    <p class="erp-kpi-foot">Across every meeting in the company</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-alarm" aria-hidden="true"></i> Overdue</p>
+                    <p class="erp-kpi-value">1</p>
+                    <p class="erp-kpi-foot">Past the due date and still open</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-calendar-event" aria-hidden="true"></i> Meetings with open work</p>
+                    <p class="erp-kpi-value">2</p>
+                    <p class="erp-kpi-foot">Meetings that still have something outstanding</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-person-badge" aria-hidden="true"></i> Unassigned</p>
+                    <p class="erp-kpi-value">1</p>
+                    <p class="erp-kpi-foot">Decided in a meeting, owned by nobody yet</p>
+                </div>
+            </div>
+
+            <form class="erp-filterbar" method="GET" action="#">
+                <div class="erp-filter">
+                    <label class="form-label" for="closed">Show</label>
+                    <select class="form-select" name="closed" id="closed">
+                        <option value="">Open work</option>
+                        <option>Everything, including closed</option>
+                    </select>
+                </div>
+                <div class="erp-filter-note">
+                    <i class="bi bi-info-circle" aria-hidden="true"></i>
+                    You hold tasks.view_all, so this is the whole office’s action items.
+                </div>
+                <div class="erp-filterbar-actions">
+                    <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-funnel" aria-hidden="true"></i> Apply</button>
+                </div>
+            </form>
+
+            ${groups.map((group) => `
+            <section class="erp-card mb-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title"><a href="./meetings.html#minutes">${group.title}</a></h2>
+                        <p class="erp-card-sub">${group.when} · <a href="./meetings.html#minutes">minutes</a></p>
+                    </div>
+                    <div class="erp-card-actions">
+                        <span class="erp-chip ${group.items.some((item) => item.overdue) ? 'erp-chip-danger' : 'erp-chip-outline'}">${group.items.length} item(s)</span>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-compact">
+                        <thead><tr><th>What was decided</th><th>Owner</th><th>Due</th><th>State</th><th></th></tr></thead>
+                        <tbody>
+                            ${group.items.map((item) => `
+                            <tr>
+                                <td>
+                                    <a class="erp-cell-strong" href="./tasks.html">${item.title}</a>
+                                    ${item.detail ? `<div class="erp-td-muted">${item.detail}</div>` : ''}
+                                </td>
+                                <td class="erp-td-muted">${item.unassigned ? '<span class="erp-chip erp-chip-outline">Nobody yet</span>' : item.owner}</td>
+                                <td class="erp-td-muted">
+                                    ${item.due ?? '—'}
+                                    ${item.overdue ? '<div><span class="erp-chip erp-chip-danger">overdue</span></div>' : ''}
+                                </td>
+                                <td><span class="erp-status erp-status-${item.state}">${item.stateLabel}</span></td>
+                                <td class="erp-td-actions"><a class="btn btn-sm btn-outline-secondary" href="./tasks.html">Open</a></td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </section>`).join('')}
+
+        </div>
+    </main>
+</div>`;
+}

@@ -1351,6 +1351,12 @@ a.erp-chip:hover { border-color: var(--accent); color: var(--accent-ink); backgr
     color: var(--warn);
 }
 
+/* §12-11: a meeting waiting to happen — neither news nor a problem */
+.erp-status-scheduled {
+    background: var(--info-soft);
+    color: var(--info);
+}
+
 /* §12-13: the task board's states. A task that is “done” is the same kind of
    news as an approved document, “blocked” is a caution that needs somebody, and
    “todo”/“cancelled” are neutral — work that has not started or has stopped. */

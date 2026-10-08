@@ -174,3 +174,9 @@
         min-height: 78px;
     }
 }
+
+/* §12-11: a meeting waiting to happen — neither news nor a problem */
+.erp-status-scheduled {
+    background: var(--info-soft);
+    color: var(--info);
+}

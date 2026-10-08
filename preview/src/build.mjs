@@ -12,6 +12,7 @@ import { designSystem, dashboard, orders, orderDetail, customers, customerProfil
     reportsCustom, reportsScheduled, settingsDesk, settingsBranch, maintenanceDesk,
     settingsLocalization, settingsTax,
     noticeBoard, taskBoard, registerDesk, complianceDesk,
+    meetingsDiary, minutesRegister, meetingActionItems,
     login, notFound } from './pages.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -50,6 +51,9 @@ const shellPages = [
     ['tasks.html', 'Tasks & projects', taskBoard],
     ['records.html', 'Business registers', registerDesk],
     ['compliance.html', 'Compliance calendar', complianceDesk],
+    ['meetings.html', 'Meetings', meetingsDiary],
+    ['minutes.html', 'Meeting minutes', minutesRegister],
+    ['action-items.html', 'Action items', meetingActionItems],
     ['petty-cash.html', 'Petty cash', pettyCash],
     ['petty-cash-requests.html', 'Petty cash requests', pettyCashRequests],
     ['petty-cash-expenses.html', 'Petty cash expenses', pettyCashExpenses],

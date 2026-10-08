@@ -183,6 +183,9 @@ export const SECTIONS = [
                 { label: 'Tasks & projects', url: './tasks.html', icon: 'bi-kanban' },
                 { label: 'Business registers', url: './records.html', icon: 'bi-journal-text' },
                 { label: 'Compliance calendar', url: './compliance.html', icon: 'bi-calendar-event' },
+                { label: 'Meetings', url: './meetings.html', icon: 'bi-calendar-event' },
+                { label: 'Meeting minutes', url: './minutes.html', icon: 'bi-journal-check' },
+                { label: 'Action items', url: './action-items.html', icon: 'bi-list-check' },
                 { label: 'Workflows', url: '#', icon: 'bi-diagram-3' },
                 { label: 'Documents', url: '#', icon: 'bi-folder2-open' },
             ],
@@ -290,6 +293,9 @@ export const PALETTE = [
     { label: 'Tasks & projects', url: './tasks.html', icon: 'bi-kanban', section: 'Governance', group: 'Business management' },
     { label: 'Business registers', url: './records.html', icon: 'bi-journal-text', section: 'Governance', group: 'Business management' },
     { label: 'Compliance calendar', url: './compliance.html', icon: 'bi-calendar-event', section: 'Governance', group: 'Business management' },
+    { label: 'Meetings', url: './meetings.html', icon: 'bi-calendar-event', section: 'Governance', group: 'Business management' },
+    { label: 'Meeting minutes', url: './minutes.html', icon: 'bi-journal-check', section: 'Governance', group: 'Business management' },
+    { label: 'Action items', url: './action-items.html', icon: 'bi-list-check', section: 'Governance', group: 'Business management' },
     { label: 'System maintenance', url: './maintenance.html', icon: 'bi-tools', section: 'Configuration', group: 'Settings' },
 ];
 
