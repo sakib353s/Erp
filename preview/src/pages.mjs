@@ -1679,3 +1679,236 @@ ${footer()}
 </div>
 <script>window.erpNavIndex = [];</script>`;
 }
+
+/**
+ * §08-08/09/12 — the reconciliation desk, mirrored from
+ * resources/views/cash-bank/reconciliation.blade.php. Same markup the Blade
+ * view renders: the proof on the left, the signature on the right, and the
+ * leftovers the bank's arithmetic cannot explain spelled out underneath.
+ */
+export function bankRecon() {
+    const leftovers = [
+        {
+            date: '28 Sep 2026', what: 'Cheque 004512 — rent, not yet presented', reference: '004512',
+            amount: '26,000.00', out: true, pair: true,
+        },
+    ];
+
+    const onStatement = [
+        {
+            date: '30 Sep 2026', what: 'Bank charge — quarterly account fee', reference: '',
+            amount: '1,250.00', out: true,
+        },
+        {
+            date: '30 Sep 2026', what: 'Transfer received — Rahmania Store', reference: 'SO-2026-00412',
+            amount: '42,000.00', out: false,
+        },
+    ];
+
+    const matched = [
+        ['02 Sep 2026', '004512', 'Chq 004511 cleared — Meghna Traders', '118,500.00', 'same amount, close in date', true],
+        ['04 Sep 2026', 'SO-2026-00411', 'Deposit — Meghna Traders', '118,500.00', 'by hand', false],
+    ];
+
+    return `
+${previewBar('bank-recon.html')}
+<div class="erp-shell" data-rail="expanded">
+${sidebar('cash_bank')}
+    <div class="erp-main">
+${topbar({ title: 'Bank reconciliation', trail: [{ label: 'Cash & Bank' }, { label: 'Bank Accounts' }, { label: 'Bank Reconciliation' }] })}
+        <main class="erp-content" id="erpContent">
+            <header class="erp-page-head">
+                <div class="erp-page-head-main">
+                    <p class="erp-eyebrow">Cash &amp; Bank &middot; Bank accounts &middot; 1121</p>
+                    <h1 class="erp-h1">Islami Bank — current account</h1>
+                    <p class="erp-page-sub">A reconciliation is an argument, not a formality: it lines the bank's statement up against the posted journal lines on this account and names what is left over on each side. The figures below are frozen on the day it was opened, so this page reads the same next year as it does now — and it cannot be signed off until the leftovers explain the whole gap.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./cash-bank.html"><i class="bi bi-journal-text" aria-hidden="true"></i> The book</a>
+                    <a class="btn btn-outline-secondary" href="./cash-bank.html"><i class="bi bi-file-earmark-spreadsheet" aria-hidden="true"></i> Statement desk</a>
+                    <button class="erp-icon-btn" type="button" title="Pin this page" aria-label="Pin this page"><i class="bi bi-star" aria-hidden="true"></i></button>
+                </div>
+            </header>
+
+            <div class="erp-note erp-note-ok mb-3">
+                <i class="bi bi-check2-circle" aria-hidden="true"></i>
+                <div>Everything is explained: the bank and the books agree to the paisa.</div>
+            </div>
+
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-journal-text" aria-hidden="true"></i> Book balance at period end</p>
+                    <p class="erp-kpi-value">৳ 1,246,800.50</p>
+                    <p class="erp-kpi-foot">Posted lines up to 2026-09-30</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-bank" aria-hidden="true"></i> Statement closing</p>
+                    <p class="erp-kpi-value">৳ 1,264,050.50</p>
+                    <p class="erp-kpi-foot">The bank's own figure for 2026-09-30</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-calculator" aria-hidden="true"></i> Expected closing</p>
+                    <p class="erp-kpi-value">৳ 1,264,050.50</p>
+                    <p class="erp-kpi-foot">Books plus what the bank moved, less what the bank has not seen</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-question-circle" aria-hidden="true"></i> Unexplained</p>
+                    <p class="erp-kpi-value">৳ 0.00</p>
+                    <p class="erp-kpi-foot">Must reach zero before anybody may sign it off</p>
+                </div>
+            </div>
+
+            <div class="erp-split">
+                <section class="erp-card">
+                    <header class="erp-card-head">
+                        <h2 class="erp-card-title">The proof <span class="erp-status erp-status-balanced">balanced</span></h2>
+                    </header>
+                    <div class="p-3">
+                        <div class="erp-dl erp-dl-tight erp-dl-striped">
+                            <dt>Book balance at period end</dt>
+                            <dd class="erp-money-flat">1,246,800.50</dd>
+
+                            <dt>Add: statement lines not in the books</dt>
+                            <dd>
+                                <span class="erp-money-in">+43,250.00</span>
+                                <span class="d-block erp-td-muted">2 line(s) the bank moved that these books have not been told about</span>
+                            </dd>
+
+                            <dt>Less: book lines the bank has not processed</dt>
+                            <dd>
+                                <span class="erp-money-out">−26,000.00</span>
+                                <span class="d-block erp-td-muted">1 line in these books the bank has not seen</span>
+                            </dd>
+
+                            <dt>Expected statement closing</dt>
+                            <dd class="erp-cell-strong">1,264,050.50</dd>
+
+                            <dt>Statement closing, as the bank states it</dt>
+                            <dd class="erp-cell-strong">1,264,050.50</dd>
+
+                            <dt>Unexplained</dt>
+                            <dd>
+                                <span class="erp-money-flat">0.00</span>
+                                <span class="d-block erp-td-muted">Every paisa of the gap is accounted for by the leftover lines on both sides.</span>
+                            </dd>
+                        </div>
+
+                        <div class="erp-filter-note mt-3">
+                            <i class="bi bi-info-circle" aria-hidden="true"></i>
+                            <span>The bank's opening figure for this period was 1,220,050.50; the books carried 1,220,050.50 at the same moment. When those two agree, the leftovers below are the whole story — when they do not, the difference is the number to chase and no amount of pairing moves it.</span>
+                        </div>
+                    </div>
+                </section>
+
+                <aside>
+                    <div class="erp-card">
+                        <header class="erp-card-head"><h2 class="erp-card-title">Sign-off</h2></header>
+                        <div class="p-3">
+                            <div class="erp-dl erp-dl-tight">
+                                <dt>Prepared by</dt>
+                                <dd>Nusrat Jahan<span class="d-block erp-td-muted">30 Sep 2026 17:42</span></dd>
+                                <dt>Signed off</dt>
+                                <dd>Abdul Karim<span class="d-block erp-td-muted">01 Oct 2026 09:15</span></dd>
+                            </div>
+
+                            <div class="erp-note erp-note-ok mt-3">
+                                <i class="bi bi-lock" aria-hidden="true"></i>
+                                <div>Signed off. The lines below are history — nothing here can be re-matched afterwards.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="erp-card mt-3">
+                        <header class="erp-card-head"><h2 class="erp-card-title">While it is still open</h2></header>
+                        <div class="p-3">
+                            <label class="form-label" for="statement_closing">The bank's closing figure</label>
+                            <div class="erp-input-group">
+                                <input class="form-control" id="statement_closing" name="statement_closing" type="number" step="0.01" value="1264050.50" disabled>
+                                <button class="btn btn-outline-secondary" type="button" disabled>Correct it</button>
+                            </div>
+                            <p class="erp-td-muted mt-2 mb-0">Read it straight off the statement's closing row — reading it off the wrong row is the commonest way this desk fails, which is why it can be corrected while the period is open and never afterwards.</p>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+
+            <section class="erp-card mt-3">
+                <header class="erp-card-head">
+                    <h2 class="erp-card-title">In the books, not on the statement <span class="erp-chip erp-chip-outline">1 line</span></h2>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="erp-table erp-table-compact">
+                        <thead><tr><th>Date</th><th>Reference</th><th>What it was</th><th class="erp-th-num">Amount</th></tr></thead>
+                        <tbody>
+${leftovers.map((row) => `                            <tr>
+                                <td class="erp-td-muted">${row.date}</td>
+                                <td class="font-monospace">${row.reference}</td>
+                                <td>${row.what}</td>
+                                <td class="erp-td-num"><span class="erp-money-out">${row.amount}</span></td>
+                            </tr>`).join('\n')}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="erp-card mt-3">
+                <header class="erp-card-head">
+                    <h2 class="erp-card-title">On the statement, not in the books <span class="erp-chip erp-chip-outline">2 lines</span></h2>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="erp-table">
+                        <thead><tr><th>Value date</th><th>What the bank says it was</th><th>Reference</th><th class="erp-th-num">Amount</th><th>Match by hand</th></tr></thead>
+                        <tbody>
+${onStatement.map((row, index) => `                            <tr>
+                                <td class="erp-td-muted">${row.date}</td>
+                                <td>${row.what}</td>
+                                <td class="font-monospace">${row.reference || '—'}</td>
+                                <td class="erp-td-num"><span class="${row.out ? 'erp-money-out' : 'erp-money-in'}">${row.amount}</span></td>
+                                <td>${index === 0
+                                    ? '<span class="erp-td-muted">Nothing left in the books to pair with this line</span>'
+                                    : '<span class="d-flex gap-2"><select class="form-select form-select-sm" aria-label="Book line" disabled><option>26 Sep 2026 · EX-2026-00214 · 26,000.00</option></select><button class="btn btn-sm btn-outline-secondary" type="button" disabled>Match</button></span>'}</td>
+                            </tr>`).join('\n')}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="erp-filter-note p-3">
+                    <i class="bi bi-info-circle" aria-hidden="true"></i>
+                    <span>Only lines of the same amount can be paired, and a pair made by the rule cannot be un-picked one line at a time — re-open the period with a wider date range instead.</span>
+                </div>
+            </section>
+
+            <section class="erp-card mt-3">
+                <header class="erp-card-head">
+                    <h2 class="erp-card-title">Matched pairs <span class="erp-chip erp-chip-outline">2</span></h2>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="erp-table erp-table-compact">
+                        <thead><tr><th>Statement date</th><th>Reference</th><th>What the bank says it was</th><th class="erp-th-num">Amount</th><th>Matched how</th><th></th></tr></thead>
+                        <tbody>
+${matched.map(([date, reference, what, amount, how, isIn]) => `                            <tr>
+                                <td class="erp-td-muted">${date}</td>
+                                <td class="font-monospace">${reference}</td>
+                                <td>${what}</td>
+                                <td class="erp-td-num"><span class="${isIn ? 'erp-money-in' : 'erp-money-out'}">${amount}</span></td>
+                                <td><span class="erp-chip erp-chip-outline">${how}</span></td>
+                                <td class="erp-td-actions"><span class="erp-td-muted">signed off — history</span></td>
+                            </tr>`).join('\n')}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
+                <p class="erp-field-label">More in this module</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="erp-chip erp-chip-outline" href="./cash-bank.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>All Bank Accounts</a>
+                    <a class="erp-chip erp-chip-outline" href="./cash-bank.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Bank Statement Import</a>
+                    <a class="erp-chip erp-chip-outline" href="./cash-bank.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Mobile Reconciliation</a>
+                </div>
+            </nav>
+        </main>
+${footer()}
+    </div>
+</div>
+<script>window.erpNavIndex = [];</script>`;
+}

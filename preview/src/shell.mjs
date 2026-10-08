@@ -111,12 +111,15 @@ export const SECTIONS = [
                 label: 'Bank Accounts', icon: 'bi-bank', items: [
                     { label: 'All Bank Accounts', url: './cash-bank.html', icon: 'bi-bank' },
                     { label: 'Bank Transactions', url: './cash-bank.html', icon: 'bi-journal-text' },
+                    { label: 'Bank Reconciliation', url: './bank-recon.html', icon: 'bi-shield-check', target: 'cash' },
+                    { label: 'Bank Statement Import', url: './bank-recon.html', icon: 'bi-file-earmark-spreadsheet' },
                 ],
             },
             {
                 label: 'Mobile Banking', icon: 'bi-phone', items: [
                     { label: 'bKash Account', url: './cash-bank.html', icon: 'bi-phone' },
                     { label: 'Nagad Account', url: './cash-bank.html', icon: 'bi-phone' },
+                    { label: 'Mobile Reconciliation', url: './bank-recon.html', icon: 'bi-phone-vibrate' },
                 ],
             },
         ],
@@ -195,6 +198,9 @@ export const PALETTE = [
     { label: 'Cash Payments', url: './cash-bank.html', icon: 'bi-box-arrow-up', section: 'Cash & bank', group: 'Cash Management' },
     { label: 'Cash Transfer', url: './cash-bank.html', icon: 'bi-arrow-left-right', section: 'Cash & bank', group: 'Cash Management' },
     { label: 'All Bank Accounts', url: './cash-bank.html', icon: 'bi-bank', section: 'Cash & bank', group: 'Bank Accounts' },
+    { label: 'Bank Reconciliation', url: './bank-recon.html', icon: 'bi-shield-check', section: 'Cash & bank', group: 'Bank Accounts' },
+    { label: 'Bank Statement Import', url: './bank-recon.html', icon: 'bi-file-earmark-spreadsheet', section: 'Cash & bank', group: 'Bank Accounts' },
+    { label: 'Mobile Reconciliation', url: './bank-recon.html', icon: 'bi-phone-vibrate', section: 'Cash & bank', group: 'Mobile Banking' },
     { label: 'Print labels', url: './labels.html', icon: 'bi-printer', section: 'Inventory & warehouse', group: 'Barcode & QR' },
     { label: 'Generate barcode', url: './labels.html', icon: 'bi-upc-scan', section: 'Inventory & warehouse', group: 'Barcode & QR' },
     { label: 'Generate QR code', url: './labels.html', icon: 'bi-qr-code', section: 'Inventory & warehouse', group: 'Barcode & QR' },
@@ -501,6 +507,7 @@ export function previewBar(current) {
         ['packaging.html', 'Packaging'],
         ['labels.html', 'Labels'],
         ['cash-bank.html', 'Cash & bank'],
+        ['bank-recon.html', 'Reconciliation'],
         ['login.html', 'Sign in'],
     ];
 
