@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#ffffff">
-    <title>Petty cash expenses · BD ERP — UI redesign preview</title>
+    <title>Report family hub · BD ERP — UI redesign preview</title>
     <link rel="stylesheet" href="./assets/preview.css">
 </head>
 <body class="erp-body">
@@ -446,15 +446,15 @@
             </p>
             
     <div class="erp-nav-group">
-        <button class="erp-nav-group-btn" type="button"
-                data-bs-toggle="collapse" data-bs-target="#nav-insight-0" aria-expanded="false">
+        <button class="erp-nav-group-btn is-active has-active-trail" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-insight-0" aria-expanded="true">
             <i class="bi bi-graph-up-arrow erp-nav-icon" aria-hidden="true"></i>
             <span>Reports</span>
             <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
         </button>
-        <div class="collapse" id="nav-insight-0">
+        <div class="collapse show" id="nav-insight-0">
             <div class="erp-nav-sub">
-        <a class="erp-nav-link" href="./reports.html">
+        <a class="erp-nav-link active" href="./reports.html" aria-current="page">
             <span>Report Centre</span>
         </a>
         <a class="erp-nav-link" href="./reports-family.html">
@@ -672,263 +672,319 @@
 
             <header class="erp-page-head">
                 <div>
-                    <p class="erp-eyebrow"><i class="bi bi-receipt" aria-hidden="true"></i> Cash &amp; bank · Petty cash · Expenses</p>
-                    <h1 class="erp-h1">What came out of the float</h1>
-                    <p class="erp-page-sub">Every voucher here is a real payment: the money left the float's own account and the ledger knows about it — debited to the category it was spent on, credited to the tin. The float cannot pay more than it holds, which is why the register and the ledger always agree.</p>
+                    <p class="erp-eyebrow"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i> Reports · Finance Reports</p>
+                    <h1 class="erp-h1">Finance reports</h1>
+                    <p class="erp-page-sub">The books themselves: trial balance, the general ledger, the money desk and the expense register. Every row below is a report this installation really registers, with the question it answers and where its numbers come from; the ones your role does not open are listed with the key they need rather than hidden.</p>
                 </div>
                 <div class="erp-page-head-actions">
-                    <a class="btn btn-outline-secondary" href="./petty-cash.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> The floats</a>
-                    <a class="btn btn-primary" href="./petty-cash-replenishment.html"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Replenish</a>
+                    <a class="btn btn-outline-secondary" href="./reports.html"><i class="bi bi-grid" aria-hidden="true"></i> All families</a>
+                    <a class="btn btn-outline-secondary" href="./reports-scheduled.html"><i class="bi bi-clock-history" aria-hidden="true"></i> Scheduled</a>
                 </div>
             </header>
 
             <div class="erp-kpi-grid mb-3">
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-receipt" aria-hidden="true"></i> Paid out this month</p>
-                    <p class="erp-kpi-value">৳ 14,240.00</p>
-                    <p class="erp-kpi-foot">9 voucher(s) out of the floats</p>
+                    <p class="erp-kpi-label"><i class="bi bi-journal-text" aria-hidden="true"></i> Reports in this family</p>
+                    <p class="erp-kpi-value">12</p>
+                    <p class="erp-kpi-foot">Registered routes, counted from the router</p>
                 </div>
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-cash-stack" aria-hidden="true"></i> In the tins now</p>
-                    <p class="erp-kpi-value">৳ 18,450.00</p>
-                    <p class="erp-kpi-foot">Across 3 open float(s) of 4</p>
+                    <p class="erp-kpi-label"><i class="bi bi-unlock" aria-hidden="true"></i> You may open</p>
+                    <p class="erp-kpi-value">9</p>
+                    <p class="erp-kpi-foot">3 more are listed below with the key they need</p>
                 </div>
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Short of their level</p>
-                    <p class="erp-kpi-value">৳ 6,550.00</p>
-                    <p class="erp-kpi-foot">What a replenishment would put back</p>
+                    <p class="erp-kpi-label"><i class="bi bi-key" aria-hidden="true"></i> Needs the hub key</p>
+                    <p class="erp-kpi-value">reports.finance</p>
+                    <p class="erp-kpi-foot">The permission this whole page is behind</p>
                 </div>
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Put back this month</p>
-                    <p class="erp-kpi-value">৳ 12,000.00</p>
-                    <p class="erp-kpi-foot">Transfers into the floats, never a second record of the spending</p>
+                    <p class="erp-kpi-label"><i class="bi bi-clock-history" aria-hidden="true"></i> Scheduled runs</p>
+                    <p class="erp-kpi-value">2</p>
+                    <p class="erp-kpi-foot">Active schedules whose definitions live in this company</p>
                 </div>
             </div>
 
-            <form class="erp-filterbar" onsubmit="return false" role="search">
-                <div class="erp-filter">
-                    <label class="form-label" for="pe-fund">Float</label>
-                    <select class="form-select" id="pe-fund">
-                        <option>Every float</option>
-                        <option>Head office tin</option>
-                        <option>Depot tin</option>
-                        <option>Counter till</option>
-                    </select>
-                </div>
-                <div class="erp-filter">
-                    <label class="form-label" for="pe-category">Category</label>
-                    <select class="form-select" id="pe-category">
-                        <option>Every category</option>
-                        <option>Local travel</option>
-                        <option>Office supplies</option>
-                        <option>Packaging materials</option>
-                    </select>
-                </div>
-                <div class="erp-filter">
-                    <label class="form-label" for="pe-from">From</label>
-                    <input class="form-control" type="date" id="pe-from" value="2026-10-01">
-                </div>
-                <div class="erp-filter">
-                    <label class="form-label" for="pe-to">To</label>
-                    <input class="form-control" type="date" id="pe-to" value="2026-10-31">
-                </div>
-                <div class="erp-filterbar-actions">
-                    <button class="btn btn-link" type="button">Reset</button>
-                    <button class="btn btn-primary" type="button"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
-                </div>
-            </form>
-
-            <div class="erp-table-shell" data-erp-table>
-                <div class="erp-card-head px-3 pt-3">
-                    <h2 class="erp-card-title">Vouchers paid out of the floats<span class="erp-chip erp-chip-outline">4 voucher(s) shown</span></h2>
-                </div>
-                <div class="erp-table-scroll">
-                    <table class="table erp-table erp-table-stack">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Voucher</th>
-                                <th>Float</th>
-                                <th>Payee</th>
-                                <th>Spent on</th>
-                                <th class="erp-th-num">Amount</th>
-                                <th>Recorded by</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+            <div class="row row-cols-1 row-cols-xl-2 g-3">
+                
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Trial balance</h2>
+                                <p class="erp-card-sub">Whether the books balance, account by account, as at a date.</p>
+                            </div>
                             
-                            <tr>
-                                <td>2026-10-08</td>
-                                <td>
-                                    <span class="erp-cell-strong">EX-2026-00418</span>
-                                    <span class="d-block erp-td-muted">posted to the ledger</span>
-                                </td>
-                                <td>
-                                    Head office tin
-                                    <span class="d-block erp-td-muted"><a href="./cash-bank.html">the tin's ledger</a></span>
-                                </td>
-                                <td>
-                                    Rickshaw
-                                    <span class="d-block erp-td-muted">Two rides to the courier office</span>
-                                </td>
-                                <td>
-                                    Local travel
-                                    <span class="d-block erp-td-muted">5220 — Travelling Expense</span>
-                                </td>
-                                <td class="erp-td-num">৳ 250.00</td>
-                                <td>
-                                    Rakib Hasan
-                                    <span class="d-block erp-td-muted">below the limit of 1,000.00</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2026-10-07</td>
-                                <td>
-                                    <span class="erp-cell-strong">EX-2026-00417</span>
-                                    <span class="d-block erp-td-muted">posted to the ledger</span>
-                                </td>
-                                <td>
-                                    Counter till
-                                    <span class="d-block erp-td-muted"><a href="./cash-bank.html">the tin's ledger</a></span>
-                                </td>
-                                <td>
-                                    Shahin Store
-                                    <span class="d-block erp-td-muted">Packing tape and markers</span>
-                                </td>
-                                <td>
-                                    Packaging materials
-                                    <span class="d-block erp-td-muted">5255 — Packing Materials</span>
-                                </td>
-                                <td class="erp-td-num">৳ 840.00</td>
-                                <td>
-                                    Jamal Uddin
-                                    <span class="d-block erp-td-muted">below the limit of 1,000.00</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2026-10-06</td>
-                                <td>
-                                    <span class="erp-cell-strong">EX-2026-00412</span>
-                                    <span class="d-block erp-td-muted">posted to the ledger</span>
-                                </td>
-                                <td>
-                                    Depot tin
-                                    <span class="d-block erp-td-muted"><a href="./cash-bank.html">the tin's ledger</a></span>
-                                </td>
-                                <td>
-                                    Paper shop
-                                    <span class="d-block erp-td-muted">Reams of paper for the counter</span>
-                                </td>
-                                <td>
-                                    Office supplies
-                                    <span class="d-block erp-td-muted">5240 — Office Supplies</span>
-                                </td>
-                                <td class="erp-td-num">৳ 2,000.00</td>
-                                <td>
-                                    Sumaiya Akter
-                                    <span class="d-block erp-td-muted">against request #31, approved by Md. Faruk</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2026-10-04</td>
-                                <td>
-                                    <span class="erp-cell-strong">EX-2026-00406</span>
-                                    <span class="d-block erp-td-muted">posted to the ledger</span>
-                                </td>
-                                <td>
-                                    Head office tin
-                                    <span class="d-block erp-td-muted"><a href="./cash-bank.html">the tin's ledger</a></span>
-                                </td>
-                                <td>
-                                    Nur Electric
-                                    <span class="d-block erp-td-muted">Replacement lock for the shutter</span>
-                                </td>
-                                <td>
-                                    Repairs & maintenance
-                                    <span class="d-block erp-td-muted">5260 — Repairs & Maintenance</span>
-                                </td>
-                                <td class="erp-td-num">৳ 1,150.00</td>
-                                <td>
-                                    Rakib Hasan
-                                    <span class="d-block erp-td-muted">against request #29, approved by Md. Faruk</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                        </header>
+
+                        <dl class="erp-dl erp-dl-tight mt-2">
+                            <dt class="erp-field-label">Reads</dt>
+                            <dd>Posted journal lines</dd>
+                            <dt class="erp-field-label">Permission</dt>
+                            <dd class="font-monospace mb-0">accounting.reports.view</dd>
+                        </dl>
+
+                        <div class="mt-auto pt-3 d-flex flex-wrap gap-2">
+                            <a class="btn btn-outline-secondary btn-sm" href="./cash-bank.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                            
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Chart of accounts</h2>
+                                <p class="erp-card-sub">The accounts themselves with their balances — the frame every other report is drawn on.</p>
+                            </div>
+                            
+                        </header>
+
+                        <dl class="erp-dl erp-dl-tight mt-2">
+                            <dt class="erp-field-label">Reads</dt>
+                            <dd>The chart and its posted balances</dd>
+                            <dt class="erp-field-label">Permission</dt>
+                            <dd class="font-monospace mb-0">accounting.coa.view</dd>
+                        </dl>
+
+                        <div class="mt-auto pt-3 d-flex flex-wrap gap-2">
+                            <a class="btn btn-outline-secondary btn-sm" href="./cash-bank.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                            
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Cash book</h2>
+                                <p class="erp-card-sub">One money account read the way a bank statement reads.</p>
+                            </div>
+                            
+                        </header>
+
+                        <dl class="erp-dl erp-dl-tight mt-2">
+                            <dt class="erp-field-label">Reads</dt>
+                            <dd>Posted journal lines of that account</dd>
+                            <dt class="erp-field-label">Permission</dt>
+                            <dd class="font-monospace mb-0">cash.reports</dd>
+                        </dl>
+
+                        <div class="mt-auto pt-3 d-flex flex-wrap gap-2">
+                            <a class="btn btn-outline-secondary btn-sm" href="./cash-reports.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                            
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Bank book</h2>
+                                <p class="erp-card-sub">Every bank and wallet side by side.</p>
+                            </div>
+                            
+                        </header>
+
+                        <dl class="erp-dl erp-dl-tight mt-2">
+                            <dt class="erp-field-label">Reads</dt>
+                            <dd>Posted journal lines of every money account</dd>
+                            <dt class="erp-field-label">Permission</dt>
+                            <dd class="font-monospace mb-0">cash.reports</dd>
+                        </dl>
+
+                        <div class="mt-auto pt-3 d-flex flex-wrap gap-2">
+                            <a class="btn btn-outline-secondary btn-sm" href="./cash-reports.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                            
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Cash flow</h2>
+                                <p class="erp-card-sub">Where the money came from and where it went.</p>
+                            </div>
+                            
+                        </header>
+
+                        <dl class="erp-dl erp-dl-tight mt-2">
+                            <dt class="erp-field-label">Reads</dt>
+                            <dd>The counterpart of every posting on a money account</dd>
+                            <dt class="erp-field-label">Permission</dt>
+                            <dd class="font-monospace mb-0">cash.reports</dd>
+                        </dl>
+
+                        <div class="mt-auto pt-3 d-flex flex-wrap gap-2">
+                            <a class="btn btn-outline-secondary btn-sm" href="./cash-reports.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                            
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Till variances</h2>
+                                <p class="erp-card-sub">What each counter session counted against what it should have held.</p>
+                            </div>
+                            
+                        </header>
+
+                        <dl class="erp-dl erp-dl-tight mt-2">
+                            <dt class="erp-field-label">Reads</dt>
+                            <dd>Counter sessions — the screen says it is not the ledger</dd>
+                            <dt class="erp-field-label">Permission</dt>
+                            <dd class="font-monospace mb-0">cash.reports</dd>
+                        </dl>
+
+                        <div class="mt-auto pt-3 d-flex flex-wrap gap-2">
+                            <a class="btn btn-outline-secondary btn-sm" href="./cash-reports.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                            
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Expense report</h2>
+                                <p class="erp-card-sub">What the company spent, by category, branch and month, with the ledger check beside it.</p>
+                            </div>
+                            
+                        </header>
+
+                        <dl class="erp-dl erp-dl-tight mt-2">
+                            <dt class="erp-field-label">Reads</dt>
+                            <dd>Posted expenses and the accounts their categories point at</dd>
+                            <dt class="erp-field-label">Permission</dt>
+                            <dd class="font-monospace mb-0">expenses.reports</dd>
+                        </dl>
+
+                        <div class="mt-auto pt-3 d-flex flex-wrap gap-2">
+                            <a class="btn btn-outline-secondary btn-sm" href="./expense-report.html">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                            
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">General ledger</h2>
+                                <p class="erp-card-sub">Every posting on one account, with a running balance.</p>
+                            </div>
+                            
+                        </header>
+
+                        <dl class="erp-dl erp-dl-tight mt-2">
+                            <dt class="erp-field-label">Reads</dt>
+                            <dd>Posted journal lines</dd>
+                            <dt class="erp-field-label">Permission</dt>
+                            <dd class="font-monospace mb-0">accounting.reports.view</dd>
+                        </dl>
+
+                        <div class="mt-auto pt-3 d-flex flex-wrap gap-2">
+                            <a class="btn btn-outline-secondary btn-sm" href="undefined">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                            <span class="erp-chip erp-chip-outline"><i class="bi bi-journal-text" aria-hidden="true"></i> opened from the register</span>
+                        </div>
+                    </section>
+                </div>
+                
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Opening trial balance</h2>
+                                <p class="erp-card-sub">What the books opened with, before anything was posted.</p>
+                            </div>
+                            <span class="erp-chip erp-chip-soft"><i class="bi bi-lock" aria-hidden="true"></i> locked</span>
+                        </header>
+
+                        <dl class="erp-dl erp-dl-tight mt-2">
+                            <dt class="erp-field-label">Reads</dt>
+                            <dd>Opening entries</dd>
+                            <dt class="erp-field-label">Permission</dt>
+                            <dd class="font-monospace mb-0">accounting.reports.view</dd>
+                        </dl>
+
+                        <div class="mt-auto pt-3 d-flex flex-wrap gap-2">
+                            <span class="erp-chip erp-chip-soft">Needs <span class="font-monospace ms-1">accounting.reports.view</span></span>
+                            
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Cheque register</h2>
+                                <p class="erp-card-sub">Cheques received and issued, and which ones a bank has paid.</p>
+                            </div>
+                            <span class="erp-chip erp-chip-soft"><i class="bi bi-lock" aria-hidden="true"></i> locked</span>
+                        </header>
+
+                        <dl class="erp-dl erp-dl-tight mt-2">
+                            <dt class="erp-field-label">Reads</dt>
+                            <dd>The cheque register</dd>
+                            <dt class="erp-field-label">Permission</dt>
+                            <dd class="font-monospace mb-0">cheques.view</dd>
+                        </dl>
+
+                        <div class="mt-auto pt-3 d-flex flex-wrap gap-2">
+                            <span class="erp-chip erp-chip-soft">Needs <span class="font-monospace ms-1">cheques.view</span></span>
+                            
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">Trial balance rebuild</h2>
+                                <p class="erp-card-sub">Rebuild the derived balances and see what moved — the one page here that writes.</p>
+                            </div>
+                            <span class="erp-chip erp-chip-soft"><i class="bi bi-lock" aria-hidden="true"></i> locked</span>
+                        </header>
+
+                        <dl class="erp-dl erp-dl-tight mt-2">
+                            <dt class="erp-field-label">Reads</dt>
+                            <dd>The ledger, re-derived from its postings</dd>
+                            <dt class="erp-field-label">Permission</dt>
+                            <dd class="font-monospace mb-0">accounting.reports.view</dd>
+                        </dl>
+
+                        <div class="mt-auto pt-3 d-flex flex-wrap gap-2">
+                            <span class="erp-chip erp-chip-soft">Needs <span class="font-monospace ms-1">accounting.reports.view</span></span>
+                            
+                        </div>
+                    </section>
                 </div>
             </div>
 
             <section class="erp-card mt-3">
                 <header class="erp-card-head">
                     <div>
-                        <h2 class="erp-card-title">Pay a voucher out of a float</h2>
-                        <p class="erp-card-sub">The float has to be holding the money — the desk checks the ledger before it lets the voucher through, because a custodian cannot hand over cash the tin does not have.</p>
+                        <h2 class="erp-card-title">The other families</h2>
+                        <p class="erp-card-sub">The rest of the centre, with what each one holds.</p>
                     </div>
                 </header>
-                <form onsubmit="return false">
-                    <div class="erp-form-grid">
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pv-fund">Float</label>
-                            <select class="form-select" id="pv-fund">
-                                <option>PC-HEAD — Head office tin</option>
-                                <option>PC-DEPOT — Depot tin</option>
-                                <option>PC-CNTR — Counter till</option>
-                            </select>
-                            <small class="form-text">Holds 6,250.00 of a 10,000.00 level.</small>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pv-category">Spent on</label>
-                            <select class="form-select" id="pv-category">
-                                <option>Local travel (5220)</option>
-                                <option>Office supplies (5240)</option>
-                                <option>Packaging materials (5255)</option>
-                            </select>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pv-payee">Payee</label>
-                            <input class="form-control" type="text" id="pv-payee" placeholder="Who was handed the cash">
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pv-amount">Amount</label>
-                            <div class="erp-input-group">
-                                <span class="input-group-text">৳</span>
-                                <input class="form-control erp-num" type="number" step="0.01" id="pv-amount" placeholder="250.00">
-                            </div>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pv-date">Date paid</label>
-                            <input class="form-control" type="date" id="pv-date" value="2026-10-08">
-                        </div>
-                        <div class="erp-form-field erp-form-field-wide">
-                            <label class="form-label" for="pv-what">What it was for</label>
-                            <input class="form-control" type="text" id="pv-what" placeholder="Two rickshaws to the courier office">
-                        </div>
-                    </div>
-                    <button class="btn btn-primary mt-2" type="button"><i class="bi bi-cash-coin" aria-hidden="true"></i> Pay and record the voucher</button>
-                </form>
+                <div class="d-flex flex-wrap gap-2 p-3">
+                    <a class="erp-chip erp-chip-outline" href="./reports-family.html"><i class="bi bi-cart3" aria-hidden="true"></i>Sales reports <span class="erp-td-muted">16</span></a>
+                    <a class="erp-chip erp-chip-outline" href="./reports-family.html"><i class="bi bi-bag-check" aria-hidden="true"></i>Purchase reports <span class="erp-td-muted">6</span></a>
+                    <a class="erp-chip erp-chip-outline" href="./reports-family.html"><i class="bi bi-boxes" aria-hidden="true"></i>Inventory reports <span class="erp-td-muted">9</span></a>
+                    <a class="erp-chip erp-chip-outline" href="./reports-family.html"><i class="bi bi-people" aria-hidden="true"></i>Customer reports <span class="erp-td-muted">7</span></a>
+                    <a class="erp-chip erp-chip-outline" href="./reports-family.html"><i class="bi bi-truck" aria-hidden="true"></i>Supplier reports <span class="erp-td-muted">4</span></a>
+                    <span class="erp-chip erp-chip-soft"><i class="bi bi-lock" aria-hidden="true"></i>VAT &amp; tax reports</span>
+                    <span class="erp-chip erp-chip-soft"><i class="bi bi-lock" aria-hidden="true"></i>Employee reports</span>
+                    <span class="erp-chip erp-chip-soft"><i class="bi bi-lock" aria-hidden="true"></i>Marketing reports</span>
+                </div>
             </section>
 
-            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
-                <p class="erp-field-label">More in this module</p>
-                <div class="d-flex flex-wrap gap-2">
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Overview</a>
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash-requests.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Requests</a>
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash-replenishment.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Replenishment</a>
-                    <a class="erp-chip erp-chip-outline" href="./expenses.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>All Expenses</a>
-                </div>
-            </nav>
-        </main>
-
-<footer class="erp-footer">
-    <span>BD ERP · Rafshan Trading Ltd.</span>
-    <span class="erp-footer-meta">
-        <span>07 Oct 2026, 06:20 PM · Asia/Dhaka</span>
-        <span class="d-none d-md-inline">Press <kbd>⌘</kbd><kbd>K</kbd> to jump anywhere</span>
-    </span>
-</footer>
-    </div>
+        </div>
+    </main>
 </div>
-<script>window.erpNavIndex = [];</script>
 
 <div class="erp-backdrop" data-erp-backdrop hidden></div>
 

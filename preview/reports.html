@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#ffffff">
-    <title>Petty cash expenses · BD ERP — UI redesign preview</title>
+    <title>Report centre · BD ERP — UI redesign preview</title>
     <link rel="stylesheet" href="./assets/preview.css">
 </head>
 <body class="erp-body">
@@ -446,15 +446,15 @@
             </p>
             
     <div class="erp-nav-group">
-        <button class="erp-nav-group-btn" type="button"
-                data-bs-toggle="collapse" data-bs-target="#nav-insight-0" aria-expanded="false">
+        <button class="erp-nav-group-btn is-active has-active-trail" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-insight-0" aria-expanded="true">
             <i class="bi bi-graph-up-arrow erp-nav-icon" aria-hidden="true"></i>
             <span>Reports</span>
             <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
         </button>
-        <div class="collapse" id="nav-insight-0">
+        <div class="collapse show" id="nav-insight-0">
             <div class="erp-nav-sub">
-        <a class="erp-nav-link" href="./reports.html">
+        <a class="erp-nav-link active" href="./reports.html" aria-current="page">
             <span>Report Centre</span>
         </a>
         <a class="erp-nav-link" href="./reports-family.html">
@@ -672,263 +672,282 @@
 
             <header class="erp-page-head">
                 <div>
-                    <p class="erp-eyebrow"><i class="bi bi-receipt" aria-hidden="true"></i> Cash &amp; bank · Petty cash · Expenses</p>
-                    <h1 class="erp-h1">What came out of the float</h1>
-                    <p class="erp-page-sub">Every voucher here is a real payment: the money left the float's own account and the ledger knows about it — debited to the category it was spent on, credited to the tin. The float cannot pay more than it holds, which is why the register and the ledger always agree.</p>
+                    <p class="erp-eyebrow"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i> Reports</p>
+                    <h1 class="erp-h1">Every report this system can actually open</h1>
+                    <p class="erp-page-sub">One page per family the catalogue names, and nothing on it that does not exist: these counts are read out of the router, so a report appears here the moment its route is registered — and a report nobody has built yet cannot be listed at all. Where a family is thin, the hub says what is missing and why instead of leaving a blank card.</p>
                 </div>
                 <div class="erp-page-head-actions">
-                    <a class="btn btn-outline-secondary" href="./petty-cash.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> The floats</a>
-                    <a class="btn btn-primary" href="./petty-cash-replenishment.html"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Replenish</a>
+                    <a class="btn btn-outline-secondary" href="./reports-custom.html"><i class="bi bi-sliders" aria-hidden="true"></i> Custom reports</a>
+                    <a class="btn btn-outline-secondary" href="./reports-scheduled.html"><i class="bi bi-clock-history" aria-hidden="true"></i> Scheduled</a>
                 </div>
             </header>
 
             <div class="erp-kpi-grid mb-3">
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-receipt" aria-hidden="true"></i> Paid out this month</p>
-                    <p class="erp-kpi-value">৳ 14,240.00</p>
-                    <p class="erp-kpi-foot">9 voucher(s) out of the floats</p>
+                    <p class="erp-kpi-label"><i class="bi bi-diagram-3" aria-hidden="true"></i> Families</p>
+                    <p class="erp-kpi-value">9</p>
+                    <p class="erp-kpi-foot">One page each, with its own permission — reading the sales reports is not reading the payroll</p>
                 </div>
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-cash-stack" aria-hidden="true"></i> In the tins now</p>
-                    <p class="erp-kpi-value">৳ 18,450.00</p>
-                    <p class="erp-kpi-foot">Across 3 open float(s) of 4</p>
+                    <p class="erp-kpi-label"><i class="bi bi-file-earmark-bar-graph" aria-hidden="true"></i> Reports reachable</p>
+                    <p class="erp-kpi-value">62</p>
+                    <p class="erp-kpi-foot">Routes this installation really registers, counted from the router</p>
                 </div>
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Short of their level</p>
-                    <p class="erp-kpi-value">৳ 6,550.00</p>
-                    <p class="erp-kpi-foot">What a replenishment would put back</p>
+                    <p class="erp-kpi-label"><i class="bi bi-unlock" aria-hidden="true"></i> You may open</p>
+                    <p class="erp-kpi-value">55</p>
+                    <p class="erp-kpi-foot">The other 7 are listed on their hubs with the key they need — none are hidden</p>
                 </div>
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Put back this month</p>
-                    <p class="erp-kpi-value">৳ 12,000.00</p>
-                    <p class="erp-kpi-foot">Transfers into the floats, never a second record of the spending</p>
+                    <p class="erp-kpi-label"><i class="bi bi-clock-history" aria-hidden="true"></i> Scheduled</p>
+                    <p class="erp-kpi-value">3</p>
+                    <p class="erp-kpi-foot">Reports that run themselves and file what they produced</p>
                 </div>
             </div>
 
-            <form class="erp-filterbar" onsubmit="return false" role="search">
-                <div class="erp-filter">
-                    <label class="form-label" for="pe-fund">Float</label>
-                    <select class="form-select" id="pe-fund">
-                        <option>Every float</option>
-                        <option>Head office tin</option>
-                        <option>Depot tin</option>
-                        <option>Counter till</option>
-                    </select>
-                </div>
-                <div class="erp-filter">
-                    <label class="form-label" for="pe-category">Category</label>
-                    <select class="form-select" id="pe-category">
-                        <option>Every category</option>
-                        <option>Local travel</option>
-                        <option>Office supplies</option>
-                        <option>Packaging materials</option>
-                    </select>
-                </div>
-                <div class="erp-filter">
-                    <label class="form-label" for="pe-from">From</label>
-                    <input class="form-control" type="date" id="pe-from" value="2026-10-01">
-                </div>
-                <div class="erp-filter">
-                    <label class="form-label" for="pe-to">To</label>
-                    <input class="form-control" type="date" id="pe-to" value="2026-10-31">
-                </div>
-                <div class="erp-filterbar-actions">
-                    <button class="btn btn-link" type="button">Reset</button>
-                    <button class="btn btn-primary" type="button"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
-                </div>
-            </form>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
+                
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title"><i class="bi bi-cart3" aria-hidden="true"></i> Sales reports</h2>
+                                <p class="erp-card-sub">What sold, to whom, through which channel and at what hour — every figure a posted invoice, a payment or a counter sale.</p>
+                            </div>
+                        </header>
 
-            <div class="erp-table-shell" data-erp-table>
-                <div class="erp-card-head px-3 pt-3">
-                    <h2 class="erp-card-title">Vouchers paid out of the floats<span class="erp-chip erp-chip-outline">4 voucher(s) shown</span></h2>
-                </div>
-                <div class="erp-table-scroll">
-                    <table class="table erp-table erp-table-stack">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Voucher</th>
-                                <th>Float</th>
-                                <th>Payee</th>
-                                <th>Spent on</th>
-                                <th class="erp-th-num">Amount</th>
-                                <th>Recorded by</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            <span class="erp-chip erp-chip-outline">16 report(s)</span>
                             
-                            <tr>
-                                <td>2026-10-08</td>
-                                <td>
-                                    <span class="erp-cell-strong">EX-2026-00418</span>
-                                    <span class="d-block erp-td-muted">posted to the ledger</span>
-                                </td>
-                                <td>
-                                    Head office tin
-                                    <span class="d-block erp-td-muted"><a href="./cash-bank.html">the tin's ledger</a></span>
-                                </td>
-                                <td>
-                                    Rickshaw
-                                    <span class="d-block erp-td-muted">Two rides to the courier office</span>
-                                </td>
-                                <td>
-                                    Local travel
-                                    <span class="d-block erp-td-muted">5220 — Travelling Expense</span>
-                                </td>
-                                <td class="erp-td-num">৳ 250.00</td>
-                                <td>
-                                    Rakib Hasan
-                                    <span class="d-block erp-td-muted">below the limit of 1,000.00</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2026-10-07</td>
-                                <td>
-                                    <span class="erp-cell-strong">EX-2026-00417</span>
-                                    <span class="d-block erp-td-muted">posted to the ledger</span>
-                                </td>
-                                <td>
-                                    Counter till
-                                    <span class="d-block erp-td-muted"><a href="./cash-bank.html">the tin's ledger</a></span>
-                                </td>
-                                <td>
-                                    Shahin Store
-                                    <span class="d-block erp-td-muted">Packing tape and markers</span>
-                                </td>
-                                <td>
-                                    Packaging materials
-                                    <span class="d-block erp-td-muted">5255 — Packing Materials</span>
-                                </td>
-                                <td class="erp-td-num">৳ 840.00</td>
-                                <td>
-                                    Jamal Uddin
-                                    <span class="d-block erp-td-muted">below the limit of 1,000.00</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2026-10-06</td>
-                                <td>
-                                    <span class="erp-cell-strong">EX-2026-00412</span>
-                                    <span class="d-block erp-td-muted">posted to the ledger</span>
-                                </td>
-                                <td>
-                                    Depot tin
-                                    <span class="d-block erp-td-muted"><a href="./cash-bank.html">the tin's ledger</a></span>
-                                </td>
-                                <td>
-                                    Paper shop
-                                    <span class="d-block erp-td-muted">Reams of paper for the counter</span>
-                                </td>
-                                <td>
-                                    Office supplies
-                                    <span class="d-block erp-td-muted">5240 — Office Supplies</span>
-                                </td>
-                                <td class="erp-td-num">৳ 2,000.00</td>
-                                <td>
-                                    Sumaiya Akter
-                                    <span class="d-block erp-td-muted">against request #31, approved by Md. Faruk</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2026-10-04</td>
-                                <td>
-                                    <span class="erp-cell-strong">EX-2026-00406</span>
-                                    <span class="d-block erp-td-muted">posted to the ledger</span>
-                                </td>
-                                <td>
-                                    Head office tin
-                                    <span class="d-block erp-td-muted"><a href="./cash-bank.html">the tin's ledger</a></span>
-                                </td>
-                                <td>
-                                    Nur Electric
-                                    <span class="d-block erp-td-muted">Replacement lock for the shutter</span>
-                                </td>
-                                <td>
-                                    Repairs & maintenance
-                                    <span class="d-block erp-td-muted">5260 — Repairs & Maintenance</span>
-                                </td>
-                                <td class="erp-td-num">৳ 1,150.00</td>
-                                <td>
-                                    Rakib Hasan
-                                    <span class="d-block erp-td-muted">against request #29, approved by Md. Faruk</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                            
+                        </div>
+
+                        
+
+                        <div class="mt-auto pt-3 d-flex gap-2">
+                            
+                            <a class="btn btn-outline-secondary btn-sm" href="./reports-family.html">Open the hub <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title"><i class="bi bi-bag-check" aria-hidden="true"></i> Purchase reports</h2>
+                                <p class="erp-card-sub">What the company bought, from whom, and what it still owes for it.</p>
+                            </div>
+                        </header>
+
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            <span class="erp-chip erp-chip-outline">6 report(s)</span>
+                            
+                            <span class="erp-chip erp-chip-soft">still growing</span>
+                        </div>
+
+                        <p class="erp-filter-note mt-2 mb-0">Purchase reports proper — bills by supplier, price-movement analysis — are §03 rows that have not been built; what is here reads the buying side through the registers that do exist.</p>
+
+                        <div class="mt-auto pt-3 d-flex gap-2">
+                            
+                            <a class="btn btn-outline-secondary btn-sm" href="./reports-family.html">Open the hub <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title"><i class="bi bi-boxes" aria-hidden="true"></i> Inventory reports</h2>
+                                <p class="erp-card-sub">What is on the shelf, how long it has been there, what it is worth and what it cost to pack.</p>
+                            </div>
+                        </header>
+
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            <span class="erp-chip erp-chip-outline">9 report(s)</span>
+                            
+                            
+                        </div>
+
+                        
+
+                        <div class="mt-auto pt-3 d-flex gap-2">
+                            
+                            <a class="btn btn-outline-secondary btn-sm" href="./reports-family.html">Open the hub <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title"><i class="bi bi-people" aria-hidden="true"></i> Customer reports</h2>
+                                <p class="erp-card-sub">Who owes what and for how long, with the ledger and the statement behind each name.</p>
+                            </div>
+                        </header>
+
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            <span class="erp-chip erp-chip-outline">7 report(s)</span>
+                            <span class="erp-chip erp-chip-warn">2 need another key</span>
+                            <span class="erp-chip erp-chip-soft">still growing</span>
+                        </div>
+
+                        <p class="erp-filter-note mt-2 mb-0">Collections, referral and loyalty reporting (§05) are not built yet; the account itself — ledger, ageing and statement — is.</p>
+
+                        <div class="mt-auto pt-3 d-flex gap-2">
+                            <span class="erp-chip erp-chip-soft"><i class="bi bi-lock" aria-hidden="true"></i> some need another key</span>
+                            <a class="btn btn-outline-secondary btn-sm" href="./reports-family.html">Open the hub <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title"><i class="bi bi-truck" aria-hidden="true"></i> Supplier reports</h2>
+                                <p class="erp-card-sub">What is owed to each supplier, spread by how long it has been owed.</p>
+                            </div>
+                        </header>
+
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            <span class="erp-chip erp-chip-outline">4 report(s)</span>
+                            
+                            <span class="erp-chip erp-chip-soft">still growing</span>
+                        </div>
+
+                        <p class="erp-filter-note mt-2 mb-0">Contract, scoring and document reporting (§06) are not built; the payable side is.</p>
+
+                        <div class="mt-auto pt-3 d-flex gap-2">
+                            
+                            <a class="btn btn-outline-secondary btn-sm" href="./reports-family.html">Open the hub <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title"><i class="bi bi-journal-text" aria-hidden="true"></i> Finance reports</h2>
+                                <p class="erp-card-sub">The books themselves: trial balance, the general ledger, the money desk and the expense register.</p>
+                            </div>
+                        </header>
+
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            <span class="erp-chip erp-chip-outline">12 report(s)</span>
+                            <span class="erp-chip erp-chip-warn">3 need another key</span>
+                            
+                        </div>
+
+                        
+
+                        <div class="mt-auto pt-3 d-flex gap-2">
+                            <span class="erp-chip erp-chip-soft"><i class="bi bi-lock" aria-hidden="true"></i> some need another key</span>
+                            <a class="btn btn-outline-secondary btn-sm" href="./reports-family.html">Open the hub <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title"><i class="bi bi-file-earmark-ruled" aria-hidden="true"></i> VAT &amp; tax reports</h2>
+                                <p class="erp-card-sub">What the company has to account for to the tax authority, and what has already been filed.</p>
+                            </div>
+                        </header>
+
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            <span class="erp-chip erp-chip-outline">1 report(s)</span>
+                            
+                            <span class="erp-chip erp-chip-soft">still growing</span>
+                        </div>
+
+                        <p class="erp-filter-note mt-2 mb-0">A VAT return is a statutory document with its own numbering and its own filing dates (§09-18…§09-28). The invoice-level Mushak 9.1 print exists; the period register behind it does not yet.</p>
+
+                        <div class="mt-auto pt-3 d-flex gap-2">
+                            
+                            <a class="btn btn-outline-secondary btn-sm" href="./reports-family.html">Open the hub <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title"><i class="bi bi-person-badge" aria-hidden="true"></i> Employee reports</h2>
+                                <p class="erp-card-sub">Attendance and leave today; salary, overtime and loan reporting once payroll posts.</p>
+                            </div>
+                        </header>
+
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            <span class="erp-chip erp-chip-outline">6 report(s)</span>
+                            <span class="erp-chip erp-chip-warn">2 need another key</span>
+                            <span class="erp-chip erp-chip-soft">still growing</span>
+                        </div>
+
+                        <p class="erp-filter-note mt-2 mb-0">Payroll itself (§10) is not built, so there is nothing to report on yet. Attendance and leave are real.</p>
+
+                        <div class="mt-auto pt-3 d-flex gap-2">
+                            <span class="erp-chip erp-chip-soft"><i class="bi bi-lock" aria-hidden="true"></i> some need another key</span>
+                            <a class="btn btn-outline-secondary btn-sm" href="./reports-family.html">Open the hub <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                        </div>
+                    </section>
+                </div>
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title"><i class="bi bi-megaphone" aria-hidden="true"></i> Marketing reports</h2>
+                                <p class="erp-card-sub">What a campaign cost and what it brought back in, measured on the orders it actually produced.</p>
+                            </div>
+                        </header>
+
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            <span class="erp-chip erp-chip-outline">0 report(s)</span>
+                            
+                            
+                        </div>
+
+                        <p class="erp-filter-note mt-2 mb-0">The campaign engine itself (§11) is not built, so there is nothing to measure yet. Promotion performance is real, and sits on the sales hub.</p>
+
+                        <div class="mt-auto pt-3 d-flex gap-2">
+                            <span class="erp-chip erp-chip-soft"><i class="bi bi-dash-circle" aria-hidden="true"></i> nothing to report yet</span>
+                            <a class="btn btn-outline-secondary btn-sm" href="./reports-family.html">Open the hub <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                        </div>
+                    </section>
                 </div>
             </div>
 
             <section class="erp-card mt-3">
                 <header class="erp-card-head">
                     <div>
-                        <h2 class="erp-card-title">Pay a voucher out of a float</h2>
-                        <p class="erp-card-sub">The float has to be holding the money — the desk checks the ledger before it lets the voucher through, because a custodian cannot hand over cash the tin does not have.</p>
+                        <h2 class="erp-card-title">About these pages</h2>
+                        <p class="erp-card-sub">Three families in the catalogue are thin or empty — they are here, and they say so.</p>
                     </div>
                 </header>
-                <form onsubmit="return false">
-                    <div class="erp-form-grid">
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pv-fund">Float</label>
-                            <select class="form-select" id="pv-fund">
-                                <option>PC-HEAD — Head office tin</option>
-                                <option>PC-DEPOT — Depot tin</option>
-                                <option>PC-CNTR — Counter till</option>
-                            </select>
-                            <small class="form-text">Holds 6,250.00 of a 10,000.00 level.</small>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pv-category">Spent on</label>
-                            <select class="form-select" id="pv-category">
-                                <option>Local travel (5220)</option>
-                                <option>Office supplies (5240)</option>
-                                <option>Packaging materials (5255)</option>
-                            </select>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pv-payee">Payee</label>
-                            <input class="form-control" type="text" id="pv-payee" placeholder="Who was handed the cash">
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pv-amount">Amount</label>
-                            <div class="erp-input-group">
-                                <span class="input-group-text">৳</span>
-                                <input class="form-control erp-num" type="number" step="0.01" id="pv-amount" placeholder="250.00">
-                            </div>
-                        </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pv-date">Date paid</label>
-                            <input class="form-control" type="date" id="pv-date" value="2026-10-08">
-                        </div>
-                        <div class="erp-form-field erp-form-field-wide">
-                            <label class="form-label" for="pv-what">What it was for</label>
-                            <input class="form-control" type="text" id="pv-what" placeholder="Two rickshaws to the courier office">
-                        </div>
-                    </div>
-                    <button class="btn btn-primary mt-2" type="button"><i class="bi bi-cash-coin" aria-hidden="true"></i> Pay and record the voucher</button>
-                </form>
+                <div class="erp-table-scroll">
+                    <table class="erp-table">
+                        <thead>
+                            <tr><th>Family</th><th>Permission</th><th class="erp-th-num">Reports</th><th>State</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><span class="erp-cell-strong">Sales reports</span></td><td class="erp-td-muted font-monospace">reports.sales</td><td class="erp-td-num">16</td><td><span class="erp-status erp-status-posted">built</span></td></tr>
+                            <tr><td><span class="erp-cell-strong">Finance reports</span></td><td class="erp-td-muted font-monospace">reports.finance</td><td class="erp-td-num">12</td><td><span class="erp-status erp-status-posted">built</span></td></tr>
+                            <tr><td><span class="erp-cell-strong">VAT &amp; tax reports</span></td><td class="erp-td-muted font-monospace">reports.tax</td><td class="erp-td-num">1</td><td><span class="erp-status erp-status-active">partly built</span></td></tr>
+                            <tr><td><span class="erp-cell-strong">Marketing reports</span></td><td class="erp-td-muted font-monospace">reports.marketing</td><td class="erp-td-num">0</td><td><span class="erp-status erp-status-draft">nothing to report yet</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-3 pt-0">
+                    <p class="erp-filter-note mb-0">
+                        <i class="bi bi-info-circle" aria-hidden="true"></i>
+                        A report whose route needs an argument — one account, one customer, one employee — is listed on its hub with the
+                        <strong>register</strong> it is opened from, because a hub can only link to things that open by themselves.
+                    </p>
+                </div>
             </section>
 
-            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
-                <p class="erp-field-label">More in this module</p>
-                <div class="d-flex flex-wrap gap-2">
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Overview</a>
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash-requests.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Requests</a>
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash-replenishment.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Replenishment</a>
-                    <a class="erp-chip erp-chip-outline" href="./expenses.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>All Expenses</a>
-                </div>
-            </nav>
-        </main>
-
-<footer class="erp-footer">
-    <span>BD ERP · Rafshan Trading Ltd.</span>
-    <span class="erp-footer-meta">
-        <span>07 Oct 2026, 06:20 PM · Asia/Dhaka</span>
-        <span class="d-none d-md-inline">Press <kbd>⌘</kbd><kbd>K</kbd> to jump anywhere</span>
-    </span>
-</footer>
-    </div>
+        </div>
+    </main>
 </div>
-<script>window.erpNavIndex = [];</script>
 
 <div class="erp-backdrop" data-erp-backdrop hidden></div>
 

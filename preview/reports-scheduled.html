@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#ffffff">
-    <title>Petty cash expenses · BD ERP — UI redesign preview</title>
+    <title>Scheduled reports · BD ERP — UI redesign preview</title>
     <link rel="stylesheet" href="./assets/preview.css">
 </head>
 <body class="erp-body">
@@ -446,15 +446,15 @@
             </p>
             
     <div class="erp-nav-group">
-        <button class="erp-nav-group-btn" type="button"
-                data-bs-toggle="collapse" data-bs-target="#nav-insight-0" aria-expanded="false">
+        <button class="erp-nav-group-btn is-active has-active-trail" type="button"
+                data-bs-toggle="collapse" data-bs-target="#nav-insight-0" aria-expanded="true">
             <i class="bi bi-graph-up-arrow erp-nav-icon" aria-hidden="true"></i>
             <span>Reports</span>
             <i class="bi bi-chevron-right erp-nav-caret" aria-hidden="true"></i>
         </button>
-        <div class="collapse" id="nav-insight-0">
+        <div class="collapse show" id="nav-insight-0">
             <div class="erp-nav-sub">
-        <a class="erp-nav-link" href="./reports.html">
+        <a class="erp-nav-link active" href="./reports.html" aria-current="page">
             <span>Report Centre</span>
         </a>
         <a class="erp-nav-link" href="./reports-family.html">
@@ -672,263 +672,183 @@
 
             <header class="erp-page-head">
                 <div>
-                    <p class="erp-eyebrow"><i class="bi bi-receipt" aria-hidden="true"></i> Cash &amp; bank · Petty cash · Expenses</p>
-                    <h1 class="erp-h1">What came out of the float</h1>
-                    <p class="erp-page-sub">Every voucher here is a real payment: the money left the float's own account and the ledger knows about it — debited to the category it was spent on, credited to the tin. The float cannot pay more than it holds, which is why the register and the ledger always agree.</p>
+                    <p class="erp-eyebrow"><i class="bi bi-clock-history" aria-hidden="true"></i> Reports · Scheduled Reports</p>
+                    <h1 class="erp-h1">Reports that run themselves</h1>
+                    <p class="erp-page-sub">A schedule is an instruction to produce a report on a rhythm, not a promise that it worked. So every execution is written down with its row count and its snapshot, a failure keeps its reason on the row, and the next run time only moves when a run has actually finished — which is what makes “it ran last night” a fact on this page rather than something somebody remembers.</p>
                 </div>
                 <div class="erp-page-head-actions">
-                    <a class="btn btn-outline-secondary" href="./petty-cash.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> The floats</a>
-                    <a class="btn btn-primary" href="./petty-cash-replenishment.html"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Replenish</a>
+                    <a class="btn btn-outline-secondary" href="./reports.html"><i class="bi bi-grid" aria-hidden="true"></i> All families</a>
+                    <a class="btn btn-outline-secondary" href="./reports-custom.html"><i class="bi bi-file-earmark-ruled" aria-hidden="true"></i> Saved reports</a>
                 </div>
             </header>
 
             <div class="erp-kpi-grid mb-3">
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-receipt" aria-hidden="true"></i> Paid out this month</p>
-                    <p class="erp-kpi-value">৳ 14,240.00</p>
-                    <p class="erp-kpi-foot">9 voucher(s) out of the floats</p>
+                    <p class="erp-kpi-label"><i class="bi bi-clock-history" aria-hidden="true"></i> Schedules</p>
+                    <p class="erp-kpi-value">4</p>
+                    <p class="erp-kpi-foot">3 active, 1 paused</p>
                 </div>
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-cash-stack" aria-hidden="true"></i> In the tins now</p>
-                    <p class="erp-kpi-value">৳ 18,450.00</p>
-                    <p class="erp-kpi-foot">Across 3 open float(s) of 4</p>
+                    <p class="erp-kpi-label"><i class="bi bi-alarm" aria-hidden="true"></i> Due now</p>
+                    <p class="erp-kpi-value">0</p>
+                    <p class="erp-kpi-foot">Active schedules whose next run time has arrived — the command picks them up</p>
                 </div>
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-arrow-down-up" aria-hidden="true"></i> Short of their level</p>
-                    <p class="erp-kpi-value">৳ 6,550.00</p>
-                    <p class="erp-kpi-foot">What a replenishment would put back</p>
+                    <p class="erp-kpi-label"><i class="bi bi-archive" aria-hidden="true"></i> Runs filed</p>
+                    <p class="erp-kpi-value">96</p>
+                    <p class="erp-kpi-foot">Executions recorded against a schedule, most recent first</p>
                 </div>
                 <div class="erp-kpi">
-                    <p class="erp-kpi-label"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Put back this month</p>
-                    <p class="erp-kpi-value">৳ 12,000.00</p>
-                    <p class="erp-kpi-foot">Transfers into the floats, never a second record of the spending</p>
+                    <p class="erp-kpi-label"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Last failure</p>
+                    <p class="erp-kpi-value">08 Oct 06:15</p>
+                    <p class="erp-kpi-foot">A failed run keeps its reason; it is never silently retried as if it had worked</p>
                 </div>
             </div>
 
-            <form class="erp-filterbar" onsubmit="return false" role="search">
-                <div class="erp-filter">
-                    <label class="form-label" for="pe-fund">Float</label>
-                    <select class="form-select" id="pe-fund">
-                        <option>Every float</option>
-                        <option>Head office tin</option>
-                        <option>Depot tin</option>
-                        <option>Counter till</option>
-                    </select>
-                </div>
-                <div class="erp-filter">
-                    <label class="form-label" for="pe-category">Category</label>
-                    <select class="form-select" id="pe-category">
-                        <option>Every category</option>
-                        <option>Local travel</option>
-                        <option>Office supplies</option>
-                        <option>Packaging materials</option>
-                    </select>
-                </div>
-                <div class="erp-filter">
-                    <label class="form-label" for="pe-from">From</label>
-                    <input class="form-control" type="date" id="pe-from" value="2026-10-01">
-                </div>
-                <div class="erp-filter">
-                    <label class="form-label" for="pe-to">To</label>
-                    <input class="form-control" type="date" id="pe-to" value="2026-10-31">
-                </div>
-                <div class="erp-filterbar-actions">
-                    <button class="btn btn-link" type="button">Reset</button>
-                    <button class="btn btn-primary" type="button"><i class="bi bi-funnel" aria-hidden="true"></i> Filter</button>
-                </div>
-            </form>
-
-            <div class="erp-table-shell" data-erp-table>
+            <div class="erp-table-shell mb-3" data-erp-table>
                 <div class="erp-card-head px-3 pt-3">
-                    <h2 class="erp-card-title">Vouchers paid out of the floats<span class="erp-chip erp-chip-outline">4 voucher(s) shown</span></h2>
+                    <h2 class="erp-card-title">What is scheduled<span class="erp-chip erp-chip-outline">4 schedule(s)</span></h2>
                 </div>
                 <div class="erp-table-scroll">
-                    <table class="table erp-table erp-table-stack">
+                    <table class="table erp-table">
                         <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Voucher</th>
-                                <th>Float</th>
-                                <th>Payee</th>
-                                <th>Spent on</th>
-                                <th class="erp-th-num">Amount</th>
-                                <th>Recorded by</th>
-                            </tr>
+                            <tr><th>Schedule</th><th>Report</th><th>Rhythm</th><th>Next run</th><th>Last run</th><th>State</th><th>Written by</th></tr>
                         </thead>
                         <tbody>
                             
                             <tr>
-                                <td>2026-10-08</td>
-                                <td>
-                                    <span class="erp-cell-strong">EX-2026-00418</span>
-                                    <span class="d-block erp-td-muted">posted to the ledger</span>
-                                </td>
-                                <td>
-                                    Head office tin
-                                    <span class="d-block erp-td-muted"><a href="./cash-bank.html">the tin's ledger</a></span>
-                                </td>
-                                <td>
-                                    Rickshaw
-                                    <span class="d-block erp-td-muted">Two rides to the courier office</span>
-                                </td>
-                                <td>
-                                    Local travel
-                                    <span class="d-block erp-td-muted">5220 — Travelling Expense</span>
-                                </td>
-                                <td class="erp-td-num">৳ 250.00</td>
-                                <td>
-                                    Rakib Hasan
-                                    <span class="d-block erp-td-muted">below the limit of 1,000.00</span>
-                                </td>
+                                <td><span class="erp-cell-strong">Weekly ageing to the manager</span></td>
+                                <td>Weekly receivables ageing<div class="erp-td-muted font-monospace">WEEKLY-AR</div></td>
+                                <td><span class="erp-chip erp-chip-soft">weekly</span></td>
+                                <td>2026-10-12 06:15</td>
+                                <td class="erp-td-muted">2026-10-05 06:15</td>
+                                <td><span class="erp-status erp-status-active">active</span></td>
+                                <td class="erp-td-muted">Manager</td>
                             </tr>
                             <tr>
-                                <td>2026-10-07</td>
-                                <td>
-                                    <span class="erp-cell-strong">EX-2026-00417</span>
-                                    <span class="d-block erp-td-muted">posted to the ledger</span>
-                                </td>
-                                <td>
-                                    Counter till
-                                    <span class="d-block erp-td-muted"><a href="./cash-bank.html">the tin's ledger</a></span>
-                                </td>
-                                <td>
-                                    Shahin Store
-                                    <span class="d-block erp-td-muted">Packing tape and markers</span>
-                                </td>
-                                <td>
-                                    Packaging materials
-                                    <span class="d-block erp-td-muted">5255 — Packing Materials</span>
-                                </td>
-                                <td class="erp-td-num">৳ 840.00</td>
-                                <td>
-                                    Jamal Uddin
-                                    <span class="d-block erp-td-muted">below the limit of 1,000.00</span>
-                                </td>
+                                <td><span class="erp-cell-strong">Branch day-book, every morning</span></td>
+                                <td>Branch day-book<div class="erp-td-muted font-monospace">BRANCH-DAY</div></td>
+                                <td><span class="erp-chip erp-chip-soft">daily</span></td>
+                                <td>2026-10-09 06:15</td>
+                                <td class="erp-td-muted">2026-10-08 06:15</td>
+                                <td><span class="erp-status erp-status-active">active</span></td>
+                                <td class="erp-td-muted">Accountant</td>
                             </tr>
                             <tr>
-                                <td>2026-10-06</td>
-                                <td>
-                                    <span class="erp-cell-strong">EX-2026-00412</span>
-                                    <span class="d-block erp-td-muted">posted to the ledger</span>
-                                </td>
-                                <td>
-                                    Depot tin
-                                    <span class="d-block erp-td-muted"><a href="./cash-bank.html">the tin's ledger</a></span>
-                                </td>
-                                <td>
-                                    Paper shop
-                                    <span class="d-block erp-td-muted">Reams of paper for the counter</span>
-                                </td>
-                                <td>
-                                    Office supplies
-                                    <span class="d-block erp-td-muted">5240 — Office Supplies</span>
-                                </td>
-                                <td class="erp-td-num">৳ 2,000.00</td>
-                                <td>
-                                    Sumaiya Akter
-                                    <span class="d-block erp-td-muted">against request #31, approved by Md. Faruk</span>
-                                </td>
+                                <td><span class="erp-cell-strong">Chase list for the callers</span></td>
+                                <td>Chase list for the callers<div class="erp-td-muted font-monospace">CHASE-90</div></td>
+                                <td><span class="erp-chip erp-chip-soft">daily</span></td>
+                                <td>2026-10-09 06:15</td>
+                                <td class="erp-td-muted">2026-10-08 06:15</td>
+                                <td><span class="erp-status erp-status-active">active</span></td>
+                                <td class="erp-td-muted">Manager</td>
                             </tr>
                             <tr>
-                                <td>2026-10-04</td>
-                                <td>
-                                    <span class="erp-cell-strong">EX-2026-00406</span>
-                                    <span class="d-block erp-td-muted">posted to the ledger</span>
-                                </td>
-                                <td>
-                                    Head office tin
-                                    <span class="d-block erp-td-muted"><a href="./cash-bank.html">the tin's ledger</a></span>
-                                </td>
-                                <td>
-                                    Nur Electric
-                                    <span class="d-block erp-td-muted">Replacement lock for the shutter</span>
-                                </td>
-                                <td>
-                                    Repairs & maintenance
-                                    <span class="d-block erp-td-muted">5260 — Repairs & Maintenance</span>
-                                </td>
-                                <td class="erp-td-num">৳ 1,150.00</td>
-                                <td>
-                                    Rakib Hasan
-                                    <span class="d-block erp-td-muted">against request #29, approved by Md. Faruk</span>
-                                </td>
+                                <td><span class="erp-cell-strong">Slow movers, month end</span></td>
+                                <td>Slow movers by warehouse<div class="erp-td-muted font-monospace">SLOW-MOV</div></td>
+                                <td><span class="erp-chip erp-chip-soft">monthly</span></td>
+                                <td>2026-11-01 06:15</td>
+                                <td class="erp-td-muted">2026-10-01 06:15</td>
+                                <td><span class="erp-status erp-status-paused">paused</span></td>
+                                <td class="erp-td-muted">Store keeper</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <section class="erp-card mt-3">
-                <header class="erp-card-head">
-                    <div>
-                        <h2 class="erp-card-title">Pay a voucher out of a float</h2>
-                        <p class="erp-card-sub">The float has to be holding the money — the desk checks the ledger before it lets the voucher through, because a custodian cannot hand over cash the tin does not have.</p>
-                    </div>
-                </header>
-                <form onsubmit="return false">
-                    <div class="erp-form-grid">
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pv-fund">Float</label>
-                            <select class="form-select" id="pv-fund">
-                                <option>PC-HEAD — Head office tin</option>
-                                <option>PC-DEPOT — Depot tin</option>
-                                <option>PC-CNTR — Counter till</option>
-                            </select>
-                            <small class="form-text">Holds 6,250.00 of a 10,000.00 level.</small>
+            <div class="erp-split mb-3">
+                <section class="erp-card">
+                    <header class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">Schedule a saved report</h2>
+                            <p class="erp-card-sub">The definition has to exist and belong to this company. A schedule starts due immediately, so the next run of the command produces it.</p>
                         </div>
+                    </header>
+                    <form class="erp-form p-3" onsubmit="return false">
                         <div class="erp-form-field">
-                            <label class="form-label" for="pv-category">Spent on</label>
-                            <select class="form-select" id="pv-category">
-                                <option>Local travel (5220)</option>
-                                <option>Office supplies (5240)</option>
-                                <option>Packaging materials (5255)</option>
+                            <label class="erp-field-label" for="sch-def">Report</label>
+                            <select class="form-select" id="sch-def">
+                                <option>Weakly receivables ageing (WEEKLY-AR)</option>
+                                <option>Branch day-book (BRANCH-DAY)</option>
+                                <option>Slow movers by warehouse (SLOW-MOV)</option>
+                                <option>Chase list for the callers (CHASE-90)</option>
                             </select>
                         </div>
                         <div class="erp-form-field">
-                            <label class="form-label" for="pv-payee">Payee</label>
-                            <input class="form-control" type="text" id="pv-payee" placeholder="Who was handed the cash">
+                            <label class="erp-field-label" for="sch-name">Name it</label>
+                            <input class="form-control" id="sch-name" type="text" placeholder="e.g. Weekly receivables ageing for the manager">
+                            <p class="form-text">This is what the run log will call it, so name it for the person who reads it, not for the table.</p>
                         </div>
                         <div class="erp-form-field">
-                            <label class="form-label" for="pv-amount">Amount</label>
-                            <div class="erp-input-group">
-                                <span class="input-group-text">৳</span>
-                                <input class="form-control erp-num" type="number" step="0.01" id="pv-amount" placeholder="250.00">
-                            </div>
+                            <label class="erp-field-label" for="sch-freq">How often</label>
+                            <select class="form-select" id="sch-freq">
+                                <option>Daily</option>
+                                <option>Weekly</option>
+                                <option>Monthly</option>
+                            </select>
                         </div>
-                        <div class="erp-form-field">
-                            <label class="form-label" for="pv-date">Date paid</label>
-                            <input class="form-control" type="date" id="pv-date" value="2026-10-08">
+                        <div class="erp-form-actions">
+                            <button class="btn btn-primary" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i> Schedule it</button>
                         </div>
-                        <div class="erp-form-field erp-form-field-wide">
-                            <label class="form-label" for="pv-what">What it was for</label>
-                            <input class="form-control" type="text" id="pv-what" placeholder="Two rickshaws to the courier office">
+                    </form>
+                </section>
+
+                <section class="erp-card">
+                    <header class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">Runs filed by the scheduler</h2>
+                            <p class="erp-card-sub">What each scheduled run produced, and what it could not.</p>
                         </div>
+                    </header>
+                    <div class="erp-table-scroll">
+                        <table class="table erp-table erp-table-compact">
+                            <thead><tr><th>When</th><th>Schedule</th><th>State</th><th class="erp-th-num">Rows</th></tr></thead>
+                            <tbody>
+                                
+                                <tr>
+                                    <td>2026-10-08 06:15</td>
+                                    <td><span class="erp-cell-strong">Chase list for the callers</span></td>
+                                    <td>
+                                        <span class="erp-status erp-status-failed">failed</span>
+                                        <div class="erp-td-muted">The branch you asked for is not in your scope.</div>
+                                    </td>
+                                    <td class="erp-td-num">0</td>
+                                </tr>
+                                <tr>
+                                    <td>2026-10-08 06:15</td>
+                                    <td><span class="erp-cell-strong">Branch day-book, every morning</span></td>
+                                    <td>
+                                        <span class="erp-status erp-status-posted">completed</span>
+                                        
+                                    </td>
+                                    <td class="erp-td-num">640</td>
+                                </tr>
+                                <tr>
+                                    <td>2026-10-05 06:15</td>
+                                    <td><span class="erp-cell-strong">Weekly ageing to the manager</span></td>
+                                    <td>
+                                        <span class="erp-status erp-status-posted">completed</span>
+                                        
+                                    </td>
+                                    <td class="erp-td-num">151</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <button class="btn btn-primary mt-2" type="button"><i class="bi bi-cash-coin" aria-hidden="true"></i> Pay and record the voucher</button>
-                </form>
-            </section>
+                    <div class="p-3 pt-0">
+                        <p class="erp-filter-note mb-0">
+                            <i class="bi bi-info-circle" aria-hidden="true"></i>
+                            Delivery to recipients and PDF/XLSX filing are not built: a run today produces its rows and records them here. Until a delivery
+                            channel exists, this page is the report — it does not pretend to have emailed anything.
+                        </p>
+                    </div>
+                </section>
+            </div>
 
-            <nav class="erp-card erp-card-tight mt-3" aria-label="More in this module">
-                <p class="erp-field-label">More in this module</p>
-                <div class="d-flex flex-wrap gap-2">
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Overview</a>
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash-requests.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Requests</a>
-                    <a class="erp-chip erp-chip-outline" href="./petty-cash-replenishment.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>Petty Cash Replenishment</a>
-                    <a class="erp-chip erp-chip-outline" href="./expenses.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i>All Expenses</a>
-                </div>
-            </nav>
-        </main>
-
-<footer class="erp-footer">
-    <span>BD ERP · Rafshan Trading Ltd.</span>
-    <span class="erp-footer-meta">
-        <span>07 Oct 2026, 06:20 PM · Asia/Dhaka</span>
-        <span class="d-none d-md-inline">Press <kbd>⌘</kbd><kbd>K</kbd> to jump anywhere</span>
-    </span>
-</footer>
-    </div>
+        </div>
+    </main>
 </div>
-<script>window.erpNavIndex = [];</script>
 
 <div class="erp-backdrop" data-erp-backdrop hidden></div>
 

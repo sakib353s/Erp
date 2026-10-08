@@ -162,15 +162,15 @@ export const SECTIONS = [
     {
         code: 'insight', label: 'Reports & insight', icon: 'bi-graph-up-arrow', hue: 3,
         groups: [{
-            label: 'Reports', icon: 'bi-graph-up-arrow', items: [
-                { label: 'Sales summary', url: '#', icon: 'bi-bar-chart' },
-                { label: 'Sales trend', url: '#', icon: 'bi-graph-up' },
-                { label: 'Invoice aging', url: '#', icon: 'bi-calendar-check' },
-                { label: 'Peak hours', url: '#', icon: 'bi-clock' },
-                { label: 'Custom report', url: '#', icon: 'bi-sliders2' },
-                { label: 'Documents', url: '#', icon: 'bi-folder2-open' },
+            label: 'Reports', icon: 'bi-graph-up-arrow', target: 'insight', items: [
+                { label: 'Report Centre', url: './reports.html', icon: 'bi-grid', target: 'insight' },
+                { label: 'Sales Reports', url: './reports-family.html', icon: 'bi-cart3' },
+                { label: 'Finance Reports', url: './reports-family.html', icon: 'bi-journal-text' },
+                { label: 'Inventory Reports', url: './reports-family.html', icon: 'bi-boxes' },
+                { label: 'Customer Reports', url: './reports-family.html', icon: 'bi-people' },
+                { label: 'Custom Reports', url: './reports-custom.html', icon: 'bi-sliders2' },
+                { label: 'Scheduled Reports', url: './reports-scheduled.html', icon: 'bi-clock-history' },
             ],
-            overflow: 26,
         }],
     },
     {
@@ -237,6 +237,10 @@ export const PALETTE = [
     { label: 'Bank Reconciliation', url: './bank-recon.html', icon: 'bi-shield-check', section: 'Cash & bank', group: 'Bank Accounts' },
     { label: 'Bank Statement Import', url: './bank-recon.html', icon: 'bi-file-earmark-spreadsheet', section: 'Cash & bank', group: 'Bank Accounts' },
     { label: 'Bank Charge Auto-Posting', url: './bank-charges.html', icon: 'bi-cash-coin', section: 'Cash & bank', group: 'Bank Accounts' },
+    { label: 'Report Centre', url: './reports.html', icon: 'bi-grid', section: 'Reports & insight', group: 'Reports' },
+    { label: 'Finance Reports', url: './reports-family.html', icon: 'bi-journal-text', section: 'Reports & insight', group: 'Reports' },
+    { label: 'Custom Reports', url: './reports-custom.html', icon: 'bi-sliders2', section: 'Reports & insight', group: 'Reports' },
+    { label: 'Scheduled Reports', url: './reports-scheduled.html', icon: 'bi-clock-history', section: 'Reports & insight', group: 'Reports' },
     { label: 'Mobile Reconciliation', url: './bank-recon.html', icon: 'bi-phone-vibrate', section: 'Cash & bank', group: 'Mobile Banking' },
     { label: 'Received Cheques', url: './cheques.html', icon: 'bi-journal-arrow-down', section: 'Cash & bank', group: 'Cheque Management' },
     { label: 'Issued Cheques', url: './cheques.html', icon: 'bi-journal-arrow-up', section: 'Cash & bank', group: 'Cheque Management' },

@@ -4841,3 +4841,543 @@ ${previewBar('cash-reports.html')}
     </main>
 </div>`;
 }
+
+/**
+ * §13-01…§13-09 — the report centre: one card per catalogue family, with what
+ * each one really holds. The hub pages show the other half of the design: a
+ * report the reader cannot open is listed with the key it needs, never hidden.
+ */
+export function reportCentre() {
+    const families = [
+        { title: 'Sales reports', icon: 'bi-cart3', built: 16, openable: 16, blurb: 'What sold, to whom, through which channel and at what hour — every figure a posted invoice, a payment or a counter sale.', state: 'built' },
+        { title: 'Purchase reports', icon: 'bi-bag-check', built: 6, openable: 6, blurb: 'What the company bought, from whom, and what it still owes for it.', state: 'partial', note: 'Purchase reports proper — bills by supplier, price-movement analysis — are §03 rows that have not been built; what is here reads the buying side through the registers that do exist.' },
+        { title: 'Inventory reports', icon: 'bi-boxes', built: 9, openable: 9, blurb: 'What is on the shelf, how long it has been there, what it is worth and what it cost to pack.', state: 'built' },
+        { title: 'Customer reports', icon: 'bi-people', built: 7, openable: 5, blurb: 'Who owes what and for how long, with the ledger and the statement behind each name.', state: 'partial', note: 'Collections, referral and loyalty reporting (§05) are not built yet; the account itself — ledger, ageing and statement — is.' },
+        { title: 'Supplier reports', icon: 'bi-truck', built: 4, openable: 4, blurb: 'What is owed to each supplier, spread by how long it has been owed.', state: 'partial', note: 'Contract, scoring and document reporting (§06) are not built; the payable side is.' },
+        { title: 'Finance reports', icon: 'bi-journal-text', built: 12, openable: 9, blurb: 'The books themselves: trial balance, the general ledger, the money desk and the expense register.', state: 'built' },
+        { title: 'VAT &amp; tax reports', icon: 'bi-file-earmark-ruled', built: 1, openable: 1, blurb: 'What the company has to account for to the tax authority, and what has already been filed.', state: 'partial', note: 'A VAT return is a statutory document with its own numbering and its own filing dates (§09-18…§09-28). The invoice-level Mushak 9.1 print exists; the period register behind it does not yet.' },
+        { title: 'Employee reports', icon: 'bi-person-badge', built: 6, openable: 4, blurb: 'Attendance and leave today; salary, overtime and loan reporting once payroll posts.', state: 'partial', note: 'Payroll itself (§10) is not built, so there is nothing to report on yet. Attendance and leave are real.' },
+        { title: 'Marketing reports', icon: 'bi-megaphone', built: 0, openable: 0, blurb: 'What a campaign cost and what it brought back in, measured on the orders it actually produced.', state: 'empty', note: 'The campaign engine itself (§11) is not built, so there is nothing to measure yet. Promotion performance is real, and sits on the sales hub.' },
+    ];
+
+    return `
+${previewBar('reports.html')}
+<div class="erp-shell">
+    ${sidebar('insight')}
+    <main class="erp-main">
+        ${topbar('Reports')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i> Reports</p>
+                    <h1 class="erp-h1">Every report this system can actually open</h1>
+                    <p class="erp-page-sub">One page per family the catalogue names, and nothing on it that does not exist: these counts are read out of the router, so a report appears here the moment its route is registered — and a report nobody has built yet cannot be listed at all. Where a family is thin, the hub says what is missing and why instead of leaving a blank card.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./reports-custom.html"><i class="bi bi-sliders" aria-hidden="true"></i> Custom reports</a>
+                    <a class="btn btn-outline-secondary" href="./reports-scheduled.html"><i class="bi bi-clock-history" aria-hidden="true"></i> Scheduled</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-diagram-3" aria-hidden="true"></i> Families</p>
+                    <p class="erp-kpi-value">9</p>
+                    <p class="erp-kpi-foot">One page each, with its own permission — reading the sales reports is not reading the payroll</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-file-earmark-bar-graph" aria-hidden="true"></i> Reports reachable</p>
+                    <p class="erp-kpi-value">62</p>
+                    <p class="erp-kpi-foot">Routes this installation really registers, counted from the router</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-unlock" aria-hidden="true"></i> You may open</p>
+                    <p class="erp-kpi-value">55</p>
+                    <p class="erp-kpi-foot">The other 7 are listed on their hubs with the key they need — none are hidden</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-clock-history" aria-hidden="true"></i> Scheduled</p>
+                    <p class="erp-kpi-value">3</p>
+                    <p class="erp-kpi-foot">Reports that run themselves and file what they produced</p>
+                </div>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
+                ${families.map((family) => `
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title"><i class="bi ${family.icon}" aria-hidden="true"></i> ${family.title}</h2>
+                                <p class="erp-card-sub">${family.blurb}</p>
+                            </div>
+                        </header>
+
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            <span class="erp-chip erp-chip-outline">${family.built} report(s)</span>
+                            ${family.built > family.openable ? `<span class="erp-chip erp-chip-warn">${family.built - family.openable} need another key</span>` : ''}
+                            ${family.state === 'partial' ? '<span class="erp-chip erp-chip-soft">still growing</span>' : ''}
+                        </div>
+
+                        ${family.note ? `<p class="erp-filter-note mt-2 mb-0">${family.note}</p>` : ''}
+
+                        <div class="mt-auto pt-3 d-flex gap-2">
+                            ${family.built === 0
+                                ? '<span class="erp-chip erp-chip-soft"><i class="bi bi-dash-circle" aria-hidden="true"></i> nothing to report yet</span>'
+                                : family.openable < family.built
+                                    ? '<span class="erp-chip erp-chip-soft"><i class="bi bi-lock" aria-hidden="true"></i> some need another key</span>'
+                                    : ''}
+                            <a class="btn btn-outline-secondary btn-sm" href="./reports-family.html">Open the hub <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                        </div>
+                    </section>
+                </div>`).join('')}
+            </div>
+
+            <section class="erp-card mt-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">About these pages</h2>
+                        <p class="erp-card-sub">Three families in the catalogue are thin or empty — they are here, and they say so.</p>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="erp-table">
+                        <thead>
+                            <tr><th>Family</th><th>Permission</th><th class="erp-th-num">Reports</th><th>State</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><span class="erp-cell-strong">Sales reports</span></td><td class="erp-td-muted font-monospace">reports.sales</td><td class="erp-td-num">16</td><td><span class="erp-status erp-status-posted">built</span></td></tr>
+                            <tr><td><span class="erp-cell-strong">Finance reports</span></td><td class="erp-td-muted font-monospace">reports.finance</td><td class="erp-td-num">12</td><td><span class="erp-status erp-status-posted">built</span></td></tr>
+                            <tr><td><span class="erp-cell-strong">VAT &amp; tax reports</span></td><td class="erp-td-muted font-monospace">reports.tax</td><td class="erp-td-num">1</td><td><span class="erp-status erp-status-active">partly built</span></td></tr>
+                            <tr><td><span class="erp-cell-strong">Marketing reports</span></td><td class="erp-td-muted font-monospace">reports.marketing</td><td class="erp-td-num">0</td><td><span class="erp-status erp-status-draft">nothing to report yet</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-3 pt-0">
+                    <p class="erp-filter-note mb-0">
+                        <i class="bi bi-info-circle" aria-hidden="true"></i>
+                        A report whose route needs an argument — one account, one customer, one employee — is listed on its hub with the
+                        <strong>register</strong> it is opened from, because a hub can only link to things that open by themselves.
+                    </p>
+                </div>
+            </section>
+
+        </div>
+    </main>
+</div>`;
+}
+
+/**
+ * A family hub. Finance is the family that shows both halves at once: reports
+ * this reader may open, reports that exist but need another key, and a report
+ * that lives on a detail page and is therefore reached through its register.
+ */
+export function reportFamily() {
+    const openable = [
+        { title: 'Trial balance', answers: 'Whether the books balance, account by account, as at a date.', reads: 'Posted journal lines', permission: 'accounting.reports.view', url: './cash-bank.html' },
+        { title: 'Chart of accounts', answers: 'The accounts themselves with their balances — the frame every other report is drawn on.', reads: 'The chart and its posted balances', permission: 'accounting.coa.view', url: './cash-bank.html' },
+        { title: 'Cash book', answers: 'One money account read the way a bank statement reads.', reads: 'Posted journal lines of that account', permission: 'cash.reports', url: './cash-reports.html' },
+        { title: 'Bank book', answers: 'Every bank and wallet side by side.', reads: 'Posted journal lines of every money account', permission: 'cash.reports', url: './cash-reports.html' },
+        { title: 'Cash flow', answers: 'Where the money came from and where it went.', reads: 'The counterpart of every posting on a money account', permission: 'cash.reports', url: './cash-reports.html' },
+        { title: 'Till variances', answers: 'What each counter session counted against what it should have held.', reads: 'Counter sessions — the screen says it is not the ledger', permission: 'cash.reports', url: './cash-reports.html' },
+        { title: 'Expense report', answers: 'What the company spent, by category, branch and month, with the ledger check beside it.', reads: 'Posted expenses and the accounts their categories point at', permission: 'expenses.reports', url: './expense-report.html' },
+        { title: 'General ledger', answers: 'Every posting on one account, with a running balance.', reads: 'Posted journal lines', permission: 'accounting.reports.view', register: true },
+    ];
+
+    const locked = [
+        { title: 'Opening trial balance', answers: 'What the books opened with, before anything was posted.', reads: 'Opening entries', permission: 'accounting.reports.view' },
+        { title: 'Cheque register', answers: 'Cheques received and issued, and which ones a bank has paid.', reads: 'The cheque register', permission: 'cheques.view' },
+        { title: 'Trial balance rebuild', answers: 'Rebuild the derived balances and see what moved — the one page here that writes.', reads: 'The ledger, re-derived from its postings', permission: 'accounting.reports.view' },
+    ];
+
+    const card = (entry, allowed) => `
+                <div class="col">
+                    <section class="erp-card erp-card-tight h-100 d-flex flex-column">
+                        <header class="erp-card-head">
+                            <div>
+                                <h2 class="erp-card-title">${entry.title}</h2>
+                                <p class="erp-card-sub">${entry.answers}</p>
+                            </div>
+                            ${allowed ? '' : '<span class="erp-chip erp-chip-soft"><i class="bi bi-lock" aria-hidden="true"></i> locked</span>'}
+                        </header>
+
+                        <dl class="erp-dl erp-dl-tight mt-2">
+                            <dt class="erp-field-label">Reads</dt>
+                            <dd>${entry.reads}</dd>
+                            <dt class="erp-field-label">Permission</dt>
+                            <dd class="font-monospace mb-0">${entry.permission}</dd>
+                        </dl>
+
+                        <div class="mt-auto pt-3 d-flex flex-wrap gap-2">
+                            ${allowed
+                                ? `<a class="btn btn-outline-secondary btn-sm" href="${entry.url}">Open <i class="bi bi-arrow-right" aria-hidden="true"></i></a>`
+                                : `<span class="erp-chip erp-chip-soft">Needs <span class="font-monospace ms-1">${entry.permission}</span></span>`}
+                            ${entry.register ? '<span class="erp-chip erp-chip-outline"><i class="bi bi-journal-text" aria-hidden="true"></i> opened from the register</span>' : ''}
+                        </div>
+                    </section>
+                </div>`;
+
+    return `
+${previewBar('reports-family.html')}
+<div class="erp-shell">
+    ${sidebar('insight')}
+    <main class="erp-main">
+        ${topbar('Finance reports')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i> Reports · Finance Reports</p>
+                    <h1 class="erp-h1">Finance reports</h1>
+                    <p class="erp-page-sub">The books themselves: trial balance, the general ledger, the money desk and the expense register. Every row below is a report this installation really registers, with the question it answers and where its numbers come from; the ones your role does not open are listed with the key they need rather than hidden.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./reports.html"><i class="bi bi-grid" aria-hidden="true"></i> All families</a>
+                    <a class="btn btn-outline-secondary" href="./reports-scheduled.html"><i class="bi bi-clock-history" aria-hidden="true"></i> Scheduled</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-journal-text" aria-hidden="true"></i> Reports in this family</p>
+                    <p class="erp-kpi-value">12</p>
+                    <p class="erp-kpi-foot">Registered routes, counted from the router</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-unlock" aria-hidden="true"></i> You may open</p>
+                    <p class="erp-kpi-value">9</p>
+                    <p class="erp-kpi-foot">3 more are listed below with the key they need</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-key" aria-hidden="true"></i> Needs the hub key</p>
+                    <p class="erp-kpi-value">reports.finance</p>
+                    <p class="erp-kpi-foot">The permission this whole page is behind</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-clock-history" aria-hidden="true"></i> Scheduled runs</p>
+                    <p class="erp-kpi-value">2</p>
+                    <p class="erp-kpi-foot">Active schedules whose definitions live in this company</p>
+                </div>
+            </div>
+
+            <div class="row row-cols-1 row-cols-xl-2 g-3">
+                ${openable.map((entry) => card(entry, true)).join('')}
+                ${locked.map((entry) => card(entry, false)).join('')}
+            </div>
+
+            <section class="erp-card mt-3">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">The other families</h2>
+                        <p class="erp-card-sub">The rest of the centre, with what each one holds.</p>
+                    </div>
+                </header>
+                <div class="d-flex flex-wrap gap-2 p-3">
+                    <a class="erp-chip erp-chip-outline" href="./reports-family.html"><i class="bi bi-cart3" aria-hidden="true"></i>Sales reports <span class="erp-td-muted">16</span></a>
+                    <a class="erp-chip erp-chip-outline" href="./reports-family.html"><i class="bi bi-bag-check" aria-hidden="true"></i>Purchase reports <span class="erp-td-muted">6</span></a>
+                    <a class="erp-chip erp-chip-outline" href="./reports-family.html"><i class="bi bi-boxes" aria-hidden="true"></i>Inventory reports <span class="erp-td-muted">9</span></a>
+                    <a class="erp-chip erp-chip-outline" href="./reports-family.html"><i class="bi bi-people" aria-hidden="true"></i>Customer reports <span class="erp-td-muted">7</span></a>
+                    <a class="erp-chip erp-chip-outline" href="./reports-family.html"><i class="bi bi-truck" aria-hidden="true"></i>Supplier reports <span class="erp-td-muted">4</span></a>
+                    <span class="erp-chip erp-chip-soft"><i class="bi bi-lock" aria-hidden="true"></i>VAT &amp; tax reports</span>
+                    <span class="erp-chip erp-chip-soft"><i class="bi bi-lock" aria-hidden="true"></i>Employee reports</span>
+                    <span class="erp-chip erp-chip-soft"><i class="bi bi-lock" aria-hidden="true"></i>Marketing reports</span>
+                </div>
+            </section>
+
+        </div>
+    </main>
+</div>`;
+}
+
+/**
+ * §13-11 — the register of custom reports, and §13-12 — the schedules that run
+ * them. Two pages in the app; both are about reports rather than of them.
+ */
+export function reportsCustom() {
+    const definitions = [
+        { name: 'Weekly receivables ageing', code: 'WEEKLY-AR', source: 'invoices', columns: 7, filters: 2, savedFilters: 3, runs: 14, by: 'Manager' },
+        { name: 'Branch day-book', code: 'BRANCH-DAY', source: 'invoices', columns: 9, filters: 3, savedFilters: 1, runs: 42, by: 'Accountant' },
+        { name: 'Slow movers by warehouse', code: 'SLOW-MOV', source: 'stock_movements', columns: 6, filters: 2, savedFilters: 2, runs: 9, by: 'Store keeper' },
+        { name: 'Chase list for the callers', code: 'CHASE-90', source: 'invoices', columns: 5, filters: 4, savedFilters: 5, runs: 31, by: 'Manager' },
+    ];
+
+    const runs = [
+        { when: '2026-10-08 06:15', report: 'Weekly receivables ageing', by: 'the scheduler', state: 'completed', rows: 148, note: '—' },
+        { when: '2026-10-08 06:15', report: 'Branch day-book', by: 'the scheduler', state: 'completed', rows: 640, note: '—' },
+        { when: '2026-10-08 06:15', report: 'Chase list for the callers', by: 'the scheduler', state: 'failed', rows: 0, note: 'The branch you asked for is not in your scope.' },
+        { when: '2026-10-07 16:02', report: 'Slow movers by warehouse', by: 'Store keeper', state: 'completed', rows: 62, note: '—' },
+        { when: '2026-10-07 06:15', report: 'Branch day-book', by: 'the scheduler', state: 'completed', rows: 617, note: '—' },
+    ];
+
+    return `
+${previewBar('reports-custom.html')}
+<div class="erp-shell">
+    ${sidebar('insight')}
+    <main class="erp-main">
+        ${topbar('Custom reports')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-sliders" aria-hidden="true"></i> Reports · Custom Reports</p>
+                    <h1 class="erp-h1">Reports this company wrote for itself</h1>
+                    <p class="erp-page-sub">A saved report is a source, a set of columns and a set of filters — stored as those keys, never as SQL, and re-validated against the builder's whitelist on every single run, so a definition saved last year cannot reach a column that has since been closed or a branch the reader cannot see. Executions are kept with their row count and their snapshot, which is why a schedule that failed can say so rather than looking like it produced nothing.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./reports.html"><i class="bi bi-grid" aria-hidden="true"></i> All families</a>
+                    <a class="btn btn-primary" href="#"><i class="bi bi-sliders" aria-hidden="true"></i> Open the builder</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-file-earmark-ruled" aria-hidden="true"></i> Saved reports</p>
+                    <p class="erp-kpi-value">4</p>
+                    <p class="erp-kpi-foot">Definitions this company owns — shared, not per person</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-funnel" aria-hidden="true"></i> Saved filters</p>
+                    <p class="erp-kpi-value">11</p>
+                    <p class="erp-kpi-foot">Named filter sets hanging off those definitions</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-play-circle" aria-hidden="true"></i> Runs recorded</p>
+                    <p class="erp-kpi-value">96</p>
+                    <p class="erp-kpi-foot">Every execution, with its row count and a snapshot of what it produced</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-clock-history" aria-hidden="true"></i> Scheduled</p>
+                    <p class="erp-kpi-value">3</p>
+                    <p class="erp-kpi-foot">Definitions that run themselves — see Scheduled reports</p>
+                </div>
+            </div>
+
+            <div class="erp-note mb-3">
+                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                <div>
+                    <strong class="d-block mb-1">What a custom report can be built on</strong>
+                    The builder whitelists 4 sources: invoices, payments, stock_movements, purchase_bills. Columns are re-checked against that list on every run,
+                    so a definition cannot outlive the column it names — and branch scope is applied at run time from your own access, never from what
+                    whoever wrote the definition could see.
+                </div>
+            </div>
+
+            <div class="erp-table-shell mb-3" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">The definitions<span class="erp-chip erp-chip-outline">4 saved</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead>
+                            <tr><th>Report</th><th>Code</th><th>Source</th><th class="erp-th-num">Columns</th><th class="erp-th-num">Filters</th><th class="erp-th-num">Saved sets</th><th class="erp-th-num">Runs</th><th></th></tr>
+                        </thead>
+                        <tbody>
+                            ${definitions.map((row) => `
+                            <tr>
+                                <td><span class="erp-cell-strong">${row.name}</span><div class="erp-td-muted">written by ${row.by}</div></td>
+                                <td class="erp-td-muted font-monospace">${row.code}</td>
+                                <td><span class="erp-chip erp-chip-soft">${row.source}</span></td>
+                                <td class="erp-td-num">${row.columns}</td>
+                                <td class="erp-td-num">${row.filters}</td>
+                                <td class="erp-td-num">${row.savedFilters}</td>
+                                <td class="erp-td-num">${row.runs}</td>
+                                <td class="text-end">
+                                    <button class="btn btn-outline-secondary btn-sm" type="button"><i class="bi bi-play" aria-hidden="true"></i> Run</button>
+                                </td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <section class="erp-card">
+                <header class="erp-card-head">
+                    <div>
+                        <h2 class="erp-card-title">Recent runs</h2>
+                        <p class="erp-card-sub">What actually came out, including the failures — a run that failed is recorded as failed, with the reason, rather than as an empty report.</p>
+                    </div>
+                    <div class="erp-card-actions">
+                        <a class="erp-chip erp-chip-outline" href="./reports-scheduled.html">Scheduled reports</a>
+                    </div>
+                </header>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table erp-table-compact">
+                        <thead><tr><th>When</th><th>Report</th><th>By</th><th>State</th><th class="erp-th-num">Rows</th><th>Note</th></tr></thead>
+                        <tbody>
+                            ${runs.map((row) => `
+                            <tr>
+                                <td>${row.when}</td>
+                                <td><span class="erp-cell-strong">${row.report}</span></td>
+                                <td class="erp-td-muted">${row.by}</td>
+                                <td><span class="erp-status erp-status-${row.state === 'completed' ? 'posted' : 'failed'}">${row.state}</span></td>
+                                <td class="erp-td-num">${row.rows}</td>
+                                <td class="erp-td-muted">${row.note}</td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+    </main>
+</div>`;
+}
+
+export function reportsScheduled() {
+    const schedules = [
+        { name: 'Weekly ageing to the manager', report: 'Weekly receivables ageing', code: 'WEEKLY-AR', frequency: 'weekly', next: '2026-10-12 06:15', last: '2026-10-05 06:15', active: true, by: 'Manager' },
+        { name: 'Branch day-book, every morning', report: 'Branch day-book', code: 'BRANCH-DAY', frequency: 'daily', next: '2026-10-09 06:15', last: '2026-10-08 06:15', active: true, by: 'Accountant' },
+        { name: 'Chase list for the callers', report: 'Chase list for the callers', code: 'CHASE-90', frequency: 'daily', next: '2026-10-09 06:15', last: '2026-10-08 06:15', active: true, by: 'Manager' },
+        { name: 'Slow movers, month end', report: 'Slow movers by warehouse', code: 'SLOW-MOV', frequency: 'monthly', next: '2026-11-01 06:15', last: '2026-10-01 06:15', active: false, by: 'Store keeper' },
+    ];
+
+    const runs = [
+        { when: '2026-10-08 06:15', schedule: 'Chase list for the callers', state: 'failed', rows: 0, note: 'The branch you asked for is not in your scope.' },
+        { when: '2026-10-08 06:15', schedule: 'Branch day-book, every morning', state: 'completed', rows: 640, note: null },
+        { when: '2026-10-05 06:15', schedule: 'Weekly ageing to the manager', state: 'completed', rows: 151, note: null },
+    ];
+
+    return `
+${previewBar('reports-scheduled.html')}
+<div class="erp-shell">
+    ${sidebar('insight')}
+    <main class="erp-main">
+        ${topbar('Scheduled reports')}
+        <div class="erp-content">
+
+            <header class="erp-page-head">
+                <div>
+                    <p class="erp-eyebrow"><i class="bi bi-clock-history" aria-hidden="true"></i> Reports · Scheduled Reports</p>
+                    <h1 class="erp-h1">Reports that run themselves</h1>
+                    <p class="erp-page-sub">A schedule is an instruction to produce a report on a rhythm, not a promise that it worked. So every execution is written down with its row count and its snapshot, a failure keeps its reason on the row, and the next run time only moves when a run has actually finished — which is what makes “it ran last night” a fact on this page rather than something somebody remembers.</p>
+                </div>
+                <div class="erp-page-head-actions">
+                    <a class="btn btn-outline-secondary" href="./reports.html"><i class="bi bi-grid" aria-hidden="true"></i> All families</a>
+                    <a class="btn btn-outline-secondary" href="./reports-custom.html"><i class="bi bi-file-earmark-ruled" aria-hidden="true"></i> Saved reports</a>
+                </div>
+            </header>
+
+            <div class="erp-kpi-grid mb-3">
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-clock-history" aria-hidden="true"></i> Schedules</p>
+                    <p class="erp-kpi-value">4</p>
+                    <p class="erp-kpi-foot">3 active, 1 paused</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-alarm" aria-hidden="true"></i> Due now</p>
+                    <p class="erp-kpi-value">0</p>
+                    <p class="erp-kpi-foot">Active schedules whose next run time has arrived — the command picks them up</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-archive" aria-hidden="true"></i> Runs filed</p>
+                    <p class="erp-kpi-value">96</p>
+                    <p class="erp-kpi-foot">Executions recorded against a schedule, most recent first</p>
+                </div>
+                <div class="erp-kpi">
+                    <p class="erp-kpi-label"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Last failure</p>
+                    <p class="erp-kpi-value">08 Oct 06:15</p>
+                    <p class="erp-kpi-foot">A failed run keeps its reason; it is never silently retried as if it had worked</p>
+                </div>
+            </div>
+
+            <div class="erp-table-shell mb-3" data-erp-table>
+                <div class="erp-card-head px-3 pt-3">
+                    <h2 class="erp-card-title">What is scheduled<span class="erp-chip erp-chip-outline">4 schedule(s)</span></h2>
+                </div>
+                <div class="erp-table-scroll">
+                    <table class="table erp-table">
+                        <thead>
+                            <tr><th>Schedule</th><th>Report</th><th>Rhythm</th><th>Next run</th><th>Last run</th><th>State</th><th>Written by</th></tr>
+                        </thead>
+                        <tbody>
+                            ${schedules.map((row) => `
+                            <tr>
+                                <td><span class="erp-cell-strong">${row.name}</span></td>
+                                <td>${row.report}<div class="erp-td-muted font-monospace">${row.code}</div></td>
+                                <td><span class="erp-chip erp-chip-soft">${row.frequency}</span></td>
+                                <td>${row.next}</td>
+                                <td class="erp-td-muted">${row.last}</td>
+                                <td><span class="erp-status erp-status-${row.active ? 'active' : 'paused'}">${row.active ? 'active' : 'paused'}</span></td>
+                                <td class="erp-td-muted">${row.by}</td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="erp-split mb-3">
+                <section class="erp-card">
+                    <header class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">Schedule a saved report</h2>
+                            <p class="erp-card-sub">The definition has to exist and belong to this company. A schedule starts due immediately, so the next run of the command produces it.</p>
+                        </div>
+                    </header>
+                    <form class="erp-form p-3" onsubmit="return false">
+                        <div class="erp-form-field">
+                            <label class="erp-field-label" for="sch-def">Report</label>
+                            <select class="form-select" id="sch-def">
+                                <option>Weakly receivables ageing (WEEKLY-AR)</option>
+                                <option>Branch day-book (BRANCH-DAY)</option>
+                                <option>Slow movers by warehouse (SLOW-MOV)</option>
+                                <option>Chase list for the callers (CHASE-90)</option>
+                            </select>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="erp-field-label" for="sch-name">Name it</label>
+                            <input class="form-control" id="sch-name" type="text" placeholder="e.g. Weekly receivables ageing for the manager">
+                            <p class="form-text">This is what the run log will call it, so name it for the person who reads it, not for the table.</p>
+                        </div>
+                        <div class="erp-form-field">
+                            <label class="erp-field-label" for="sch-freq">How often</label>
+                            <select class="form-select" id="sch-freq">
+                                <option>Daily</option>
+                                <option>Weekly</option>
+                                <option>Monthly</option>
+                            </select>
+                        </div>
+                        <div class="erp-form-actions">
+                            <button class="btn btn-primary" type="button"><i class="bi bi-plus-lg" aria-hidden="true"></i> Schedule it</button>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="erp-card">
+                    <header class="erp-card-head">
+                        <div>
+                            <h2 class="erp-card-title">Runs filed by the scheduler</h2>
+                            <p class="erp-card-sub">What each scheduled run produced, and what it could not.</p>
+                        </div>
+                    </header>
+                    <div class="erp-table-scroll">
+                        <table class="table erp-table erp-table-compact">
+                            <thead><tr><th>When</th><th>Schedule</th><th>State</th><th class="erp-th-num">Rows</th></tr></thead>
+                            <tbody>
+                                ${runs.map((row) => `
+                                <tr>
+                                    <td>${row.when}</td>
+                                    <td><span class="erp-cell-strong">${row.schedule}</span></td>
+                                    <td>
+                                        <span class="erp-status erp-status-${row.state === 'completed' ? 'posted' : 'failed'}">${row.state}</span>
+                                        ${row.note ? `<div class="erp-td-muted">${row.note}</div>` : ''}
+                                    </td>
+                                    <td class="erp-td-num">${row.rows}</td>
+                                </tr>`).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-3 pt-0">
+                        <p class="erp-filter-note mb-0">
+                            <i class="bi bi-info-circle" aria-hidden="true"></i>
+                            Delivery to recipients and PDF/XLSX filing are not built: a run today produces its rows and records them here. Until a delivery
+                            channel exists, this page is the report — it does not pretend to have emailed anything.
+                        </p>
+                    </div>
+                </section>
+            </div>
+
+        </div>
+    </main>
+</div>`;
+}
